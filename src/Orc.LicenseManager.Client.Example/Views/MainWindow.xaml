@@ -11,11 +11,10 @@
     <!-- Content -->
      <catel:StackGrid x:Name="LayoutRoot">
 		<catel:StackGrid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</catel:StackGrid.RowDefinitions>
-		
-		<Label Content="{Binding Title}" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </catel:StackGrid.RowDefinitions>
+        <Label Content="{Binding Title}" />
         <Button Content="Show license" Command="{Binding ShowLicense}" />
     </catel:StackGrid>
 </catel:DataWindow>

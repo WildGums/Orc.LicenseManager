@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager.Services
 {
     using System;
+    using Portable.Licensing.Validation;
 
     /// <summary>
     /// Service to validate, store and remove licenses for software products.
@@ -21,7 +22,6 @@ namespace Orc.LicenseManager.Services
         /// <param name="applicationId">The application identifier.</param>
         /// <exception cref="ArgumentException">The <paramref name="applicationId"/> is <c>null</c> or whitespace.</exception>
         void Initialize(string applicationId);
-        #endregion
 
         /// <summary>
         /// Shows the single license dialog.
@@ -29,5 +29,21 @@ namespace Orc.LicenseManager.Services
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
         /// <param name="website">The website.  If <c>null</c>, no website link will be displayed.</param>
         void ShowSingleLicenseDialog(string title = null, string website = null);
+
+        /// <summary>
+        /// Validates the lisence.
+        /// </summary>
+        /// <param name="lisence">The lisence key the user has given to be validated.</param>
+        /// <returns>Returns only true if the license is valid.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="lisence"/> is <c>null</c> or whitespace.</exception>
+        bool ValidateLisence(string lisence);
+        #endregion
+
+        /// <summary>
+        /// Gets the validation error.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Please try to validate the lisence first.</exception>
+        IValidationFailure GetValidationError();
     }
 }

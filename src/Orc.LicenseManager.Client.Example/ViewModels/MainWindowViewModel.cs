@@ -1,4 +1,11 @@
-﻿namespace Orc.LicenseManager.Client.Example.ViewModels
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MainWindowViewModel.cs" company="Orchestra development team">
+//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Orc.LicenseManager.Client.Example.ViewModels
 {
     using Catel.MVVM;
     using Services;
@@ -8,9 +15,29 @@
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly ILicenseService _licenseService;
+        #region Commands
+
+        #region Properties
+        public Command ShowLicense { get; private set; }
+        #endregion
+
+        #region Methods
+        private void OnShowLicenseExecute()
+        {
+            _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+        }
+        #endregion
+
+        #endregion
 
         #region Fields
+        /// <summary>
+        /// Register the License property so it is known in the class.
+        /// </summary>
+        #endregion
+
+        #region Fields
+        private readonly ILicenseService _licenseService;
         #endregion
 
         #region Constructors
@@ -31,23 +58,10 @@
         /// Gets the title of the view model.
         /// </summary>
         /// <value>The title.</value>
-        public override string Title { get { return "License manager example"; } }
-
-        // TODO: Register models with the vmpropmodel codesnippet
-        // TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
-        #endregion
-
-        #region Commands
-        public Command ShowLicense { get; private set; }
-
-        private void OnShowLicenseExecute()
+        public override string Title
         {
-            _licenseService.ShowSingleLicenseDialog();
+            get { return "License manager example"; }
         }
-        #endregion
-
-        #region Methods
-
         #endregion
     }
 }

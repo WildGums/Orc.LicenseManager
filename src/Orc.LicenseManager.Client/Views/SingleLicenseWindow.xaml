@@ -1,21 +1,26 @@
 ﻿<catel:DataWindow x:Class="Orc.LicenseManager.Views.SingleLicenseWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				   xmlns:catel="http://catel.codeplex.com">
-    
+				   xmlns:catel="http://catel.codeplex.com" >
 
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Content="Key:" Margin="10" />
+            <TextBox Text="{Binding Key}" Grid.Column="1" Margin="10" HorizontalAlignment="Stretch" Width="auto" />
+        </Grid>
+        <StackPanel Orientation="Vertical" Visibility="{Binding Path=FailureOccured, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+            <TextBlock Text="{Binding FailureMessage}" Foreground="Red" />
+            <TextBlock Text="{Binding FailureSolution}" Foreground="Red" />
+        </StackPanel>
     
-    <!-- Content -->
-    <!--<catel:StackGrid>
-		<catel:StackGrid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</catel:StackGrid.RowDefinitions>
-		
-		<Label Content="{Binding Title}" />
-        <Label Content="Here goes your real content" />
-    </catel:StackGrid>-->
+        <TextBlock Visibility="{Binding Path=WebsiteIsSet, Converter={catel:BooleanToCollapsingVisibilityConverter}}">           
+            <Hyperlink NavigateUri="{Binding Website}"   Command="{Binding WebsiteClick}">
+                <TextBlock Text="{Binding Website}" Margin="-1" />
+            </Hyperlink>
+        </TextBlock>
+    </StackPanel>
 </catel:DataWindow>
