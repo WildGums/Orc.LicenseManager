@@ -7,6 +7,7 @@
 
 namespace Orc.LicenseManager.Client.Example.ViewModels
 {
+    using Catel;
     using Catel.MVVM;
     using Services;
 
@@ -15,26 +16,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-        #region Commands
-
-        #region Properties
-        public Command ShowLicense { get; private set; }
-        #endregion
-
-        #region Methods
-        private void OnShowLicenseExecute()
-        {
-            _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
-        }
-        #endregion
-
-        #endregion
-
-        #region Fields
-        /// <summary>
-        /// Register the License property so it is known in the class.
-        /// </summary>
-        #endregion
 
         #region Fields
         private readonly ILicenseService _licenseService;
@@ -47,9 +28,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         public MainWindowViewModel(ILicenseService licenseService)
             : base()
         {
-            _licenseService = licenseService;
+            Argument.IsNotNull(() => licenseService);
 
-            ShowLicense = new Command(OnShowLicenseExecute);
+            _licenseService = licenseService;
         }
         #endregion
 
@@ -63,5 +44,23 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             get { return "License manager example"; }
         }
         #endregion
+
+        protected override void Initialize()
+        {
+            if (_licenseService.LicenseExists())
+            {
+                var licenseString = _licenseService.LoadLicense();
+                var licenseValidation = _licenseService.ValidateLicense(licenseString);
+
+                if (licenseValidation.HasErrors)
+                {
+                    _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+                }
+            }
+            else
+            {
+                _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+            }
+        }
     }
 }

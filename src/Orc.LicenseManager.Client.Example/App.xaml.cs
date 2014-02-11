@@ -26,7 +26,7 @@ namespace Orc.LicenseManager.Client.Example
         protected override void OnStartup(StartupEventArgs e)
         {
 #if DEBUG
-            Catel.Logging.LogManager.AddDebugListener();
+            Catel.Logging.LogManager.AddDebugListener(true);
 #endif
 
             Console.WriteLine(typeof(ILicenseService));
