@@ -8,11 +8,8 @@
 namespace Orc.LicenseManager.ViewModels
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
-    using System.Windows;
     using Catel;
-    using Catel.Data;
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.MVVM.Services;
@@ -24,10 +21,10 @@ namespace Orc.LicenseManager.ViewModels
     /// </summary>
     public class SingleLicenseViewModel : ViewModelBase
     {
+        #region Fields
         private readonly INavigationService _navigationService;
         private readonly IProcessService _processService;
 
-        #region Fields
         private readonly ILicenseService _licenseService;
         #endregion
 
@@ -52,7 +49,7 @@ namespace Orc.LicenseManager.ViewModels
 
             _navigationService = navigationService;
             _processService = processService;
-            _licenseService = licenseService; 
+            _licenseService = licenseService;
 
             SingleLicenseModel = singleLicenseModel;
             WebsiteClick = new Command(OnWebsiteClickExecute);
@@ -95,8 +92,6 @@ namespace Orc.LicenseManager.ViewModels
         #endregion
 
         #region Methods
-        
-
         /// <summary>
         /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.ViewModelBase.Cancel" /> of <see cref="M:Catel.MVVM.ViewModelBase.Save" /> method.
         /// </summary>
@@ -133,8 +128,26 @@ namespace Orc.LicenseManager.ViewModels
         /// </remarks>
         protected override void Initialize()
         {
-            // TODO: Validate any existing lcienses
-            FailureOccurred = true;
+            var pleaseWaitService = DependencyResolver.Resolve<IPleaseWaitService>();
+            pleaseWaitService.Show("Checking licenses");
+            if (_licenseService.LicenseExists())
+            {
+                var licenseText = _licenseService.LoadLicense();
+                var validationContext = _licenseService.ValidateLicense(licenseText);
+                if (validationContext.HasErrors == false)
+                {
+                    FailureOccurred = false;
+                }
+                else
+                {
+                    FailureOccurred = true;
+                }
+            }
+            else
+            {
+                FailureOccurred = true;
+            }
+            pleaseWaitService.Hide();
         }
 
         /// <summary>
@@ -146,7 +159,6 @@ namespace Orc.LicenseManager.ViewModels
         protected override bool Save()
         {
             var validationContext = _licenseService.ValidateLicense(SingleLicenseModel.Key);
-
             var firstError = validationContext.GetBusinessRuleErrors().FirstOrDefault();
             if (firstError != null)
             {

@@ -9,6 +9,7 @@ namespace Orc.LicenseManager.Client.Example
 {
     using System;
     using System.Windows;
+    using Catel.Logging;
     using Catel.Reflection;
     using Catel.Windows;
     using Services;
@@ -28,6 +29,10 @@ namespace Orc.LicenseManager.Client.Example
 #if DEBUG
             Catel.Logging.LogManager.AddDebugListener(true);
 #endif
+
+            //var consoleLogListener = new ConsoleLogListener();
+            //consoleLogListener.IgnoreCatelLogging = true;
+            //LogManager.AddListener(consoleLogListener);
 
             Console.WriteLine(typeof(ILicenseService));
 

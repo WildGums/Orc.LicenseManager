@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -15,6 +16,7 @@ namespace Orc.LicenseManager.Services
     using Catel;
     using Catel.Data;
     using Catel.Fody;
+    using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Services;
     using Catel.Reflection;
@@ -28,6 +30,10 @@ namespace Orc.LicenseManager.Services
     /// </summary>
     public class LicenseService : ILicenseService
     {
+        #region Constants
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Fields
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
@@ -59,9 +65,10 @@ namespace Orc.LicenseManager.Services
         /// Initializes the specified application identifier.
         /// </summary>
         /// <param name="applicationId">The application identifier.</param>
-        /// <exception cref="ArgumentException">The <paramref name="applicationId"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="applicationId" /> is <c>null</c> or whitespace.</exception>
         public void Initialize([NotNullOrWhitespace] string applicationId)
         {
+            Log.Debug("Initailized"); // TODO: Debug or Info : / ? DILEMA
             _initialized = true;
             _applicationId = applicationId;
         }
@@ -71,7 +78,7 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
         /// <param name="website">The website. If <c>null</c>, no website link will be displayed.</param>
-        /// <exception cref="Exception">The <see cref="Initialize"/> method must be run first.</exception>
+        /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
         public void ShowSingleLicenseDialog(string title = null, string website = null)
         {
             if (!_initialized)
@@ -81,14 +88,14 @@ namespace Orc.LicenseManager.Services
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                var assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
+                Assembly assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
                 title = assembly.Title();
             }
 
             var model = new SingleLicenseModel {Title = title, Website = website};
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-
             _uiVisualizerService.ShowDialog(vm);
+            Log.Info("Showing dialog");
         }
 
         /// <summary>
@@ -99,80 +106,72 @@ namespace Orc.LicenseManager.Services
         /// The validation context containing all the validation results.
         /// </returns>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
-        /// <exception cref="Exception">The <see cref="Initialize"/> method must be run first.</exception>
+        /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
         public IValidationContext ValidateLicense(string license)
         {
             var validationContext = new ValidationContext();
-
             if (!_initialized)
             {
-                throw new Exception("Please use the Initialize method first");
+                const string error = "Please use the Initialize method first";
+                Log.Error(error);
+                throw new Exception(error);
             }
-
             try
             {
-                var licenseObject = License.Load(license);
-
-                foreach (var failure in licenseObject.Validate().Signature(_applicationId).AssertValidLicense().ToList())
+                License licenseObject = License.Load(license);
+                List<IValidationFailure> failureList = licenseObject.Validate().Signature(_applicationId).AssertValidLicense().ToList();
+                if (failureList.Count > 0)
                 {
-                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag(failure.Message, failure.HowToResolve));
+                    foreach (IValidationFailure failure in failureList)
+                    {
+                        BusinessRuleValidationResult businessRuleValidationResult = BusinessRuleValidationResult.CreateErrorWithTag(failure.Message, failure.HowToResolve);
+                        validationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
+                    }
                 }
             }
             catch (Exception)
             {
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The given key was in an invalid format", "Do it again"));
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The given key was in an invalid format", "Please check or you copied the whole key."));
             }
-
+            finally
+            {
+                if (validationContext.GetErrors().Count > 0)
+                {
+                    Log.Warning("License is not valid:");
+                    Log.Indent();
+                    foreach (IValidationResult error in validationContext.GetErrors())
+                    {
+                        Log.Warning("- {0}\n{1}", error.Message, error.Tag as string);
+                    }
+                    Log.Unindent();
+                }
+            }
             return validationContext;
         }
-
-        ///// <summary>
-        ///// Gets the validation error.
-        ///// </summary>
-        ///// <returns>
-        ///// An <c>IValidationFailure</c> if the validation failed.
-        ///// </returns>
-        ///// <exception cref="System.Exception">Please try to validate the lisence first.</exception>
-        ///// <exception cref="Exception">The <see cref="Initialize"/> method must be run first.</exception>
-        //public IValidationFailure GetValidationError()
-        //{
-        //    if (!_initialized)
-        //    {
-        //        throw new Exception("Please use the Initialize method first");
-        //    }
-        //    if (_failures == null)
-        //    {
-        //        throw new Exception("Please Validate first.");
-        //    }
-        //    if (_failures.Count() == 0)
-        //    {
-        //        throw new Exception("There were no issues with validating the lisence");
-        //    }
-        //    try
-        //    {
-        //        return _failures.First();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // I don t want to have to do this :D
-        //        return _failures.First();
-        //    }
-        //}
 
         /// <summary>
         /// Saves the license.
         /// </summary>
         /// <param name="license">The lisence key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
         /// <returns>Returns only true if the license is valid.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="license"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
         public void SaveLicense([NotNullOrWhitespace] string license)
         {
-            var xmlFilePath = GetLicenseInfoPath();
-            var licenseObject = License.Load(license);
-            var xmlWriter = XmlWriter.Create(xmlFilePath);
-            licenseObject.Save(xmlWriter);
-            xmlWriter.Flush();
-            xmlWriter.Close();
+            try
+            {
+                string xmlFilePath = GetLicenseInfoPath();
+                License licenseObject = License.Load(license);
+                XmlWriter xmlWriter = XmlWriter.Create(xmlFilePath);
+                licenseObject.Save(xmlWriter);
+                xmlWriter.Flush();
+                xmlWriter.Close();
+                Log.Info("License saved.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed To save license!");
+                throw;
+            }
         }
 
         /// <summary>
@@ -180,10 +179,15 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         public void RemoveLicense()
         {
-            var xmlFilePath = GetLicenseInfoPath();
+            string xmlFilePath = GetLicenseInfoPath();
             if (File.Exists(xmlFilePath))
             {
+                Log.Info("License got removed.");
                 File.Delete(xmlFilePath);
+            }
+            else
+            {
+                Log.Info("License didn't get removed, didn't exist.");
             }
         }
 
@@ -193,12 +197,13 @@ namespace Orc.LicenseManager.Services
         /// <returns>returns <c>true</c> if exists else <c>false</c></returns>
         public bool LicenseExists()
         {
-            var xmlFilePath = GetLicenseInfoPath();
-
+            string xmlFilePath = GetLicenseInfoPath();
             if (File.Exists(xmlFilePath))
             {
+                Log.Info("License exist.");
                 return true;
             }
+            Log.Info("License doesn't exist.");
             return false;
         }
 
@@ -208,16 +213,18 @@ namespace Orc.LicenseManager.Services
         /// <returns>The lisence from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
         public string LoadLicense()
         {
-            var xmlFilePath = GetLicenseInfoPath();
-
+            string xmlFilePath = GetLicenseInfoPath();
             try
             {
-                var xmlReader = XmlReader.Create(xmlFilePath);
-                var licenseObject = License.Load(xmlReader);
+                XmlReader xmlReader = XmlReader.Create(xmlFilePath);
+                License licenseObject = License.Load(xmlReader);
+                Log.Info("License loaded: {0}.", licenseObject.ToString());
                 return licenseObject.ToString();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Warning(ex, "Failed to load the license, returning empty string");
+                Log.Unindent();
                 return "";
             }
         }

@@ -15,6 +15,6 @@
             <RowDefinition Height="Auto" />
           </catel:StackGrid.RowDefinitions>
         <Label Content="{Binding Title}" />
-        <Button Content="Delete License" Command="{Binding DeleteLicense}" />
+        <Button Content="Delete License" Command="{Binding RemoveLicense}" />
     </catel:StackGrid>
 </catel:DataWindow>

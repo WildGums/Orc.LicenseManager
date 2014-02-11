@@ -16,7 +16,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-
         #region Fields
         private readonly ILicenseService _licenseService;
         #endregion
@@ -29,12 +28,18 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             : base()
         {
             Argument.IsNotNull(() => licenseService);
+            RemoveLicense = new Command(OnRemoveLicenseExecute);
 
             _licenseService = licenseService;
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the RemoveLicense command.
+        /// </summary>
+        public Command RemoveLicense { get; private set; }
+
         /// <summary>
         /// Gets the title of the view model.
         /// </summary>
@@ -44,6 +49,17 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             get { return "License manager example"; }
         }
         #endregion
+
+        #region Methods
+        /// <summary>
+        /// Method to invoke when the RemoveLicense command is executed.
+        /// </summary>
+        private void OnRemoveLicenseExecute()
+        {
+            
+            _licenseService.RemoveLicense();
+            _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+        }
 
         protected override void Initialize()
         {
@@ -62,5 +78,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
             }
         }
+        #endregion
     }
 }
