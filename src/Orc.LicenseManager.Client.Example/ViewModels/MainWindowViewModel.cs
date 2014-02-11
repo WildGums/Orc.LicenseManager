@@ -56,7 +56,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         /// </summary>
         private void OnRemoveLicenseExecute()
         {
-            
             _licenseService.RemoveLicense();
             _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
         }

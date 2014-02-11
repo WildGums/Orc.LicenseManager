@@ -8,9 +8,11 @@
 namespace Orc.LicenseManager.ViewModels
 {
     using System;
+    using System.ComponentModel;
     using System.Linq;
     using Catel;
     using Catel.IoC;
+    using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Services;
     using Models;
@@ -21,6 +23,8 @@ namespace Orc.LicenseManager.ViewModels
     /// </summary>
     public class SingleLicenseViewModel : ViewModelBase
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region Fields
         private readonly INavigationService _navigationService;
         private readonly IProcessService _processService;
@@ -90,7 +94,22 @@ namespace Orc.LicenseManager.ViewModels
         [Catel.Fody.Expose("WebsiteIsSet")]
         private SingleLicenseModel SingleLicenseModel { get; set; }
         #endregion
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Color { get; set; }
+        private void OnKeyChanged()
+        {
+            Log.Debug("Key value has changed.");
+            if (_licenseService.ValidateLicense(SingleLicenseModel.Key).HasErrors)
+            {
+                Color = "Red";
+            }
+            else
+            {
+                Color = "Green";
+            }
+        }
         #region Methods
         /// <summary>
         /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.ViewModelBase.Cancel" /> of <see cref="M:Catel.MVVM.ViewModelBase.Save" /> method.
@@ -99,9 +118,10 @@ namespace Orc.LicenseManager.ViewModels
         {
             if (FailureOccurred)
             {
+                Log.Debug("Closing application becauso no valid key was given.");
                 _navigationService.CloseApplication();
             }
-
+            Log.Debug("Closing dialog with a valid lisence.");
             base.Close();
         }
 
@@ -128,7 +148,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </remarks>
         protected override void Initialize()
         {
-            var pleaseWaitService = DependencyResolver.Resolve<IPleaseWaitService>();
+            var pleaseWaitService = DependencyResolver.Resolve<IPleaseWaitService>(); // Once we ll verify online this will be useful
             pleaseWaitService.Show("Checking licenses");
             if (_licenseService.LicenseExists())
             {
@@ -162,16 +182,17 @@ namespace Orc.LicenseManager.ViewModels
             var firstError = validationContext.GetBusinessRuleErrors().FirstOrDefault();
             if (firstError != null)
             {
+                Log.Debug("Ok pressed without a valid key");
                 FailureOccurred = true;
                 FailureMessage = firstError.Message;
                 FailureSolution = firstError.Tag as string;
             }
             else
             {
+                Log.Debug("Ok pressed with a valid key");
                 FailureOccurred = false;
                 _licenseService.SaveLicense(SingleLicenseModel.Key);
             }
-
             return !validationContext.HasErrors;
         }
         #endregion
