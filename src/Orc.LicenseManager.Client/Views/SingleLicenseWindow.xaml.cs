@@ -33,6 +33,13 @@ namespace Orc.LicenseManager.Views
             : base(viewModel, DataWindowMode.Custom)
         {
             InitializeComponent();
+
+            if (Catel.Environment.IsInDesignMode)
+            {
+                return;
+            }
+
+            Orc.LicenseManager.ResourceHelper.EnsureStyles();
         }
         #endregion
 

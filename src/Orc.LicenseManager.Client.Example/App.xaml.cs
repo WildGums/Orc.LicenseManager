@@ -8,9 +8,12 @@
 namespace Orc.LicenseManager.Client.Example
 {
     using System;
+    using System.Globalization;
     using System.Windows;
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
+    using Catel.Services;
     using Catel.Windows;
     using Services;
 
@@ -39,6 +42,14 @@ namespace Orc.LicenseManager.Client.Example
             System.AppDomain.CurrentDomain.PreloadAssemblies();
 
             StyleHelper.CreateStyleForwardersForDefaultStyles();
+
+            var serviceLocator = ServiceLocator.Default;
+            var languageService = serviceLocator.ResolveType<ILanguageService>();
+
+            //languageService.PreferredCulture = new CultureInfo("nl-NL");
+            //languageService.FallbackCulture = new CultureInfo("en-US");
+
+            languageService.PreloadLanguageSources();
 
             base.OnStartup(e);
         }

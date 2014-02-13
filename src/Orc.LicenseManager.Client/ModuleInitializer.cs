@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Windows;
 using Catel.IoC;
 using Catel.Reflection;
+using Catel.Services;
+using Catel.Services.Models;
 using Orc.LicenseManager.Services;
 
 /// <summary>
@@ -18,8 +21,10 @@ public static class ModuleInitializer
 
         Console.WriteLine(typeof (Catel.MVVM.ViewModelBase));
 
-        var servicelocator = ServiceLocator.Default;
-        servicelocator.RegisterType<ILicenseService, LicenseService>();
-        
+        var serviceLocator = ServiceLocator.Default;
+        serviceLocator.RegisterType<ILicenseService, LicenseService>();
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client", "Orc.LicenseManager.Properties", "Resources"));
     }
 }

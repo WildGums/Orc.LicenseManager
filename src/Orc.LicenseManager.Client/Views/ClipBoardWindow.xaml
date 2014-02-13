@@ -5,7 +5,7 @@
     
     <!-- Resources -->
     <catel:DataWindow.Resources>
-        <ResourceDictionary Source="../Styles.xaml" />
+        <ResourceDictionary Source="../Themes/Generic.xaml" />
     </catel:DataWindow.Resources>
 
     <!-- Content -->
@@ -15,6 +15,6 @@
             <RowDefinition Height="60"/>
         </catel:StackGrid.RowDefinitions>
         <TextBox Text="{Binding ClipBoardText}" AcceptsReturn="True" TextWrapping="Wrap" TextAlignment="Justify"  IsEnabled="False"/>
-        <Button Grid.Row="1" Style="{StaticResource RoundButtonTemplate}" Command="{Binding Exit}" Width="100" Content="Close"/>
+        <Button Grid.Row="1" Style="{StaticResource RoundButtonTemplate}" Command="{Binding Exit}" Width="100" Content="{catel:LanguageBinding Close}"/>
     </catel:StackGrid>
 </catel:DataWindow>

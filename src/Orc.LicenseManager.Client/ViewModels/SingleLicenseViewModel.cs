@@ -9,7 +9,6 @@ namespace Orc.LicenseManager.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Linq;
     using System.Windows;
     using Catel;
@@ -36,6 +35,7 @@ namespace Orc.LicenseManager.ViewModels
         private readonly ILicenseService _licenseService;
 
         private readonly IUIVisualizerService _uiVisualizerService;
+        private readonly IViewModelFactory _viewModelFactory;
         #endregion
 
         #region Constructors
@@ -47,24 +47,32 @@ namespace Orc.LicenseManager.ViewModels
         /// <param name="processService">The process service.</param>
         /// <param name="licenseService">The license service.</param>
         /// <param name="uiVisualizerService">The uiVisualizer service.</param>
+        /// <param name="viewModelFactory">The uiVisualizer service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="singleLicenseModel" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="navigationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="processService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public SingleLicenseViewModel(SingleLicenseModel singleLicenseModel, INavigationService navigationService, IProcessService processService, ILicenseService licenseService, IUIVisualizerService uiVisualizerService)
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
+        public SingleLicenseViewModel(SingleLicenseModel singleLicenseModel, INavigationService navigationService, IProcessService processService,
+            ILicenseService licenseService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
         {
-            Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => singleLicenseModel);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => processService);
             Argument.IsNotNull(() => licenseService);
+            Argument.IsNotNull(() => uiVisualizerService);
+            Argument.IsNotNull(() => viewModelFactory);
+
             _navigationService = navigationService;
             _processService = processService;
             _licenseService = licenseService;
             _uiVisualizerService = uiVisualizerService;
-            XmlData = new ObservableCollection<XMLDataModel>();
+            _viewModelFactory = viewModelFactory;
+
             SingleLicenseModel = singleLicenseModel;
+            XmlData = new ObservableCollection<XmlDataModel>();
+
             Paste = new Command(OnPasteExecute);
             Exit = new Command(OnExitExecute);
             ShowClipboard = new Command(OnShowClipboardExecute);
@@ -130,16 +138,7 @@ namespace Orc.LicenseManager.ViewModels
         [Catel.Fody.Expose("CompanyText")]
         [Catel.Fody.Expose("CompanyImage")]
         [Catel.Fody.Expose("Key")]
-        [Catel.Fody.Expose("CompanyWebsiteIsSet")]
-        [Catel.Fody.Expose("PurchaseLinkIsSet")]
-        [Catel.Fody.Expose("CompanyInfoIsSet")]
         private SingleLicenseModel SingleLicenseModel { get; set; }
-
-        /// <summary>
-        /// Color is either red or green when successful
-        /// </summary>
-        [DefaultValue("Red")]
-        public string Color { get; set; }
 
         /// <summary>
         /// Gets the Paste command.
@@ -149,7 +148,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// List of xml Data, only populated when license was valid.
         /// </summary>
-        public ObservableCollection<XMLDataModel> XmlData { get; set; }
+        public ObservableCollection<XmlDataModel> XmlData { get; set; }
 
         /// <summary>
         /// Gets the ShowClipboard command.
@@ -204,7 +203,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnExitExecute()
         {
-            Log.Debug("Closing application.");
+            Log.Debug("Closing application");
             _navigationService.CloseApplication();
         }
 
@@ -246,7 +245,7 @@ namespace Orc.LicenseManager.ViewModels
         }
 
         /// <summary>
-        /// Method to invoke when the Paste command is executed. Validates the lisence and xml, 
+        /// Method to invoke when the Paste command is executed. Validates the license and xml, 
         /// </summary>
         private void OnPasteExecute()
         {
@@ -256,14 +255,14 @@ namespace Orc.LicenseManager.ViewModels
                 if (Clipboard.GetText() != string.Empty)
                 {
                     SingleLicenseModel.Key = Clipboard.GetText();
-                    string lisence = SingleLicenseModel.Key;
-                    var xmlFirstError = _licenseService.ValidateXML(lisence).GetBusinessRuleErrors().FirstOrDefault();
+                    string license = SingleLicenseModel.Key;
+                    var xmlFirstError = _licenseService.ValidateXML(license).GetBusinessRuleErrors().FirstOrDefault();
                     if (xmlFirstError == null)
                     {
                         var normalFirstError = _licenseService.ValidateLicense(SingleLicenseModel.Key).GetBusinessRuleErrors().FirstOrDefault();
                         if (normalFirstError == null)
                         {
-                            var xmlList = _licenseService.LoadXMLFromLisence(SingleLicenseModel.Key);
+                            var xmlList = _licenseService.LoadXmlFromLicense(SingleLicenseModel.Key);
                             xmlList.ForEach(XmlData.Add);
                             FailureOccurred = false;
                             ShowFailure = false;
@@ -285,6 +284,8 @@ namespace Orc.LicenseManager.ViewModels
                 else
                 {
                     ShowFailure = true;
+
+                    // TODO: Read from resources (language service preferred)
                     FailureMessage = "No text was pasted into the windows.";
                     FailureSolution = "Please copy the license text into this window.";
                 }
@@ -296,7 +297,8 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnShowClipboardExecute()
         {
-            _uiVisualizerService.ShowDialog(new ClipBoardViewModel());
+            var vm = _viewModelFactory.CreateViewModel<ClipBoardViewModel>(null);
+            _uiVisualizerService.ShowDialog(vm);
         }
         #endregion
     }

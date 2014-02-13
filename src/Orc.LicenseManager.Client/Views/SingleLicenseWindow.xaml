@@ -3,76 +3,89 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				   xmlns:catel="http://catel.codeplex.com"
 				   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
-				   FontFamily="Gadugi"    Style="{DynamicResource MetroWindowStyle}" >
+				   FontFamily="Gadugi" Style="{DynamicResource MetroWindowStyle}" Width="800" >
+
     <catel:DataWindow.Resources>
-        <ResourceDictionary Source="../Styles.xaml" />
+        <ResourceDictionary Source="../Themes/Generic.xaml" />
     </catel:DataWindow.Resources>
-    <i:Interaction.Behaviors>
-        <catel:KeyPressToCommand  Command="{Binding Paste}" Key="V" Modifiers="Control"  />
-    </i:Interaction.Behaviors>
-    <StackPanel Orientation="Vertical">
-        <GroupBox Header="About" Visibility="{Binding CompanyInfoIsSet, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
-            <Grid MaxWidth="600">
+
+    <StackPanel Orientation="Vertical" Width="800" >
+        <i:Interaction.Behaviors>
+            <catel:KeyPressToCommand Command="{Binding Paste}" Key="V" Modifiers="Control"  />
+        </i:Interaction.Behaviors>
+
+        <GroupBox Header="{catel:LanguageBinding AboutHeader}" Visibility="{Binding CompanyName, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*"/>
-                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
+
                 <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Source="{Binding CompanyImage}" Width="250" Height="100" />
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CompanyName}" FontSize="16" FontWeight="Bold"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CompanyText}" TextWrapping="Wrap"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=CompanySiteIsSet, Converter={catel:BooleanToCollapsingVisibilityConverter}}" >
-            <Hyperlink NavigateUri="{Binding CompanySite}" Command="{Binding CompanySiteClick}">
-                <TextBlock Text="{Binding CompanySite}" Margin="-1" />
-            </Hyperlink>
-        </TextBlock>
+
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CompanyText}" TextWrapping="Wrap"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding CompanySite, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" >                    
+                    <Hyperlink NavigateUri="{Binding CompanySite}" Command="{Binding CompanySiteClick}">
+                        <TextBlock Text="{Binding CompanySite}" Margin="-1" />
+                    </Hyperlink>
+                </TextBlock>
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="Insert license"  Visibility="{Binding Path=FailureOccurred, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+        <GroupBox Header="{catel:LanguageBinding InsertLicenseHeader}"  Visibility="{Binding FailureOccurred, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.ColumnSpan="2" Text="Please paste the whole license in this window to verify the lisence" HorizontalAlignment="Center"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="Paste (CTRL+V)" Command="{Binding Paste}"  Margin="40,5" Style="{StaticResource RoundButtonTemplate}"/>
-                <Button Grid.Row="1" Grid.Column="1" Content="Show clipboard" Command="{Binding ShowClipboard}" Margin="40,5" Style="{StaticResource RoundButtonTemplate}"/>
+
+                <TextBlock Grid.ColumnSpan="2" Text="{catel:LanguageBinding PleasePaste}" HorizontalAlignment="Center"/>
+                <Button Grid.Row="1" Grid.Column="0" Content="{catel:LanguageBinding PasteWithShortcut}" Command="{Binding Paste}"  Margin="40,5" Style="{StaticResource RoundButtonTemplate}"/>
+                <Button Grid.Row="1" Grid.Column="1" Content="{catel:LanguageBinding ShowClipboard}" Command="{Binding ShowClipboard}" Margin="40,5" Style="{StaticResource RoundButtonTemplate}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="1" Grid.ColumnSpan="2"  Visibility="{Binding XmlData.Count, Converter={catel:CountCollapsedConverter}}" Header="License properties">
+
+        <GroupBox Grid.Row="1" Grid.ColumnSpan="2"  Visibility="{Binding XmlData.Count, Converter={catel:CountCollapsedConverter}}" Header="{catel:LanguageBinding LicensePropsHeader}">
             <ListBox  ItemsSource="{Binding XmlData}" BorderBrush="Transparent" HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="4" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name, StringFormat='{}{0}: '}" Foreground="ForestGreen" FontWeight="Bold"  />
-                            <TextBlock Text="{Binding Value }" Foreground="ForestGreen" />
+                            <TextBlock Text="{Binding Name, StringFormat='{}{0}: '}" Foreground="ForestGreen" FontWeight="Bold" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Value }" Foreground="ForestGreen" TextWrapping="Wrap" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </GroupBox>
+        
         <StackPanel Orientation="Vertical" Visibility="{Binding Path=ShowFailure, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
             <TextBlock Text="{Binding FailureMessage}" Foreground="Red" />
             <TextBlock Text="{Binding FailureSolution}" Foreground="Red" />
         </StackPanel>
-        <TextBlock Visibility="{Binding Path=PurchaseLinkIsSet, Converter={catel:BooleanToCollapsingVisibilityConverter}}" Margin="9,5,0,5">
+        
+        <TextBlock Visibility="{Binding PurchaseLink, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" Margin="9,5,0,5">
             <Hyperlink NavigateUri="{Binding PurchaseLink}" Command="{Binding PurchaseLinkClick}">
-                <TextBlock Text="Click here buy a license!" Margin="-1" />
+                <TextBlock Text="{catel:LanguageBinding ClickToBuyLicense}" Margin="-1" />
             </Hyperlink>
         </TextBlock>
+        
         <Border BorderThickness="0,2,0,0" BorderBrush="#FFAAAAAA" Padding="0,4" Margin="0,4,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Save" Command="{Binding Submit}" Style="{StaticResource RoundButtonTemplate}" Width="60" Margin="5,0" IsEnabled="{Binding FailureOccurred, Converter={catel:BooleanToOppositeBooleanConverter}}"/>
-                <Button Content="Cancel" Command="{Binding Exit}"   Style="{StaticResource RoundButtonTemplate}" Width="60" Margin="5,0"/>
+                <Button Content="{catel:LanguageBinding Save}" Command="{Binding Submit}" Style="{StaticResource RoundButtonTemplate}" Width="60" Margin="5,0" IsEnabled="{Binding FailureOccurred, Converter={catel:BooleanToOppositeBooleanConverter}}"/>
+                <Button Content="{catel:LanguageBinding Cancel}" Command="{Binding Exit}"   Style="{StaticResource RoundButtonTemplate}" Width="60" Margin="5,0"/>
             </StackPanel>
         </Border>
     </StackPanel>

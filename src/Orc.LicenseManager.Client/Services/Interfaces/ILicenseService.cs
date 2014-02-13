@@ -49,9 +49,9 @@ namespace Orc.LicenseManager.Services
         void ShowSingleLicenseDialog(string title = null, string purchaseLink = null);
 
         /// <summary>
-        /// Validates the lisence.
+        /// Validates the license.
         /// </summary>
-        /// <param name="license">The lisence key the user has given to be validated.</param>
+        /// <param name="license">The license key the user has given to be validated.</param>
         /// <returns>
         /// The validation context containing all the validation results.
         /// </returns>
@@ -62,7 +62,7 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Saves the license.
         /// </summary>
-        /// <param name="license">The lisence key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
+        /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
         void SaveLicense( string license);
@@ -81,7 +81,7 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Loads the license.
         /// </summary>
-        /// <returns>The lisence from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
+        /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
         string LoadLicense();
 
         /// <summary>
@@ -96,12 +96,12 @@ namespace Orc.LicenseManager.Services
         IValidationContext ValidateXML(string license);
 
         /// <summary>
-        /// Loads the XML out of lisence.
+        /// Loads the XML out of license.
         /// </summary>
         /// <param name="license">The license.</param>
         /// <returns>
         /// A List of with the xml names and values
         /// </returns>
-        List<XMLDataModel> LoadXMLFromLisence(string license);
+        List<XmlDataModel> LoadXmlFromLicense(string license);
     }
 }

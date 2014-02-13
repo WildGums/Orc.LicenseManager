@@ -48,7 +48,7 @@ namespace Orc.LicenseManager.Models
         public string CompanyName { get; set; }
 
         /// <summary>
-        /// Gets or sets the company text that will be used in the singlelisencedialogue.
+        /// Gets or sets the company text that will be used in the singlelicensedialogue.
         /// </summary>
         /// <value>
         /// The company text.
@@ -71,38 +71,6 @@ namespace Orc.LicenseManager.Models
         /// </value>
         public string Key { get; set; }
 
-        /// <summary>
-        /// Gets a value indicating whether [company website is set].
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if [company website is set]; otherwise, <c>false</c>.
-        /// </value>
-        public bool CompanyWebsiteIsSet
-        {
-            get { return CompanySite != null; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether [purchase link is set].
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if [purchase link is set]; otherwise, <c>false</c>.
-        /// </value>
-        public bool PurchaseLinkIsSet
-        {
-            get { return PurchaseLink != null; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether [company information is set].
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if [company information is set]; otherwise, <c>false</c>.
-        /// </value>
-        public bool CompanyInfoIsSet
-        {
-            get { return CompanyText != null; }
-        }
         #endregion
     }
 }

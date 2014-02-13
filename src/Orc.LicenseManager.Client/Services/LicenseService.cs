@@ -74,7 +74,7 @@ namespace Orc.LicenseManager.Services
         }
 
         /// <summary>
-        /// Shows the single license dialog including all company info.
+        /// Shows the single license dialog including all company info. You will see the about box.
         /// </summary>
         /// <param name="companyName">Name of the company.</param>
         /// <param name="companyImage">The company image.</param>
@@ -103,7 +103,7 @@ namespace Orc.LicenseManager.Services
         }
 
         /// <summary>
-        /// Shows the single license dialog.
+        /// Shows the single license dialog. You won't see the about box.
         /// </summary>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
         /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
@@ -128,9 +128,9 @@ namespace Orc.LicenseManager.Services
         }
 
         /// <summary>
-        /// Validates the lisence.
+        /// Validates the license.
         /// </summary>
-        /// <param name="license">The lisence key the user has given to be validated.</param>
+        /// <param name="license">The license key the user has given to be validated.</param>
         /// <returns>
         /// The validation context containing all the validation results.
         /// </returns>
@@ -181,7 +181,7 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Saves the license.
         /// </summary>
-        /// <param name="license">The lisence key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
+        /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
         public void SaveLicense([NotNullOrWhitespace] string license)
@@ -239,7 +239,7 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Loads the license.
         /// </summary>
-        /// <returns>The lisence from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
+        /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
         public string LoadLicense()
         {
             string xmlFilePath = GetLicenseInfoPath();
@@ -275,7 +275,7 @@ namespace Orc.LicenseManager.Services
             {
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Your clipboard seems to be empty", "Please make sure that you copied the whole text."));
             }
-            var xmlDataList = new List<XMLDataModel>();
+            var xmlDataList = new List<XmlDataModel>();
             try
             {
                 var xmlDoc = new XmlDocument();
@@ -288,7 +288,7 @@ namespace Orc.LicenseManager.Services
                 var xmlNodes = xmlRoot.ChildNodes;
                 foreach (XmlNode node in xmlNodes)
                 {
-                    xmlDataList.Add(new XMLDataModel()
+                    xmlDataList.Add(new XmlDataModel()
                     {
                         Name = node.Name,
                         Value = node.InnerText
@@ -321,15 +321,15 @@ namespace Orc.LicenseManager.Services
             return validationContext;
         }
         /// <summary>
-        /// Loads the XML out of lisence.
+        /// Loads the XML out of license.
         /// </summary>
         /// <param name="license">The license.</param>
         /// <returns>
         /// A List of with the xml names and values
         /// </returns>
-        public List<XMLDataModel> LoadXMLFromLisence(string license)
+        public List<XmlDataModel> LoadXmlFromLicense(string license)
         {
-            var xmlDataList = new List<XMLDataModel>();
+            var xmlDataList = new List<XmlDataModel>();
             try
             {
                 var xmlDoc = new XmlDocument();
@@ -338,7 +338,7 @@ namespace Orc.LicenseManager.Services
                 var xmlNodes = xmlRoot.ChildNodes;
                 foreach (XmlNode node in xmlNodes)
                 {
-                    xmlDataList.Add(new XMLDataModel()
+                    xmlDataList.Add(new XmlDataModel()
                     {
                         Name = node.Name,
                         Value = node.InnerText

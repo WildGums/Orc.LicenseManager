@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="XmlDataModel.cs" company="Orchestra development team">
+//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Orc.LicenseManager.Models
 {
     /// <summary>
     /// XMLDataModel is used for extracting the data from a XML file
     /// </summary>
-    public class XMLDataModel
+    public class XmlDataModel
     {
+        #region Properties
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -17,6 +20,7 @@ namespace Orc.LicenseManager.Models
         /// The name.
         /// </value>
         public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
@@ -24,5 +28,6 @@ namespace Orc.LicenseManager.Models
         /// The value.
         /// </value>
         public string Value { get; set; }
+        #endregion
     }
 }
