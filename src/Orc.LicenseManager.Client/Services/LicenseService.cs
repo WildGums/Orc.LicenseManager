@@ -92,7 +92,7 @@ namespace Orc.LicenseManager.Services
                 title = assembly.Title();
             }
 
-            var model = new SingleLicenseModel {Title = title, Website = website};
+            var model = new SingleLicenseModel { Title = title, Website = website };
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
             Log.Info("Showing dialog");
@@ -227,6 +227,102 @@ namespace Orc.LicenseManager.Services
                 Log.Unindent();
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Validates the XML
+        /// </summary>
+        /// <param name="license">The license.</param>
+        /// <returns>The validation context containing all the validation results.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="XmlException">The license text is not valid XML.</exception>
+        /// <exception cref="Exception">The root element is not License.</exception>
+        /// <exception cref="Exception">There were no inner nodes found.</exception>
+        public IValidationContext ValidateXML(string license)
+        {
+            // TODO: Ask geert about the exceptions, it can be exception, argument, xml.... mayby more
+            var validationContext = new ValidationContext();
+            if (string.IsNullOrWhiteSpace(license))
+            {
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Your clipboard seems to be empty", "Please make sure that you copied the whole text."));
+            }
+            var xmlDataList = new List<XMLDataModel>();
+            try
+            {
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(license);
+                var xmlRoot = xmlDoc.DocumentElement;
+                if (xmlRoot.Name != "License")
+                {
+                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Please make sure that you pasted the complete xmldata, including the License tag", "Please make sure that you copied the whole text."));
+                }
+                var xmlNodes = xmlRoot.ChildNodes;
+                foreach (XmlNode node in xmlNodes)
+                {
+                    xmlDataList.Add(new XMLDataModel()
+                    {
+                        Name = node.Name,
+                        Value = node.InnerText
+                    });
+                }
+                if (xmlDataList.Count == 0)
+                {
+                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("There was no inner XML found", "Please make sure that you copied the whole text."));
+                }
+                Log.Info("the XML is valid.");
+            }
+            catch (XmlException xmlex)
+            {
+                Log.Debug(xmlex);
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The pasted text is not valid XML.", "Please make sure that you copied the whole text."));
+                Log.Info("the XML is invalid.");
+
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(ex);
+                string innermessage = "";
+                if (ex.InnerException != null)
+                {
+                    innermessage = ex.InnerException.Message;
+                }
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag(ex.Message, innermessage));
+                Log.Info("the XML is invalid.");
+            }
+            return validationContext;
+        }
+        /// <summary>
+        /// Loads the XML out of lisence.
+        /// </summary>
+        /// <param name="license">The license.</param>
+        /// <returns>
+        /// A List of with the xml names and values
+        /// </returns>
+        public List<XMLDataModel> LoadXMLFromLisence(string license)
+        {
+            var xmlDataList = new List<XMLDataModel>();
+            try
+            {
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(license);
+                var xmlRoot = xmlDoc.DocumentElement;
+                var xmlNodes = xmlRoot.ChildNodes;
+                foreach (XmlNode node in xmlNodes)
+                {
+                    xmlDataList.Add(new XMLDataModel()
+                    {
+                        Name = node.Name,
+                        Value = node.InnerText
+                    });
+                }
+                Log.Info("returning xml successfull");
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(ex);
+                throw;
+            }
+            return xmlDataList;
         }
         #endregion
 

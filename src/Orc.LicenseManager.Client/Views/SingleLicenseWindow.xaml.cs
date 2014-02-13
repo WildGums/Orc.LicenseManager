@@ -7,6 +7,7 @@
 
 namespace Orc.LicenseManager.Views
 {
+    using System.Windows.Input;
     using Catel.Windows;
     using ViewModels;
 
@@ -29,10 +30,12 @@ namespace Orc.LicenseManager.Views
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public SingleLicenseWindow(SingleLicenseViewModel viewModel)
-            : base(viewModel, DataWindowMode.OkCancel)
+            : base(viewModel, DataWindowMode.Custom)
         {
             InitializeComponent();
         }
         #endregion
+
+   
     }
 }

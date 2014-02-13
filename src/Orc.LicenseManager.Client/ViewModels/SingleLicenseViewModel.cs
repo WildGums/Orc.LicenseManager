@@ -8,8 +8,10 @@
 namespace Orc.LicenseManager.ViewModels
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Windows;
     using Catel;
     using Catel.IoC;
     using Catel.Logging;
@@ -23,7 +25,9 @@ namespace Orc.LicenseManager.ViewModels
     /// </summary>
     public class SingleLicenseViewModel : ViewModelBase
     {
+        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
         #region Fields
         private readonly INavigationService _navigationService;
@@ -50,17 +54,35 @@ namespace Orc.LicenseManager.ViewModels
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => processService);
             Argument.IsNotNull(() => licenseService);
-
             _navigationService = navigationService;
             _processService = processService;
             _licenseService = licenseService;
+            NoFailure = true;
+            XmlData = new ObservableCollection<XMLDataModel>();
 
             SingleLicenseModel = singleLicenseModel;
             WebsiteClick = new Command(OnWebsiteClickExecute);
+            Paste = new Command(OnPasteExecute);
+            Exit = new Command(OnExitExecute);
+            ShowClipboard = new Command(OnShowClipboardExecute);
+            Submit = new Command(OnSubmitExecute);
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the Submit command.
+        /// </summary>
+        public Command Submit { get; private set; }
+
+        /// <summary>
+        /// Gets the Exit command.
+        /// </summary>
+        public Command Exit { get; private set; }
+
+        /// <summary>
+        /// Gets the Close command.
+        /// </summary>
         /// <summary>
         /// Gets the WebsiteClick command.
         /// </summary>
@@ -70,6 +92,11 @@ namespace Orc.LicenseManager.ViewModels
         /// Gets or sets the property value.
         /// </summary>
         public bool FailureOccurred { get; set; }
+
+        /// <summary>
+        /// Gets set by the opposite way of FailureOccured
+        /// </summary>
+        public bool NoFailure { get; set; }
 
         /// <summary>
         /// Gets the failure message.
@@ -93,37 +120,59 @@ namespace Orc.LicenseManager.ViewModels
         [Catel.Fody.Expose("Key")]
         [Catel.Fody.Expose("WebsiteIsSet")]
         private SingleLicenseModel SingleLicenseModel { get; set; }
-        #endregion
+
         /// <summary>
-        /// 
+        /// Color is either red or green when successful
         /// </summary>
+        [DefaultValue("Red")]
         public string Color { get; set; }
-        private void OnKeyChanged()
-        {
-            Log.Debug("Key value has changed.");
-            if (_licenseService.ValidateLicense(SingleLicenseModel.Key).HasErrors)
-            {
-                Color = "Red";
-            }
-            else
-            {
-                Color = "Green";
-            }
-        }
+
+        /// <summary>
+        /// Gets the Paste command.
+        /// </summary>
+        public Command Paste { get; private set; }
+
+        /// <summary>
+        /// List of xml Data, only populated when license was valid.
+        /// </summary>
+        public ObservableCollection<XMLDataModel> XmlData { get; set; }
+
+        /// <summary>
+        /// Gets the ShowClipboard command.
+        /// </summary>
+        public Command ShowClipboard { get; private set; }
+        #endregion
+
         #region Methods
         /// <summary>
-        /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.ViewModelBase.Cancel" /> of <see cref="M:Catel.MVVM.ViewModelBase.Save" /> method.
+        /// Method to invoke when the Submit command is executed.
         /// </summary>
-        protected override void Close()
+        private void OnSubmitExecute()
         {
-            if (FailureOccurred)
-            {
-                Log.Debug("Closing application becauso no valid key was given.");
-                _navigationService.CloseApplication();
-            }
-            Log.Debug("Closing dialog with a valid lisence.");
-            base.Close();
+            _licenseService.SaveLicense(SingleLicenseModel.Key);
+            base.Close(); // TODO: Fix this :/
         }
+
+
+
+        /// <summary>
+        /// Method to invoke when the Exit command is executed.
+        /// </summary>
+        private void OnExitExecute()
+        {
+            Log.Debug("Closing application.");
+            _navigationService.CloseApplication();
+
+        }
+
+        private void OnFailureOccurredChanged()
+        {
+            NoFailure = !FailureOccurred;
+            Log.Debug("NoFailure is: " + NoFailure);
+            Log.Debug("FailureOccurred is: " + FailureOccurred);
+        }
+
+
 
         /// <summary>
         /// Method to invoke when the WebsiteClick command is executed.
@@ -170,30 +219,55 @@ namespace Orc.LicenseManager.ViewModels
             pleaseWaitService.Hide();
         }
 
+
         /// <summary>
-        /// Is fired upon pressing the Ok button! Saves the data, closes the window.
+        /// Method to invoke when the Paste command is executed. Validates the lisence and xml, 
         /// </summary>
-        /// <returns>
-        ///   <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
-        protected override bool Save()
+        private void OnPasteExecute()
         {
-            var validationContext = _licenseService.ValidateLicense(SingleLicenseModel.Key);
-            var firstError = validationContext.GetBusinessRuleErrors().FirstOrDefault();
-            if (firstError != null)
+            if (FailureOccurred == true)
             {
-                Log.Debug("Ok pressed without a valid key");
-                FailureOccurred = true;
-                FailureMessage = firstError.Message;
-                FailureSolution = firstError.Tag as string;
+                XmlData.Clear();
+                if (Clipboard.GetText() != string.Empty)
+                {
+                    SingleLicenseModel.Key = Clipboard.GetText();
+                    string lisence = SingleLicenseModel.Key;
+                    var xmlFirstError = _licenseService.ValidateXML(lisence).GetBusinessRuleErrors().FirstOrDefault();
+                    if (xmlFirstError == null)
+                    {
+                        var normalFirstError = _licenseService.ValidateLicense(SingleLicenseModel.Key).GetBusinessRuleErrors().FirstOrDefault();
+                        if (normalFirstError == null)
+                        {
+                            var xmlList = _licenseService.LoadXMLFromLisence(SingleLicenseModel.Key);
+                            xmlList.ForEach(XmlData.Add);
+                            FailureOccurred = false;
+                        }
+                        else
+                        {
+                            FailureMessage = normalFirstError.Message;
+                            FailureSolution = normalFirstError.Tag as string;
+                        }
+                    }
+                    else
+                    {
+                        FailureMessage = xmlFirstError.Message;
+                        FailureSolution = xmlFirstError.Tag as string;
+                    }
+                }
+                else
+                {
+                    FailureMessage = "No text was pasted into the windows.";
+                    FailureSolution = "Please copy the license text into this window.";
+                }
             }
-            else
-            {
-                Log.Debug("Ok pressed with a valid key");
-                FailureOccurred = false;
-                _licenseService.SaveLicense(SingleLicenseModel.Key);
-            }
-            return !validationContext.HasErrors;
+        }
+
+        /// <summary>
+        /// Method to invoke when the ShowClipboard command is executed.
+        /// </summary>
+        private void OnShowClipboardExecute()
+        {
+            //TODO: Show clipboard
         }
         #endregion
     }
