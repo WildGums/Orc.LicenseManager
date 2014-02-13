@@ -57,7 +57,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         private void OnRemoveLicenseExecute()
         {
             _licenseService.RemoveLicense();
-            _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+            ShowLicenseDialogue();
         }
 
         protected override void Initialize()
@@ -69,13 +69,19 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
                 if (licenseValidation.HasErrors)
                 {
-                    _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+                    ShowLicenseDialogue();
                 }
             }
             else
             {
-                _licenseService.ShowSingleLicenseDialog("CatelSoftware", "http://www.catelproject.com");
+                ShowLicenseDialogue();
             }
+        }
+
+        private void ShowLicenseDialogue()
+        {
+            //_licenseService.ShowSingleLicenseDialog("Catel", "http://www.catelproject.com/wp-content/uploads/2013/10/logo_with_text.png", "Catel is a company made in 200x and is  dolor sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.catelproject.com/", "CatelSoftware Lisence Required", "http://www.catelproject.com/product/buy/642");
+            _licenseService.ShowSingleLicenseDialog();
         }
         #endregion
     }

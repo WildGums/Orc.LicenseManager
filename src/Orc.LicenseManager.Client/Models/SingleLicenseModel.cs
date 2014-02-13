@@ -22,13 +22,47 @@ namespace Orc.LicenseManager.Models
         /// The title.
         /// </value>
         public string Title { get; set; }
+
         /// <summary>
-        /// Gets or sets the website.
+        /// Gets or sets the PurchaseLink.
         /// </summary>
         /// <value>
         /// The website.
         /// </value>
-        public string Website { get; set; }
+        public string PurchaseLink { get; set; }
+
+        /// <summary>
+        /// Gets or sets the company site.
+        /// </summary>
+        /// <value>
+        /// The company site.
+        /// </value>
+        public string CompanySite { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the company.
+        /// </summary>
+        /// <value>
+        /// The name of the company.
+        /// </value>
+        public string CompanyName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the company text that will be used in the singlelisencedialogue.
+        /// </summary>
+        /// <value>
+        /// The company text.
+        /// </value>
+        public string CompanyText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CompanyImage source path.
+        /// </summary>
+        /// <value>
+        /// The image source.
+        /// </value>
+        public string CompanyImage { get; set; }
+
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
@@ -38,14 +72,36 @@ namespace Orc.LicenseManager.Models
         public string Key { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether [website is set].
+        /// Gets a value indicating whether [company website is set].
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [website is set]; otherwise, <c>false</c>.
+        /// <c>true</c> if [company website is set]; otherwise, <c>false</c>.
         /// </value>
-        public bool WebsiteIsSet
+        public bool CompanyWebsiteIsSet
         {
-            get { return Website != null; }
+            get { return CompanySite != null; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether [purchase link is set].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [purchase link is set]; otherwise, <c>false</c>.
+        /// </value>
+        public bool PurchaseLinkIsSet
+        {
+            get { return PurchaseLink != null; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether [company information is set].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [company information is set]; otherwise, <c>false</c>.
+        /// </value>
+        public bool CompanyInfoIsSet
+        {
+            get { return CompanyText != null; }
         }
         #endregion
     }

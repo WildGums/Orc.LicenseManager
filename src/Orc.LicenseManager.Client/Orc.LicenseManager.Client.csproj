@@ -38,6 +38,9 @@
     <Reference Include="Catel.Core">
       <HintPath>..\..\lib\Catel.Core.3.9.0\lib\net40\Catel.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Catel.Extensions.Controls">
+      <HintPath>..\..\lib\Catel.Extensions.Controls.3.9.0\lib\net40\Catel.Extensions.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Catel.Fody.Attributes">
       <HintPath>..\..\lib\Catel.Fody.1.7.0\lib\net40\Catel.Fody.Attributes.dll</HintPath>
       <Private>False</Private>
@@ -68,16 +71,17 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\SingleLicenseModel.cs" />
     <Compile Include="Models\XMLDataModel.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interfaces\ILicenseService.cs" />
     <Compile Include="Services\LicenseService.cs" />
+    <Compile Include="ViewModels\ClipBoardViewModel.cs" />
     <Compile Include="ViewModels\SingleLicenseViewModel.cs" />
+    <Compile Include="Views\ClipBoardWindow.xaml.cs">
+      <DependentUpon>ClipBoardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SingleLicenseWindow.xaml.cs">
       <DependentUpon>SingleLicenseWindow.xaml</DependentUpon>
     </Compile>
@@ -95,9 +99,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="App.xaml">
+    <Page Include="Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ClipBoardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SingleLicenseWindow.xaml">
       <SubType>Designer</SubType>

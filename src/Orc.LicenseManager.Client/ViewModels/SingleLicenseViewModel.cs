@@ -34,6 +34,8 @@ namespace Orc.LicenseManager.ViewModels
         private readonly IProcessService _processService;
 
         private readonly ILicenseService _licenseService;
+
+        private readonly IUIVisualizerService _uiVisualizerService;
         #endregion
 
         #region Constructors
@@ -44,12 +46,15 @@ namespace Orc.LicenseManager.ViewModels
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="processService">The process service.</param>
         /// <param name="licenseService">The license service.</param>
+        /// <param name="uiVisualizerService">The uiVisualizer service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="singleLicenseModel" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="navigationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="processService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
-        public SingleLicenseViewModel(SingleLicenseModel singleLicenseModel, INavigationService navigationService, IProcessService processService, ILicenseService licenseService)
+        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
+        public SingleLicenseViewModel(SingleLicenseModel singleLicenseModel, INavigationService navigationService, IProcessService processService, ILicenseService licenseService, IUIVisualizerService uiVisualizerService)
         {
+            Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => singleLicenseModel);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => processService);
@@ -57,15 +62,15 @@ namespace Orc.LicenseManager.ViewModels
             _navigationService = navigationService;
             _processService = processService;
             _licenseService = licenseService;
-            NoFailure = true;
+            _uiVisualizerService = uiVisualizerService;
             XmlData = new ObservableCollection<XMLDataModel>();
-
             SingleLicenseModel = singleLicenseModel;
-            WebsiteClick = new Command(OnWebsiteClickExecute);
             Paste = new Command(OnPasteExecute);
             Exit = new Command(OnExitExecute);
             ShowClipboard = new Command(OnShowClipboardExecute);
             Submit = new Command(OnSubmitExecute);
+            PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
+            CompanySiteClick = new Command(OnCompanySiteClickExecute);
         }
         #endregion
 
@@ -86,17 +91,10 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Gets the WebsiteClick command.
         /// </summary>
-        public Command WebsiteClick { get; private set; }
-
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>
         public bool FailureOccurred { get; set; }
-
-        /// <summary>
-        /// Gets set by the opposite way of FailureOccured
-        /// </summary>
-        public bool NoFailure { get; set; }
 
         /// <summary>
         /// Gets the failure message.
@@ -114,11 +112,27 @@ namespace Orc.LicenseManager.ViewModels
         /// </value>
         public string FailureSolution { get; private set; }
 
+        /// <summary>
+        /// Gets the PurchaseLinkClick command.
+        /// </summary>
+        public Command PurchaseLinkClick { get; private set; }
+
+        /// <summary>
+        /// Gets the CompanySiteClick command.
+        /// </summary>
+        public Command CompanySiteClick { get; private set; }
+
         [Model]
         [Catel.Fody.Expose("Title")]
-        [Catel.Fody.Expose("Website")]
+        [Catel.Fody.Expose("PurchaseLink")]
+        [Catel.Fody.Expose("CompanyName")]
+        [Catel.Fody.Expose("CompanySite")]
+        [Catel.Fody.Expose("CompanyText")]
+        [Catel.Fody.Expose("CompanyImage")]
         [Catel.Fody.Expose("Key")]
-        [Catel.Fody.Expose("WebsiteIsSet")]
+        [Catel.Fody.Expose("CompanyWebsiteIsSet")]
+        [Catel.Fody.Expose("PurchaseLinkIsSet")]
+        [Catel.Fody.Expose("CompanyInfoIsSet")]
         private SingleLicenseModel SingleLicenseModel { get; set; }
 
         /// <summary>
@@ -141,19 +155,49 @@ namespace Orc.LicenseManager.ViewModels
         /// Gets the ShowClipboard command.
         /// </summary>
         public Command ShowClipboard { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [paste success].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [paste success]; otherwise, <c>false</c>.
+        /// </value>
+        public bool PasteSuccess { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [show failure].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show failure]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowFailure { get; set; }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Method to invoke when the CompanySiteClick command is executed.
+        /// </summary>
+        private void OnCompanySiteClickExecute()
+        {
+            _processService.StartProcess(SingleLicenseModel.CompanySite);
+        }
+
+        /// <summary>
+        /// Method to invoke when the PurchaseLinkClick command is executed.
+        /// </summary>
+        private void OnPurchaseLinkClickExecute()
+        {
+            _processService.StartProcess(SingleLicenseModel.PurchaseLink);
+        }
+
         /// <summary>
         /// Method to invoke when the Submit command is executed.
         /// </summary>
         private void OnSubmitExecute()
         {
             _licenseService.SaveLicense(SingleLicenseModel.Key);
-            base.Close(); // TODO: Fix this :/
+            CancelAndCloseViewModel(); // TODO: Close doesn t work : / 
         }
-
-
 
         /// <summary>
         /// Method to invoke when the Exit command is executed.
@@ -162,24 +206,6 @@ namespace Orc.LicenseManager.ViewModels
         {
             Log.Debug("Closing application.");
             _navigationService.CloseApplication();
-
-        }
-
-        private void OnFailureOccurredChanged()
-        {
-            NoFailure = !FailureOccurred;
-            Log.Debug("NoFailure is: " + NoFailure);
-            Log.Debug("FailureOccurred is: " + FailureOccurred);
-        }
-
-
-
-        /// <summary>
-        /// Method to invoke when the WebsiteClick command is executed.
-        /// </summary>
-        private void OnWebsiteClickExecute()
-        {
-            _processService.StartProcess(SingleLicenseModel.Website);
         }
 
         /// <summary>
@@ -219,7 +245,6 @@ namespace Orc.LicenseManager.ViewModels
             pleaseWaitService.Hide();
         }
 
-
         /// <summary>
         /// Method to invoke when the Paste command is executed. Validates the lisence and xml, 
         /// </summary>
@@ -241,21 +266,25 @@ namespace Orc.LicenseManager.ViewModels
                             var xmlList = _licenseService.LoadXMLFromLisence(SingleLicenseModel.Key);
                             xmlList.ForEach(XmlData.Add);
                             FailureOccurred = false;
+                            ShowFailure = false;
                         }
                         else
                         {
+                            ShowFailure = true;
                             FailureMessage = normalFirstError.Message;
                             FailureSolution = normalFirstError.Tag as string;
                         }
                     }
                     else
                     {
+                        ShowFailure = true;
                         FailureMessage = xmlFirstError.Message;
                         FailureSolution = xmlFirstError.Tag as string;
                     }
                 }
                 else
                 {
+                    ShowFailure = true;
                     FailureMessage = "No text was pasted into the windows.";
                     FailureSolution = "Please copy the license text into this window.";
                 }
@@ -267,7 +296,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnShowClipboardExecute()
         {
-            //TODO: Show clipboard
+            _uiVisualizerService.ShowDialog(new ClipBoardViewModel());
         }
         #endregion
     }

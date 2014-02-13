@@ -74,12 +74,41 @@ namespace Orc.LicenseManager.Services
         }
 
         /// <summary>
+        /// Shows the single license dialog including all company info.
+        /// </summary>
+        /// <param name="companyName">Name of the company.</param>
+        /// <param name="companyImage">The company image.</param>
+        /// <param name="companyText">The company text.</param>
+        /// <param name="companySite">The company site.</param>
+        /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
+        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
+        /// <exception cref="System.Exception">Please use the Initialize method first</exception>
+        /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
+        public void ShowSingleLicenseDialog(string companyName, string companyImage, string companyText, string companySite = null, string title = null, string purchaseLink = null)
+        {
+            if (!_initialized)
+            {
+                throw new Exception("Please use the Initialize method first");
+            }
+
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
+                title = assembly.Title();
+            }
+            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink, CompanyImage = companyImage, CompanyName = companyName, CompanyText = companyText, CompanySite = companySite};
+            var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
+            _uiVisualizerService.ShowDialog(vm);
+            Log.Info("Showing dialog with companyinfo");
+        }
+
+        /// <summary>
         /// Shows the single license dialog.
         /// </summary>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="website">The website. If <c>null</c>, no website link will be displayed.</param>
+        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
         /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public void ShowSingleLicenseDialog(string title = null, string website = null)
+        public void ShowSingleLicenseDialog(string title = null, string purchaseLink = null)
         {
             if (!_initialized)
             {
@@ -92,7 +121,7 @@ namespace Orc.LicenseManager.Services
                 title = assembly.Title();
             }
 
-            var model = new SingleLicenseModel { Title = title, Website = website };
+            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink };
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
             Log.Info("Showing dialog");
