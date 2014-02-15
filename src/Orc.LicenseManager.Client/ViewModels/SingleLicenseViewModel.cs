@@ -78,7 +78,7 @@ namespace Orc.LicenseManager.ViewModels
             ShowClipboard = new Command(OnShowClipboardExecute);
             Submit = new Command(OnSubmitExecute);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
-            CompanySiteClick = new Command(OnCompanySiteClickExecute);
+            AboutSiteClick = new Command(OnAboutSiteClickExecute);
         }
         #endregion
 
@@ -126,19 +126,28 @@ namespace Orc.LicenseManager.ViewModels
         public Command PurchaseLinkClick { get; private set; }
 
         /// <summary>
-        /// Gets the CompanySiteClick command.
+        /// Gets the AboutSiteClick command.
         /// </summary>
-        public Command CompanySiteClick { get; private set; }
+        public Command AboutSiteClick { get; private set; }
 
         [Model]
         [Catel.Fody.Expose("Title")]
         [Catel.Fody.Expose("PurchaseLink")]
-        [Catel.Fody.Expose("CompanyName")]
-        [Catel.Fody.Expose("CompanySite")]
-        [Catel.Fody.Expose("CompanyText")]
-        [Catel.Fody.Expose("CompanyImage")]
+        [Catel.Fody.Expose("AboutTitle")]
+        [Catel.Fody.Expose("AboutSite")]
+        [Catel.Fody.Expose("AboutText")]
+        [Catel.Fody.Expose("AboutImage")]
         [Catel.Fody.Expose("Key")]
         private SingleLicenseModel SingleLicenseModel { get; set; }
+
+
+        /// <summary>
+        /// Gets the about image URI.
+        /// </summary>
+        /// <value>
+        /// The about image URI.
+        /// </value>
+        public Uri AboutImageUri { get { return new Uri(SingleLicenseModel.AboutImage, UriKind.RelativeOrAbsolute);} }
 
         /// <summary>
         /// Gets the Paste command.
@@ -174,11 +183,11 @@ namespace Orc.LicenseManager.ViewModels
 
         #region Methods
         /// <summary>
-        /// Method to invoke when the CompanySiteClick command is executed.
+        /// Method to invoke when the AboutSiteClick command is executed.
         /// </summary>
-        private void OnCompanySiteClickExecute()
+        private void OnAboutSiteClickExecute()
         {
-            _processService.StartProcess(SingleLicenseModel.CompanySite);
+            _processService.StartProcess(SingleLicenseModel.AboutSite);
         }
 
         /// <summary>

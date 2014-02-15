@@ -27,14 +27,14 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Source="{Binding CompanyImage}" Width="250" Height="100" />
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CompanyName}" FontSize="16" FontWeight="Bold"/>
+                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Source="{Binding AboutImageUri}" Width="250" Height="100" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding AboutTitle}" FontSize="16" FontWeight="Bold"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CompanyText}" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AboutText}" TextWrapping="Wrap"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding CompanySite, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" >                    
-                    <Hyperlink NavigateUri="{Binding CompanySite}" Command="{Binding CompanySiteClick}">
-                        <TextBlock Text="{Binding CompanySite}" Margin="-1" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding AboutSite, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" >                    
+                    <Hyperlink NavigateUri="{Binding AboutSite}" Command="{Binding AboutSiteClick}">
+                        <TextBlock Text="{Binding AboutSite}" Margin="-1" />
                     </Hyperlink>
                 </TextBlock>
             </Grid>

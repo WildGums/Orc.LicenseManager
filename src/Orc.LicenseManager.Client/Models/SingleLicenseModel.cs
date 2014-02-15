@@ -37,31 +37,31 @@ namespace Orc.LicenseManager.Models
         /// <value>
         /// The company site.
         /// </value>
-        public string CompanySite { get; set; }
+        public string AboutSite { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the company.
+        /// Gets or sets the Title for the about box
         /// </summary>
         /// <value>
         /// The name of the company.
         /// </value>
-        public string CompanyName { get; set; }
+        public string AboutTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets the company text that will be used in the singlelicensedialogue.
+        /// Gets or sets the company text that will be used in the about box
         /// </summary>
         /// <value>
         /// The company text.
         /// </value>
-        public string CompanyText { get; set; }
+        public string AboutText { get; set; }
 
         /// <summary>
-        /// Gets or sets the CompanyImage source path.
+        /// Gets or sets the AboutImage source path.
         /// </summary>
         /// <value>
         /// The image source.
         /// </value>
-        public string CompanyImage { get; set; }
+        public string AboutImage { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

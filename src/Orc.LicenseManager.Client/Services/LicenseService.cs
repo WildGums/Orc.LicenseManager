@@ -76,15 +76,15 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Shows the single license dialog including all company info. You will see the about box.
         /// </summary>
-        /// <param name="companyName">Name of the company.</param>
-        /// <param name="companyImage">The company image.</param>
-        /// <param name="companyText">The company text.</param>
-        /// <param name="companySite">The company site.</param>
+        /// <param name="aboutTitle">The title inside the about box.</param>
+        /// <param name="aboutImae">The about box image.</param>
+        /// <param name="aboutText">The text inside the about box</param>
+        /// <param name="aboutSite">The site inside the about box.</param>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
         /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
         /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public void ShowSingleLicenseDialog(string companyName, string companyImage, string companyText, string companySite = null, string title = null, string purchaseLink = null)
+        public void ShowSingleLicenseDialog(string aboutTitle, string aboutImae, string aboutText, string aboutSite = null, string title = null, string purchaseLink = null)
         {
             if (!_initialized)
             {
@@ -96,7 +96,7 @@ namespace Orc.LicenseManager.Services
                 Assembly assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
                 title = assembly.Title();
             }
-            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink, CompanyImage = companyImage, CompanyName = companyName, CompanyText = companyText, CompanySite = companySite};
+            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink, AboutImage = aboutImae, AboutTitle = aboutTitle, AboutText = aboutText, AboutSite = aboutSite};
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
             Log.Info("Showing dialog with companyinfo");
