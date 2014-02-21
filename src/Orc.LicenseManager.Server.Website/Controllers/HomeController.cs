@@ -1,17 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HomeController.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
-
-namespace LicenseManager.Server.Website.Controllers
+namespace Orc.LicenseManager.Server.Website.Controllers
 {
-    using System.Web.Mvc;
+    using System.Data.Entity;
+    using Data;
 
     public class HomeController : Controller
     {
-        #region Methods
         public ActionResult Index()
         {
             return View();
@@ -30,6 +29,14 @@ namespace LicenseManager.Server.Website.Controllers
 
             return View();
         }
-        #endregion
+        public ActionResult Reset()
+        {
+            Database.SetInitializer<LicenseManagerDbContext>(new RecreateContext());
+            using (var context = new LicenseManagerDbContext())
+            {
+                context.Database.Initialize(true);
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

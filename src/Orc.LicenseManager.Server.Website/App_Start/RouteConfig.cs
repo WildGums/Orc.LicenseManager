@@ -1,18 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RouteConfig.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
-
-namespace LicenseManager.Server.Website
+namespace Orc.LicenseManager.Server.Website
 {
-    using System.Web.Mvc;
-    using System.Web.Routing;
-
     public class RouteConfig
     {
-        #region Methods
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -20,9 +16,8 @@ namespace LicenseManager.Server.Website
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new {controller = "Home", action = "Index", id = UrlParameter.Optional}
-                );
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
         }
-        #endregion
     }
 }

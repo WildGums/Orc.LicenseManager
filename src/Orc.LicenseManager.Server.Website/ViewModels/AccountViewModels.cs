@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace LicenseManager.Server.Website.Models
+namespace Orc.LicenseManager.Server.Website.ViewModels
 {
     using System.ComponentModel.DataAnnotations;
 

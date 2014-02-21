@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace LicenseManager.Server.Website.Controllers
+namespace Orc.LicenseManager.Server.Website.Controllers
 {
     using System.Threading.Tasks;
     using System.Web;
@@ -13,8 +13,7 @@ namespace LicenseManager.Server.Website.Controllers
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Microsoft.Owin.Security;
-    using Models;
-    using Orc.LicenseManager.Server;
+    using ViewModels;
 
     [Authorize]
     public class AccountController : Controller

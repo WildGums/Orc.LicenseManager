@@ -7,7 +7,11 @@ using Orc.LicenseManager.Server;
 
 namespace Orc.LicenseManager.Server.Repositories
 {
-	public partial interface ILicenseRepository : IEntityRepository<License, int>
+	public partial interface ILicensePocoRepository : IEntityRepository<LicensePoco, int>
+	{
+		
+	} 
+	public partial interface IProductRepository : IEntityRepository<Product, int>
 	{
 		
 	} 

@@ -11,19 +11,29 @@ namespace Orc.LicenseManager.Server
 
 	public partial class UoW : UnitOfWork<LicenseManagerDbContext>, IUoW
 	{
-        private ILicenseRepository _LicenseRepository;
+        private ILicensePocoRepository _LicensePocoRepository;
 
-        public ILicenseRepository Licenses
+        public ILicensePocoRepository Licenses
         {
             get 
 			{ 
-				return _LicenseRepository ?? (_LicenseRepository = GetRepository<ILicenseRepository>());
+				return _LicensePocoRepository ?? (_LicensePocoRepository = GetRepository<ILicensePocoRepository>());
+		    }
+        }
+        private IProductRepository _ProductRepository;
+
+        public IProductRepository Products
+        {
+            get 
+			{ 
+				return _ProductRepository ?? (_ProductRepository = GetRepository<IProductRepository>());
 		    }
         }
 	}
 	public partial interface IUoW
 	{
-            ILicenseRepository Licenses { get; }
+            ILicensePocoRepository Licenses { get; }
+            IProductRepository Products { get; }
 	}
 }
 

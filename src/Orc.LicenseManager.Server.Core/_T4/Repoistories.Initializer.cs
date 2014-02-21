@@ -11,7 +11,8 @@ namespace Orc.LicenseManager.Server
 	{
 		internal static void RegisterRepositories()
 		{
-            ServiceLocator.Default.RegisterType<ILicenseRepository, LicenseRepository>();
+            ServiceLocator.Default.RegisterType<ILicensePocoRepository, LicensePocoRepository>();
+	            ServiceLocator.Default.RegisterType<IProductRepository, ProductRepository>();
 			}
 	}
 }

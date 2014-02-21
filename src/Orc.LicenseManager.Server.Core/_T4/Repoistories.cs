@@ -8,9 +8,17 @@ using Orc.LicenseManager.Server;
 
 namespace Orc.LicenseManager.Server.Repositories
 {
-    public partial class LicenseRepository : EntityRepositoryBase<License, int>, ILicenseRepository
+    public partial class LicensePocoRepository : EntityRepositoryBase<LicensePoco, int>, ILicensePocoRepository
 	{
-		 public LicenseRepository(LicenseManagerDbContext dbContext) 
+		 public LicensePocoRepository(LicenseManagerDbContext dbContext) 
+		 : base(dbContext)
+         {
+         }
+	} 
+
+    public partial class ProductRepository : EntityRepositoryBase<Product, int>, IProductRepository
+	{
+		 public ProductRepository(LicenseManagerDbContext dbContext) 
 		 : base(dbContext)
          {
          }

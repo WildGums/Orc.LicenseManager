@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C32AEBA1-64E5-4909-9786-D7166E8EFC1E}</ProjectGuid>
+    <ProjectGuid>{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -20,7 +20,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <FodyPath>..\..\lib\Fody.1.20.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +29,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,15 +43,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.Core">
-      <HintPath>..\..\lib\Catel.Core.3.9.0.1402191045-beta\lib\net45\Catel.Core.dll</HintPath>
+    <Reference Include="Catel.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Catel.Core.3.9.0.1402201626-beta\lib\net45\Catel.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.Extensions.EntityFramework6">
-      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.3.9.0.1402191045-beta\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
-    </Reference>
-    <Reference Include="Catel.Fody.Attributes">
-      <HintPath>..\..\lib\Catel.Fody.1.7.0\lib\net45\Catel.Fody.Attributes.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Catel.Extensions.EntityFramework6, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.3.9.0.1402201626-beta\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -123,7 +119,7 @@
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.AspNet.Web.Optimization.1.1.2\lib\net40\System.Web.Optimization.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -178,19 +174,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -200,11 +195,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
-    <Content Include="FodyWeavers.xml" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Fody.targets" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -249,9 +242,20 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Delete.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\License\Create.cshtml" />
+    <Content Include="Views\License\Delete.cshtml" />
+    <Content Include="Views\License\Details.cshtml" />
+    <Content Include="Views\License\Edit.cshtml" />
+    <Content Include="Views\License\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -263,11 +267,11 @@
       <Name>Orc.LicenseManager.Server.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orc.LicenseManager.Server.Data\Orc.LicenseManager.Server.Data.csproj">
-      <Project>{11AC62DF-094E-46C6-981C-AF888458B0CE}</Project>
+      <Project>{11ac62df-094e-46c6-981c-af888458b0ce}</Project>
       <Name>Orc.LicenseManager.Server.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orc.LicenseManager.Server.Models\Orc.LicenseManager.Server.Models.csproj">
-      <Project>{C316C7EE-3536-48CA-AD4D-8442E16763CF}</Project>
+      <Project>{c316c7ee-3536-48ca-ad4d-8442e16763cf}</Project>
       <Name>Orc.LicenseManager.Server.Models</Name>
     </ProjectReference>
   </ItemGroup>
@@ -287,7 +291,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1857</DevelopmentServerPort>
+          <DevelopmentServerPort>1554</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:1815/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
@@ -299,7 +303,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="Fody.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
