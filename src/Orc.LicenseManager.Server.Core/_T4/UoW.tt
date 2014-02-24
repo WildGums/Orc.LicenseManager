@@ -15,6 +15,7 @@ var baseNameSpace = "Orc.LicenseManager.Server";
 <#@ assembly name="$(TargetDir)Orc.LicenseManager.Server.Models.dll" #>
 <#@ import namespace="Orc.LicenseManager.Server"#>
 
+ 
 
 
 
@@ -69,13 +70,14 @@ Using(baseNameSpace);
 
 
 string dbcontextname = typeInfo.Name.ToString();
-var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("DbSet") && !x.PropertyType.ToString().Contains("User") && !x.PropertyType.ToString().Contains("IdentityRole")).ToArray();
+//var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("DbSet") && !x.PropertyType.ToString().Contains("User") && !x.PropertyType.ToString().Contains("IdentityRole")).ToArray();
+var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("IDbSet") && !x.PropertyType.ToString().Contains("IdentityRole")).ToArray();
 var poconames = new string[pocos.Count()];
 var propnames = new string[pocos.Count()];
 int counter = 0;
 foreach(var poco in pocos)
 {
-	poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.DbSet`1[" + baseNameSpace+ ".","").Replace("]","");
+	poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.IDbSet`1[" + baseNameSpace+ ".","").Replace("]","");
 	propnames[counter] = poco.Name;
 	counter ++;
 }

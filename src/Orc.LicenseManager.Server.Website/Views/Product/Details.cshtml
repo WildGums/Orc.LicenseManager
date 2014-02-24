@@ -11,6 +11,14 @@
 	<hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.Creator.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Creator.UserName)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
 
@@ -19,19 +27,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PassPhrase)
+            @Html.DisplayNameFor(model => model.PublicKey)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PassPhrase)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PrivateKey)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PrivateKey)
+            @Html.DisplayFor(model => model.PublicKey)
         </dd>
 
         <dt>

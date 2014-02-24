@@ -67,11 +67,14 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Interfaces\ICreator.cs" />
     <Compile Include="Models\Interfaces\ICreateDate.cs" />
     <Compile Include="Models\Interfaces\IDates.cs" />
     <Compile Include="Models\Interfaces\IModifyDate.cs" />
     <Compile Include="Models\LicensePoco.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

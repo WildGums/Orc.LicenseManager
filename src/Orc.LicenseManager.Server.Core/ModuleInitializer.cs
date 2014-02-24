@@ -1,4 +1,5 @@
 ﻿using Catel.IoC;
+using Orc.LicenseManager.Server;
 using Orc.LicenseManager.Server.Services;
 
 /// <summary>
@@ -13,5 +14,6 @@ public static class ModuleInitializer
     {
         var serviceLocator = ServiceLocator.Default;
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
+        RepositoryInitializer.RegisterRepositories();
     }
 }

@@ -26,34 +26,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Comment, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CustomerId, "CustomerId", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Comment)
-                @Html.ValidationMessageFor(model => model.Comment)
+                @Html.DropDownList("CustomerId", String.Empty)
+                @Html.ValidationMessageFor(model => model.CustomerId)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CreatorId, "CreatorId", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProductId, "ProductId", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("CreatorId", String.Empty)
-                @Html.ValidationMessageFor(model => model.CreatorId)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ModificationDate, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ModificationDate)
-                @Html.ValidationMessageFor(model => model.ModificationDate)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreationDate, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreationDate)
-                @Html.ValidationMessageFor(model => model.CreationDate)
+                @Html.DropDownList("ProductId", String.Empty)
+                @Html.ValidationMessageFor(model => model.ProductId)
             </div>
         </div>
 

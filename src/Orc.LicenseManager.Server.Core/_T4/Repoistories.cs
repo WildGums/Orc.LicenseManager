@@ -24,5 +24,21 @@ namespace Orc.LicenseManager.Server.Repositories
          }
 	} 
 
+    public partial class CustomerRepository : EntityRepositoryBase<Customer, int>, ICustomerRepository
+	{
+		 public CustomerRepository(LicenseManagerDbContext dbContext) 
+		 : base(dbContext)
+         {
+         }
+	} 
+
+    public partial class UserRepository : EntityRepositoryBase<User, int>, IUserRepository
+	{
+		 public UserRepository(LicenseManagerDbContext dbContext) 
+		 : base(dbContext)
+         {
+         }
+	} 
+
 }
 

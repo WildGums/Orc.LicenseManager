@@ -13,21 +13,20 @@ namespace Orc.LicenseManager.Server.Services
     public class LicenseService : ILicenseService
     {
         #region ILicenseService Members
-        public LicensePoco GenerateLicenseForProduct(Product product)
+        public void GenerateLicenseValue(LicensePoco licensepoco)
         {
-            var licensepoco = new LicensePoco();
+            if (licensepoco.Product == null)
+            {
+                throw new ArgumentException("Please load the product reference before trying to generate the value.");
+            }
             var license = License.New()
                 .WithUniqueIdentifier(Guid.NewGuid())
                 .As(LicenseType.Standard)
-                .CreateAndSignWithPrivateKey(product.PrivateKey, product.PassPhrase);
+                .CreateAndSignWithPrivateKey(licensepoco.Product.PrivateKey, licensepoco.Product.PassPhrase);
             licensepoco.Value = license.ToString();
-            return licensepoco;
         }
 
-        #endregion
-
-        #region Methods
-        public Product GenerateKeysForProduct(Product product)
+        public void GenerateKeysForProduct(Product product)
         {
             if (string.IsNullOrWhiteSpace(product.PassPhrase))
             {
@@ -37,7 +36,6 @@ namespace Orc.LicenseManager.Server.Services
             var keyPair = keyGenerator.GenerateKeyPair();
             product.PrivateKey = keyPair.ToEncryptedPrivateKeyString(product.PassPhrase);
             product.PublicKey = keyPair.ToPublicKeyString();
-            return product;
         }
         #endregion
     }

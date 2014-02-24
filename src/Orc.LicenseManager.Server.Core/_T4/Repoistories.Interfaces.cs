@@ -15,5 +15,13 @@ namespace Orc.LicenseManager.Server.Repositories
 	{
 		
 	} 
+	public partial interface ICustomerRepository : IEntityRepository<Customer, int>
+	{
+		
+	} 
+	public partial interface IUserRepository : IEntityRepository<User, int>
+	{
+		
+	} 
 }
 

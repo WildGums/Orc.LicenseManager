@@ -26,18 +26,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PassPhrase, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PublicKey, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PassPhrase)
-                @Html.ValidationMessageFor(model => model.PassPhrase)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PrivateKey, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PrivateKey)
-                @Html.ValidationMessageFor(model => model.PrivateKey)
+                @Html.EditorFor(model => model.PublicKey)
+                @Html.ValidationMessageFor(model => model.PublicKey)
             </div>
         </div>
 

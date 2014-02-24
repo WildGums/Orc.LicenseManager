@@ -29,11 +29,31 @@ namespace Orc.LicenseManager.Server
 				return _ProductRepository ?? (_ProductRepository = GetRepository<IProductRepository>());
 		    }
         }
+        private ICustomerRepository _CustomerRepository;
+
+        public ICustomerRepository Customers
+        {
+            get 
+			{ 
+				return _CustomerRepository ?? (_CustomerRepository = GetRepository<ICustomerRepository>());
+		    }
+        }
+        private IUserRepository _UserRepository;
+
+        public IUserRepository Users
+        {
+            get 
+			{ 
+				return _UserRepository ?? (_UserRepository = GetRepository<IUserRepository>());
+		    }
+        }
 	}
 	public partial interface IUoW
 	{
             ILicensePocoRepository Licenses { get; }
             IProductRepository Products { get; }
+            ICustomerRepository Customers { get; }
+            IUserRepository Users { get; }
 	}
 }
 

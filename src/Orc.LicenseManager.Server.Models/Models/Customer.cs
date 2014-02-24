@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicensePoco.cs" company="Orchestra development team">
+// <copyright file="Customer.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -8,31 +8,39 @@
 namespace Orc.LicenseManager.Server
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class LicensePoco : IDates, ICreator
+    public class Customer : ICreator, IDates
     {
         #region Properties
         [Key]
         public int Id { get; set; }
 
-        public string Value { get; set; }
-        public int CustomerId { get; set; }
+        [Required]
+        public string FirstName { get; set; }
 
-        [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        [Required]
+        public string LastName { get; set; }
 
-        public int ProductId { get; set; }
+        public string Company { get; set; }
 
-        [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+
+        public string City { get; set; }
+        public string Postal { get; set; }
+        public string Street { get; set; }
+        public string Country { get; set; }
+
+        public virtual ICollection<LicensePoco> Licenses { get; set; }
         #endregion
 
         #region ICreator Members
         [ScaffoldColumn(false)]
         public string CreatorId { get; set; }
-
+        [ScaffoldColumn(false)]
         [ForeignKey("CreatorId")]
         public User Creator { get; set; }
         #endregion

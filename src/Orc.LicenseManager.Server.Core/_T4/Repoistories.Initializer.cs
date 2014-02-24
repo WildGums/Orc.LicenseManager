@@ -13,6 +13,8 @@ namespace Orc.LicenseManager.Server
 		{
             ServiceLocator.Default.RegisterType<ILicensePocoRepository, LicensePocoRepository>();
 	            ServiceLocator.Default.RegisterType<IProductRepository, ProductRepository>();
+	            ServiceLocator.Default.RegisterType<ICustomerRepository, CustomerRepository>();
+	            ServiceLocator.Default.RegisterType<IUserRepository, UserRepository>();
 			}
 	}
 }

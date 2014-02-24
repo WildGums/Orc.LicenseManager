@@ -15,16 +15,13 @@
             @Html.DisplayNameFor(model => model.Creator.UserName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Customer.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Name)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Value)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comment)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModificationDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreationDate)
         </th>
         <th></th>
     </tr>
@@ -35,16 +32,13 @@
             @Html.DisplayFor(modelItem => item.Creator.UserName)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Customer.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comment)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModificationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

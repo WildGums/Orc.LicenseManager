@@ -1,38 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Orc.LicenseManager.Server;
+﻿
 
 namespace Orc.LicenseManager.Server.Website.Controllers
 {
-    using System.Web.UI.WebControls;
-    using Catel.IoC;
-    using Services;
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Data.Entity;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
+	
+	using Catel.Logging;
+	
+	using Repositories;
 
+	using Orc.LicenseManager.Server;
+	//This controller template is created by Crabbé Maxim
+	//This is a modified controller template that uses the Unit of Work pattern with the help
+	//of Catel.Core and Catel.Extensions.EntityFramework
+	//For more info about Catel visit http://www.catelproject.com
     public class LicenseController : Controller
     {
-        private LicenseManagerDbContext db = new LicenseManagerDbContext();
-
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+		
         // GET: /License/
         public ActionResult Index()
         {
-            var licenses = db.Licenses.Include(l => l.Creator);
-            return View(licenses.ToList());
+			Log.Debug("GET/Index");
+			using(var uow = new UoW()){
+				var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+				var licenses = licensesRepo.GetQuery().Include(l => l.Creator).Include(l => l.Customer).Include(l => l.Product).ToList();
+				return View(licenses);
+			}
         }
 
         // GET: /License/Details/5
         public ActionResult Details(int? id)
         {
+			Log.Debug("GET/Details id: {0}", id.ToString());
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            LicensePoco licensepoco = db.Licenses.Find(id);
+            LicensePoco licensepoco = null;
+			using(var uow = new UoW()){
+				var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+				licensepoco = licensesRepo.GetByKey((System.Int32)id);
+			}
             if (licensepoco == null)
             {
                 return HttpNotFound();
@@ -43,7 +58,11 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         // GET: /License/Create
         public ActionResult Create()
         {
-            ViewBag.CreatorId = new SelectList(db.Products, "Id", "Name");
+			Log.Debug("GET/Create");
+			using(var uow = new UoW()){
+				ViewBag.CustomerId = new SelectList(uow.Customers.GetAll(), "Id", "FirstName");
+				ViewBag.ProductId = new SelectList(uow.Products.GetAll(), "Id", "Name");
+			}
             return View();
         }
 
@@ -52,35 +71,47 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Comment")] LicensePoco licensepoco)
+        public ActionResult Create([Bind(Include="Id,Value,CustomerId,ProductId,CreatorId,ModificationDate,CreationDate")] LicensePoco licensepoco)
         {
-            licensepoco.Creator = 
+			Log.Debug("POST/Create");
             if (ModelState.IsValid)
             {
-                var licenseservice = ServiceLocator.Default.ResolveType<ILicenseService>();
-                licenseservice.GenerateLicenseForProduct(licensepoco);
-                db.Licenses.Add(licensepoco);
-                db.SaveChanges();
+				using(var uow = new UoW()){
+					var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+					licensesRepo.Add(licensepoco);
+					uow.SaveChanges();
+				}
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CreatorId = new SelectList(db.Users, "Id", "UserName", licensepoco.CreatorId);
+			using(var uow = new UoW()){
+				ViewBag.CustomerId = new SelectList(uow.Customers.GetAll(), "Id", "FirstName");
+				ViewBag.ProductId = new SelectList(uow.Products.GetAll(), "Id", "Name");
+			}
             return View(licensepoco);
         }
 
         // GET: /License/Edit/5
         public ActionResult Edit(int? id)
         {
+			Log.Debug("GET/Edit id:{0}", id.ToString());
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            LicensePoco licensepoco = db.Licenses.Find(id);
+            LicensePoco licensepoco = null;
+			using(var uow = new UoW()){
+				var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+				licensepoco = licensesRepo.GetByKey((System.Int32)id);
+			}
             if (licensepoco == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CreatorId = new SelectList(db.Users, "Id", "UserName", licensepoco.CreatorId);
+			using(var uow = new UoW()){
+				ViewBag.CustomerId = new SelectList(uow.Customers.GetAll(), "Id", "FirstName");
+				ViewBag.ProductId = new SelectList(uow.Products.GetAll(), "Id", "Name");
+			}
             return View(licensepoco);
         }
 
@@ -89,26 +120,38 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Value,Comment,CreatorId,ModificationDate,CreationDate")] LicensePoco licensepoco)
+        public ActionResult Edit([Bind(Include="Id,Value,CustomerId,ProductId,CreatorId,ModificationDate,CreationDate")] LicensePoco licensepoco)
         {
+			Log.Debug("POST/Edit");
             if (ModelState.IsValid)
             {
-                db.Entry(licensepoco).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CreatorId = new SelectList(db.Users, "Id", "UserName", licensepoco.CreatorId);
+				using(var uow = new UoW()){
+					var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+					
+					licensesRepo.Update(licensepoco);
+					uow.SaveChanges();
+				}
+			}	
+			using(var uow = new UoW()){
+				ViewBag.CustomerId = new SelectList(uow.Customers.GetAll(), "Id", "FirstName");
+				ViewBag.ProductId = new SelectList(uow.Products.GetAll(), "Id", "Name");
+			}
             return View(licensepoco);
         }
 
         // GET: /License/Delete/5
         public ActionResult Delete(int? id)
         {
+		Log.Debug("GET/Delete Id:{0}, id.ToString()");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            LicensePoco licensepoco = db.Licenses.Find(id);
+            LicensePoco licensepoco = null;
+			using(var uow = new UoW()){
+				var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+				licensepoco = licensesRepo.GetByKey((System.Int32)id);
+			}
             if (licensepoco == null)
             {
                 return HttpNotFound();
@@ -121,18 +164,19 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            LicensePoco licensepoco = db.Licenses.Find(id);
-            db.Licenses.Remove(licensepoco);
-            db.SaveChanges();
+			Log.Debug("POST/DeleteConfirmed Id:{0}", id.ToString());
+			using(var uow = new UoW()){
+				var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+				var licensepoco = licensesRepo.GetByKey((System.Int32)id);
+				licensesRepo.Delete(licensepoco);
+				uow.SaveChanges();
+			}
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            //UoW dispose ofzo?
             base.Dispose(disposing);
         }
     }

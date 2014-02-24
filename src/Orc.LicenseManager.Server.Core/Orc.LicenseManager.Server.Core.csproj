@@ -78,10 +78,13 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Data\RecreateContext.cs" />
+    <Compile Include="Data\UoW.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Services\Interfaces\ILicenseService.cs" />
     <Compile Include="Services\LicenseService.cs" />
+    <Compile Include="Services\AccountService.cs" />
     <Compile Include="_T4\AddReposToUoW.cs">
       <DependentUpon>UoW.tt</DependentUpon>
     </Compile>

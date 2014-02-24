@@ -20,22 +20,22 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 	//This is a modified controller template that uses the Unit of Work pattern with the help
 	//of Catel.Core and Catel.Extensions.EntityFramework
 	//For more info about Catel visit http://www.catelproject.com
-    public class ProductController : Controller
+    public class CustomerController : Controller
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 		
-        // GET: /Product/
+        // GET: /Customer/
         public ActionResult Index()
         {
 			Log.Debug("GET/Index");
 			using(var uow = new UoW()){
-				var productsRepo = uow.GetRepository<IProductRepository>();
-				var products = productsRepo.GetQuery().Include(p => p.Creator).ToList();
-				return View(products);
+				var customersRepo = uow.GetRepository<ICustomerRepository>();
+				var customers = customersRepo.GetQuery().Include(c => c.Creator).ToList();
+				return View(customers);
 			}
         }
 
-        // GET: /Product/Details/5
+        // GET: /Customer/Details/5
         public ActionResult Details(int? id)
         {
 			Log.Debug("GET/Details id: {0}", id.ToString());
@@ -43,46 +43,53 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = null;
+            Customer customer = null;
 			using(var uow = new UoW()){
-				var productsRepo = uow.GetRepository<IProductRepository>();
-				product = productsRepo.GetByKey((System.Int32)id);
+				var customersRepo = uow.GetRepository<ICustomerRepository>();
+				customer = customersRepo.GetByKey((System.Int32)id);
 			}
-            if (product == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(product);
+            return View(customer);
         }
 
-        // GET: /Product/Create
+        // GET: /Customer/Create
         public ActionResult Create()
         {
 			Log.Debug("GET/Create");
+			using(var uow = new UoW()){
+                //ViewBag.CreatorId = new SelectList(uow.IdentityUsers.GetAll(), "Id", "UserName");
+			}
             return View();
         }
 
-        // POST: /Product/Create
+        // POST: /Customer/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name,PassPhrase,PrivateKey,PublicKey,CreationDate,CreatorId")] Product product)
+        public ActionResult Create([Bind(Include="Id,FirstName,LastName,Company,Email,City,Postal,Street,Country,CreatorId,ModificationDate,CreationDate")] Customer customer)
         {
 			Log.Debug("POST/Create");
             if (ModelState.IsValid)
             {
 				using(var uow = new UoW()){
-					var productsRepo = uow.GetRepository<IProductRepository>();
-					productsRepo.Add(product);
+					var customersRepo = uow.GetRepository<ICustomerRepository>();
+					customersRepo.Add(customer);
 					uow.SaveChanges();
 				}
                 return RedirectToAction("Index");
             }
-            return View(product);
+
+			using(var uow = new UoW()){
+                //ViewBag.CreatorId = new SelectList(uow.IdentityUsers.GetAll(), "Id", "UserName");
+			}
+            return View(customer);
         }
 
-        // GET: /Product/Edit/5
+        // GET: /Customer/Edit/5
         public ActionResult Edit(int? id)
         {
 			Log.Debug("GET/Edit id:{0}", id.ToString());
@@ -90,39 +97,45 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = null;
+            Customer customer = null;
 			using(var uow = new UoW()){
-				var productsRepo = uow.GetRepository<IProductRepository>();
-				product = productsRepo.GetByKey((System.Int32)id);
+				var customersRepo = uow.GetRepository<ICustomerRepository>();
+				customer = customersRepo.GetByKey((System.Int32)id);
 			}
-            if (product == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(product);
+			using(var uow = new UoW()){
+                //ViewBag.CreatorId = new SelectList(uow.IdentityUsers.GetAll(), "Id", "UserName");
+			}
+            return View(customer);
         }
 
-        // POST: /Product/Edit/5
+        // POST: /Customer/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,PassPhrase,PrivateKey,PublicKey,CreationDate,CreatorId")] Product product)
+        public ActionResult Edit([Bind(Include="Id,FirstName,LastName,Company,Email,City,Postal,Street,Country,CreatorId,ModificationDate,CreationDate")] Customer customer)
         {
 			Log.Debug("POST/Edit");
             if (ModelState.IsValid)
             {
 				using(var uow = new UoW()){
-					var productsRepo = uow.GetRepository<IProductRepository>();
+					var customersRepo = uow.GetRepository<ICustomerRepository>();
 					
-					productsRepo.Update(product);
+					customersRepo.Update(customer);
 					uow.SaveChanges();
 				}
 			}	
-            return View(product);
+			using(var uow = new UoW()){
+                //ViewBag.CreatorId = new SelectList(uow.IdentityUsers.GetAll(), "Id", "UserName");
+			}
+            return View(customer);
         }
 
-        // GET: /Product/Delete/5
+        // GET: /Customer/Delete/5
         public ActionResult Delete(int? id)
         {
 		Log.Debug("GET/Delete Id:{0}, id.ToString()");
@@ -130,28 +143,28 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = null;
+            Customer customer = null;
 			using(var uow = new UoW()){
-				var productsRepo = uow.GetRepository<IProductRepository>();
-				product = productsRepo.GetByKey((System.Int32)id);
+				var customersRepo = uow.GetRepository<ICustomerRepository>();
+				customer = customersRepo.GetByKey((System.Int32)id);
 			}
-            if (product == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(product);
+            return View(customer);
         }
 
-        // POST: /Product/Delete/5
+        // POST: /Customer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
 			Log.Debug("POST/DeleteConfirmed Id:{0}", id.ToString());
 			using(var uow = new UoW()){
-				var productsRepo = uow.GetRepository<IProductRepository>();
-				var product = productsRepo.GetByKey((System.Int32)id);
-				productsRepo.Delete(product);
+				var customersRepo = uow.GetRepository<ICustomerRepository>();
+				var customer = customersRepo.GetByKey((System.Int32)id);
+				customersRepo.Delete(customer);
 				uow.SaveChanges();
 			}
             return RedirectToAction("Index");

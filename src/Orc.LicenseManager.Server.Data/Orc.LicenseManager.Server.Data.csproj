@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="Data\LicenseManagerDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TODOfixplace\IMembershipService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
