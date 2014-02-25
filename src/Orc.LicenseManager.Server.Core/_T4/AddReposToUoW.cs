@@ -38,6 +38,15 @@ namespace Orc.LicenseManager.Server
 				return _CustomerRepository ?? (_CustomerRepository = GetRepository<ICustomerRepository>());
 		    }
         }
+        private IRoleRepository _RoleRepository;
+
+        public IRoleRepository Roles
+        {
+            get 
+			{ 
+				return _RoleRepository ?? (_RoleRepository = GetRepository<IRoleRepository>());
+		    }
+        }
         private IUserRepository _UserRepository;
 
         public IUserRepository Users
@@ -53,6 +62,7 @@ namespace Orc.LicenseManager.Server
             ILicensePocoRepository Licenses { get; }
             IProductRepository Products { get; }
             ICustomerRepository Customers { get; }
+            IRoleRepository Roles { get; }
             IUserRepository Users { get; }
 	}
 }

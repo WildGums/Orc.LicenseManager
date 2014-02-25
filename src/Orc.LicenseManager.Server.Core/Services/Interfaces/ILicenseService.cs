@@ -12,6 +12,7 @@ namespace Orc.LicenseManager.Server.Services
         #region Methods
         void GenerateLicenseValue(LicensePoco license);
         void GenerateKeysForProduct(Product product);
+        void GeneratePassPhraseForProduct(Product product);
         #endregion
     }
 }

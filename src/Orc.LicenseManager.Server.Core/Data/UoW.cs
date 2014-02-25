@@ -13,8 +13,11 @@
         {
             foreach (var ihascreatedate in DbContext.ChangeTracker.Entries<ICreator>().Where(x => x.State == EntityState.Added))
             {
-                var membershipService = ServiceLocator.Default.ResolveType<IMembershipService>();
-                ihascreatedate.Entity.CreatorId = membershipService.GetUserId();
+                if (string.IsNullOrWhiteSpace(ihascreatedate.Entity.CreatorId))
+                {
+                    var membershipService = ServiceLocator.Default.ResolveType<IMembershipService>();
+                    ihascreatedate.Entity.CreatorId = membershipService.GetUserId();
+                }
             }
             foreach (var ihascreatedate in DbContext.ChangeTracker.Entries<ICreateDate>().Where(x => x.State == EntityState.Added))
             {

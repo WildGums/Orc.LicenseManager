@@ -7,12 +7,24 @@ using System.Web.Mvc;
 namespace Orc.LicenseManager.Server.Website.Controllers
 {
     using System.Data.Entity;
+    using Catel.IoC;
     using Data;
+    using Repositories;
 
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
+
+            //// heb dit hier gezet voor te testen
+            //var context = new LicenseManagerDbContext();
+            //var alluserscontext = context.Users.ToList(); // werkt wel
+
+            //using (var uow = new UoW())
+            //{
+            //    var repository = uow.GetRepository<IUserRepository>();
+            //    repository.GetQuery().ToList(); // crash 
+            //} // hij geraakt hier niet 
             return View();
         }
 
@@ -31,7 +43,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         }
         public ActionResult Reset()
         {
-            Database.SetInitializer<LicenseManagerDbContext>(new RecreateContext());
+            Database.SetInitializer<LicenseManagerDbContext>(TypeFactory.Default.CreateInstance<RecreateContext>());
             using (var context = new LicenseManagerDbContext())
             {
                 context.Database.Initialize(true);

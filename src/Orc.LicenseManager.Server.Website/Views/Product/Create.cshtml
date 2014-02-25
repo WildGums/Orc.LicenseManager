@@ -23,23 +23,6 @@
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PublicKey, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PublicKey)
-                @Html.ValidationMessageFor(model => model.PublicKey)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreationDate, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreationDate)
-                @Html.ValidationMessageFor(model => model.CreationDate)
-            </div>
-        </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

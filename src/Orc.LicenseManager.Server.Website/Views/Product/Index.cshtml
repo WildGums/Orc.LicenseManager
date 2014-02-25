@@ -20,9 +20,6 @@
         <th>
             @Html.DisplayNameFor(model => model.PublicKey)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </th>
         <th></th>
     </tr>
 
@@ -36,9 +33,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PublicKey)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

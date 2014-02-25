@@ -23,6 +23,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Value)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpireVersion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpireDate)
+        </th>
         <th></th>
     </tr>
 
@@ -39,6 +45,12 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpireVersion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpireDate)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

@@ -32,7 +32,15 @@ namespace Orc.LicenseManager.Server.Repositories
          }
 	} 
 
-    public partial class UserRepository : EntityRepositoryBase<User, int>, IUserRepository
+    public partial class RoleRepository : EntityRepositoryBase<Role, string>, IRoleRepository
+	{
+		 public RoleRepository(LicenseManagerDbContext dbContext) 
+		 : base(dbContext)
+         {
+         }
+	} 
+
+    public partial class UserRepository : EntityRepositoryBase<User, string>, IUserRepository
 	{
 		 public UserRepository(LicenseManagerDbContext dbContext) 
 		 : base(dbContext)

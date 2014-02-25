@@ -26,6 +26,22 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.ExpireVersion, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpireVersion)
+                @Html.ValidationMessageFor(model => model.ExpireVersion)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpireDate, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpireDate)
+                @Html.ValidationMessageFor(model => model.ExpireDate)
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.CustomerId, "CustomerId", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("CustomerId", String.Empty)

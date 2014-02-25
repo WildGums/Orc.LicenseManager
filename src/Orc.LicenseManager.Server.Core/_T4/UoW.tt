@@ -71,13 +71,24 @@ Using(baseNameSpace);
 
 string dbcontextname = typeInfo.Name.ToString();
 //var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("DbSet") && !x.PropertyType.ToString().Contains("User") && !x.PropertyType.ToString().Contains("IdentityRole")).ToArray();
-var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("IDbSet") && !x.PropertyType.ToString().Contains("IdentityRole")).ToArray();
+var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("DbSet") && !x.PropertyType.ToString().Contains("IdentityRole"));
 var poconames = new string[pocos.Count()];
 var propnames = new string[pocos.Count()];
+var pocopktype = new string[pocos.Count()];
 int counter = 0;
 foreach(var poco in pocos)
 {
-	poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.IDbSet`1[" + baseNameSpace+ ".","").Replace("]","");
+    if(poco.PropertyType.ToString().Contains("System.Data.Entity.IDbSet`1["))
+	{
+		poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.IDbSet`1[" + baseNameSpace+ ".","").Replace("]","");
+		pocopktype[counter] = "string";
+	}
+	else
+	{
+		poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.DbSet`1[" + baseNameSpace+ ".","").Replace("]","");
+		pocopktype[counter] = "int";
+
+	}
 	propnames[counter] = poco.Name;
 	counter ++;
 }
@@ -94,9 +105,12 @@ foreach(var poco in pocos)
 namespace <#=repositoriesNameSpace#>
 {
 <#
-foreach (var poconame in poconames){
+for(int x=0;x!=pocos.Count();x++)
+{
+var poconame = poconames[x];
+var proppk = pocopktype[x];
 #>
-    public partial class <#=poconame#>Repository : EntityRepositoryBase<<#=poconame#>, int>, I<#=poconame#>Repository
+    public partial class <#=poconame#>Repository : EntityRepositoryBase<<#=poconame#>, <#=proppk#>>, I<#=poconame#>Repository
 	{
 		 public <#=poconame#>Repository(<#=dbcontextname#> dbContext) 
 		 : base(dbContext)
@@ -117,10 +131,12 @@ foreach (var poconame in poconames){
 namespace <#=repositoriesNameSpace#>
 {
 <#
-foreach (var poconame in poconames)
+for(int x=0;x!=pocos.Count();x++)
 {
+var poconame = poconames[x];
+var proppk = pocopktype[x];
 #>
-	public partial interface I<#=poconame#>Repository : IEntityRepository<<#=poconame#>, int>
+	public partial interface I<#=poconame#>Repository : IEntityRepository<<#=poconame#>, <#=proppk#>>
 	{
 		
 	} 

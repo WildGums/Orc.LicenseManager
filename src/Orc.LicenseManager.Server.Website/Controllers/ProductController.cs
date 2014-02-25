@@ -10,20 +10,29 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 	using System.Net;
 	using System.Web;
 	using System.Web.Mvc;
-	
+	using Catel.Data;
+	using Catel.IoC;
 	using Catel.Logging;
 	
 	using Repositories;
 
 	using Orc.LicenseManager.Server;
-	//This controller template is created by Crabbé Maxim
+	using Server.Services;
+
+    //This controller template is created by Crabbé Maxim
 	//This is a modified controller template that uses the Unit of Work pattern with the help
 	//of Catel.Core and Catel.Extensions.EntityFramework
 	//For more info about Catel visit http://www.catelproject.com
     public class ProductController : Controller
     {
+        private readonly ILicenseService _licenseService;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-		
+
+        public ProductController(ILicenseService licenseService)
+        {
+            _licenseService = licenseService;
+        }
+
         // GET: /Product/
         public ActionResult Index()
         {
@@ -72,8 +81,10 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 			Log.Debug("POST/Create");
             if (ModelState.IsValid)
             {
-				using(var uow = new UoW()){
+                using(var uow = new UoW()){
 					var productsRepo = uow.GetRepository<IProductRepository>();
+                    _licenseService.GeneratePassPhraseForProduct(product);
+                    _licenseService.GenerateKeysForProduct(product);
 					productsRepo.Add(product);
 					uow.SaveChanges();
 				}

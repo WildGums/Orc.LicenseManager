@@ -28,6 +28,10 @@ namespace Orc.LicenseManager.Server.Website
             Catel.Mvc.DependencyInjectionConfig.RegisterServiceLocatorAsDependencyResolver();
             ServiceLocator.Default.RegisterType<IMembershipService, MembershipService>();
             ServiceLocator.Default.RegisterType<IStringService, StringService>();
+
+
+            ServiceLocator.Default.RegisterType<ILicenseService, LicenseService>();
+
         }
         #endregion
     }

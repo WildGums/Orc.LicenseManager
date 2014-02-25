@@ -18,7 +18,10 @@ namespace Orc.LicenseManager.Server
         public int Id { get; set; }
 
         public string Value { get; set; }
+        public int? ExpireVersion { get; set; }
+        public DateTime? ExpireDate { get; set; }
         public int CustomerId { get; set; }
+        
 
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }

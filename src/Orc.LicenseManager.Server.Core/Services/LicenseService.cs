@@ -8,6 +8,9 @@
 namespace Orc.LicenseManager.Server.Services
 {
     using System;
+    using System.Collections.Generic;
+    using Catel.IoC;
+    using MaxBox.Core.Services;
     using Portable.Licensing;
 
     public class LicenseService : ILicenseService
@@ -19,12 +22,25 @@ namespace Orc.LicenseManager.Server.Services
             {
                 throw new ArgumentException("Please load the product reference before trying to generate the value.");
             }
-            var license = License.New()
-                .WithUniqueIdentifier(Guid.NewGuid())
-                .As(LicenseType.Standard)
-                .CreateAndSignWithPrivateKey(licensepoco.Product.PrivateKey, licensepoco.Product.PassPhrase);
+            var license = License.New();
+            if (licensepoco.ExpireDate != null)
+            {
+                license = license.ExpiresAt((DateTime)licensepoco.ExpireDate);
+            }
+            if (licensepoco.ExpireVersion == null)
+            {
+                license = license.WithProductFeatures(new Dictionary<string, string>
+                {
+                    {"Version", licensepoco.ExpireVersion.ToString()}
+                });
+            }
+            license
+             .WithUniqueIdentifier(Guid.NewGuid())
+             .As(LicenseType.Standard)
+             .CreateAndSignWithPrivateKey(licensepoco.Product.PrivateKey, licensepoco.Product.PassPhrase);
             licensepoco.Value = license.ToString();
         }
+
 
         public void GenerateKeysForProduct(Product product)
         {
@@ -36,6 +52,12 @@ namespace Orc.LicenseManager.Server.Services
             var keyPair = keyGenerator.GenerateKeyPair();
             product.PrivateKey = keyPair.ToEncryptedPrivateKeyString(product.PassPhrase);
             product.PublicKey = keyPair.ToPublicKeyString();
+        }
+
+        public void GeneratePassPhraseForProduct(Product product)
+        {
+            var stringService = ServiceLocator.Default.ResolveType<IStringService>();
+            product.PassPhrase = stringService.GenerateString(15);
         }
         #endregion
     }
