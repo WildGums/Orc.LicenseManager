@@ -134,6 +134,9 @@
   <ItemGroup>
     <Resource Include="Data\CatelLogo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\logo_with_text.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="Fody.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

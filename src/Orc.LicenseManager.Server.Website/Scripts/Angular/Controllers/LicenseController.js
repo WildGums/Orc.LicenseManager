@@ -15,10 +15,20 @@
     $scope.selectedCustomerId = function () {
         for (var x = 0, len = $scope.customers.length; x < len; x += 1) {
             if ($scope.customers[x].FirstName === $scope.selectedCustomer) {
-                console.info($scope.customers[x]);
                 return $scope.customers[x].Id;
             }
         }
         return "null";
+    };
+    $scope.GetFilteredCustomers = function (viewValue) {
+        var returnlist = [];
+        $scope.customers.forEach(function (cust) {
+            var hasLastName = (cust.LastName.toLowerCase().indexOf(viewValue.toLowerCase()) !== -1);
+            var hasFirstName = (cust.FirstName.toLowerCase().indexOf(viewValue.toLowerCase()) !== -1);
+            if (hasFirstName || hasLastName) {
+                returnlist.push(cust);
+            }
+        });
+        return returnlist;
     };
 });

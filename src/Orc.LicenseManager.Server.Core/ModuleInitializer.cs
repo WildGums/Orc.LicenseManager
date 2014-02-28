@@ -18,7 +18,7 @@ public static class ModuleInitializer
         RepositoryInitializer.RegisterRepositories();
         serviceLocator.RegisterType<IAccountService, AccountService>();
         //MaxBox
-        serviceLocator.RegisterType<IStringService, StringService>();
+        serviceLocator.RegisterType<IRngService, RngService>();
 
     }
 }

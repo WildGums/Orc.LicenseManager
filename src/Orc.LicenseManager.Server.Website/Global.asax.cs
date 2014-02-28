@@ -28,7 +28,7 @@ namespace Orc.LicenseManager.Server.Website
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Catel.Mvc.DependencyInjectionConfig.RegisterServiceLocatorAsDependencyResolver();
             ServiceLocator.Default.RegisterType<IMembershipService, MembershipService>();
-            ServiceLocator.Default.RegisterType<IStringService, StringService>();
+            ServiceLocator.Default.RegisterType<IRngService, RngService>();
 
 
             ServiceLocator.Default.RegisterType<ILicenseService, LicenseService>();

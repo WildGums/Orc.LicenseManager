@@ -59,7 +59,7 @@ namespace Orc.LicenseManager.Server.Services
 
         public void GeneratePassPhraseForProduct(Product product)
         {
-            var stringService = ServiceLocator.Default.ResolveType<IStringService>();
+            var stringService = ServiceLocator.Default.ResolveType<IRngService>();
             product.PassPhrase = stringService.GenerateString(15);
         }
         #endregion

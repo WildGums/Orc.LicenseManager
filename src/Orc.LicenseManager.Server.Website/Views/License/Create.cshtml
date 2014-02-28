@@ -13,11 +13,10 @@
             @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
-                <h4>LicensePoco</h4>
                 <hr />
                 @Html.ValidationSummary(true)
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ExpireVersion, new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="ExpireVersion">Maximum version</label>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ExpireVersion)
                         @Html.ValidationMessageFor(model => model.ExpireVersion)
@@ -25,7 +24,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ExpireDate, new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="ExpireDate">Expire Date</label>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ExpireDate)
                         @Html.ValidationMessageFor(model => model.ExpireDate)
@@ -35,10 +34,12 @@
                 <div class="form-group">
                     <label class="control-label col-md-2" for="selectedcustomer">Customer</label>
                     <div class="col-md-10">
-                        <input required type="text" ng-model="selectedCustomer" typeahead="customer.FirstName as customer.FirstName for customer in customers | filter:$viewValue | limitTo:5" class="form-control" />
+                        <input required type="text" ng-model="selectedCustomer"
+                               typeahead="customer as customer.FirstName + ' (' +  customer.LastName + ')' for customer in GetFilteredCustomers($viewValue ) |  limitTo:5"
+                               class="form-control" />
                         <div class="error" ng-show="selectedcustomer.$invalid">
                             <small class="error" ng-show="selectedCustomer.$invalid">
-                                Your name is required.
+                                Your customer is required.
                             </small>
                         </div>
                     </div>
@@ -47,7 +48,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2" for="selectedproduct">Product</label>
                     <div class="col-md-10">
-                        <input required type="text" ng-model="selectedProduct" typeahead="product.Name as product.Name for product in products | filter:$viewValue | limitTo:5" class="form-control">
+                        <input required type="text" ng-model="selectedProduct" typeahead="product.Name as product.Name for product in products | filter:{Name: $viewValue} | limitTo:5" class="form-control" typeahead-editable="false">
                     </div>
                 </div>
                 <input data-val="true" data-val-number="The field ProductId must be a number." data-val-required="The ProductId field is required." id="ProductId" name="ProductId" type="hidden" value="{{selectedProductId()}}">
