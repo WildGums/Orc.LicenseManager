@@ -18,16 +18,20 @@ namespace Orc.LicenseManager.Server.Services
         #region ILicenseService Members
         public void GenerateLicenseValue(LicensePoco licensepoco)
         {
-            if (licensepoco.Product == null)
+            var tempProduct = licensepoco.Product;
+            if (tempProduct == null)
             {
-                throw new ArgumentException("Please load the product reference before trying to generate the value.");
+                using (var uow = new UoW())
+                {
+                    tempProduct = uow.Products.GetByKey(licensepoco.ProductId);
+                }
             }
             var license = License.New();
             if (licensepoco.ExpireDate != null)
             {
                 license = license.ExpiresAt((DateTime)licensepoco.ExpireDate);
             }
-            if (licensepoco.ExpireVersion == null)
+            if (licensepoco.ExpireVersion != null)
             {
                 license = license.WithProductFeatures(new Dictionary<string, string>
                 {
@@ -36,7 +40,7 @@ namespace Orc.LicenseManager.Server.Services
             }
             var finalLicense = license.WithUniqueIdentifier(Guid.NewGuid())
                 .As(LicenseType.Standard)
-                .CreateAndSignWithPrivateKey(licensepoco.Product.PrivateKey, licensepoco.Product.PassPhrase);
+                .CreateAndSignWithPrivateKey(tempProduct.PrivateKey, tempProduct.PassPhrase);
             licensepoco.Value = finalLicense.ToString();
         }
 

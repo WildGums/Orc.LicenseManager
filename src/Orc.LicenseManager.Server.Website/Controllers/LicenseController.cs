@@ -96,11 +96,11 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             Log.Debug("POST/Create");
             if (ModelState.IsValid)
             {
-                using (var dbContextManager = DbContextManager<LicenseManagerDbContext>.GetManager())
-                {
-                    dbContextManager.Context.Licenses.Attach(licensepoco);
-                    dbContextManager.Context.Entry(licensepoco).Reference(x => x.Product).Load();
-                }
+                //using (var dbContextManager = DbContextManager<LicenseManagerDbContext>.GetManager())
+                //{
+                //    dbContextManager.Context.Licenses.Attach(licensepoco);
+                //    dbContextManager.Context.Entry(licensepoco).Reference(x => x.Product).Load();
+                //}
                 _licenseService.GenerateLicenseValue(licensepoco);
                 using (var uow = new UoW())
                 {
@@ -113,63 +113,63 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 
             using (var uow = new UoW())
             {
-                ViewBag.CustomerId = new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
-                ViewBag.ProductId = new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
+                ViewBag.CustomerId = JsonConvert.SerializeObject(uow.Customers.GetAll().ToList()); // new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
+                ViewBag.ProductId = JsonConvert.SerializeObject(uow.Products.GetAll().ToList());//new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
             }
             return View(licensepoco);
         }
 
         // GET: /License/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            Log.Debug("GET/Edit id:{0}", id.ToString());
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            LicensePoco licensepoco = null;
-            using (var uow = new UoW())
-            {
-                var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
-                licensepoco = licensesRepo.GetByKey((System.Int32) id);
-            }
-            if (licensepoco == null)
-            {
-                return HttpNotFound();
-            }
-            using (var uow = new UoW())
-            {
-                ViewBag.CustomerId = new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
-                ViewBag.ProductId = new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
-            }
-            return View(licensepoco);
-        }
+        //public ActionResult Edit(int? id)
+        //{
+        //    Log.Debug("GET/Edit id:{0}", id.ToString());
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    LicensePoco licensepoco = null;
+        //    using (var uow = new UoW())
+        //    {
+        //        var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+        //        licensepoco = licensesRepo.GetByKey((System.Int32) id);
+        //    }
+        //    if (licensepoco == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    using (var uow = new UoW())
+        //    {
+        //        ViewBag.CustomerId = new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
+        //        ViewBag.ProductId = new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
+        //    }
+        //    return View(licensepoco);
+        //}
 
-        // POST: /License/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Value,ExpireVersion,ExpireDate,CustomerId,ProductId,CreatorId,ModificationDate,CreationDate")] LicensePoco licensepoco)
-        {
-            Log.Debug("POST/Edit");
-            if (ModelState.IsValid)
-            {
-                using (var uow = new UoW())
-                {
-                    var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
+        //// POST: /License/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "Id,Value,ExpireVersion,ExpireDate,CustomerId,ProductId,CreatorId,ModificationDate,CreationDate")] LicensePoco licensepoco)
+        //{
+        //    Log.Debug("POST/Edit");
+        //    if (ModelState.IsValid)
+        //    {
+        //        using (var uow = new UoW())
+        //        {
+        //            var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
 
-                    licensesRepo.Update(licensepoco);
-                    uow.SaveChanges();
-                }
-            }
-            using (var uow = new UoW())
-            {
-                ViewBag.CustomerId = new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
-                ViewBag.ProductId = new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
-            }
-            return View(licensepoco);
-        }
+        //            licensesRepo.Update(licensepoco);
+        //            uow.SaveChanges();
+        //        }
+        //    }
+        //    using (var uow = new UoW())
+        //    {
+        //        ViewBag.CustomerId = new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
+        //        ViewBag.ProductId = new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
+        //    }
+        //    return View(licensepoco);
+        //}
 
         // GET: /License/Delete/5
         public ActionResult Delete(int? id)

@@ -46,3 +46,6 @@ input[type="checkbox"].input-validation-error {
 button, input, optgroup, select, textarea {
     color: black;
 }
+.breakword {
+    word-wrap: break-word;
+}

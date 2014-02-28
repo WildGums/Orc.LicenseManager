@@ -22,12 +22,12 @@
             @Html.DisplayNameFor(model => model.PublicKey)
         </dt>
 
-        <dd>
+        <dd class="breakword">
             @Html.DisplayFor(model => model.PublicKey)
         </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id },  new { @class = "btn btn-sm btn-primary" }) |
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-sm btn-primary" })
 </p>

@@ -20,7 +20,7 @@
         <dt>
             @Html.DisplayNameFor(model => model.PublicKey)
         </dt>
-        <dd>
+        <dd class="breakword">
             @Html.DisplayFor(model => model.PublicKey)
         </dd>
     </dl>
@@ -30,7 +30,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
         </div>
     }
 </div>

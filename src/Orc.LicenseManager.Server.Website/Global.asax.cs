@@ -13,6 +13,7 @@ namespace Orc.LicenseManager.Server.Website
     using System.Web.Routing;
     using Catel.IoC;
     using MaxBox.Core.Services;
+    using Newtonsoft.Json;
     using Server.Services;
     using Services;
 
@@ -31,6 +32,13 @@ namespace Orc.LicenseManager.Server.Website
 
 
             ServiceLocator.Default.RegisterType<ILicenseService, LicenseService>();
+
+            // http://stackoverflow.com/questions/7397207/json-net-error-self-referencing-loop-detected-for-type
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            };
 
         }
         #endregion

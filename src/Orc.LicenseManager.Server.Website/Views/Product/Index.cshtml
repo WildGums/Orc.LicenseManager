@@ -7,24 +7,23 @@
 <h2>Products</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a class="btn btn-sm btn-primary" href="/Product/Create">Create new product</a>
 </p>
 <table class="table">
 
 
 @foreach (var item in Model) {
     <tr>
-      
-        <td>
-            <a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Edit/@item.Id">Edit</a>
-            <a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Details/@item.Id">Details</a>
-            <a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Delete/@item.Id">Delete</a>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
-            @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-            @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @*<a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Edit/@item.Id">Edit</a>
+            <a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Details/@item.Id">Details</a>
+            <a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Delete/@item.Id">Delete</a>*@
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>
 }

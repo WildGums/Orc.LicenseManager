@@ -1,10 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using System.Activities.Statements
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>@ViewBag.Title - My ASP.NET Application</title>
         <link rel="stylesheet" type="text/css" href="http://bootswatch.com/superhero/bootstrap.min.css" />
+        @*<link rel="stylesheet" type="text/css" href="http://bootswatch.com/united/bootstrap.min.css" />*@
+        
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
@@ -25,11 +28,14 @@
                     @Html.ActionLink("Orc License Manager", "Index", "Home", null, new { @class = "navbar-brand" })
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Licenses", "Index", "License")</li>
-                        <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
-                        <li>@Html.ActionLink("Products", "Index", "Product")</li>
-                    </ul>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Licenses", "Index", "License")</li>
+                            <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
+                            <li>@Html.ActionLink("Products", "Index", "Product")</li>
+                        </ul>
+                    }
                     @Html.Partial("_LoginPartial")
                 </div>
             </div>
