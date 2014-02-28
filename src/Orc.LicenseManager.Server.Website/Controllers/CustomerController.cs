@@ -20,6 +20,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 	//This is a modified controller template that uses the Unit of Work pattern with the help
 	//of Catel.Core and Catel.Extensions.EntityFramework
 	//For more info about Catel visit http://www.catelproject.com
+    [Authorize(Roles = "Admin")]
     public class CustomerController : Controller
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();

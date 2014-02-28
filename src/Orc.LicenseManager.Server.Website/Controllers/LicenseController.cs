@@ -13,6 +13,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
     using System.Web.Mvc;
     using Catel.Data;
     using Catel.Logging;
+    using Newtonsoft.Json;
     using Repositories;
     using Server.Services;
 
@@ -20,6 +21,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
     //This is a modified controller template that uses the Unit of Work pattern with the help
     //of Catel.Core and Catel.Extensions.EntityFramework
     //For more info about Catel visit http://www.catelproject.com
+    [Authorize(Roles = "Admin")]
     public class LicenseController : Controller
     {
         #region Constants
@@ -78,8 +80,8 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             Log.Debug("GET/Create");
             using (var uow = new UoW())
             {
-                ViewBag.CustomerId = new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
-                ViewBag.ProductId = new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
+                ViewBag.CustomerId = JsonConvert.SerializeObject(uow.Customers.GetAll().ToList()); // new SelectList(uow.Customers.GetAll().ToList(), "Id", "FirstName");
+                ViewBag.ProductId = JsonConvert.SerializeObject(uow.Products.GetAll().ToList());//new SelectList(uow.Products.GetAll().ToList(), "Id", "Name");
             }
             return View();
         }

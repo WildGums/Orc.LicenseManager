@@ -34,11 +34,10 @@ namespace Orc.LicenseManager.Server.Services
                     {"Version", licensepoco.ExpireVersion.ToString()}
                 });
             }
-            license
-             .WithUniqueIdentifier(Guid.NewGuid())
-             .As(LicenseType.Standard)
-             .CreateAndSignWithPrivateKey(licensepoco.Product.PrivateKey, licensepoco.Product.PassPhrase);
-            licensepoco.Value = license.ToString();
+            var finalLicense = license.WithUniqueIdentifier(Guid.NewGuid())
+                .As(LicenseType.Standard)
+                .CreateAndSignWithPrivateKey(licensepoco.Product.PrivateKey, licensepoco.Product.PassPhrase);
+            licensepoco.Value = finalLicense.ToString();
         }
 
 
