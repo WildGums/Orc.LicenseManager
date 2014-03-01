@@ -19,6 +19,7 @@ namespace Orc.LicenseManager.Server.Services
         public void GenerateLicenseValue(LicensePoco licensepoco)
         {
             var tempProduct = licensepoco.Product;
+            var tempCustomer = licensepoco.Customer;
             if (tempProduct == null)
             {
                 using (var uow = new UoW())
@@ -26,24 +27,34 @@ namespace Orc.LicenseManager.Server.Services
                     tempProduct = uow.Products.GetByKey(licensepoco.ProductId);
                 }
             }
+            if (tempCustomer == null)
+            {
+                using (var uow = new UoW())
+                {
+                    tempCustomer = uow.Customers.GetByKey(licensepoco.CustomerId);
+                }
+            }
             var license = License.New();
+            var productFeatures = new Dictionary<string, string>
+            {
+                {"FirstName", tempCustomer.FirstName},
+                {"LastName", tempCustomer.LastName},
+                {"Email", tempCustomer.Email}
+            };
             if (licensepoco.ExpireDate != null)
             {
-                license = license.ExpiresAt((DateTime)licensepoco.ExpireDate);
+                license = license.ExpiresAt((DateTime) licensepoco.ExpireDate);
             }
             if (licensepoco.ExpireVersion != null)
             {
-                license = license.WithProductFeatures(new Dictionary<string, string>
-                {
-                    {"Version", licensepoco.ExpireVersion.ToString()}
-                });
+                productFeatures.Add("Version", licensepoco.ExpireVersion.ToString());
             }
             var finalLicense = license.WithUniqueIdentifier(Guid.NewGuid())
                 .As(LicenseType.Standard)
+                .WithProductFeatures(productFeatures)
                 .CreateAndSignWithPrivateKey(tempProduct.PrivateKey, tempProduct.PassPhrase);
             licensepoco.Value = finalLicense.ToString();
         }
-
 
         public void GenerateKeysForProduct(Product product)
         {
