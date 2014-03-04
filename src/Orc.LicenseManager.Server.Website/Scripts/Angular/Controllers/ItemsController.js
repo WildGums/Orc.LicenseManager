@@ -15,11 +15,15 @@
         count: 5,           // count per page
         filter: {
             Name: ''       // initial filter
+        },
+        sorting: {
+            Name: 'asc'     // initial sorting
         }
     }, {
         total: $scope.data.length, // length of data
         getData: function ($defer, params) {
-            var orderedData = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
+            var orderedData = params.sorting() ? $filter('orderBy')($scope.data, params.orderBy()) : $scope.data;
+            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
             $scope.items = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
             $defer.resolve($scope.items);
         }

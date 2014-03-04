@@ -10,19 +10,13 @@
 </p>
 <div ng-app="LMApp">
     <div ng-controller="ItemsController">
-        @*<button class="copybutton" data-clipboard-text="sdfgqsdf"></button>*@
-
-        @*<p><strong>Page:</strong> {{tableParams.page()}}</p>
-            <p><strong>Count per page:</strong> {{tableParams.count()}}</p>*@
-        <table ng-table="tableParams" class="table" template-pagination="custompager" show-filter="true">
+        <table id="mainTable" ng-table="tableParams" class="table" template-pagination="custompager" show-filter="true">
             <tr ng-repeat="product in items">
-                <td data-title="'Name'" filter="{ 'Name': 'text' }">
+                <td data-title="'Name'" filter="{ 'Name': 'text' }" sortable="'Name'">
                     {{product.Name}}
                 </td>
                 <td data-title="'Public Key'">
                     <button class="copy-button" data-clipboard-text="{{product.PublicKey}}"><i class="glyphicon glyphicon-paperclip"></i></button>
-
-
                 </td>
                 <td>
                     <a class="btn btn-sm btn-primary" style="width: 80px;" href="/Product/Edit/{{product.Id}}">Edit</a>
@@ -42,6 +36,7 @@
             </li>
             <li>
                 <div class="btn-group">
+                    <button type="button" ng-class="{'active':params.count() == 5}" ng-click="params.count(5)" class="btn btn-default">5</button>
                     <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
                     <button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
                     <button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
@@ -50,48 +45,45 @@
         </ul>
     </script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $("table").on("mouseover", "button", function() {
-                client.clip($(this));
-            });
-            ZeroClipboard.config({
-                moviePath: "http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.3.2/ZeroClipboard.swf"
-            });
 
-            var client = new ZeroClipboard();
-            client.on('load', function(client) {
-                // alert( "movie is loaded" );
-                client.on('datarequested', function(client) {
-                    client.setText($(this).attr("data-clipboard-text"));
+        $(document).ready(function() {
+            if ($("#mainTable") != null) {
+                ZeroClipboard.config({
+                    moviePath: "http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.3.2/ZeroClipboard.swf"
                 });
-                client.on('complete', function(client, args) {
-                    toastr.success("Copied text to clipboard: " + args.text);
+                var client = new ZeroClipboard();
+                client.on('load', function(client) {
+                    // alert( "movie is loaded" );
+                    client.on('datarequested', function(client) {
+                        client.setText($(this).attr("data-clipboard-text"));
+                    });
+                    client.on('complete', function(client, args) {
+                        toastr.success("Copied text to clipboard: " + args.text);
+                    });
                 });
-            });
-            client.on('wrongflash', function() {
-                console.info("Wrong flash found!");
-                ZeroClipboard.destroy();
-            });
-            client.on('noflash', function() {
-                console.info("No flash found!");
-                ZeroClipboard.destroy();
-            });
+                client.on('wrongflash', function() {
+                    console.info("Wrong flash found!");
+                    ZeroClipboard.destroy();
+                });
+                client.on('noflash', function() {
+                    console.info("No flash found!");
+                    ZeroClipboard.destroy();
+                });
+                $("#mainTable").on("mouseover", ".copy-button", function() {
+                    client.clip($(this));
+                });
+            }
         });
     </script>
 </div>
 
 @section Scripts
 {
-
-    <script type="text/javascript" src="/Scripts/Angular/LMapp.js"></script>
-    <script type="text/javascript" src="/Scripts/Angular/Controllers/ItemsController.js"></script>
     <script type="text/javascript">
         LMApp.factory('bootstrappedData', function() {
             return {
                 items: @Html.Raw(Model)
-                };
+            };
         });
     </script>
-
-
 }
