@@ -1,5 +1,4 @@
-﻿@using System.Activities.Statements
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
@@ -7,13 +6,23 @@
         <title>@ViewBag.Title - My ASP.NET Application</title>
         @*<link rel="stylesheet" type="text/css" href="http://bootswatch.com/superhero/bootstrap.min.css" />*@
         <link rel="stylesheet" type="text/css" href="http://bootswatch.com/united/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
         
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+        @*<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zclip/1.1.2/jquery.zclip.min.js"></script>*@
+        @*<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.3.2/ZeroClipboard.js"></script>*@
+        <script type="text/javascript" src="/Scripts/ZeroClipboard.min.js"></script>
+        
+        <script type="text/javascript" src="/Scripts/Angular/ng-table.min.js"></script>
+
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         
 
         <script src="~/Scripts/Angular/LicenseModule.js"></script>
@@ -28,7 +37,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    @Html.ActionLink("Orc License Manager", "Index", "Home", null, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Orc License Manager", "Index", "Home", null, new {@class = "navbar-brand"})
                 </div>
                 <div class="navbar-collapse collapse">
                     @if (User.IsInRole("Admin"))
@@ -51,12 +60,9 @@
             </footer>
         </div>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
+
         @RenderSection("scripts", required: false)
 
     </body>
 
 </html>
-
-

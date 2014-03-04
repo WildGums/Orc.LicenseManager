@@ -11,7 +11,7 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    /*max-width: 280px;*/
 }
 
 .field-validation-error {
@@ -48,4 +48,9 @@ button, input, optgroup, select, textarea {
 }
 .breakword {
     word-wrap: break-word;
+}
+
+
+.toast-top-right {
+    top: 62px; /* default is 12 I added 50 because thats how the navbar is */
 }

@@ -13,11 +13,6 @@
         return "null";
     };
     $scope.selectedCustomerId = function () {
-        //for (var x = 0, len = $scope.customers.length; x < len; x += 1) {
-        //    if ($scope.customers[x].FirstName === $scope.selectedCustomer) {
-        //        return $scope.customers[x].Id;
-        //    }
-        //}
         return $scope.selectedCustomer.Id;
     };
     $scope.GetFilteredCustomers = function (viewValue) {
