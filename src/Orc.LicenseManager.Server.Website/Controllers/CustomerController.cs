@@ -12,7 +12,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 	using System.Web.Mvc;
 	
 	using Catel.Logging;
-	
+	using Newtonsoft.Json;
 	using Repositories;
 
 	using Orc.LicenseManager.Server;
@@ -32,7 +32,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 			using(var uow = new UoW()){
 				var customersRepo = uow.GetRepository<ICustomerRepository>();
 				var customers = customersRepo.GetQuery().Include(c => c.Creator).ToList();
-				return View(customers);
+                return View("Index", (object)JsonConvert.SerializeObject(customers));
 			}
         }
 
@@ -125,9 +125,18 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             {
 				using(var uow = new UoW()){
 					var customersRepo = uow.GetRepository<ICustomerRepository>();
-					
-					customersRepo.Update(customer);
-					uow.SaveChanges();
+                    var customermodify = customersRepo.GetByKey(customer.Id);
+                    customermodify.FirstName = customer.LastName;
+                    customermodify.LastName = customer.LastName;
+                    customermodify.Company = customer.Company;
+                    customermodify.Email = customer.Email;
+                    customermodify.Street = customer.Street;
+                    customermodify.Postal = customer.Postal;
+                    customermodify.Country = customer.Country;
+                    customermodify.City = customer.City;
+                    customersRepo.Update(customermodify);
+                    uow.SaveChanges();
+                    return RedirectToAction("Details", new { @id = customer.Id });
 				}
 			}	
 			using(var uow = new UoW()){

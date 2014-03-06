@@ -137,9 +137,11 @@ namespace Orc.LicenseManager.Server.Website.Controllers
                 using (var uow = new UoW())
                 {
                     var productsRepo = uow.GetRepository<IProductRepository>();
-
-                    productsRepo.Update(product);
+                    var modifyproduct = productsRepo.GetByKey(product.Id);
+                    modifyproduct.Name = product.Name;
+                    productsRepo.Update(modifyproduct);
                     uow.SaveChanges();
+                    return RedirectToAction("Details", new { @id = product.Id});
                 }
             }
             return View(product);

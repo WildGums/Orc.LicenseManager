@@ -1,17 +1,6 @@
-﻿@model string
-@{
-    ViewBag.Title = "Products";
-}
-
-<h2>Products</h2>
-
-<p>
-    <a class="btn btn-sm btn-primary" href="/Product/Create">Create new product</a>
-</p>
-
-<table ng-controller="ItemsController" ng-table="tableParams" class="table" template-pagination="custompager" show-filter="true">
+﻿<table ng-controller="ItemsController" ng-table="tableParams" class="table" template-pagination="custompager" show-filter="true">
     <tr ng-repeat="item in items">
-        <td data-title="'Name'" filter="{ 'Name': 'text' }" sortable="'Name'">
+        <td data-title="'Name'" filter="{ 'Name': 'text' }" sortable="'Name'" >
             {{item.Name}}
         </td>
         <td data-title="'Public Key'">
@@ -24,15 +13,3 @@
         </td>
     </tr>
 </table>
-@Html.Partial("_CustomPager")
-
-@section Scripts
-{
-    <script type="text/javascript">
-        LMApp.factory('bootstrappedData', function() {
-            return {
-                items: @Html.Raw(Model)
-                }
-        });
-    </script>
-}

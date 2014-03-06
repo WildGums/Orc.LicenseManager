@@ -214,11 +214,11 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Scripts\Angular\Controllers\ItemsController.js" />
-    <Content Include="Scripts\Angular\Controllers\LicenseController.js" />
-    <Content Include="Scripts\Angular\LicenseModule.js" />
-    <Content Include="Scripts\Angular\LMApp.js" />
-    <Content Include="Scripts\Angular\ng-table.min.js" />
+    <Content Include="MyScripts\maintablezeroclip.js" />
+    <Content Include="MyScripts\Angular\Controllers\ItemsController.js" />
+    <Content Include="MyScripts\Angular\Controllers\LicenseController.js" />
+    <Content Include="MyScripts\Angular\LMApp.js" />
+    <Content Include="Scripts\ng-table.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
@@ -234,6 +234,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\ZeroClipboard.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Templates\table.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -274,6 +275,9 @@
     <Content Include="Views\License\Edit.cshtml" />
     <Content Include="Views\License\Index.cshtml" />
     <Content Include="Views\Product\Index - Copy.cshtml" />
+    <Content Include="Views\Shared\_CustomPager.cshtml" />
+    <Content Include="Views\License\Index - Copy.cshtml" />
+    <Content Include="Views\Customer\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,77 +4,69 @@
     ViewBag.Title = "Create";
 }
 
-<div ng-app='licenseModule'>
-    <div ng-controller="LicenseController">
-        <h2>Create a new license</h2>
 
-        @using (Html.BeginForm("Create", "License", FormMethod.Post, new { @novalidate = "" }))
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="form-horizontal">
-                <hr />
-                @Html.ValidationSummary(true)
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="ExpireVersion">Maximum version</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ExpireVersion)
-                        @Html.ValidationMessageFor(model => model.ExpireVersion)
-                    </div>
+<div ng-controller="LicenseController">
+    <h2>Create a new license</h2>
+    @using (Html.BeginForm("Create", "License", FormMethod.Post, new { @novalidate = "" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <label class="control-label col-md-2" for="ExpireVersion">Maximum version</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ExpireVersion)
+                    @Html.ValidationMessageFor(model => model.ExpireVersion)
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="ExpireDate">Expire Date</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ExpireDate)
-                        @Html.ValidationMessageFor(model => model.ExpireDate)
-                    </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="ExpireDate">Expire Date</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ExpireDate)
+                    @Html.ValidationMessageFor(model => model.ExpireDate)
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="selectedcustomer">Customer</label>
-                    <div class="col-md-10">
-                        <input required type="text" ng-model="selectedCustomer"
-                               typeahead="customer as customer.FirstName + ' (' +  customer.LastName + ')' for customer in GetFilteredCustomers($viewValue ) |  limitTo:5"
-                               class="form-control" />
-                        <div class="error" ng-show="selectedcustomer.$invalid">
-                            <small class="error" ng-show="selectedCustomer.$invalid">
-                                Your customer is required.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="selectedproduct">Product</label>
-                    <div class="col-md-10">
-                        <input required type="text" ng-model="selectedProduct" typeahead="product.Name as product.Name for product in products | filter:{Name: $viewValue} | limitTo:5" class="form-control" typeahead-editable="false">
-                    </div>
-                </div>
-                <input data-val="true" data-val-number="The field ProductId must be a number." data-val-required="The ProductId field is required." id="ProductId" name="ProductId" type="hidden" value="{{selectedProductId()}}">
-                <input data-val="true" data-val-number="The field CustomerId must be a number." data-val-required="The CustomerId field is required." id="CustomerId" name="CustomerId" type="hidden" value="{{selectedCustomerId()}}">
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-default" ng-disabled="signup_form.$invalid" />
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="selectedcustomer">Customer</label>
+                <div class="col-md-10">
+                    <input required type="text" ng-model="selectedCustomer"
+                           typeahead="customer as customer.FirstName + ' (' +  customer.LastName + ')' for customer in GetFilteredCustomers($viewValue ) |  limitTo:5"
+                           class="form-control" />
+                    <div class="error" ng-show="selectedcustomer.$invalid">
+                        <small class="error" ng-show="selectedCustomer.$invalid">
+                            Your customer is required.
+                        </small>
                     </div>
                 </div>
             </div>
-        }
-
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-
+            <div class="form-group">
+                <label class="control-label col-md-2" for="selectedproduct">Product</label>
+                <div class="col-md-10">
+                    <input required type="text" ng-model="selectedProduct" typeahead="product.Name as product.Name for product in products | filter:{Name: $viewValue} | limitTo:5" class="form-control" typeahead-editable="false">
+                </div>
+            </div>
+            <input data-val="true" data-val-number="The field ProductId must be a number." data-val-required="The ProductId field is required." id="ProductId" name="ProductId" type="hidden" value="{{selectedProductId()}}">
+            <input data-val="true" data-val-number="The field CustomerId must be a number." data-val-required="The CustomerId field is required." id="CustomerId" name="CustomerId" type="hidden" value="{{selectedCustomerId()}}">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" ng-disabled="signup_form.$invalid" />
+                </div>
+            </div>
         </div>
+    }
+    <div>
+        @Html.ActionLink("Back to List", "Index")
     </div>
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
-        licenseModule.factory('bootstrappedData', function() {
+        LMApp.factory('bootstrappedData', function() {
             return {
                 customers: @Html.Raw(ViewBag.CustomerId),
                 products: @Html.Raw(ViewBag.ProductId)
-                });
+                }
         });
     </script>
 }

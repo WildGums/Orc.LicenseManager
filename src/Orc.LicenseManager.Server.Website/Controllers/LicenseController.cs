@@ -49,7 +49,8 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             {
                 var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
                 var licenses = licensesRepo.GetQuery().Include(l => l.Creator).Include(l => l.Customer).Include(l => l.Product).ToList();
-                return View(licenses);
+                return View("Index", (object)JsonConvert.SerializeObject(licenses));
+
             }
         }
 
@@ -96,11 +97,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             Log.Debug("POST/Create");
             if (ModelState.IsValid)
             {
-                //using (var dbContextManager = DbContextManager<LicenseManagerDbContext>.GetManager())
-                //{
-                //    dbContextManager.Context.Licenses.Attach(licensepoco);
-                //    dbContextManager.Context.Entry(licensepoco).Reference(x => x.Product).Load();
-                //}
                 _licenseService.GenerateLicenseValue(licensepoco);
                 using (var uow = new UoW())
                 {
