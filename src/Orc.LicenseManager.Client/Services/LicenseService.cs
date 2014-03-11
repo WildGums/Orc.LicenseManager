@@ -96,7 +96,7 @@ namespace Orc.LicenseManager.Services
                 Assembly assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
                 title = assembly.Title();
             }
-            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink, AboutImage = aboutImae, AboutTitle = aboutTitle, AboutText = aboutText, AboutSite = aboutSite};
+            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink, AboutImage = aboutImae, AboutTitle = aboutTitle, AboutText = aboutText, AboutSite = aboutSite };
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
             Log.Info("Showing dialog with companyinfo");
@@ -148,7 +148,9 @@ namespace Orc.LicenseManager.Services
             try
             {
                 License licenseObject = License.Load(license);
-                List<IValidationFailure> failureList = licenseObject.Validate().Signature(_applicationId).AssertValidLicense().ToList();
+                List<IValidationFailure> failureList = licenseObject.Validate()
+                    .Signature(_applicationId)
+                    .AssertValidLicense().ToList();
                 if (failureList.Count > 0)
                 {
                     foreach (IValidationFailure failure in failureList)
@@ -177,7 +179,117 @@ namespace Orc.LicenseManager.Services
             }
             return validationContext;
         }
+        /// <summary>
+        /// Validates the XML
+        /// </summary>
+        /// <param name="license">The license.</param>
+        /// <returns>The validation context containing all the validation results.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="XmlException">The license text is not valid XML.</exception>
+        /// <exception cref="Exception">The root element is not License.</exception>
+        /// <exception cref="Exception">There were no inner nodes found.</exception>
+        public IValidationContext ValidateXML(string license)
+        {
+            // TODO: Ask geert about the exceptions, it can be exception, argument, xml.... mayby more
+            var validationContext = new ValidationContext();
+            if (string.IsNullOrWhiteSpace(license))
+            {
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Your clipboard seems to be empty", "Please make sure that you copied the whole text."));
+            }
+            var xmlDataList = new List<XmlDataModel>();
+            try
+            {
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(license);
+                var xmlRoot = xmlDoc.DocumentElement;
+                if (xmlRoot.Name != "License")
+                {
+                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Please make sure that you pasted the complete xmldata, including the License tag", "Please make sure that you copied the whole text."));
+                }
+                var xmlNodes = xmlRoot.ChildNodes;
+                foreach (XmlNode node in xmlNodes)
+                {
+                    if (node.Name != "ProductFeatures")
+                    {
+                        xmlDataList.Add(new XmlDataModel()
+                        {
+                            Name = node.Name,
+                            Value = node.InnerText
+                        });
+                    }
+                    else
+                    {
+                        foreach (XmlNode featrureNode in node.ChildNodes)
+                        {
+                            xmlDataList.Add(new XmlDataModel()
+                            {
+                                Name = featrureNode.Attributes[0].Value,
+                                Value = featrureNode.InnerText
+                            });
+                        }
+                    }
+                }
+                if (xmlDataList.Count == 0)
+                {
+                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("There was no inner XML found", "Please make sure that you copied the whole text."));
+                }
+                var expData = xmlDataList.FirstOrDefault(x => x.Name == "Expiration");
+                if (expData != null)
+                {
+                    DateTime expDataDate;
+                    if (DateTime.TryParse(expData.Value, out expDataDate))
+                    {
+                        if (expDataDate < DateTime.UtcNow)
+                        {
+                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The license has expired.", "Please make sure you got a license that isn't expired."));
+                        }
+                    }
+                    else
+                    {
+                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The expiration date was no valid DateTime value", "Please make sure you got a valid license."));
+                    }
+                }
+                var xmlDataVersion = xmlDataList.FirstOrDefault(x => x.Name == "Version");
+                if (xmlDataVersion != null)
+                {
+                    Version licenseVersion;
+                    if (Version.TryParse(xmlDataVersion.Value, out licenseVersion))
+                    {
+                        var productVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                        if (productVersion > licenseVersion)
+                        {
+                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The license has expired.", "Your license only support until version (" + licenseVersion.ToString() + ") while the current version of this product is: (" + productVersion.ToString() + ")."));
+                        }
+                    }
+                    else
+                    {
+                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The version was no valid Version value", "Please make sure you got a valid license."));
 
+                    }
+
+                }
+                Log.Info("the XML is valid.");
+            }
+            catch (XmlException xmlex)
+            {
+                Log.Debug(xmlex);
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The pasted text is not valid XML.", "Please make sure that you copied the whole text."));
+                Log.Info("the XML is invalid.");
+
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(ex);
+                string innermessage = "";
+                if (ex.InnerException != null)
+                {
+                    innermessage = ex.InnerException.Message;
+                }
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag(ex.Message, innermessage));
+                Log.Info("the XML is invalid.");
+            }
+            return validationContext;
+        }
         /// <summary>
         /// Saves the license.
         /// </summary>
@@ -258,68 +370,7 @@ namespace Orc.LicenseManager.Services
             }
         }
 
-        /// <summary>
-        /// Validates the XML
-        /// </summary>
-        /// <param name="license">The license.</param>
-        /// <returns>The validation context containing all the validation results.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="XmlException">The license text is not valid XML.</exception>
-        /// <exception cref="Exception">The root element is not License.</exception>
-        /// <exception cref="Exception">There were no inner nodes found.</exception>
-        public IValidationContext ValidateXML(string license)
-        {
-            // TODO: Ask geert about the exceptions, it can be exception, argument, xml.... mayby more
-            var validationContext = new ValidationContext();
-            if (string.IsNullOrWhiteSpace(license))
-            {
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Your clipboard seems to be empty", "Please make sure that you copied the whole text."));
-            }
-            var xmlDataList = new List<XmlDataModel>();
-            try
-            {
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(license);
-                var xmlRoot = xmlDoc.DocumentElement;
-                if (xmlRoot.Name != "License")
-                {
-                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Please make sure that you pasted the complete xmldata, including the License tag", "Please make sure that you copied the whole text."));
-                }
-                var xmlNodes = xmlRoot.ChildNodes;
-                foreach (XmlNode node in xmlNodes)
-                {
-                    xmlDataList.Add(new XmlDataModel()
-                    {
-                        Name = node.Name,
-                        Value = node.InnerText
-                    });
-                }
-                if (xmlDataList.Count == 0)
-                {
-                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("There was no inner XML found", "Please make sure that you copied the whole text."));
-                }
-                Log.Info("the XML is valid.");
-            }
-            catch (XmlException xmlex)
-            {
-                Log.Debug(xmlex);
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The pasted text is not valid XML.", "Please make sure that you copied the whole text."));
-                Log.Info("the XML is invalid.");
 
-            }
-            catch (Exception ex)
-            {
-                Log.Debug(ex);
-                string innermessage = "";
-                if (ex.InnerException != null)
-                {
-                    innermessage = ex.InnerException.Message;
-                }
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag(ex.Message, innermessage));
-                Log.Info("the XML is invalid.");
-            }
-            return validationContext;
-        }
         /// <summary>
         /// Loads the XML out of license.
         /// </summary>
@@ -338,11 +389,25 @@ namespace Orc.LicenseManager.Services
                 var xmlNodes = xmlRoot.ChildNodes;
                 foreach (XmlNode node in xmlNodes)
                 {
-                    xmlDataList.Add(new XmlDataModel()
+                    if (node.Name != "ProductFeatures")
                     {
-                        Name = node.Name,
-                        Value = node.InnerText
-                    });
+                        xmlDataList.Add(new XmlDataModel()
+                        {
+                            Name = node.Name,
+                            Value = node.InnerText
+                        });
+                    }
+                    else
+                    {
+                        foreach (XmlNode featrureNode in node.ChildNodes)
+                        {
+                            xmlDataList.Add(new XmlDataModel()
+                            {
+                                Name = featrureNode.Attributes[0].Value,
+                                Value = featrureNode.InnerText
+                            });
+                        }
+                    }
                 }
                 Log.Info("returning xml successfull");
             }
