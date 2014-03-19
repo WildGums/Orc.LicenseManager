@@ -50,5 +50,12 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        public ActionResult Update()
+        {
+            Database.SetInitializer<LicenseManagerDbContext>(null);
+            var context = new LicenseManagerDbContext();
+            context.Database.Initialize(true);
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

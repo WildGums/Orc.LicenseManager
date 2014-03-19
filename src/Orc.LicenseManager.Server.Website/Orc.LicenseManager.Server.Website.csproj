@@ -228,6 +228,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="MyScripts\Angular\Controllers\DashboardController.js" />
     <Content Include="MyScripts\maintablezeroclip.js" />
     <Content Include="MyScripts\Angular\Controllers\ItemsController.js" />
     <Content Include="MyScripts\Angular\Controllers\LicenseController.js" />

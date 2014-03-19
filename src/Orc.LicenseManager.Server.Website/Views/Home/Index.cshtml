@@ -7,3 +7,33 @@
     <p class="lead">Orc license manager allows you to easily create licenses for your products you wish to disturb. <br />You'll need a user account to access the license manager server.</p>
     <p><a href="https://github.com/Orcomp/Orc.LicenseManager" class="btn btn-primary btn-large">Github &raquo;</a></p>
 </div>
+@if (Request.IsAuthenticated)
+{
+    <div class="row" ng-controller="DashboardController">
+        <div class="col-md-3 ">
+            <div class="jumbotron">
+
+                <h3>Latest products</h3>
+                <div ng-repeat="product in products">
+                    <a href="/Product/Details?id={{product.Id}}">{{product.Name}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 ">
+            <div class="jumbotron">
+                <h3>Latest Customers</h3>
+                <div ng-repeat="customer in customers">
+                    <a href="/Customer/Details?id={{customer.Id}}">{{customer.FirstName}} {{customer.LastName}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 ">
+            <div class="jumbotron">
+                <h3>Latest Licenses</h3>
+                <div ng-repeat="license in licenses">
+                    <a href="/License/Details?id={{license.Id}}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

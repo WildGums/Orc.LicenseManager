@@ -7,6 +7,7 @@
 
 namespace Orc.LicenseManager.Server.Website
 {
+    using System.Data.Entity;
     using System.Web;
     using System.Web.Http;
     using System.Web.Mvc;
@@ -23,6 +24,8 @@ namespace Orc.LicenseManager.Server.Website
         #region Methods
         protected void Application_Start()
         {
+            Database.SetInitializer<LicenseManagerDbContext>(null);
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -39,9 +42,8 @@ namespace Orc.LicenseManager.Server.Website
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
-                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize
             };
-
         }
         #endregion
     }

@@ -26,6 +26,7 @@ namespace Orc.LicenseManager.Server
 
         public string Company { get; set; }
 
+        [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 

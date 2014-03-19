@@ -6,7 +6,6 @@
     $scope.selectedProductId = function () {
         for (var x = 0, len = $scope.products.length; x < len; x += 1) {
             if ($scope.products[x].Name === $scope.selectedProduct) {
-                console.info($scope.products[x]);
                 return $scope.products[x].Id;
             }
         }
