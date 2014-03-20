@@ -261,8 +261,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -289,10 +287,7 @@
     <Content Include="Views\License\Details.cshtml" />
     <Content Include="Views\License\Edit.cshtml" />
     <Content Include="Views\License\Index.cshtml" />
-    <Content Include="Views\Product\Index - Copy.cshtml" />
     <Content Include="Views\Shared\_CustomPager.cshtml" />
-    <Content Include="Views\License\Index - Copy.cshtml" />
-    <Content Include="Views\Customer\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

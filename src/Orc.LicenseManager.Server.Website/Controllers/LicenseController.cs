@@ -21,8 +21,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
     //This is a modified controller template that uses the Unit of Work pattern with the help
     //of Catel.Core and Catel.Extensions.EntityFramework
     //For more info about Catel visit http://www.catelproject.com
-    [Authorize(Roles = "Admin")]
-    public class LicenseController : Controller
+    public class LicenseController : BaseController
     {
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -66,7 +65,8 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             using (var uow = new UoW())
             {
                 var licensesRepo = uow.GetRepository<ILicensePocoRepository>();
-                licensepoco = licensesRepo.GetByKey((System.Int32) id);
+              //  licensepoco = licensesRepo.GetByKey((System.Int32) id); // Geert mayby add include?
+                licensepoco = licensesRepo.GetQuery().Include(x=>x.Customer).Include(x=>x.Product).FirstOrDefault(x => x.Id == (System.Int32) id);
             }
             if (licensepoco == null)
             {

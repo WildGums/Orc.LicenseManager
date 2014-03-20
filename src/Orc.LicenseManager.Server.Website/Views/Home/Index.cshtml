@@ -11,27 +11,26 @@
 {
     <div class="row" ng-controller="DashboardController">
         <div class="col-md-3 ">
-            <div class="jumbotron">
-
-                <h3>Latest products</h3>
+            <div class="jumbotron" ng-hide="products.length==0">
+                <h5>Latest products</h5>
                 <div ng-repeat="product in products">
                     <a href="/Product/Details?id={{product.Id}}">{{product.Name}}</a>
                 </div>
             </div>
         </div>
         <div class="col-md-3 ">
-            <div class="jumbotron">
-                <h3>Latest Customers</h3>
+            <div class="jumbotron" ng-hide="customers.length==0">
+                <h5>Latest Customers</h5>
                 <div ng-repeat="customer in customers">
-                    <a href="/Customer/Details?id={{customer.Id}}">{{customer.FirstName}} {{customer.LastName}}</a>
+                    <a href="/Customer/Details?id={{customer.Id}}">{{customer.FullName}}</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6 ">
-            <div class="jumbotron">
-                <h3>Latest Licenses</h3>
+            <div class="jumbotron" ng-hide="licenses.length==0">
+                <h5>Latest Licenses</h5>
                 <div ng-repeat="license in licenses">
-                    <a href="/License/Details?id={{license.Id}}"></a>
+                    A <a href="/License/Details?id={{license.Id}}">license</a> has been created for <a href="/Customer/Details?id={{license.Customer.Id}}">{{license.Customer.Name}}</a> ( <a href="/Product/Details?id={{license.Product.Id}}">{{license.Product.Name}}</a> )
                 </div>
             </div>
         </div>

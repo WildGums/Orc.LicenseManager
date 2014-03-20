@@ -24,8 +24,6 @@ namespace Orc.LicenseManager.Server.Website
         #region Methods
         protected void Application_Start()
         {
-            Database.SetInitializer<LicenseManagerDbContext>(null);
-
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -34,15 +32,12 @@ namespace Orc.LicenseManager.Server.Website
             Catel.Mvc.DependencyInjectionConfig.RegisterServiceLocatorAsDependencyResolver();
             ServiceLocator.Default.RegisterType<IMembershipService, MembershipService>();
             ServiceLocator.Default.RegisterType<IRngService, RngService>();
-
-
             ServiceLocator.Default.RegisterType<ILicenseService, LicenseService>();
-
             // http://stackoverflow.com/questions/7397207/json-net-error-self-referencing-loop-detected-for-type
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
-                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize
+                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             };
         }
         #endregion

@@ -8,7 +8,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 {
     using System.Reflection.Emit;
     using Microsoft.AspNet.Identity;
-
+    [Authorize(Roles = "Admin")]
     public abstract class BaseController : Controller
     {
         public string UserIP {

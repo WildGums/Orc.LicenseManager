@@ -11,63 +11,65 @@ namespace Orc.LicenseManager.Server.Website.Controllers
     using System.Linq;
     using System.Web.Http;
     using Catel.Data;
-
+    [Authorize(Roles = "Admin")]
     public class DashboardController : ApiController
     {
         #region Fields
-        private readonly LicenseManagerDbContext dbContext = new LicenseManagerDbContext();
+        LicenseManagerDbContext db = new LicenseManagerDbContext();
         #endregion
 
         #region Constructors
         public DashboardController()
         {
-            dbContext.Configuration.ProxyCreationEnabled = true;
         }
         #endregion
 
         #region Methods
         [ActionName("GetLast5Products")]
-        public IEnumerable<Product> GetLast5Products()
+        public object GetLast5Products()
         {
-            using (var db = dbContext)
+            return db.Products.Include(x => x.Licenses).OrderByDescending(x => x.CreationDate).Take(5).Select(x => new
             {
-                var products = db.Products.Include(x => x.Licenses).OrderByDescending(x => x.CreationDate).Take(5);
-                return products.ToList();
-            }
+                x.Id,
+                Name = x.Name
+            });
         }
 
         [ActionName("GetLast5Customers")]
-        public IEnumerable<Customer> GetLast5Customers()
+        public object GetLast5Customers()
         {
-            using (var db = dbContext)
+
+            return db.Customers.Include(x => x.Licenses).OrderByDescending(x => x.CreationDate).Take(5).Select(x => new
             {
-                var customers = db.Customers.Include(x => x.Licenses).OrderByDescending(x => x.CreationDate).Take(5);
-                return customers.ToList();
-            }
+                x.Id,
+                FullName = x.FirstName + " " + x.LastName
+            });
         }
 
         [ActionName("GetLast5Licenses")]
         public object GetLast5Licenses()
         {
-            using (var db = dbContext)
+            var licenses = db.Licenses.Include(x => x.Customer).Include(x => x.Product).OrderByDescending(x => x.CreationDate).Take(5).Select(x => new
             {
-                var licenses = db.Licenses.Include(x=>x.Customer).Include(x=>x.Product).OrderByDescending(x => x.CreationDate).Take(5).Select(x => new 
+                x.Id,
+                Product = new
                 {
-                    x.Id
-                    //,ProductName = new
-                    //{
-                    //    x.Product.Name
-                    //},
-                    //CustomerName =x.Customer.FirstName + " " + x.Customer.LastName
+                    Id = x.ProductId,
+                    Name = x.Product.Name
 
-                });;
-               //var licenseobject =  licenses
-                return licenses;
-            }
+                },
+                Customer = new
+                {
+                    Id = x.CustomerId,
+                    Name = x.Customer.FirstName + " " + x.Customer.LastName
+                }
+            });
+            return licenses;
         }
 
         protected override void Dispose(bool disposing)
         {
+            db.Dispose();
             base.Dispose(disposing);
         }
         #endregion

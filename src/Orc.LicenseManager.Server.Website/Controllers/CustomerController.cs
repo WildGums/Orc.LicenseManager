@@ -21,7 +21,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 	//of Catel.Core and Catel.Extensions.EntityFramework
 	//For more info about Catel visit http://www.catelproject.com
     [Authorize(Roles = "Admin")]
-    public class CustomerController : Controller
+    public class CustomerController : BaseController
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 		

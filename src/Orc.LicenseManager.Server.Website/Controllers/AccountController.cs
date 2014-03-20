@@ -15,8 +15,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
     using Microsoft.Owin.Security;
     using ViewModels;
 
-    [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         #region Constructors
         public AccountController()
@@ -72,7 +71,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -81,7 +79,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -192,7 +189,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         //
         // POST: /Account/ExternalLogin
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
@@ -202,7 +198,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 
         //
         // GET: /Account/ExternalLoginCallback
-        [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
@@ -257,7 +252,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         //
         // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
@@ -304,7 +298,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 
         //
         // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
             return View();
