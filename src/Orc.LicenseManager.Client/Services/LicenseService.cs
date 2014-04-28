@@ -18,7 +18,7 @@ namespace Orc.LicenseManager.Services
     using Catel.Fody;
     using Catel.Logging;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using Catel.Reflection;
     using Models;
     using Portable.Licensing;

@@ -45,22 +45,21 @@
     </Reference>
     <Reference Include="Catel.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Catel\output\debug\NET45\Catel.Extensions.EntityFramework6\Catel.Core.dll</HintPath>
+      <HintPath>..\..\lib\Catel.Core.3.9.0.1404241954-beta\lib\net45\Catel.Core.dll</HintPath>
     </Reference>
     <Reference Include="Catel.Extensions.EntityFramework6, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Catel\output\debug\NET45\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.dll</HintPath>
+      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.3.9.0.1404241954-beta\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.Mvc">
-      <HintPath>..\..\lib\Catel.Mvc.3.9.0.1402201626-beta\lib\net45\Catel.Mvc.dll</HintPath>
+    <Reference Include="Catel.MVC4">
+      <HintPath>..\..\lib\Catel.Mvc.3.9.0.1404241954-beta\lib\net45\Catel.MVC4.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\EntityFramework.6.0.2\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\lib\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\lib\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="MaxBox.Core">
       <HintPath>..\..\..\MaxBox\output\debug\Maxbox.Core\MaxBox.Core.dll</HintPath>

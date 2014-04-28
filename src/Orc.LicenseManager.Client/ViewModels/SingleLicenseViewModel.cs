@@ -15,7 +15,7 @@ namespace Orc.LicenseManager.ViewModels
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using Models;
     using Services;
 

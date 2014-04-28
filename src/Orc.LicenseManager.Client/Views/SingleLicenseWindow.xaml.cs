@@ -7,7 +7,7 @@
 
 namespace Orc.LicenseManager.Views
 {
-    using System.Windows.Input;
+    using Catel;
     using Catel.Windows;
     using ViewModels;
 
@@ -34,7 +34,7 @@ namespace Orc.LicenseManager.Views
         {
             InitializeComponent();
 
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
