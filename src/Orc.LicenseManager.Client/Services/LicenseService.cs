@@ -68,7 +68,6 @@ namespace Orc.LicenseManager.Services
         /// <exception cref="ArgumentException">The <paramref name="applicationId" /> is <c>null</c> or whitespace.</exception>
         public void Initialize([NotNullOrWhitespace] string applicationId)
         {
-            Log.Debug("Initailized"); // TODO: Debug or Info : / ? DILEMA
             _initialized = true;
             _applicationId = applicationId;
         }
@@ -77,54 +76,71 @@ namespace Orc.LicenseManager.Services
         /// Shows the single license dialog including all company info. You will see the about box.
         /// </summary>
         /// <param name="aboutTitle">The title inside the about box.</param>
-        /// <param name="aboutImae">The about box image.</param>
+        /// <param name="aboutImage">The about box image.</param>
         /// <param name="aboutText">The text inside the about box</param>
-        /// <param name="aboutSite">The site inside the about box.</param>
+        /// <param name="aboutSiteUrl">The site inside the about box.</param>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
+        /// <param name="purchaseLinkUrl">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
         /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public void ShowSingleLicenseDialog(string aboutTitle, string aboutImae, string aboutText, string aboutSite = null, string title = null, string purchaseLink = null)
+        public void ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null)
         {
             if (!_initialized)
             {
-                throw new Exception("Please use the Initialize method first");
+                Log.ErrorAndThrowException<InvalidOperationException>("Please use the Initialize method first");
             }
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                Assembly assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
+                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
                 title = assembly.Title();
             }
-            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink, AboutImage = aboutImae, AboutTitle = aboutTitle, AboutText = aboutText, AboutSite = aboutSite };
+
+            var model = new SingleLicenseModel
+            {
+                Title = title, 
+                PurchaseLink = purchaseLinkUrl, 
+                AboutImage = aboutImage, 
+                AboutTitle = aboutTitle, 
+                AboutText = aboutText, 
+                AboutSite = aboutSiteUrl
+            };
+
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
-            Log.Info("Showing dialog with companyinfo");
+
+            Log.Info("Showing license dialog with companyinfo");
         }
 
         /// <summary>
         /// Shows the single license dialog. You won't see the about box.
         /// </summary>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
+        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
         public void ShowSingleLicenseDialog(string title = null, string purchaseLink = null)
         {
             if (!_initialized)
             {
-                throw new Exception("Please use the Initialize method first");
+                Log.ErrorAndThrowException<InvalidOperationException>("Please use the Initialize method first");
             }
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                Assembly assembly = Assembly.GetExecutingAssembly() ?? Assembly.GetEntryAssembly();
+                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
                 title = assembly.Title();
             }
 
-            var model = new SingleLicenseModel { Title = title, PurchaseLink = purchaseLink };
+            var model = new SingleLicenseModel
+            {
+                Title = title, 
+                PurchaseLink = purchaseLink
+            };
+
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
-            Log.Info("Showing dialog");
+
+            Log.Info("Showing license dialog");
         }
 
         /// <summary>
@@ -141,21 +157,22 @@ namespace Orc.LicenseManager.Services
             var validationContext = new ValidationContext();
             if (!_initialized)
             {
-                const string error = "Please use the Initialize method first";
-                Log.Error(error);
-                throw new Exception(error);
+                Log.ErrorAndThrowException<InvalidOperationException>("Please use the Initialize method first");
             }
+
+            Log.Info("Validating license");
+
             try
             {
-                License licenseObject = License.Load(license);
-                List<IValidationFailure> failureList = licenseObject.Validate()
+                var licenseObject = License.Load(license);
+                var failureList = licenseObject.Validate()
                     .Signature(_applicationId)
                     .AssertValidLicense().ToList();
                 if (failureList.Count > 0)
                 {
-                    foreach (IValidationFailure failure in failureList)
+                    foreach (var failure in failureList)
                     {
-                        BusinessRuleValidationResult businessRuleValidationResult = BusinessRuleValidationResult.CreateErrorWithTag(failure.Message, failure.HowToResolve);
+                        var businessRuleValidationResult = BusinessRuleValidationResult.CreateErrorWithTag(failure.Message, failure.HowToResolve);
                         validationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
                     }
                 }
@@ -170,15 +187,23 @@ namespace Orc.LicenseManager.Services
                 {
                     Log.Warning("License is not valid:");
                     Log.Indent();
-                    foreach (IValidationResult error in validationContext.GetErrors())
+
+                    foreach (var error in validationContext.GetErrors())
                     {
                         Log.Warning("- {0}\n{1}", error.Message, error.Tag as string);
                     }
+
                     Log.Unindent();
                 }
+                else
+                {
+                    Log.Info("License is valid");
+                }
             }
+
             return validationContext;
         }
+
         /// <summary>
         /// Validates the XML
         /// </summary>
@@ -188,30 +213,32 @@ namespace Orc.LicenseManager.Services
         /// <exception cref="XmlException">The license text is not valid XML.</exception>
         /// <exception cref="Exception">The root element is not License.</exception>
         /// <exception cref="Exception">There were no inner nodes found.</exception>
-        public IValidationContext ValidateXML(string license)
+        public IValidationContext ValidateXml(string license)
         {
-            // TODO: Ask geert about the exceptions, it can be exception, argument, xml.... mayby more
             var validationContext = new ValidationContext();
             if (string.IsNullOrWhiteSpace(license))
             {
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Your clipboard seems to be empty", "Please make sure that you copied the whole text."));
             }
+
             var xmlDataList = new List<XmlDataModel>();
+
             try
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(license);
                 var xmlRoot = xmlDoc.DocumentElement;
-                if (xmlRoot.Name != "License")
+                if (!string.Equals(xmlRoot.Name, "License"))
                 {
                     validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("Please make sure that you pasted the complete xmldata, including the License tag", "Please make sure that you copied the whole text."));
                 }
+
                 var xmlNodes = xmlRoot.ChildNodes;
                 foreach (XmlNode node in xmlNodes)
                 {
-                    if (node.Name != "ProductFeatures")
+                    if (!string.Equals(node.Name, "ProductFeatures"))
                     {
-                        xmlDataList.Add(new XmlDataModel()
+                        xmlDataList.Add(new XmlDataModel
                         {
                             Name = node.Name,
                             Value = node.InnerText
@@ -221,7 +248,7 @@ namespace Orc.LicenseManager.Services
                     {
                         foreach (XmlNode featrureNode in node.ChildNodes)
                         {
-                            xmlDataList.Add(new XmlDataModel()
+                            xmlDataList.Add(new XmlDataModel
                             {
                                 Name = featrureNode.Attributes[0].Value,
                                 Value = featrureNode.InnerText
@@ -229,11 +256,13 @@ namespace Orc.LicenseManager.Services
                         }
                     }
                 }
+
                 if (xmlDataList.Count == 0)
                 {
                     validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("There was no inner XML found", "Please make sure that you copied the whole text."));
                 }
-                var expData = xmlDataList.FirstOrDefault(x => x.Name == "Expiration");
+
+                var expData = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, "Expiration"));
                 if (expData != null)
                 {
                     DateTime expDataDate;
@@ -249,7 +278,8 @@ namespace Orc.LicenseManager.Services
                         validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The expiration date was no valid DateTime value", "Please make sure you got a valid license."));
                     }
                 }
-                var xmlDataVersion = xmlDataList.FirstOrDefault(x => x.Name == "Version");
+
+                var xmlDataVersion = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, "Version"));
                 if (xmlDataVersion != null)
                 {
                     Version licenseVersion;
@@ -258,38 +288,43 @@ namespace Orc.LicenseManager.Services
                         var productVersion = Assembly.GetExecutingAssembly().GetName().Version;
                         if (productVersion > licenseVersion)
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The license has expired.", "Your license only support until version (" + licenseVersion.ToString() + ") while the current version of this product is: (" + productVersion.ToString() + ")."));
+                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The license has expired.", "Your license only support until version (" + licenseVersion + ") while the current version of this product is: (" + productVersion + ")."));
                         }
                     }
                     else
                     {
                         validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The version was no valid Version value", "Please make sure you got a valid license."));
-
                     }
-
                 }
-                Log.Info("the XML is valid.");
+
+                Log.Info("The XML is invalid");
             }
             catch (XmlException xmlex)
             {
                 Log.Debug(xmlex);
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The pasted text is not valid XML.", "Please make sure that you copied the whole text."));
-                Log.Info("the XML is invalid.");
 
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The pasted text is not valid XML.", "Please make sure that you copied the whole text."));
+
+                Log.Info("The XML is invalid");
             }
             catch (Exception ex)
             {
                 Log.Debug(ex);
-                string innermessage = "";
+
+                string innermessage = string.Empty;
                 if (ex.InnerException != null)
                 {
                     innermessage = ex.InnerException.Message;
                 }
+
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag(ex.Message, innermessage));
-                Log.Info("the XML is invalid.");
+
+                Log.Info("The XML is invalid");
             }
+
             return validationContext;
         }
+
         /// <summary>
         /// Saves the license.
         /// </summary>
@@ -301,16 +336,21 @@ namespace Orc.LicenseManager.Services
             try
             {
                 string xmlFilePath = GetLicenseInfoPath();
-                License licenseObject = License.Load(license);
-                XmlWriter xmlWriter = XmlWriter.Create(xmlFilePath);
-                licenseObject.Save(xmlWriter);
-                xmlWriter.Flush();
-                xmlWriter.Close();
-                Log.Info("License saved.");
+                var licenseObject = License.Load(license);
+
+                using (var xmlWriter = XmlWriter.Create(xmlFilePath))
+                {
+                    licenseObject.Save(xmlWriter);
+
+                    xmlWriter.Flush();
+                    xmlWriter.Close();
+                }
+
+                Log.Info("License saved");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed To save license!");
+                Log.Error(ex, "Failed to save license");
                 throw;
             }
         }
@@ -321,15 +361,13 @@ namespace Orc.LicenseManager.Services
         public void RemoveLicense()
         {
             string xmlFilePath = GetLicenseInfoPath();
+
             if (File.Exists(xmlFilePath))
             {
-                Log.Info("License got removed.");
                 File.Delete(xmlFilePath);
             }
-            else
-            {
-                Log.Info("License didn't get removed, didn't exist.");
-            }
+
+            Log.Info("License has been removed");
         }
 
         /// <summary>
@@ -341,10 +379,12 @@ namespace Orc.LicenseManager.Services
             string xmlFilePath = GetLicenseInfoPath();
             if (File.Exists(xmlFilePath))
             {
-                Log.Info("License exist.");
+                Log.Info("License exists");
                 return true;
             }
-            Log.Info("License doesn't exist.");
+
+            Log.Info("License does not exist");
+
             return false;
         }
 
@@ -354,44 +394,45 @@ namespace Orc.LicenseManager.Services
         /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
         public string LoadLicense()
         {
-            string xmlFilePath = GetLicenseInfoPath();
             try
             {
-                XmlReader xmlReader = XmlReader.Create(xmlFilePath);
-                License licenseObject = License.Load(xmlReader);
-                Log.Info("License loaded: {0}.", licenseObject.ToString());
-                return licenseObject.ToString();
+                string xmlFilePath = GetLicenseInfoPath();
+
+                using (var xmlReader = XmlReader.Create(xmlFilePath))
+                {
+                    var licenseObject = License.Load(xmlReader);
+                    Log.Info("License loaded: {0}", licenseObject.ToString());
+                    return licenseObject.ToString();
+                }
             }
             catch (Exception ex)
             {
                 Log.Warning(ex, "Failed to load the license, returning empty string");
-                Log.Unindent();
-                return "";
+                return string.Empty;
             }
         }
-
 
         /// <summary>
         /// Loads the XML out of license.
         /// </summary>
         /// <param name="license">The license.</param>
-        /// <returns>
-        /// A List of with the xml names and values
-        /// </returns>
+        /// <returns>A List of with the xml names and values</returns>
         public List<XmlDataModel> LoadXmlFromLicense(string license)
         {
             var xmlDataList = new List<XmlDataModel>();
+
             try
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(license);
                 var xmlRoot = xmlDoc.DocumentElement;
                 var xmlNodes = xmlRoot.ChildNodes;
+
                 foreach (XmlNode node in xmlNodes)
                 {
-                    if (node.Name != "ProductFeatures")
+                    if (!string.Equals(node.Name, "ProductFeatures"))
                     {
-                        xmlDataList.Add(new XmlDataModel()
+                        xmlDataList.Add(new XmlDataModel
                         {
                             Name = node.Name,
                             Value = node.InnerText
@@ -401,7 +442,7 @@ namespace Orc.LicenseManager.Services
                     {
                         foreach (XmlNode featrureNode in node.ChildNodes)
                         {
-                            xmlDataList.Add(new XmlDataModel()
+                            xmlDataList.Add(new XmlDataModel
                             {
                                 Name = featrureNode.Attributes[0].Value,
                                 Value = featrureNode.InnerText
@@ -409,13 +450,15 @@ namespace Orc.LicenseManager.Services
                         }
                     }
                 }
-                Log.Info("returning xml successfull");
+
+                Log.Info("Returning xml successfull");
             }
             catch (Exception ex)
             {
                 Log.Debug(ex);
                 throw;
             }
+
             return xmlDataList;
         }
         #endregion

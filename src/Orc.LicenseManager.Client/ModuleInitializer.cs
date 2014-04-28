@@ -23,6 +23,7 @@ public static class ModuleInitializer
 
         var serviceLocator = ServiceLocator.Default;
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
+        serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client", "Orc.LicenseManager.Properties", "Resources"));

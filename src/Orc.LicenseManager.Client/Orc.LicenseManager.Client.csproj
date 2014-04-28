@@ -56,6 +56,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Catel.MVVM.3.9.0.1404241954-beta\lib\net40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -72,6 +73,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Models\SingleLicenseModel.cs" />
     <Compile Include="Models\XmlDataModel.cs" />
@@ -88,7 +90,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Interfaces\ILicenseService.cs" />
+    <Compile Include="Services\Interfaces\ISimpleLicenseService.cs" />
     <Compile Include="Services\LicenseService.cs" />
+    <Compile Include="Services\SimpleLicenseService.cs" />
     <Compile Include="ViewModels\ClipBoardViewModel.cs" />
     <Compile Include="ViewModels\SingleLicenseViewModel.cs" />
     <Compile Include="Views\ClipBoardWindow.xaml.cs">

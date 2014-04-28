@@ -25,7 +25,7 @@ namespace Orc.LicenseManager.Views
         {
         }
 
-        /// <summary>
+        /// <summary>5
         /// Initializes a new instance of the <see cref="SingleLicenseWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
@@ -39,10 +39,10 @@ namespace Orc.LicenseManager.Views
                 return;
             }
 
-            Orc.LicenseManager.ResourceHelper.EnsureStyles();
+            LicenseManager.ResourceHelper.EnsureStyles();
+
+            this.ApplyIconFromApplication();
         }
         #endregion
-
-   
     }
 }

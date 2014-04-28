@@ -24,7 +24,8 @@
             : base(viewModel, DataWindowMode.Custom)
         {
             InitializeComponent();
-        }
 
+            this.ApplyIconFromApplication();
+        }
     }
 }

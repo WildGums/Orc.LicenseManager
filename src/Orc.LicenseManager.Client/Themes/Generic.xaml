@@ -2,8 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:catel="http://catel.codeplex.com">
 
-
-    <Style x:Key="RoundButtonTemplate" TargetType="Button">
+    <Style x:Key="{x:Type Button}" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="MinWidth" Value="75" />
+    </Style>
+    
+    <!--<Style x:Key="RoundButtonTemplate" TargetType="Button">
         <Setter Property="Background" Value="#007ACC"/>
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Height" Value="30" />
@@ -41,8 +44,9 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-    <Style x:Key="MetroWindowStyle" TargetType="{x:Type Window}">
+    </Style>-->
+    
+    <!--<Style x:Key="MetroWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
         <Setter Property="WindowStyle" Value="None" />
@@ -106,6 +110,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
     <Style x:Key="MetroWindowButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle">
             <Setter.Value>
@@ -154,6 +159,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
 </ResourceDictionary >

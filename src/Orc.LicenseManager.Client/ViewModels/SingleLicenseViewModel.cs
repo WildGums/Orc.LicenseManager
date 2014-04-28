@@ -265,7 +265,7 @@ namespace Orc.LicenseManager.ViewModels
                 {
                     SingleLicenseModel.Key = Clipboard.GetText();
                     string license = SingleLicenseModel.Key;
-                    var xmlFirstError = _licenseService.ValidateXML(license).GetBusinessRuleErrors().FirstOrDefault();
+                    var xmlFirstError = _licenseService.ValidateXml(license).GetBusinessRuleErrors().FirstOrDefault();
                     if (xmlFirstError == null)
                     {
                         var normalFirstError = _licenseService.ValidateLicense(SingleLicenseModel.Key).GetBusinessRuleErrors().FirstOrDefault();

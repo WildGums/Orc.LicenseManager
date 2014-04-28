@@ -31,20 +31,20 @@ namespace Orc.LicenseManager.Services
         /// Shows the single license dialog including all company info. You will see the about box.
         /// </summary>
         /// <param name="aboutTitle">The title inside the about box.</param>
-        /// <param name="aboutImae">The about box image.</param>
+        /// <param name="aboutImage">The about box image.</param>
         /// <param name="aboutText">The text inside the about box</param>
-        /// <param name="aboutSite">The site inside the about box.</param>
+        /// <param name="aboutSiteUrl">The site inside the about box.</param>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
+        /// <param name="purchaseLinkUrl">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
         /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
-        void ShowSingleLicenseDialog(string aboutTitle, string aboutImae, string aboutText, string aboutSite = null, string title = null, string purchaseLink = null);
+        void ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null);
 
         /// <summary>
         /// Shows the single license dialog. You won't see the about box.
         /// </summary>
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLink link will be displayed.</param>
+        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
         void ShowSingleLicenseDialog(string title = null, string purchaseLink = null);
 
@@ -93,7 +93,7 @@ namespace Orc.LicenseManager.Services
         /// <exception cref="XmlException">The license text is not valid XML.</exception>
         /// <exception cref="Exception">The root element is not License.</exception>
         /// <exception cref="Exception">There were no inner nodes found.</exception>
-        IValidationContext ValidateXML(string license);
+        IValidationContext ValidateXml(string license);
 
         /// <summary>
         /// Loads the XML out of license.
