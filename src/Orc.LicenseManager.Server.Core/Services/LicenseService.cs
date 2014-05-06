@@ -10,7 +10,6 @@ namespace Orc.LicenseManager.Server.Services
     using System;
     using System.Collections.Generic;
     using Catel.IoC;
-    using MaxBox.Core.Services;
     using Portable.Licensing;
 
     public class LicenseService : ILicenseService
@@ -70,8 +69,10 @@ namespace Orc.LicenseManager.Server.Services
 
         public void GeneratePassPhraseForProduct(Product product)
         {
-            var stringService = ServiceLocator.Default.ResolveType<IRngService>();
-            product.PassPhrase = stringService.GenerateString(15);
+            //var stringService = ServiceLocator.Default.ResolveType<IRngService>();
+            //product.PassPhrase = stringService.GenerateString(15);
+
+            product.PassPhrase = Guid.NewGuid().ToString();
         }
         #endregion
     }

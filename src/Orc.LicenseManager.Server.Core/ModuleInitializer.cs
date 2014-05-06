@@ -1,5 +1,4 @@
 ﻿using Catel.IoC;
-using MaxBox.Core.Services;
 using Orc.LicenseManager.Server;
 using Orc.LicenseManager.Server.Services;
 
@@ -16,9 +15,7 @@ public static class ModuleInitializer
         var serviceLocator = ServiceLocator.Default;
 
         RepositoryInitializer.RegisterRepositories();
-        serviceLocator.RegisterType<IAccountService, AccountService>();
-        //MaxBox
-        serviceLocator.RegisterType<IRngService, RngService>();
 
+        serviceLocator.RegisterType<IAccountService, AccountService>();
     }
 }

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="HomeController.cs" company="Orchestra development team">
+//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Orc.LicenseManager.Server.Website.Controllers
 {
     using System.Data.Entity;
+    using System.Web.Mvc;
     using Catel.IoC;
     using Data;
-    using Repositories;
 
     public class HomeController : BaseController
     {
@@ -18,24 +19,34 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         {
             return View();
         }
+
 #if DEBUG
-     
+
+        [AllowAnonymous]
         public ActionResult Reset()
         {
             Database.SetInitializer<LicenseManagerDbContext>(TypeFactory.Default.CreateInstance<RecreateContext>());
+
             using (var context = new LicenseManagerDbContext())
             {
                 context.Database.Initialize(true);
             }
+
             return RedirectToAction("Index", "Home");
         }
+
+        [AllowAnonymous]
         public ActionResult Update()
         {
             Database.SetInitializer<LicenseManagerDbContext>(null);
-            var context = new LicenseManagerDbContext();
-            context.Database.Initialize(true);
+
+            using (var context = new LicenseManagerDbContext())
+            {
+                context.Database.Initialize(true);
+            }
+
             return RedirectToAction("Index", "Home");
         }
-#endif 
+#endif
     }
 }

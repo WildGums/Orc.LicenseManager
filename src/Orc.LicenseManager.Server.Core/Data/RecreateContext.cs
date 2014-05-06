@@ -1,34 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RecreateContext.cs" company="Orchestra development team">
+//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Orc.LicenseManager.Server.Data
 {
+    using System.Collections.Generic;
     using System.Data.Entity;
-    using Catel.IoC;
-    using MaxBox.Core.Services;
     using Services;
+
     public class RecreateContext : DropCreateDatabaseAlways<LicenseManagerDbContext>
     {
+        #region Fields
         private readonly IAccountService _accountService;
         private readonly ILicenseService _licenseService;
-        private readonly IRngService _stringService;
+        #endregion
 
-        public RecreateContext(IAccountService accountService, ILicenseService licenseService, IRngService stringService)
+        #region Constructors
+        public RecreateContext(IAccountService accountService, ILicenseService licenseService)
         {
             _accountService = accountService;
             _licenseService = licenseService;
-            _stringService = stringService;
         }
+        #endregion
 
+        #region Methods
         protected override void Seed(LicenseManagerDbContext context)
         {
-
-
             _accountService.CreateRole("Admin");
-            _accountService.CreateUserWithRoles("Admin", "password123", new List<string>() { "Admin" });
+            _accountService.CreateUserWithRoles("Admin", "password123", new List<string>() {"Admin"});
             //_accountService.CreateUserWithRoles("Maxim", "password123", new List<string>() { "Admin" });
             //_accountService.CreateUserWithRoles("Geert", "password123", new List<string>() { "Admin" });
             //var maximId = context.Users.First(x => x.UserName == "Maxim").Id;
@@ -50,10 +52,10 @@ namespace Orc.LicenseManager.Server.Data
             //        uow.Customers.Add(customer);
             //    }
             //    uow.SaveChanges();
-                    
+
             //}
             base.Seed(context);
         }
-        
+        #endregion
     }
 }

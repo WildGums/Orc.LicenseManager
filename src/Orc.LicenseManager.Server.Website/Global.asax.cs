@@ -14,7 +14,6 @@ namespace Orc.LicenseManager.Server.Website
     using System.Web.Optimization;
     using System.Web.Routing;
     using Catel.IoC;
-    using MaxBox.Core.Services;
     using Newtonsoft.Json;
     using Server.Services;
     using Services;
@@ -30,9 +29,11 @@ namespace Orc.LicenseManager.Server.Website
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Catel.Mvc.DependencyInjectionConfig.RegisterServiceLocatorAsDependencyResolver();
-            ServiceLocator.Default.RegisterType<IMembershipService, MembershipService>();
-            ServiceLocator.Default.RegisterType<IRngService, RngService>();
-            ServiceLocator.Default.RegisterType<ILicenseService, LicenseService>();
+
+            var serviceLocator = ServiceLocator.Default;
+            serviceLocator.RegisterType<IMembershipService, MembershipService>();
+            serviceLocator.RegisterType<ILicenseService, LicenseService>();
+
             // http://stackoverflow.com/questions/7397207/json-net-error-self-referencing-loop-detected-for-type
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
