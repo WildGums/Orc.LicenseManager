@@ -1,36 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{F8D80626-9253-40EF-A74E-407B8B942A39}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{81A22D63-8930-434E-A0AB-EA8F1E932A5E}"
 	ProjectSection(SolutionItems) = preProject
 		..\lib\repositories.config = ..\lib\repositories.config
 		..\..\lib\RestorePackages.bat = ..\..\lib\RestorePackages.bat
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AA3D0D39-D04A-4839-9D3A-E47E8E646F81}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E8045126-DE0A-4ACF-B56D-204EED0694A7}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\tools\tools\NuGet\NuGet.exe = ..\..\tools\tools\NuGet\NuGet.exe
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C1DA253A-2C9B-40E1-94DE-2D1F14F3B6ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Website", "Website", "{04BE99AC-E676-4938-97E7-CBD29EDC3CF6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{CFE0CBFB-5F80-420A-904F-F467089B2EC9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client.WPF", "Client.WPF", "{CFE0CBFB-5F80-420A-904F-F467089B2EC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client", "Orc.LicenseManager.Client\Orc.LicenseManager.Client.csproj", "{8D9CDFE6-34E4-407C-95FB-BF582C8D344C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.WPF", "Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.csproj", "{8D9CDFE6-34E4-407C-95FB-BF582C8D344C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C7037131-F052-44C0-A4BF-E87B3D85976B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Test", "Orc.LicenseManager.Test\Orc.LicenseManager.Test.csproj", "{906B4E55-7BC7-48D2-A118-F3AE8DEC2E7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.Example", "Orc.LicenseManager.Client.Example\Orc.LicenseManager.Client.Example.csproj", "{71452771-3DE3-45E4-81A4-2CF0565F8133}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.WPF.Example", "Orc.LicenseManager.Client.WPF.Example\Orc.LicenseManager.Client.WPF.Example.csproj", "{71452771-3DE3-45E4-81A4-2CF0565F8133}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{F293D31F-3E46-4CBA-B32C-98ECC2DDEE18}"
 	ProjectSection(SolutionItems) = preProject
@@ -43,9 +34,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Server.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Server.Core", "Orc.LicenseManager.Server.Core\Orc.LicenseManager.Server.Core.csproj", "{78F6CC61-A8A3-497D-B4FA-70C49229C9CA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{091017C1-FAC1-4734-AF27-81A4B02CB08F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{091017C1-FAC1-4734-AF27-81A4B02CB08F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Server.Website", "Orc.LicenseManager.Server.Website\Orc.LicenseManager.Server.Website.csproj", "{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{008D3308-EA4B-4F0D-9622-249600E5E016}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.config = NuGet.config
+		Orc.LicenseManager.sln.DotSettings = Orc.LicenseManager.sln.DotSettings
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,7 +84,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E8045126-DE0A-4ACF-B56D-204EED0694A7} = {AA3D0D39-D04A-4839-9D3A-E47E8E646F81}
 		{04BE99AC-E676-4938-97E7-CBD29EDC3CF6} = {C1DA253A-2C9B-40E1-94DE-2D1F14F3B6ED}
 		{CFE0CBFB-5F80-420A-904F-F467089B2EC9} = {C1DA253A-2C9B-40E1-94DE-2D1F14F3B6ED}
 		{8D9CDFE6-34E4-407C-95FB-BF582C8D344C} = {CFE0CBFB-5F80-420A-904F-F467089B2EC9}

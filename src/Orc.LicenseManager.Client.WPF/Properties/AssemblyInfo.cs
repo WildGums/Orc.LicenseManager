@@ -9,6 +9,6 @@ using System.Reflection;
 
 // All other assembly info is defined in SharedAssembly.cs
 
-[assembly: AssemblyTitle("Orc.LicenseManager.Test")]
-[assembly: AssemblyProduct("Orc.LicenseManager.Test")]
-[assembly: AssemblyDescription("Orc.LicenseManager.Test library")]
+[assembly: AssemblyTitle("Orc.LicenseManager.Client.WPF")]
+[assembly: AssemblyProduct("Orc.LicenseManager.Client.WPF")]
+[assembly: AssemblyDescription("Orc.LicenseManager client WPF library")]
