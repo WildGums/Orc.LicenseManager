@@ -45,13 +45,15 @@
     </Reference>
     <Reference Include="Catel.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.Core.4.0.0-unstable0436\lib\net45\Catel.Core.dll</HintPath>
+      <HintPath>..\..\lib\Catel.Core.4.0.0-unstable0461\lib\net45\Catel.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.Extensions.EntityFramework6">
-      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.4.0.0-unstable0436\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
+    <Reference Include="Catel.Extensions.EntityFramework6, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.4.0.0-unstable0461\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.MVC4">
-      <HintPath>..\..\lib\Catel.Mvc.4.0.0-unstable0436\lib\net45\Catel.MVC4.dll</HintPath>
+    <Reference Include="Catel.MVC4, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Catel.Mvc.4.0.0-unstable0461\lib\net45\Catel.MVC4.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
