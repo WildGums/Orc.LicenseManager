@@ -7,6 +7,7 @@
 
 namespace Orc.LicenseManager.Client.Example.ViewModels
 {
+    using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;
     using Services;
@@ -54,13 +55,14 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         /// <summary>
         /// Method to invoke when the RemoveLicense command is executed.
         /// </summary>
-        private void OnRemoveLicenseExecute()
+        private async void OnRemoveLicenseExecute()
         {
             _licenseService.RemoveLicense();
-            ShowLicenseDialog();
+
+            await ShowLicenseDialog();
         }
 
-        protected override void Initialize()
+        protected override async Task Initialize()
         {
             if (_licenseService.LicenseExists())
             {
@@ -69,18 +71,18 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
                 if (licenseValidation.HasErrors)
                 {
-                    ShowLicenseDialog();
+                    await ShowLicenseDialog();
                 }
             }
             else
             {
-                ShowLicenseDialog();
+                await ShowLicenseDialog();
             }
         }
 
-        private void ShowLicenseDialog()
+        private async Task ShowLicenseDialog()
         {
-            _licenseService.ShowSingleLicenseDialog("Catel", "/Orc.LicenseManager.Client.Example;component/Resources/Images/logo_with_text.png", "Catel is a company made in 2010 and is  dolor sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.catelproject.com/", "CatelSoftware License Required", "http://www.catelproject.com/product/buy/642");
+            await _licenseService.ShowSingleLicenseDialog("Catel", "/Orc.LicenseManager.Client.Example;component/Resources/Images/logo_with_text.png", "Catel is a company made in 2010 and is  dolor sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.catelproject.com/", "CatelSoftware License Required", "http://www.catelproject.com/product/buy/642");
             //_licenseService.ShowSingleLicenseDialog("Orchestra", "http://staugustineorchestra.org/wp-content/uploads/2012/08/Violin-Logos-Color-Fin.jpg", "Orchestra is a project that has 2 sides a server and a shell sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.orchestra.com/", "Orchestra License Required", "http://www.orchestra.com/product/buy/642");
             //_licenseService.ShowSingleLicenseDialog();
         }

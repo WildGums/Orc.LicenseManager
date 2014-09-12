@@ -12,6 +12,7 @@ namespace Orc.LicenseManager.Services
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Threading.Tasks;
     using System.Xml;
     using Catel;
     using Catel.Data;
@@ -66,8 +67,10 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <param name="applicationId">The application identifier.</param>
         /// <exception cref="ArgumentException">The <paramref name="applicationId" /> is <c>null</c> or whitespace.</exception>
-        public void Initialize([NotNullOrWhitespace] string applicationId)
+        public async Task Initialize(string applicationId)
         {
+            Argument.IsNotNull(() => applicationId);
+
             _initialized = true;
             _applicationId = applicationId;
         }
@@ -83,7 +86,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="purchaseLinkUrl">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
         /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public void ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null)
+        public async Task ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null)
         {
             if (!_initialized)
             {
@@ -92,7 +95,7 @@ namespace Orc.LicenseManager.Services
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+                var assembly = AssemblyHelper.GetEntryAssembly();
                 title = assembly.Title();
             }
 
@@ -107,7 +110,7 @@ namespace Orc.LicenseManager.Services
             };
 
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-            _uiVisualizerService.ShowDialog(vm);
+            await _uiVisualizerService.ShowDialog(vm);
 
             Log.Info("Showing license dialog with companyinfo");
         }
@@ -118,7 +121,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
         /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public void ShowSingleLicenseDialog(string title = null, string purchaseLink = null)
+        public async Task ShowSingleLicenseDialog(string title = null, string purchaseLink = null)
         {
             if (!_initialized)
             {
@@ -127,7 +130,7 @@ namespace Orc.LicenseManager.Services
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+                var assembly = AssemblyHelper.GetEntryAssembly();
                 title = assembly.Title();
             }
 
@@ -138,7 +141,7 @@ namespace Orc.LicenseManager.Services
             };
 
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-            _uiVisualizerService.ShowDialog(vm);
+            await _uiVisualizerService.ShowDialog(vm);
 
             Log.Info("Showing license dialog");
         }

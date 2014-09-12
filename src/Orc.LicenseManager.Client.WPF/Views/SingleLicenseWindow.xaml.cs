@@ -30,7 +30,7 @@ namespace Orc.LicenseManager.Views
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public SingleLicenseWindow(SingleLicenseViewModel viewModel)
-            : base(viewModel, DataWindowMode.Custom)
+            : base(viewModel, DataWindowMode.OkCancel)
         {
             InitializeComponent();
 

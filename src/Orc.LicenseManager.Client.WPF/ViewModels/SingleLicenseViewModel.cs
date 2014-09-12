@@ -10,6 +10,7 @@ namespace Orc.LicenseManager.ViewModels
     using System;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows;
     using Catel;
     using Catel.IoC;
@@ -74,25 +75,13 @@ namespace Orc.LicenseManager.ViewModels
             XmlData = new ObservableCollection<XmlDataModel>();
 
             Paste = new Command(OnPasteExecute);
-            Exit = new Command(OnExitExecute);
             ShowClipboard = new Command(OnShowClipboardExecute);
-            Submit = new Command(OnSubmitExecute);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
         }
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the Submit command.
-        /// </summary>
-        public Command Submit { get; private set; }
-
-        /// <summary>
-        /// Gets the Exit command.
-        /// </summary>
-        public Command Exit { get; private set; }
-
         /// <summary>
         /// Gets the Close command.
         /// </summary>
@@ -139,7 +128,6 @@ namespace Orc.LicenseManager.ViewModels
         [Catel.Fody.Expose("AboutImage")]
         [Catel.Fody.Expose("Key")]
         private SingleLicenseModel SingleLicenseModel { get; set; }
-
 
         /// <summary>
         /// Gets the about image URI.
@@ -199,24 +187,6 @@ namespace Orc.LicenseManager.ViewModels
         }
 
         /// <summary>
-        /// Method to invoke when the Submit command is executed.
-        /// </summary>
-        private void OnSubmitExecute()
-        {
-            _licenseService.SaveLicense(SingleLicenseModel.Key);
-            CancelAndCloseViewModel(); // TODO: Close doesn t work : / 
-        }
-
-        /// <summary>
-        /// Method to invoke when the Exit command is executed.
-        /// </summary>
-        private void OnExitExecute()
-        {
-            Log.Debug("Closing application");
-            _navigationService.CloseApplication();
-        }
-
-        /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
         /// to a state where the associated UI element (user control, window, ...) is actually loaded.
         /// <para />
@@ -229,10 +199,11 @@ namespace Orc.LicenseManager.ViewModels
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        protected override void Initialize()
+        protected override async Task Initialize()
         {
             var pleaseWaitService = DependencyResolver.Resolve<IPleaseWaitService>(); // Once we ll verify online this will be useful
             pleaseWaitService.Show("Checking licenses");
+
             if (_licenseService.LicenseExists())
             {
                 var licenseText = _licenseService.LoadLicense();
@@ -250,7 +221,30 @@ namespace Orc.LicenseManager.ViewModels
             {
                 FailureOccurred = true;
             }
+
             pleaseWaitService.Hide();
+        }
+
+        protected override async Task<bool> Save()
+        {
+            var validationContext = _licenseService.ValidateLicense(SingleLicenseModel.Key);
+            if (validationContext.HasErrors)
+            {
+                return false;
+            }
+
+            _licenseService.SaveLicense(SingleLicenseModel.Key);
+
+            return true;
+        }
+
+        protected override async Task<bool> Cancel()
+        {
+            Log.Debug("Closing application");
+
+            _navigationService.CloseApplication();
+
+            return true;
         }
 
         /// <summary>

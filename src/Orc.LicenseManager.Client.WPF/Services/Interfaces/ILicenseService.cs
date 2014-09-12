@@ -9,6 +9,7 @@ namespace Orc.LicenseManager.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Xml;
     using Catel.Data;
     using Catel.Fody;
@@ -25,7 +26,7 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <param name="applicationId">The application identifier.</param>
         /// <exception cref="ArgumentException">The <paramref name="applicationId" /> is <c>null</c> or whitespace.</exception>
-        void Initialize([NotNullOrWhitespace] string applicationId);
+        Task Initialize(string applicationId);
 
         /// <summary>
         /// Shows the single license dialog including all company info. You will see the about box.
@@ -38,7 +39,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="purchaseLinkUrl">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
         /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
-        void ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null);
+        Task ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null);
 
         /// <summary>
         /// Shows the single license dialog. You won't see the about box.
@@ -46,7 +47,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
         /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
         /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
-        void ShowSingleLicenseDialog(string title = null, string purchaseLink = null);
+        Task ShowSingleLicenseDialog(string title = null, string purchaseLink = null);
 
         /// <summary>
         /// Validates the license.
