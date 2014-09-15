@@ -28,13 +28,13 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         #endregion
 
         #region Fields
-        private readonly ILicenseService _licenseService;
+        private readonly ILicenseGenerationService _licenseGenerationService;
         #endregion
 
         #region Constructors
-        public LicenseController(ILicenseService licenseService)
+        public LicenseController(ILicenseGenerationService licenseGenerationService)
         {
-            _licenseService = licenseService;
+            _licenseGenerationService = licenseGenerationService;
         }
         #endregion
 
@@ -97,7 +97,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
             Log.Debug("POST/Create");
             if (ModelState.IsValid)
             {
-                _licenseService.GenerateLicenseValue(licensepoco);
+                _licenseGenerationService.GenerateLicenseValue(licensepoco);
                 using (var uow = new UoW())
                 {
                     var licensesRepo = uow.GetRepository<ILicensePocoRepository>();

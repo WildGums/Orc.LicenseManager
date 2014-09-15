@@ -32,7 +32,7 @@ namespace Orc.LicenseManager.Server.Website
 
             var serviceLocator = ServiceLocator.Default;
             serviceLocator.RegisterType<IMembershipService, MembershipService>();
-            serviceLocator.RegisterType<ILicenseService, LicenseService>();
+            serviceLocator.RegisterType<ILicenseGenerationService, LicenseGenerationGenerationService>();
 
             // http://stackoverflow.com/questions/7397207/json-net-error-self-referencing-loop-detected-for-type
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings

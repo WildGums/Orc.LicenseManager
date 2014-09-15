@@ -17,5 +17,7 @@ public static class ModuleInitializer
         RepositoryInitializer.RegisterRepositories();
 
         serviceLocator.RegisterType<IAccountService, AccountService>();
+        serviceLocator.RegisterType<ILicenseGenerationService, LicenseGenerationGenerationService>();
+        serviceLocator.RegisterType<ILicenseValidationService, LicenseValidationService>();
     }
 }

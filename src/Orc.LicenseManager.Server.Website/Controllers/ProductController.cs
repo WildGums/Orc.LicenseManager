@@ -27,13 +27,13 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         #endregion
 
         #region Fields
-        private readonly ILicenseService _licenseService;
+        private readonly ILicenseGenerationService _licenseGenerationService;
         #endregion
 
         #region Constructors
-        public ProductController(ILicenseService licenseService)
+        public ProductController(ILicenseGenerationService licenseGenerationService)
         {
-            _licenseService = licenseService;
+            _licenseGenerationService = licenseGenerationService;
         }
         #endregion
 
@@ -92,8 +92,8 @@ namespace Orc.LicenseManager.Server.Website.Controllers
                 using (var uow = new UoW())
                 {
                     var productsRepo = uow.GetRepository<IProductRepository>();
-                    _licenseService.GeneratePassPhraseForProduct(product);
-                    _licenseService.GenerateKeysForProduct(product);
+                    _licenseGenerationService.GeneratePassPhraseForProduct(product);
+                    _licenseGenerationService.GenerateKeysForProduct(product);
                     productsRepo.Add(product);
                     uow.SaveChanges();
                 }

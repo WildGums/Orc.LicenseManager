@@ -11,8 +11,10 @@ namespace Orc.LicenseManager.Services
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
+    using System.Web;
     using System.Xml;
     using Catel;
     using Catel.Data;
@@ -208,6 +210,58 @@ namespace Orc.LicenseManager.Services
         }
 
         /// <summary>
+        /// Validates the license on the server.
+        /// </summary>
+        /// <param name="license">The license.</param>
+        /// <param name="serverUrl">The server URL.</param>
+        /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
+        public async Task<bool> ValidateLicenseOnServer(string license, string serverUrl)
+        {
+            Argument.IsNotNullOrWhitespace(() => license);
+            Argument.IsNotNullOrWhitespace(() => serverUrl);
+
+            return await Task.Factory.StartNew(() =>
+            {
+
+                try
+                {
+                    // TODO: Send simplified version of the xml?
+
+                    var webRequest = WebRequest.Create(serverUrl);
+                    //webRequest.ContentType = "application/xml";
+                    webRequest.ContentType = "text/plain";
+                    webRequest.Method = "POST";
+
+                    using (var sw = new StreamWriter(webRequest.GetRequestStream()))
+                    {
+                        sw.Write(license);
+                    }
+
+                    using (var httpWebResponse = (HttpWebResponse) webRequest.GetResponse())
+                    {
+                        if (httpWebResponse.StatusCode != HttpStatusCode.OK)
+                        {
+                            return false;
+                        }
+
+                        //using (var sr = new StreamReader(httpWebResponse.GetResponseStream()))
+                        //{
+
+                        //}
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to validate the license on the server");
+
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        /// <summary>
         /// Validates the XML
         /// </summary>
         /// <param name="license">The license.</param>
@@ -334,8 +388,10 @@ namespace Orc.LicenseManager.Services
         /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        public void SaveLicense([NotNullOrWhitespace] string license)
+        public void SaveLicense(string license)
         {
+            Argument.IsNotNullOrWhitespace("license", license);
+
             try
             {
                 string xmlFilePath = GetLicenseInfoPath();

@@ -15,14 +15,14 @@ namespace Orc.LicenseManager.Server.Data
     {
         #region Fields
         private readonly IAccountService _accountService;
-        private readonly ILicenseService _licenseService;
+        private readonly ILicenseGenerationService _licenseGenerationService;
         #endregion
 
         #region Constructors
-        public RecreateContext(IAccountService accountService, ILicenseService licenseService)
+        public RecreateContext(IAccountService accountService, ILicenseGenerationService licenseGenerationService)
         {
             _accountService = accountService;
-            _licenseService = licenseService;
+            _licenseGenerationService = licenseGenerationService;
         }
         #endregion
 
@@ -42,8 +42,8 @@ namespace Orc.LicenseManager.Server.Data
             //        var product = new Product();
             //        product.Name = _stringService.GenerateString(7, true, false);
             //        product.CreatorId = maximId;
-            //        _licenseService.GeneratePassPhraseForProduct(product);
-            //        _licenseService.GenerateKeysForProduct(product);
+            //        _licenseGenerationService.GeneratePassPhraseForProduct(product);
+            //        _licenseGenerationService.GenerateKeysForProduct(product);
             //        uow.Products.Add(product);
             //        var customer = new Customer();
             //        customer.FirstName = _stringService.GenerateString(7, true, false);

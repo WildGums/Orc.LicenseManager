@@ -21,7 +21,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         }
 
 #if DEBUG
-
         [AllowAnonymous]
         public ActionResult Reset()
         {

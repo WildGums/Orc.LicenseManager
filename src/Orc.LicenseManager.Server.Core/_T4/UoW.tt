@@ -100,7 +100,7 @@ foreach(var poco in pocos)
 
 //		REPOSITORIES
 
-<# manager.StartNewFile("Repoistories.cs"); #>
+<# manager.StartNewFile("Repositories.cs"); #>
 
 namespace <#=repositoriesNameSpace#>
 {
@@ -127,7 +127,7 @@ var proppk = pocopktype[x];
 //		REPOSITORIES INTERFACES
 
 
-<# manager.StartNewFile("Repoistories.Interfaces.cs"); #>
+<# manager.StartNewFile("Repositories.Interfaces.cs"); #>
 namespace <#=repositoriesNameSpace#>
 {
 <#
@@ -147,7 +147,7 @@ var proppk = pocopktype[x];
 
 //		REPOSITORIES Initializer
 
-<# manager.StartNewFile("Repoistories.Initializer.cs"); #>
+<# manager.StartNewFile("Repositories.Initializer.cs"); #>
 namespace <#=baseNameSpace#>
 {
 	internal static partial class RepositoryInitializer

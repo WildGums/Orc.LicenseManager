@@ -1,13 +1,22 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
-using Owin;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Startup.Auth.cs" company="Orchestra development team">
+//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Orc.LicenseManager.Server.Website
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.Owin;
+    using Microsoft.Owin.Security.Cookies;
+    using Owin;
+
     public partial class Startup
     {
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
+
+        #region Methods
         public void ConfigureAuth(IAppBuilder app)
         {
             // Enable the application to use a cookie to store information for the signed in user
@@ -34,5 +43,6 @@ namespace Orc.LicenseManager.Server.Website
 
             //app.UseGoogleAuthentication();
         }
+        #endregion
     }
 }

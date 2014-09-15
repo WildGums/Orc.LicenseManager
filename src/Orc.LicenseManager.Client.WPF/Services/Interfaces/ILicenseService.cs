@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ILicenseService.cs" company="Orchestra development team">
+// <copyright file="ILicenseGenerationService.cs" company="Orchestra development team">
 //   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -12,9 +12,7 @@ namespace Orc.LicenseManager.Services
     using System.Threading.Tasks;
     using System.Xml;
     using Catel.Data;
-    using Catel.Fody;
     using Models;
-    using Portable.Licensing.Validation;
 
     /// <summary>
     /// Service to validate, store and remove licenses for software products.
@@ -66,7 +64,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        void SaveLicense([NotNullOrWhitespace] string license);
+        void SaveLicense(string license);
 
         /// <summary>
         /// Removes the license if exists.
@@ -104,5 +102,13 @@ namespace Orc.LicenseManager.Services
         /// A List of with the xml names and values
         /// </returns>
         List<XmlDataModel> LoadXmlFromLicense(string license);
+
+        /// <summary>
+        /// Validates the license on the server.
+        /// </summary>
+        /// <param name="license">The license.</param>
+        /// <param name="serverUrl">The server URL.</param>
+        /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
+        Task<bool> ValidateLicenseOnServer(string license, string serverUrl);
     }
 }
