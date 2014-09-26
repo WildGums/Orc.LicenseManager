@@ -29,7 +29,6 @@ namespace Orc.LicenseManager.Server.Website
                 defaults: new {id = RouteParameter.Optional}
                 );
 
-
             config.Formatters.Add(new PlainTextFormatter());
 
             //var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
