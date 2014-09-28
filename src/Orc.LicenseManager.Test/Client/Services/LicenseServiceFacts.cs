@@ -21,23 +21,23 @@ namespace Orc.LicenseManager.Test.Client.Services
         [TestClass]
         public class TheInitializeMethod
         {
-            [TestMethod]
-            public void ThrowsArgumentExceptionForNullApplicationId()
-            {
-                var typeFactory = TypeFactory.Default;
-                var service = typeFactory.CreateInstance<LicenseService>();
+            //[TestMethod]
+            //public void ThrowsArgumentExceptionForNullApplicationId()
+            //{
+            //    var typeFactory = TypeFactory.Default;
+            //    var service = typeFactory.CreateInstance<LicenseService>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => service.Initialize(null));
-            }
+            //    ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => service.Initialize(null));
+            //}
 
-            [TestMethod]
-            public void ThrowsArgumentExceptionForWhitespaceApplicationId()
-            {
-                var typeFactory = TypeFactory.Default;
-                var service = typeFactory.CreateInstance<LicenseService>();
+            //[TestMethod]
+            //public void ThrowsArgumentExceptionForWhitespaceApplicationId()
+            //{
+            //    var typeFactory = TypeFactory.Default;
+            //    var service = typeFactory.CreateInstance<LicenseService>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => service.Initialize(" "));
-            }
+            //    ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => service.Initialize(" "));
+            //}
         }
 
         [TestClass]
