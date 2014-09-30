@@ -109,6 +109,6 @@ namespace Orc.LicenseManager.Services
         /// <param name="license">The license.</param>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        Task<bool> ValidateLicenseOnServer(string license, string serverUrl);
+        Task<LicenseValidationResult> ValidateLicenseOnServer(string license, string serverUrl);
     }
 }

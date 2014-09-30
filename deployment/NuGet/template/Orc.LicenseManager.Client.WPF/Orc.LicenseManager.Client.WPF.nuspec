@@ -25,6 +25,7 @@
     
     <dependencies>
       <dependency id="Catel.Extensions.Controls" version="[replaced]" />
+      <dependency id="Newtonsoft.Json" version="[replaced]" />
     </dependencies>    
   </metadata>
 </package>

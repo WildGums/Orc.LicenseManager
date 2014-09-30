@@ -14,6 +14,8 @@ namespace Orc.LicenseManager.Server.Website
     using System.Web.Optimization;
     using System.Web.Routing;
     using Catel.IoC;
+    using Data;
+    using IoC;
     using Newtonsoft.Json;
     using Server.Services;
     using Services;
@@ -28,7 +30,9 @@ namespace Orc.LicenseManager.Server.Website
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
             Catel.Mvc.DependencyInjectionConfig.RegisterServiceLocatorAsDependencyResolver();
+            GlobalConfiguration.Configuration.DependencyResolver = new CatelWebApiDependencyResolver();
 
             var serviceLocator = ServiceLocator.Default;
             serviceLocator.RegisterType<IMembershipService, MembershipService>();
@@ -40,6 +44,17 @@ namespace Orc.LicenseManager.Server.Website
                 Formatting = Newtonsoft.Json.Formatting.Indented,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             };
+
+            Database.SetInitializer(new CreateDatabaseIfNotExists<LicenseManagerDbContext>());
+
+            using (var context = new LicenseManagerDbContext())
+            {
+                if (!context.Database.Exists())
+                {
+                    context.Database.CreateIfNotExists();
+                    context.Database.Initialize(true);
+                }
+            }
         }
         #endregion
     }

@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Data\RecreateContext.cs" />
     <Compile Include="Data\UoW.cs" />
+    <Compile Include="Models\LicenseValidationResult.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interfaces\ILicenseValidationService.cs" />

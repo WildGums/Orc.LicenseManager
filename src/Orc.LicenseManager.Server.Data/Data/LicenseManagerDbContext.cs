@@ -14,7 +14,7 @@ namespace Orc.LicenseManager.Server
     {
         #region Constructors
         public LicenseManagerDbContext()
-            : base("DefaultConnection")
+            : base("DefaultConnection", false)
         {
         }
         #endregion

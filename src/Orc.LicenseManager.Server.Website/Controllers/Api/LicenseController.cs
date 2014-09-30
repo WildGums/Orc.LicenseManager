@@ -7,13 +7,13 @@
 
 namespace Orc.LicenseManager.Server.Website.Controllers.Api
 {
-    using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web;
     using System.Web.Http;
     using Catel;
-    using Microsoft.AspNet.Identity;
+    using Models;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Server.Services;
 
     public class LicenseController : ApiController
@@ -33,13 +33,12 @@ namespace Orc.LicenseManager.Server.Website.Controllers.Api
         {
             Argument.IsNotNull(() => license);
 
-            var validLicense = await _licenseValidationService.ValidateLicense(license);
-            if (!validLicense)
-            {
-                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
-            }
+            var licenseValidationResult = await _licenseValidationService.ValidateLicense(license);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return new HttpResponseMessage
+            {
+                Content = new JsonContent(licenseValidationResult)
+            };
         }
     }
 }

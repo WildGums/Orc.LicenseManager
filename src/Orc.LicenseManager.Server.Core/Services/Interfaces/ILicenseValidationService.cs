@@ -8,11 +8,12 @@
 namespace Orc.LicenseManager.Server.Services
 {
     using System.Threading.Tasks;
+    using Models;
 
     public interface ILicenseValidationService
     {
         #region Methods
-        Task<bool> ValidateLicense(string license);
+        Task<LicenseValidationResult> ValidateLicense(string license);
         #endregion
     }
 }

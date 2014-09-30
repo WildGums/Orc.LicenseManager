@@ -2,4 +2,5 @@
 <Weavers>
   <ModuleInit/>
   <Catel/>
+  <LoadAssembliesOnStartup/>
 </Weavers>

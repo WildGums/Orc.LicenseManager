@@ -24,6 +24,8 @@ namespace Orc.LicenseManager.Services
     using Catel.Services;
     using Catel.Reflection;
     using Models;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Portable.Licensing;
     using Portable.Licensing.Validation;
     using ViewModels;
@@ -103,11 +105,11 @@ namespace Orc.LicenseManager.Services
 
             var model = new SingleLicenseModel
             {
-                Title = title, 
-                PurchaseLink = purchaseLinkUrl, 
-                AboutImage = aboutImage, 
-                AboutTitle = aboutTitle, 
-                AboutText = aboutText, 
+                Title = title,
+                PurchaseLink = purchaseLinkUrl,
+                AboutImage = aboutImage,
+                AboutTitle = aboutTitle,
+                AboutText = aboutText,
                 AboutSite = aboutSiteUrl
             };
 
@@ -138,7 +140,7 @@ namespace Orc.LicenseManager.Services
 
             var model = new SingleLicenseModel
             {
-                Title = title, 
+                Title = title,
                 PurchaseLink = purchaseLink
             };
 
@@ -215,50 +217,51 @@ namespace Orc.LicenseManager.Services
         /// <param name="license">The license.</param>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public async Task<bool> ValidateLicenseOnServer(string license, string serverUrl)
+        public async Task<LicenseValidationResult> ValidateLicenseOnServer(string license, string serverUrl)
         {
             Argument.IsNotNullOrWhitespace(() => license);
             Argument.IsNotNullOrWhitespace(() => serverUrl);
 
-            return await Task.Factory.StartNew(() =>
+            LicenseValidationResult validationResult = null;
+
+            try
             {
+                var webRequest = WebRequest.Create(serverUrl);
+                webRequest.ContentType = "text/plain";
+                webRequest.Method = "POST";
 
-                try
+                using (var sw = new StreamWriter(webRequest.GetRequestStream()))
                 {
-                    // TODO: Send simplified version of the xml?
+                    sw.Write(license);
+                }
 
-                    var webRequest = WebRequest.Create(serverUrl);
-                    //webRequest.ContentType = "application/xml";
-                    webRequest.ContentType = "text/plain";
-                    webRequest.Method = "POST";
-
-                    using (var sw = new StreamWriter(webRequest.GetRequestStream()))
+                using (var httpWebResponse = await webRequest.GetResponseAsync())
+                {
+                    using (var responseStream = httpWebResponse.GetResponseStream())
                     {
-                        sw.Write(license);
-                    }
-
-                    using (var httpWebResponse = (HttpWebResponse) webRequest.GetResponse())
-                    {
-                        if (httpWebResponse.StatusCode != HttpStatusCode.OK)
+                        using (var streamReader = new StreamReader(responseStream))
                         {
-                            return false;
+                            var json = await streamReader.ReadToEndAsync();
+                            validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(json);
                         }
-
-                        //using (var sr = new StreamReader(httpWebResponse.GetResponseStream()))
-                        //{
-
-                        //}
                     }
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to validate the license on the server");
+            }
+
+            if (validationResult == null)
+            {
+                validationResult = new LicenseValidationResult()
                 {
-                    Log.Error(ex, "Failed to validate the license on the server");
+                    IsValid = false,
+                    AdditionalInfo = "Failed to check the license on the server"
+                };
+            }
 
-                    return false;
-                }
-
-                return true;
-            });
+            return validationResult;
         }
 
         /// <summary>

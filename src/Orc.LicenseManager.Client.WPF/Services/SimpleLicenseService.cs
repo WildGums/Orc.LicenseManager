@@ -70,7 +70,8 @@ namespace Orc.LicenseManager.Services
                 return false;
             }
 
-            return await _licenseService.ValidateLicenseOnServer(licenseString, serverUrl);
+            var licenseValidationResult = await _licenseService.ValidateLicenseOnServer(licenseString, serverUrl);
+            return licenseValidationResult.IsValid;
         }
 
         /// <summary>

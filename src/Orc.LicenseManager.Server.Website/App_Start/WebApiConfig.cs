@@ -18,16 +18,25 @@ namespace Orc.LicenseManager.Server.Website
         {
             config.MapHttpAttributeRoutes();
 
-            //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
+            // Controller Only
             config.Routes.MapHttpRoute(
-                name: "DefaultApiWithAction",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new {id = RouteParameter.Optional}
-                );
+                name: "ControllerOnly",
+                routeTemplate: "api/{controller}"
+            );
+
+            // Controller with ID
+            config.Routes.MapHttpRoute(
+                name: "ControllerAndId",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: null,
+                constraints: new { id = @"^\d+$" } // Only integers 
+            );
+
+            // Controllers with Actions
+            config.Routes.MapHttpRoute(
+                name: "ControllerAndAction",
+                routeTemplate: "api/{controller}/{action}"
+            );
 
             config.Formatters.Add(new PlainTextFormatter());
 

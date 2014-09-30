@@ -9,6 +9,7 @@ namespace Orc.LicenseManager.Server.Services
 {
     using System.Threading.Tasks;
     using Catel;
+    using Models;
 
     public class LicenseValidationService : ILicenseValidationService
     {
@@ -17,14 +18,14 @@ namespace Orc.LicenseManager.Server.Services
             
         }
 
-        public async Task<bool> ValidateLicense(string license)
+        public async Task<LicenseValidationResult> ValidateLicense(string license)
         {
             Argument.IsNotNullOrWhitespace(() => license);
 
             
             // TODO: Verify license
 
-            return true;
+            return new LicenseValidationResult(true, string.Empty);
         }
     }
 }

@@ -89,7 +89,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
             var result = await _licenseService.ValidateLicenseOnServer(licenseString, ServerUri);
 
-            await _messageService.Show(string.Format("License is {0}valid", result ? string.Empty : "NOT "));
+            await _messageService.Show(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
         }
         #endregion
 
