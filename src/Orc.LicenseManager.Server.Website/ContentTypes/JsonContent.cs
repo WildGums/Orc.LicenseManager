@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Server.Website.Models
+namespace Orc.LicenseManager.Server.Website
 {
     using System.IO;
     using System.Net;
@@ -13,7 +13,6 @@ namespace Orc.LicenseManager.Server.Website.Models
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     public class JsonContent : HttpContent
     {

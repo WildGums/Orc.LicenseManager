@@ -220,7 +220,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IoC\CatelWebApiDependencyResolver.cs" />
-    <Compile Include="Models\JsonContent.cs" />
+    <Compile Include="ContentTypes\JsonContent.cs" />
     <Compile Include="Services\MembershipService.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
