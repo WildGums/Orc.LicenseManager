@@ -103,6 +103,7 @@
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Models\LicenseValidationResult.cs" />
+    <Compile Include="Models\ServerLicenseValidation.cs" />
     <Compile Include="Models\SingleLicenseModel.cs" />
     <Compile Include="Models\XmlDataModel.cs" />
     <Compile Include="ModuleInitializer.cs" />

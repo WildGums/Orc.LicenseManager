@@ -12,8 +12,6 @@ namespace Orc.LicenseManager.Server.Website.Controllers.Api
     using System.Web.Http;
     using Catel;
     using Models;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Server.Services;
 
     public class LicenseController : ApiController
@@ -29,11 +27,11 @@ namespace Orc.LicenseManager.Server.Website.Controllers.Api
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<HttpResponseMessage> Validate([FromBody]string license)
+        public async Task<HttpResponseMessage> Validate([FromBody]LicenseValidation licenseValidation)
         {
-            Argument.IsNotNull(() => license);
+            Argument.IsNotNull(() => licenseValidation);
 
-            var licenseValidationResult = await _licenseValidationService.ValidateLicense(license);
+            var licenseValidationResult = await _licenseValidationService.ValidateLicense(licenseValidation.License);
 
             return new HttpResponseMessage
             {
