@@ -135,7 +135,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <value>
         /// The about image URI.
         /// </value>
-        public Uri AboutImageUri { get { return new Uri(SingleLicenseModel.AboutImage, UriKind.RelativeOrAbsolute);} }
+        public Uri AboutImageUri { get { return new Uri(SingleLicenseModel.AboutImage, UriKind.RelativeOrAbsolute); } }
 
         /// <summary>
         /// Gets the Paste command.
@@ -201,9 +201,6 @@ namespace Orc.LicenseManager.ViewModels
         /// </remarks>
         protected override async Task Initialize()
         {
-            var pleaseWaitService = DependencyResolver.Resolve<IPleaseWaitService>(); // Once we ll verify online this will be useful
-            pleaseWaitService.Show("Checking licenses");
-
             if (_licenseService.LicenseExists())
             {
                 var licenseText = _licenseService.LoadLicense();
@@ -221,8 +218,6 @@ namespace Orc.LicenseManager.ViewModels
             {
                 FailureOccurred = true;
             }
-
-            pleaseWaitService.Hide();
         }
 
         protected override async Task<bool> Save()

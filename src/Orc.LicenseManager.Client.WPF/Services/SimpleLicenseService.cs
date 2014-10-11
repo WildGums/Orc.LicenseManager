@@ -10,6 +10,7 @@ namespace Orc.LicenseManager.Services
     using System;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Logging;
 
     /// <summary>
     /// Simple license service.
@@ -17,6 +18,8 @@ namespace Orc.LicenseManager.Services
     public class SimpleLicenseService : ISimpleLicenseService
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly ILicenseService _licenseService;
         #endregion
 
@@ -63,15 +66,27 @@ namespace Orc.LicenseManager.Services
             }
 
             var licenseString = _licenseService.LoadLicense();
-            var licenseValidation = _licenseService.ValidateLicense(licenseString);
-
-            if (licenseValidation.HasErrors)
-            {
-                return false;
-            }
 
             var licenseValidationResult = await _licenseService.ValidateLicenseOnServer(licenseString, serverUrl);
-            return licenseValidationResult.IsValid;
+            if (!licenseValidationResult.IsValid)
+            {
+                Log.Warning("Failed to check for license on the server, doing a local check now");
+
+                // Do a local check
+                var validationContext = _licenseService.ValidateLicense(licenseString);
+                if (validationContext.HasErrors)
+                {
+                    Log.Error("The license is invalid and contains the following errors:");
+                    foreach (var error in validationContext.GetErrors())
+                    {
+                        Log.Error("  * {0}", error.Message);
+                    }
+
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
