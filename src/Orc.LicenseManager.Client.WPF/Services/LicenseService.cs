@@ -183,10 +183,14 @@ namespace Orc.LicenseManager.Services
                         validationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
                     }
                 }
+
+                // Also validate the xml, very important for expiration date and version
+                var xmlValidationContext = ValidateXml(license);
+                validationContext.SynchronizeWithContext(xmlValidationContext, true);
             }
             catch (Exception)
             {
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The given key was in an invalid format", "Please check or you copied the whole key."));
+                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The given key was in an invalid format", "Please check if you copied the whole key."));
             }
             finally
             {
@@ -271,7 +275,8 @@ namespace Orc.LicenseManager.Services
             {
                 validationResult = new LicenseValidationResult()
                 {
-                    IsValid = false,
+                    // We return success if we can't validate on the server, then it's up to the client to validate
+                    IsValid = true,
                     AdditionalInfo = "Failed to check the license on the server"
                 };
             }

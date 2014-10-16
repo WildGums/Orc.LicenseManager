@@ -67,23 +67,28 @@ namespace Orc.LicenseManager.Services
 
             var licenseString = _licenseService.LoadLicense();
 
+            // Server first so it's possible to make licenses invalid
             var licenseValidationResult = await _licenseService.ValidateLicenseOnServer(licenseString, serverUrl);
             if (!licenseValidationResult.IsValid)
             {
-                Log.Warning("Failed to check for license on the server, doing a local check now");
+                Log.Error("The server returned that the license is invalid and contains the following errors:");
+                Log.Error("  * {0}", licenseValidationResult.AdditionalInfo);
 
-                // Do a local check
-                var validationContext = _licenseService.ValidateLicense(licenseString);
-                if (validationContext.HasErrors)
+                return false;
+            }
+
+            Log.Debug("Server returned valid license, doing a local check to be sure that the server wasn't forged");
+
+            var validationContext = _licenseService.ValidateLicense(licenseString);
+            if (validationContext.HasErrors)
+            {
+                Log.Error("The license is invalid and contains the following errors:");
+                foreach (var error in validationContext.GetErrors())
                 {
-                    Log.Error("The license is invalid and contains the following errors:");
-                    foreach (var error in validationContext.GetErrors())
-                    {
-                        Log.Error("  * {0}", error.Message);
-                    }
-
-                    return false;
+                    Log.Error("  * {0}", error.Message);
                 }
+
+                return false;
             }
 
             return true;
