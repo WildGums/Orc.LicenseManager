@@ -12,6 +12,17 @@ namespace Orc.LicenseManager.Models
     /// </summary>
     public class XmlDataModel
     {
+        public XmlDataModel()
+        {
+            
+        }
+
+        public XmlDataModel(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
+
         #region Properties
         /// <summary>
         /// Gets or sets the name.

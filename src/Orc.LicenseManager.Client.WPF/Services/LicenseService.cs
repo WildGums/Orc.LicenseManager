@@ -512,15 +512,12 @@ namespace Orc.LicenseManager.Services
 
                 foreach (XmlNode node in xmlNodes)
                 {
-                    if (!string.Equals(node.Name, "ProductFeatures"))
+                    if (string.Equals(node.Name, "Customer"))
                     {
-                        xmlDataList.Add(new XmlDataModel
-                        {
-                            Name = node.Name,
-                            Value = node.InnerText
-                        });
+                        var customerInfo = string.Format("{0} ({1})", node.ChildNodes[0].InnerText, node.ChildNodes[1].InnerText);
+                        xmlDataList.Add(new XmlDataModel("Licensed to", customerInfo));
                     }
-                    else
+                    else if (string.Equals(node.Name, "ProductFeatures"))
                     {
                         foreach (XmlNode featrureNode in node.ChildNodes)
                         {
@@ -530,6 +527,14 @@ namespace Orc.LicenseManager.Services
                                 Value = featrureNode.InnerText
                             });
                         }
+                    }
+                    else
+                    {
+                        xmlDataList.Add(new XmlDataModel
+                        {
+                            Name = node.Name,
+                            Value = node.InnerText
+                        });
                     }
                 }
 
