@@ -65,6 +65,10 @@ namespace Orc.LicenseManager.Services
         }
         #endregion
 
+        #region Properties
+        public License CurrentLicense { get; private set; }
+        #endregion
+
         #region ILicenseService Members
         /// <summary>
         /// Initializes the specified application identifier.
@@ -478,12 +482,16 @@ namespace Orc.LicenseManager.Services
         {
             try
             {
-                string xmlFilePath = GetLicenseInfoPath();
+                var xmlFilePath = GetLicenseInfoPath();
 
                 using (var xmlReader = XmlReader.Create(xmlFilePath))
                 {
                     var licenseObject = License.Load(xmlReader);
+
+                    CurrentLicense = licenseObject;
+
                     Log.Info("License loaded: {0}", licenseObject.ToString());
+
                     return licenseObject.ToString();
                 }
             }

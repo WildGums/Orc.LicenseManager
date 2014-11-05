@@ -24,6 +24,7 @@ public static class ModuleInitializer
         var serviceLocator = ServiceLocator.Default;
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
+        serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client.WPF", "Orc.LicenseManager.Properties", "Resources"));

@@ -14,12 +14,19 @@ namespace Orc.LicenseManager.Services
     using System.Xml;
     using Catel.Data;
     using Models;
+    using Portable.Licensing;
 
     /// <summary>
     /// Service to validate, store and remove licenses for software products.
     /// </summary>
     public interface ILicenseService
     {
+        /// <summary>
+        /// Gets the current license.
+        /// </summary>
+        /// <value>The current license.</value>
+        License CurrentLicense { get; }
+
         /// <summary>
         /// Initializes the specified application identifier.
         /// </summary>

@@ -54,6 +54,7 @@ namespace Orc.LicenseManager.Server.Services
 
             var finalLicense = license.WithUniqueIdentifier(Guid.NewGuid())
                 .As(LicenseType.Standard)
+                .WithMaximumUtilization(1)
                 .WithProductFeatures(productFeatures)
                 .CreateAndSignWithPrivateKey(tempProduct.PrivateKey, tempProduct.PassPhrase);
 

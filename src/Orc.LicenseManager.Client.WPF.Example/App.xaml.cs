@@ -10,6 +10,7 @@ namespace Orc.LicenseManager.Client.Example
     using System;
     using System.Globalization;
     using System.Windows;
+    using Catel.IO;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
@@ -31,6 +32,9 @@ namespace Orc.LicenseManager.Client.Example
         {
 #if DEBUG
             Catel.Logging.LogManager.AddDebugListener(true);
+
+            var logPath = Path.Combine(GetType().Assembly.GetDirectory(), "debug.log");
+            LogManager.AddListener(new FileLogListener(logPath, 25 * 1024));
 #endif
 
             //var consoleLogListener = new ConsoleLogListener();

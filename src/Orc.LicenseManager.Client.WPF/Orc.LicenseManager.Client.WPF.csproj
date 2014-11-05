@@ -77,6 +77,7 @@
     <Reference Include="System.IO">
       <HintPath>..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.IO.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime">
       <HintPath>..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Runtime.dll</HintPath>
@@ -100,9 +101,12 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensions\LicenseExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Models\LicenseValidationResult.cs" />
+    <Compile Include="Models\NetworkLicenseUsage.cs" />
+    <Compile Include="Models\NetworkValidationResult.cs" />
     <Compile Include="Models\ServerLicenseValidation.cs" />
     <Compile Include="Models\SingleLicenseModel.cs" />
     <Compile Include="Models\XmlDataModel.cs" />
@@ -118,9 +122,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\EventArgs\NetworkValidatedEventArgs.cs" />
+    <Compile Include="Services\Interfaces\INetworkLicenseService.cs" />
     <Compile Include="Services\Interfaces\ILicenseService.cs" />
     <Compile Include="Services\Interfaces\ISimpleLicenseService.cs" />
     <Compile Include="Services\LicenseService.cs" />
+    <Compile Include="Services\NetworkLicenseService.cs" />
     <Compile Include="Services\SimpleLicenseService.cs" />
     <Compile Include="ViewModels\ClipBoardViewModel.cs" />
     <Compile Include="ViewModels\SingleLicenseViewModel.cs" />
