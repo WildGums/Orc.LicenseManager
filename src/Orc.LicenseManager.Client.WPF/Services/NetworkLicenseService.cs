@@ -34,6 +34,8 @@ namespace Orc.LicenseManager.Services
         private readonly ILicenseService _licenseService;
 
         private readonly System.Timers.Timer _pollingTimer = new System.Timers.Timer();
+
+        private bool _initialized;
         private readonly List<Thread> _listeningThreads = new List<Thread>();
         private string _computerId;
         private DateTime _startDateTime = DateTime.Now;
@@ -162,14 +164,16 @@ namespace Orc.LicenseManager.Services
 
         private async Task CreateLicenseListeningSockets()
         {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
+
             if (string.IsNullOrEmpty(_computerId))
             {
                 _computerId = await Task.Factory.StartNew(() => GetComputerId());
-            }
-
-            if (_listeningThreads.Count > 0)
-            {
-                return;
             }
 
             Log.Debug("Creating local license service and registering license sockets on local network");

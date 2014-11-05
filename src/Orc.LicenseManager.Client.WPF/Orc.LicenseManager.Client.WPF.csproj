@@ -104,6 +104,7 @@
     <Compile Include="Extensions\LicenseExtensions.cs" />
     <Compile Include="Extensions\NetworkValidationResultExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
+    <Compile Include="Helpers\NetworkValidationHelper.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Models\LicenseValidationResult.cs" />
     <Compile Include="Models\NetworkLicenseUsage.cs" />
