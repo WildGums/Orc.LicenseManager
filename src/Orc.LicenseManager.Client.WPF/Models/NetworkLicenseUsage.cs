@@ -24,6 +24,11 @@ namespace Orc.LicenseManager.Models
 
         public string Ip { get; private set; }
 
-        public DateTime StartDateTime { get; private set; } 
+        public DateTime StartDateTime { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("Id: {0} | Ip: {1} | Start time: {2}", ComputerId, Ip, StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
     }
 }
