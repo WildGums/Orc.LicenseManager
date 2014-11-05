@@ -102,6 +102,7 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Extensions\LicenseExtensions.cs" />
+    <Compile Include="Extensions\NetworkValidationResultExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Models\LicenseValidationResult.cs" />
