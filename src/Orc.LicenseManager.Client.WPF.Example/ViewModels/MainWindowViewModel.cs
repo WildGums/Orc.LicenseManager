@@ -146,11 +146,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             var validationResult = e.ValidationResult;
             if (!validationResult.IsValid)
             {
-                var latestUsage = (from usage in validationResult.CurrentUsers
-                                    orderby usage.StartDateTime descending
-                                    select usage).First();
+                var latestUsage = validationResult.GetLatestUser();
 
-                if (string.Equals(_networkLicenseService.ComputerId, latestUsage.ComputerId))
+                if (validationResult.IsCurrentUserLatestUser())
                 {
                     await _messageService.Show(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));                    
                 }

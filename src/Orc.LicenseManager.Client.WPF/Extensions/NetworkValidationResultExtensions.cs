@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager
 {
     using System.Linq;
+    using Catel;
     using Catel.IoC;
     using Models;
     using Services;
@@ -16,18 +17,29 @@ namespace Orc.LicenseManager
     {
         public static bool IsCurrentUserLatestUser(this NetworkValidationResult validationResult)
         {
+            Argument.IsNotNull(() => validationResult);
+
             var serviceLocator = ServiceLocator.Default;
             var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
 
-            var lastUser = (from usage in validationResult.CurrentUsers
-                            orderby usage.StartDateTime descending
-                            select usage).FirstOrDefault();
-            if (lastUser != null)
+            var latestUser = validationResult.GetLatestUser();
+            if (latestUser != null)
             {
-                return string.Equals(networkLicenseService.ComputerId, lastUser.ComputerId);
+                return string.Equals(networkLicenseService.ComputerId, latestUser.ComputerId);
             }
 
             return false;
+        }
+
+        public static NetworkLicenseUsage GetLatestUser(this NetworkValidationResult validationResult)
+        {
+            Argument.IsNotNull(() => validationResult);
+
+            var latestUsage = (from usage in validationResult.CurrentUsers
+                               orderby usage.StartDateTime descending
+                               select usage).FirstOrDefault();
+
+            return latestUsage;
         }
     }
 }
