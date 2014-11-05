@@ -19,13 +19,23 @@ namespace Orc.LicenseManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static bool _isInErrorHandling;
+
         public static async void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
         {
+            if (_isInErrorHandling)
+            {
+                Log.Warning("Already handling the invalid license usage");
+                return;
+            }
+
             var validationResult = e.ValidationResult;
             if (!validationResult.IsValid)
             {
                 if (validationResult.IsCurrentUserLatestUser())
                 {
+                    _isInErrorHandling = true;
+
                     var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
                     var messageService = dependencyResolver.Resolve<IMessageService>();
 
