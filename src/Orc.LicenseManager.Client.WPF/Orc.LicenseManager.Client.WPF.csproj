@@ -129,6 +129,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\EventArgs\NetworkValidatedEventArgs.cs" />
+    <Compile Include="Services\Extensions\ILicenseServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\INetworkLicenseService.cs" />
     <Compile Include="Services\Interfaces\ILicenseService.cs" />
     <Compile Include="Services\Interfaces\ISimpleLicenseService.cs" />
