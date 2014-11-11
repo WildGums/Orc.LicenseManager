@@ -29,7 +29,6 @@ namespace Orc.LicenseManager.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private const int Port = 1900;
-        private const string DateTimeFormat = "yyyyMMddHHmmss";
 
         private readonly ILicenseService _licenseService;
 
@@ -38,7 +37,8 @@ namespace Orc.LicenseManager.Services
         private bool _initialized;
         private readonly List<Thread> _listeningThreads = new List<Thread>();
         private string _computerId;
-        private DateTime _startDateTime = DateTime.Now;
+        private string _userName;
+        private readonly DateTime _startDateTime = DateTime.Now;
 
         public NetworkLicenseService(ILicenseService licenseService)
         {
@@ -171,6 +171,11 @@ namespace Orc.LicenseManager.Services
 
             _initialized = true;
 
+            if (string.IsNullOrEmpty(_userName))
+            {
+                _userName = Environment.UserName;
+            }
+
             if (string.IsNullOrEmpty(_computerId))
             {
                 _computerId = await Task.Factory.StartNew(() => GetComputerId());
@@ -227,25 +232,23 @@ namespace Orc.LicenseManager.Services
 
                                     Log.Debug("Received message '{0}' from '{1}'", receivedMessage, ipEndPoint.Address);
 
-                                    var splitted = receivedMessage.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                                    if (splitted.Length != 3)
+                                    var licenseUsage = NetworkLicenseUsage.Parse(receivedMessage);
+                                    if (licenseUsage == null)
                                     {
                                         continue;
                                     }
 
-                                    var computerId = splitted[0];
-                                    var receivedLicenseSignature = splitted[1];
-                                    var startDateTime = DateTime.ParseExact(splitted[2], DateTimeFormat, CultureInfo.InvariantCulture);
-
-                                    if (string.Equals(receivedLicenseSignature, message))
+                                    if (string.Equals(licenseUsage.LicenseSignature, message))
                                     {
                                         Log.Debug("Received message from '{0}' that license is being used", ipEndPoint.Address);
+
+                                        var computerId = licenseUsage.ComputerId;
 
                                         var add = true;
                                         if (licenseUsages.ContainsKey(computerId))
                                         {
                                             // Only update if this is an older timestamp
-                                            if (licenseUsages[computerId].StartDateTime < startDateTime)
+                                            if (licenseUsages[computerId].StartDateTime < licenseUsage.StartDateTime)
                                             {
                                                 add = false;
                                             }
@@ -253,7 +256,7 @@ namespace Orc.LicenseManager.Services
 
                                         if (add)
                                         {
-                                            licenseUsages[computerId] = new NetworkLicenseUsage(computerId, ipEndPoint.Address.ToString(), startDateTime);
+                                            licenseUsages[computerId] = licenseUsage;
                                         }
                                     }
                                 }
@@ -320,7 +323,9 @@ namespace Orc.LicenseManager.Services
                         {
                             Log.Debug("Received request from '{0}' on '{1}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
 
-                            var responseMessage = string.Format("{0}|{1}|{2}", _computerId, licenseSignature, _startDateTime.ToString(DateTimeFormat));
+                            var licenseUsage = new NetworkLicenseUsage(_computerId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
+
+                            var responseMessage = licenseUsage.ToNetworkMessage();
                             var responseBytes = ASCIIEncoding.ASCII.GetBytes(responseMessage);
 
                             udpClient.Send(responseBytes, responseBytes.Length, ipEndPoint);

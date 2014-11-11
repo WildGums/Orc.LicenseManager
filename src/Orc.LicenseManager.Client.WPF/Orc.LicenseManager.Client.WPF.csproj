@@ -101,6 +101,10 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ExpirationBehaviors\ExpirationBehaviorBase.cs" />
+    <Compile Include="ExpirationBehaviors\Interfaces\IExpirationBehavior.cs" />
+    <Compile Include="ExpirationBehaviors\PreventUsageOfAnyVersionExpirationBehavior.cs" />
+    <Compile Include="ExpirationBehaviors\PreventUsageOfLaterReleasedVersionsBehavior.cs" />
     <Compile Include="Extensions\LicenseExtensions.cs" />
     <Compile Include="Extensions\NetworkValidationResultExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />

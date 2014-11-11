@@ -42,6 +42,7 @@ namespace Orc.LicenseManager.Services
         #region Fields
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly IExpirationBehavior _expirationBehavior;
 
         private string _applicationId;
         private bool _initialized;
@@ -53,15 +54,18 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <param name="uiVisualizerService">The UI visualizer service.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
+        /// <param name="expirationBehavior">The expiration behavior.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
-        public LicenseService(IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
+        public LicenseService(IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory, IExpirationBehavior expirationBehavior)
         {
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => viewModelFactory);
+            Argument.IsNotNull(() => expirationBehavior);
 
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
+            _expirationBehavior = expirationBehavior;
         }
         #endregion
 
@@ -330,12 +334,12 @@ namespace Orc.LicenseManager.Services
                     }
                     else
                     {
-                        foreach (XmlNode featrureNode in node.ChildNodes)
+                        foreach (XmlNode featureNode in node.ChildNodes)
                         {
                             xmlDataList.Add(new XmlDataModel
                             {
-                                Name = featrureNode.Attributes[0].Value,
-                                Value = featrureNode.InnerText
+                                Name = featureNode.Attributes[0].Value,
+                                Value = featureNode.InnerText
                             });
                         }
                     }
@@ -349,10 +353,12 @@ namespace Orc.LicenseManager.Services
                 var expData = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, "Expiration"));
                 if (expData != null)
                 {
-                    DateTime expDataDate;
-                    if (DateTime.TryParse(expData.Value, out expDataDate))
+                    DateTime expirationDateTime;
+                    if (DateTime.TryParse(expData.Value, out expirationDateTime))
                     {
-                        if (expDataDate < DateTime.UtcNow)
+                        Log.Info("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
+
+                        if (_expirationBehavior.IsExpired(expirationDateTime))
                         {
                             validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The license has expired.", "Please make sure you got a license that isn't expired."));
                         }

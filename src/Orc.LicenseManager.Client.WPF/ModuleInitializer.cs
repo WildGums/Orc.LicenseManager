@@ -4,6 +4,7 @@ using Catel.IoC;
 using Catel.Reflection;
 using Catel.Services;
 using Catel.Services.Models;
+using Orc.LicenseManager;
 using Orc.LicenseManager.Services;
 
 /// <summary>
@@ -25,6 +26,7 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
         serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();
+        serviceLocator.RegisterType<IExpirationBehavior, PreventUsageOfAnyVersionExpirationBehavior>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client.WPF", "Orc.LicenseManager.Properties", "Resources"));

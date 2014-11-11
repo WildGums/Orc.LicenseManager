@@ -94,6 +94,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Client\Models\NetworkLicenseUsageTests.cs" />
     <Compile Include="Client\Services\LicenseServiceFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
