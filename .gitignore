@@ -6,6 +6,12 @@
 *.user
 *.sln.docstates
 
+.nuget/
+tools/FAKE/
+build-log.xml
+Nuget.key
+TestResult.xml
+
 # Build results
 [Bb]in/
 [Cc]lientbin/
@@ -16,11 +22,13 @@
 bin
 obj
 [Ll]ib/
+*.ide/
 *_i.c
 *_p.c
 *.ilk
 *.meta
 *.obj
+*.orig
 *.pch
 *.pdb
 *.pgc
@@ -49,6 +57,9 @@ ipch/
 # ReSharper is a .NET coding add-in
 _ReSharper*
 *.resharper.user
+
+# Catel
+CatelLogging.txt
 
 # Dotcover
 *.dotCover
