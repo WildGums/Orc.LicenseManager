@@ -22,6 +22,7 @@ namespace Orc.LicenseManager
             return (linkerTimestamp > expirationDateTime);
         }
 
+        // TODO: Replace by catel
         private DateTime RetrieveLinkerTimestamp(string fileName)
         {
             var buffer = new byte[Math.Max(Marshal.SizeOf(typeof(_IMAGE_FILE_HEADER)), 4)];
