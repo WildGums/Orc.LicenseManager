@@ -5,19 +5,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Test.Client.Models
+namespace Orc.LicenseManager.Tests.Client.Models
 {
     using System;
     using Catel;
     using LicenseManager.Models;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     public class NetworkLicenseUsageTests
     {
-        [TestClass]
+        [TestFixture]
         public class TheParsing
         {
-            [TestMethod]
+            [Test]
             public void TestParsing()
             {
                 var dateTime = DateTime.Now;

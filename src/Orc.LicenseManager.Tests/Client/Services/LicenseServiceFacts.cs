@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Test.Client.Services
+namespace Orc.LicenseManager.Tests.Client.Services
 {
     using System;
     using System.IO;
@@ -13,15 +13,15 @@ namespace Orc.LicenseManager.Test.Client.Services
     using Catel.IoC;
     using Catel.Test;
     using LicenseManager.Services;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using Portable.Licensing;
 
     public class LicenseServiceFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheInitializeMethod
         {
-            //[TestMethod]
+            //[Test]
             //public void ThrowsArgumentExceptionForNullApplicationId()
             //{
             //    var typeFactory = TypeFactory.Default;
@@ -30,7 +30,7 @@ namespace Orc.LicenseManager.Test.Client.Services
             //    ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => service.Initialize(null));
             //}
 
-            //[TestMethod]
+            //[Test]
             //public void ThrowsArgumentExceptionForWhitespaceApplicationId()
             //{
             //    var typeFactory = TypeFactory.Default;
@@ -40,11 +40,11 @@ namespace Orc.LicenseManager.Test.Client.Services
             //}
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheShowSingleLicenseDialog
         {
 #if DEBUG
-            [TestMethod]
+            [Test]
 #endif
             public void ShowsDialog()
             {
@@ -55,10 +55,10 @@ namespace Orc.LicenseManager.Test.Client.Services
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class LicenseIO
         {
-            //[TestMethod]
+            //[Test]
             //public void CreateFakeLicense()
             //{
             //    var location = Catel.IO.Path.GetApplicationDataDirectory() + "\\LicenseInfo.xml";

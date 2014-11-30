@@ -358,7 +358,9 @@ namespace Orc.LicenseManager.Services
                     {
                         Log.Info("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
 
-                        if (_expirationBehavior.IsExpired(expirationDateTime))
+                        var portableLicense = License.Load(license);
+
+                        if (_expirationBehavior.IsExpired(portableLicense, expirationDateTime, DateTime.Now))
                         {
                             validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The license has expired.", "Please make sure you got a license that isn't expired."));
                         }

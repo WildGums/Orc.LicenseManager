@@ -8,13 +8,14 @@
 namespace Orc.LicenseManager
 {
     using System;
+    using Portable.Licensing;
 
     public class PreventUsageOfAnyVersionExpirationBehavior : ExpirationBehaviorBase
     {
-        public override bool IsExpired(DateTime expirationDateTime)
+        protected override bool IsNormalLicenseExpired(License license, DateTime expirationDateTime, DateTime validationDateTime)
         {
             // Always check date of the user (not UTC date)
-            return (DateTime.Now > expirationDateTime);
+            return (validationDateTime > expirationDateTime);
         }
     }
 }

@@ -8,9 +8,10 @@
 namespace Orc.LicenseManager
 {
     using System;
+    using Portable.Licensing;
 
     public interface IExpirationBehavior
     {
-        bool IsExpired(DateTime expirationDateTime);
+        bool IsExpired(License license, DateTime expirationDateTime, DateTime validationDateTime);
     }
 }
