@@ -45,7 +45,7 @@
     </Reference>
     <Reference Include="Catel.MVVM, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.MVVM.4.1.0-unstable0007\lib\net40\Catel.MVVM.dll</HintPath>
+      <HintPath>..\..\lib\Catel.MVVM.4.1.0-unstable0043\lib\net40\Catel.MVVM.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -77,7 +77,7 @@
       <HintPath>..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Catel.MVVM.4.1.0-unstable0007\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\lib\Catel.MVVM.4.1.0-unstable0043\lib\net40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -108,6 +108,10 @@
     <ProjectReference Include="..\Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.csproj">
       <Project>{8D9CDFE6-34E4-407C-95FB-BF582C8D344C}</Project>
       <Name>Orc.LicenseManager.Client.WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orc.LicenseManager.Client\Orc.LicenseManager.Client.csproj">
+      <Project>{6402dce4-8b0c-47ca-a223-0b88b7ef8149}</Project>
+      <Name>Orc.LicenseManager.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

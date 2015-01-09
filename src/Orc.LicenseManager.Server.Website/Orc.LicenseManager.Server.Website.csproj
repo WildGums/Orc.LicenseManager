@@ -20,7 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <NuGetPackageImportStamp>a1eebc7c</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>0a3515d6</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Catel.Extensions.EntityFramework6, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.4.1.0-unstable0007\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
+      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.4.1.0-unstable0043\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
     </Reference>
     <Reference Include="Catel.Fody.Attributes, Version=2.4.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,7 +62,7 @@
     </Reference>
     <Reference Include="Catel.MVC4, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.Mvc.4.1.0-unstable0007\lib\net45\Catel.MVC4.dll</HintPath>
+      <HintPath>..\..\lib\Catel.Mvc.4.1.0-unstable0043\lib\net45\Catel.MVC4.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -361,12 +361,12 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="..\..\lib\Fody.1.26.3-beta0001\build\Fody.targets" Condition="Exists('..\..\lib\Fody.1.26.3-beta0001\build\Fody.targets')" />
+  <Import Project="..\..\lib\Fody.1.26.4\build\Fody.targets" Condition="Exists('..\..\lib\Fody.1.26.4\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\lib\Fody.1.26.3-beta0001\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.1.26.3-beta0001\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\lib\Fody.1.26.4\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.1.26.4\build\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

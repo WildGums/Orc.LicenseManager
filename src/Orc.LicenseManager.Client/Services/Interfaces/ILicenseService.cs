@@ -35,27 +35,6 @@ namespace Orc.LicenseManager.Services
         Task Initialize(string applicationId);
 
         /// <summary>
-        /// Shows the single license dialog including all company info. You will see the about box.
-        /// </summary>
-        /// <param name="aboutTitle">The title inside the about box.</param>
-        /// <param name="aboutImage">The about box image.</param>
-        /// <param name="aboutText">The text inside the about box</param>
-        /// <param name="aboutSiteUrl">The site inside the about box.</param>
-        /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLinkUrl">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
-        /// <exception cref="System.Exception">Please use the Initialize method first</exception>
-        /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
-        Task ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null);
-
-        /// <summary>
-        /// Shows the single license dialog. You won't see the about box.
-        /// </summary>
-        /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
-        /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
-        Task ShowSingleLicenseDialog(string title = null, string purchaseLink = null);
-
-        /// <summary>
         /// Validates the license.
         /// </summary>
         /// <param name="license">The license key the user has given to be validated.</param>

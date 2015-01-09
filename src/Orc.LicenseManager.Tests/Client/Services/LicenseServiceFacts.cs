@@ -41,7 +41,7 @@ namespace Orc.LicenseManager.Tests.Client.Services
         }
 
         [TestFixture]
-        public class TheShowSingleLicenseDialog
+        public class TheShowLicense
         {
 #if DEBUG
             [Test]
@@ -49,9 +49,9 @@ namespace Orc.LicenseManager.Tests.Client.Services
             public void ShowsDialog()
             {
                 var typeFactory = TypeFactory.Default;
-                var service = typeFactory.CreateInstance<LicenseService>();
+                var service = typeFactory.CreateInstance<DialogLicenseVisualizerService>();
 
-                service.ShowSingleLicenseDialog();
+                service.ShowLicense();
             }
         }
 

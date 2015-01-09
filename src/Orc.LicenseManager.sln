@@ -45,6 +45,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{008D3308-E
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{D02E58A6-EF14-4F72-9BAC-0D7D21F1E93C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client", "Orc.LicenseManager.Client\Orc.LicenseManager.Client.csproj", "{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,10 @@ Global
 		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +103,7 @@ Global
 		{78F6CC61-A8A3-497D-B4FA-70C49229C9CA} = {091017C1-FAC1-4734-AF27-81A4B02CB08F}
 		{091017C1-FAC1-4734-AF27-81A4B02CB08F} = {C1DA253A-2C9B-40E1-94DE-2D1F14F3B6ED}
 		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11} = {04BE99AC-E676-4938-97E7-CBD29EDC3CF6}
+		{D02E58A6-EF14-4F72-9BAC-0D7D21F1E93C} = {C1DA253A-2C9B-40E1-94DE-2D1F14F3B6ED}
+		{6402DCE4-8B0C-47CA-A223-0B88B7EF8149} = {D02E58A6-EF14-4F72-9BAC-0D7D21F1E93C}
 	EndGlobalSection
 EndGlobal

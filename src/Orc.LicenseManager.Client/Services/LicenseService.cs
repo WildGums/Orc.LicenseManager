@@ -14,21 +14,15 @@ namespace Orc.LicenseManager.Services
     using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
-    using System.Web;
     using System.Xml;
     using Catel;
     using Catel.Data;
-    using Catel.Fody;
     using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.Services;
     using Catel.Reflection;
     using Models;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Portable.Licensing;
     using Portable.Licensing.Validation;
-    using ViewModels;
 
     /// <summary>
     /// Service to validate, store and remove licenses for software products.
@@ -40,8 +34,6 @@ namespace Orc.LicenseManager.Services
         #endregion
 
         #region Fields
-        private readonly IUIVisualizerService _uiVisualizerService;
-        private readonly IViewModelFactory _viewModelFactory;
         private readonly IExpirationBehavior _expirationBehavior;
 
         private string _applicationId;
@@ -52,19 +44,12 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
         /// </summary>
-        /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="viewModelFactory">The view model factory.</param>
         /// <param name="expirationBehavior">The expiration behavior.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
-        public LicenseService(IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory, IExpirationBehavior expirationBehavior)
+        /// <exception cref="ArgumentNullException">The <paramref name="expirationBehavior" /> is <c>null</c>.</exception>
+        public LicenseService(IExpirationBehavior expirationBehavior)
         {
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => viewModelFactory);
             Argument.IsNotNull(() => expirationBehavior);
 
-            _uiVisualizerService = uiVisualizerService;
-            _viewModelFactory = viewModelFactory;
             _expirationBehavior = expirationBehavior;
         }
         #endregion
@@ -85,77 +70,6 @@ namespace Orc.LicenseManager.Services
 
             _initialized = true;
             _applicationId = applicationId;
-        }
-
-        /// <summary>
-        /// Shows the single license dialog including all company info. You will see the about box.
-        /// </summary>
-        /// <param name="aboutTitle">The title inside the about box.</param>
-        /// <param name="aboutImage">The about box image.</param>
-        /// <param name="aboutText">The text inside the about box</param>
-        /// <param name="aboutSiteUrl">The site inside the about box.</param>
-        /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLinkUrl">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
-        /// <exception cref="System.Exception">Please use the Initialize method first</exception>
-        /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public async Task ShowSingleLicenseDialog(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null)
-        {
-            if (!_initialized)
-            {
-                Log.ErrorAndThrowException<InvalidOperationException>("Please use the Initialize method first");
-            }
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                var assembly = AssemblyHelper.GetEntryAssembly();
-                title = assembly.Title();
-            }
-
-            var model = new SingleLicenseModel
-            {
-                Title = title,
-                PurchaseLink = purchaseLinkUrl,
-                AboutImage = aboutImage,
-                AboutTitle = aboutTitle,
-                AboutText = aboutText,
-                AboutSite = aboutSiteUrl
-            };
-
-            var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-            await _uiVisualizerService.ShowDialog(vm);
-
-            Log.Info("Showing license dialog with companyinfo");
-        }
-
-        /// <summary>
-        /// Shows the single license dialog. You won't see the about box.
-        /// </summary>
-        /// <param name="title">The title. If <c>null</c>, the title will be extracted from the entry assembly.</param>
-        /// <param name="purchaseLink">The url to the store. If <c>null</c>, no purchaseLinkUrl link will be displayed.</param>
-        /// <exception cref="Exception">The <see cref="Initialize" /> method must be run first.</exception>
-        public async Task ShowSingleLicenseDialog(string title = null, string purchaseLink = null)
-        {
-            if (!_initialized)
-            {
-                Log.ErrorAndThrowException<InvalidOperationException>("Please use the Initialize method first");
-            }
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                var assembly = AssemblyHelper.GetEntryAssembly();
-                title = assembly.Title();
-            }
-
-            var model = new SingleLicenseModel
-            {
-                Title = title,
-                PurchaseLink = purchaseLink
-            };
-
-            var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-            await _uiVisualizerService.ShowDialog(vm);
-
-            Log.Info("Showing license dialog");
         }
 
         /// <summary>

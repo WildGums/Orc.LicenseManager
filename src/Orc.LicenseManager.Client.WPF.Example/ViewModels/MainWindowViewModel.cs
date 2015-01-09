@@ -8,8 +8,6 @@
 namespace Orc.LicenseManager.Client.Example.ViewModels
 {
     using System;
-    using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;
@@ -26,21 +24,26 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         private readonly ILicenseService _licenseService;
         private readonly IMessageService _messageService;
         private readonly INetworkLicenseService _networkLicenseService;
+        private readonly ILicenseVisualizerService _licenseVisualizerService;
         #endregion
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
-        public MainWindowViewModel(ILicenseService licenseService, IMessageService messageService, INetworkLicenseService networkLicenseService)
+        public MainWindowViewModel(ILicenseService licenseService, IMessageService messageService, INetworkLicenseService networkLicenseService,
+            ILicenseVisualizerService licenseVisualizerService)
             : base()
         {
             Argument.IsNotNull(() => licenseService);
             Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => networkLicenseService);
+            Argument.IsNotNull(() => licenseVisualizerService);
 
             _licenseService = licenseService;
             _messageService = messageService;
             _networkLicenseService = networkLicenseService;
+            _licenseVisualizerService = licenseVisualizerService;
 
             RemoveLicense = new Command(OnRemoveLicenseExecute);
             ValidateLicenseOnServer = new Command(OnValidateLicenseOnServerExecute, OnValidateLicenseOnServerCanExecute);
@@ -161,7 +164,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
         private async Task ShowLicenseDialog()
         {
-            await _licenseService.ShowSingleLicenseDialog("Catel", "/Orc.LicenseManager.Client.Example;component/Resources/Images/logo_with_text.png", "Catel is a company made in 2010 and is  dolor sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.catelproject.com/", "CatelSoftware License Required", "http://www.catelproject.com/product/buy/642");
+            await _licenseVisualizerService.ShowLicense("Catel", "/Orc.LicenseManager.Client.Example;component/Resources/Images/logo_with_text.png", "Catel is a company made in 2010 and is  dolor sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.catelproject.com/", "CatelSoftware License Required", "http://www.catelproject.com/product/buy/642");
             //_licenseGenerationService.ShowSingleLicenseDialog("Orchestra", "http://staugustineorchestra.org/wp-content/uploads/2012/08/Violin-Logos-Color-Fin.jpg", "Orchestra is a project that has 2 sides a server and a shell sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.orchestra.com/", "Orchestra License Required", "http://www.orchestra.com/product/buy/642");
             //_licenseGenerationService.ShowSingleLicenseDialog();
         }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Windows;
-using Catel.IoC;
-using Catel.Reflection;
+﻿using Catel.IoC;
 using Catel.Services;
 using Catel.Services.Models;
-using Orc.LicenseManager;
 using Orc.LicenseManager.Services;
 
 /// <summary>
@@ -17,16 +13,9 @@ public static class ModuleInitializer
     /// </summary>
     public static void Initialize()
     {
-        // Force loading of Catel libraries
-        AppDomain.CurrentDomain.PreloadAssemblies();
-
-        Console.WriteLine(typeof (Catel.MVVM.ViewModelBase));
-
         var serviceLocator = ServiceLocator.Default;
-        serviceLocator.RegisterType<ILicenseService, LicenseService>();
-        serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
-        serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();
-        serviceLocator.RegisterType<IExpirationBehavior, PreventUsageOfAnyVersionExpirationBehavior>();
+
+        serviceLocator.RegisterType<ILicenseVisualizerService, DialogLicenseVisualizerService>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client.WPF", "Orc.LicenseManager.Properties", "Resources"));

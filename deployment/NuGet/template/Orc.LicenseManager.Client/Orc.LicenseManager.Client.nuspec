@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Orc.LicenseManager.Client.WPF</id>
+    <id>Orc.LicenseManager.Client</id>
     <version>[VERSION]</version>
-    <title>Orc.LicenseManager.Client.WPF</title>
+    <title>Orc.LicenseManager.Client</title>
     <authors>OrchestraDevs</authors>
     <owners>OrchestraDevs</owners>
 
 	<description>
-	  WPF client library to manage licenses.
+	  Client library to manage licenses without any GUI references.
 	</description>
 	<summary>
 	</summary>
@@ -24,8 +24,7 @@
 	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
     
     <dependencies>
-      <dependency id="Orc.LicenseManager.Client" version="[VERSION]" />
-      <dependency id="Catel.Extensions.Controls" version="[replaced]" />
+      <dependency id="Catel.Core" version="[replaced]" />
       <dependency id="Newtonsoft.Json" version="[replaced]" />
     </dependencies>    
   </metadata>

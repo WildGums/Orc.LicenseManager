@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers>
+  <Catel/>
+  <Costura>
+    <IncludeAssemblies>
+      Portable.Licensing
+    </IncludeAssemblies>
+  </Costura>
+  <ModuleInit/>
+  <LoadAssembliesOnStartup/>
+</Weavers>

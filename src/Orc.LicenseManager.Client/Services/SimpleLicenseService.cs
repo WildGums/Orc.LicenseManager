@@ -21,19 +21,23 @@ namespace Orc.LicenseManager.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ILicenseService _licenseService;
+        private readonly ILicenseVisualizerService _licenseVisualizerService;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SimpleLicenseService"/> class.
+        /// Initializes a new instance of the <see cref="SimpleLicenseService" /> class.
         /// </summary>
         /// <param name="licenseService">The license service.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="licenseService"/> is <c>null</c>.</exception>
-        public SimpleLicenseService(ILicenseService licenseService)
+        /// <param name="licenseVisualizerService">The license visualizer service.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
+        public SimpleLicenseService(ILicenseService licenseService, ILicenseVisualizerService licenseVisualizerService)
         {
             Argument.IsNotNull(() => licenseService);
+            Argument.IsNotNull(() => licenseVisualizerService);
 
             _licenseService = licenseService;
+            _licenseVisualizerService = licenseVisualizerService;
         }
         #endregion
 
@@ -57,7 +61,7 @@ namespace Orc.LicenseManager.Services
 
             if (!_licenseService.LicenseExists())
             {
-                await _licenseService.ShowSingleLicenseDialog(aboutTitle, aboutImage, aboutText, aboutSiteUrl, title, purchaseLinkUrl);
+                await _licenseVisualizerService.ShowLicense(aboutTitle, aboutImage, aboutText, aboutSiteUrl, title, purchaseLinkUrl);
             }
 
             if (!_licenseService.LicenseExists())
@@ -112,7 +116,7 @@ namespace Orc.LicenseManager.Services
 
             if (!_licenseService.LicenseExists())
             {
-                await _licenseService.ShowSingleLicenseDialog(aboutTitle, aboutImage, aboutText, aboutSiteUrl, title, purchaseLinkUrl);
+                await _licenseVisualizerService.ShowLicense(aboutTitle, aboutImage, aboutText, aboutSiteUrl, title, purchaseLinkUrl);
             }
 
             if (!_licenseService.LicenseExists())
