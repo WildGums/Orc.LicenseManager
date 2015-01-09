@@ -17,7 +17,7 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
-
+ 
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
         serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();
