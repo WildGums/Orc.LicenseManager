@@ -53,12 +53,14 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.ColumnSpan="2" Text="{catel:LanguageBinding PleasePaste}" HorizontalAlignment="Center"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="{catel:LanguageBinding PasteWithShortcut}" Command="{Binding Paste}" Margin="40,5" />
-                <Button Grid.Row="1" Grid.Column="1" Content="{catel:LanguageBinding ShowClipboard}" Command="{Binding ShowClipboard}" Margin="40,5" />
+                <Button Grid.Row="1" Grid.Column="0" Content="{catel:LanguageBinding PasteWithShortcut}" Command="{Binding Paste}" 
+                        Margin="40,5" Style="{StaticResource LicenseButtonStyle}" />
+                <Button Grid.Row="1" Grid.Column="1" Content="{catel:LanguageBinding ShowClipboard}" Command="{Binding ShowClipboard}"
+                        Margin="40,5" Style="{StaticResource LicenseButtonStyle}" />
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding XmlData.Count, Converter={catel:CountCollapsedConverter}}" Header="{catel:LanguageBinding LicensePropsHeader}">
+        <GroupBox Visibility="{Binding XmlData.Count, Converter={catel:CountCollapsedConverter}}" Header="{catel:LanguageBinding LicensePropsHeader}">
             <ListBox  ItemsSource="{Binding XmlData}" BorderBrush="Transparent" HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
