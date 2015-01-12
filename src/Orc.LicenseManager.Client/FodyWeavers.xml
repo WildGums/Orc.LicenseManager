@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers>
-  <Catel/>
   <Costura>
     <IncludeAssemblies>
       Portable.Licensing
@@ -8,4 +7,5 @@
   </Costura>
   <ModuleInit/>
   <LoadAssembliesOnStartup/>
+  <Catel/>
 </Weavers>
