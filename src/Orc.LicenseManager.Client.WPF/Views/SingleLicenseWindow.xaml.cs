@@ -42,6 +42,8 @@ namespace Orc.LicenseManager.Views
             LicenseManager.ResourceHelper.EnsureStyles();
 
             this.ApplyIconFromApplication();
+
+            this.RemoveCloseButton();
         }
         #endregion
     }

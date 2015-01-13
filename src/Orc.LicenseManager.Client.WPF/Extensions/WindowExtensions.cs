@@ -10,6 +10,7 @@ namespace Orc.LicenseManager
     using System;
     using System.Drawing;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
@@ -58,5 +59,40 @@ namespace Orc.LicenseManager
                 Log.Error(ex, "Failed to set the application icon to the window");
             }
         }
+
+        /// <summary>
+        /// Removes the close button from the specified window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        public static void RemoveCloseButton(this Window window)
+        {
+            if (!window.IsVisible)
+            {
+                window.SourceInitialized += OnWindowInitializedForRemoveCloseButton;
+                return;
+            }
+
+            var windowInteropHelper = new WindowInteropHelper(window);
+            var style = GetWindowLong(windowInteropHelper.Handle, GWL_STYLE);
+
+            SetWindowLong(windowInteropHelper.Handle, GWL_STYLE, style & ~WS_SYSMENU);
+        }
+
+        private static void OnWindowInitializedForRemoveCloseButton(object sender, EventArgs e)
+        {
+            var window = (Window) sender;
+            window.SourceInitialized -= OnWindowInitializedForRemoveCloseButton;
+
+            RemoveCloseButton(window);
+        }
+
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x00080000;
+
+        [DllImport("user32.dll")]
+        private extern static int SetWindowLong(IntPtr hwnd, int index, int value);
+
+        [DllImport("user32.dll")]
+        private extern static int GetWindowLong(IntPtr hwnd, int index);
     }
 }
