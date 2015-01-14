@@ -21,8 +21,10 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         public ClipBoardViewModel()
         {
-            base.Title = "Clipboard";
+            Title = "Clipboard";
+
             Exit = new Command(OnExitExecute);
+
             var clipBoardData = Clipboard.GetText();
             if (string.IsNullOrWhiteSpace(clipBoardData))
             {
@@ -54,9 +56,9 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Method to invoke when the Exit command is executed.
         /// </summary>
-        private void OnExitExecute()
+        private async void OnExitExecute()
         {
-            CancelAndCloseViewModel();
+            await CancelAndCloseViewModel();
         }
         #endregion
     }

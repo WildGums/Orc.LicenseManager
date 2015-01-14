@@ -43,8 +43,6 @@ namespace Orc.LicenseManager.Client.Example
 
             Console.WriteLine(typeof(ILicenseService));
 
-            System.AppDomain.CurrentDomain.PreloadAssemblies();
-
             StyleHelper.CreateStyleForwardersForDefaultStyles();
 
             var serviceLocator = ServiceLocator.Default;
