@@ -247,7 +247,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnPasteExecute()
         {
-            if (FailureOccurred == true)
+            if (FailureOccurred)
             {
                 XmlData.Clear();
                 if (Clipboard.GetText() != string.Empty)
@@ -262,7 +262,15 @@ namespace Orc.LicenseManager.ViewModels
                         if (normalFirstError == null)
                         {
                             var xmlList = _licenseService.LoadXmlFromLicense(SingleLicenseModel.Key);
-                            xmlList.ForEach(XmlData.Add);
+                            xmlList.ForEach(x =>
+                            {
+                                if (string.Equals(x.Name, "Expiration"))
+                                {
+                                    x.Name = "Maintenance End Date";
+                                }
+
+                                XmlData.Add(x);
+                            });
                             FailureOccurred = false;
                             ShowFailure = false;
                         }
@@ -296,8 +304,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnShowClipboardExecute()
         {
-            var vm = _viewModelFactory.CreateViewModel<ClipBoardViewModel>(null);
-            _uiVisualizerService.ShowDialog(vm);
+            _uiVisualizerService.ShowDialog<ClipBoardViewModel>();
         }
         #endregion
     }
