@@ -66,7 +66,7 @@ namespace Orc.LicenseManager.Services
             Log.Info("Showing license dialog with company info");
 
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-            await _uiVisualizerService.ShowDialog(vm);
+            _uiVisualizerService.ShowDialog(vm);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Orc.LicenseManager.Services
             Log.Info("Showing license dialog");
 
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
-            await _uiVisualizerService.ShowDialog(vm);
+            _uiVisualizerService.ShowDialog(vm);
         }
         #endregion
     }
