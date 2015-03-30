@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d8a6a7ce-2a07-49b3-b27e-d0377ac615fa</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.LicenseManager.Server.Website.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App_Start\BundleConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App_Start\FilterConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App_Start\RouteConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App_Start\Startup.Auth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App_Start\WebApiConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContentTypes\JsonContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\AccountController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\Api\LicenseController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\BaseController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\CustomerController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\DashBoardController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\HomeController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\LicenseController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\ProductController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Formatting\PlainTextFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\CatelWebApiDependencyResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseValidation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MembershipService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Startup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AccountViewModels.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)App_Data\LicenseManager.mdf" />
+    <Content Include="$(MSBuildThisFileDirectory)App_Data\LicenseManager_log.ldf">
+      <DependentUpon>LicenseManager.mdf</DependentUpon>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Content\bootstrap-theme.css" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\bootstrap-theme.css.map" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\bootstrap-theme.min.css" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\bootstrap.css" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\bootstrap.css.map" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\bootstrap.min.css" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\ng-table.min.html" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Site.css" />
+    <Content Include="$(MSBuildThisFileDirectory)favicon.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="$(MSBuildThisFileDirectory)fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="$(MSBuildThisFileDirectory)fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="$(MSBuildThisFileDirectory)fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="$(MSBuildThisFileDirectory)Global.asax" />
+    <Content Include="$(MSBuildThisFileDirectory)MyScripts\Angular\Controllers\DashboardController.js" />
+    <Content Include="$(MSBuildThisFileDirectory)MyScripts\Angular\Controllers\ItemsController.js" />
+    <Content Include="$(MSBuildThisFileDirectory)MyScripts\Angular\Controllers\LicenseController.js" />
+    <Content Include="$(MSBuildThisFileDirectory)MyScripts\Angular\LMApp.js" />
+    <Content Include="$(MSBuildThisFileDirectory)MyScripts\maintablezeroclip.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\bootstrap.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\bootstrap.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery-2.1.1.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery-2.1.1.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery-2.1.1.min.map" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery.validate.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery.validate.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\modernizr-2.8.3.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\ng-table.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\respond.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\respond.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\ZeroClipboard.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Scripts\_references.js" />
+    <Content Include="$(MSBuildThisFileDirectory)Templates\table.html" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\Login.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\Manage.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\Register.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\_RemoveAccountPartial.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Customer\Create.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Customer\Delete.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Customer\Details.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Customer\Edit.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Customer\Index.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Home\Index.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\License\Create.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\License\Delete.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\License\Details.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\License\Edit.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\License\Index.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Product\Create.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Product\Delete.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Product\Details.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Product\Edit.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Product\Index.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Shared\Error.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Shared\_CustomPager.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Shared\_Layout.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\Web.config" />
+    <Content Include="$(MSBuildThisFileDirectory)Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Scripts\jquery-2.1.1.intellisense.js" />
+    <None Include="$(MSBuildThisFileDirectory)Scripts\jquery.validate-vsdoc.js" />
+  </ItemGroup>
+</Project>

@@ -18,58 +18,58 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\output\debug\Orc.LicenseManager.Server\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\..\..\output\debug\NET45\Orc.LicenseManager.Server\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>..\..\output\debug\Orc.LicenseManager.Server\Orc.LicenseManager.Server.Core.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\NET45\Orc.LicenseManager.Server\Orc.LicenseManager.Server.Core.XML</DocumentationFile>
     <NoWarn>1591,1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\output\release\Orc.LicenseManager.Server\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\..\..\output\release\NET45\Orc.LicenseManager.Server\</OutputPath>
+    <DefineConstants>TRACE;NET;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>..\..\output\release\Orc.LicenseManager.Server\Orc.LicenseManager.Server.Core.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\NET45\Orc.LicenseManager.Server\Orc.LicenseManager.Server.Core.XML</DocumentationFile>
     <NoWarn>1591,1998</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Core, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.Core.4.1.0-unstable0131\lib\net45\Catel.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Core.4.1.0-unstable0131\lib\net45\Catel.Core.dll</HintPath>
     </Reference>
     <Reference Include="Catel.Extensions.EntityFramework6, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.Extensions.EntityFramework6.4.1.0-unstable0131\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Extensions.EntityFramework6.4.1.0-unstable0131\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
     </Reference>
     <Reference Include="Catel.Fody.Attributes, Version=2.5.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\lib\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\lib\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Portable.Licensing">
-      <HintPath>..\..\lib\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
+      <HintPath>..\..\..\lib\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -82,77 +82,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Data\RecreateContext.cs" />
-    <Compile Include="Data\UoW.cs" />
-    <Compile Include="Models\LicenseValidationResult.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Interfaces\ILicenseValidationService.cs" />
-    <Compile Include="Services\Interfaces\IAccountService.cs" />
-    <Compile Include="Services\Interfaces\ILicenseGenerationService.cs" />
-    <Compile Include="Services\LicenseGenerationService.cs" />
-    <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\LicenseValidationService.cs" />
-    <Compile Include="_T4\AddReposToUoW.cs">
-      <DependentUpon>UoW.tt</DependentUpon>
-    </Compile>
-    <Compile Include="_T4\Repositories.cs">
-      <DependentUpon>UoW.tt</DependentUpon>
-    </Compile>
-    <Compile Include="_T4\Repositories.Initializer.cs">
-      <DependentUpon>UoW.tt</DependentUpon>
-    </Compile>
-    <Compile Include="_T4\Repositories.Interfaces.cs">
-      <DependentUpon>UoW.tt</DependentUpon>
-    </Compile>
-    <Compile Include="_T4\UoW.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UoW.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="_T4\UoW.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UoW.cs</LastGenOutput>
-    </None>
-    <None Include="_T4\Manager.ttinclude" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Orc.LicenseManager.Server.Data\Orc.LicenseManager.Server.Data.csproj">
+    <ProjectReference Include="..\..\Orc.LicenseManager.Server.Data\Orc.LicenseManager.Server.Data.NET45\Orc.LicenseManager.Server.Data.NET45.csproj">
       <Project>{11ac62df-094e-46c6-981c-af888458b0ce}</Project>
-      <Name>Orc.LicenseManager.Server.Data</Name>
+      <Name>Orc.LicenseManager.Server.Data.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orc.LicenseManager.Server.Models\Orc.LicenseManager.Server.Models.csproj">
+    <ProjectReference Include="..\..\Orc.LicenseManager.Server.Models\Orc.LicenseManager.Server.Models.NET45\Orc.LicenseManager.Server.Models.NET45.csproj">
       <Project>{c316c7ee-3536-48ca-ad4d-8442e16763cf}</Project>
-      <Name>Orc.LicenseManager.Server.Models</Name>
+      <Name>Orc.LicenseManager.Server.Models.NET45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Repositories\Interfaces\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
+  <Import Project="..\Orc.LicenseManager.Server.Core.Shared\Orc.LicenseManager.Server.Core.Shared.projitems" Label="Shared" Condition="Exists('..\Orc.LicenseManager.Server.Core.Shared\Orc.LicenseManager.Server.Core.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\lib\Fody.1.28.0\build\Fody.targets" Condition="Exists('..\..\lib\Fody.1.28.0\build\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.28.0\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.28.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\lib\Fody.1.28.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.1.28.0\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.28.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.28.0\build\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

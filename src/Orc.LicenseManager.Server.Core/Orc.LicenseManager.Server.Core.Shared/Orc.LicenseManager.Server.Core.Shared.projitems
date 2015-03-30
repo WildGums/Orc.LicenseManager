@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>17b46698-3540-447e-bf8b-5ec81f56a074</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.LicenseManager.Server.Core.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\RecreateContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\UoW.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\AccountService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccountService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseGenerationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseValidationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseGenerationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseValidationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)_T4\AddReposToUoW.cs">
+      <DependentUpon>UoW.tt</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)_T4\Repositories.cs">
+      <DependentUpon>UoW.tt</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)_T4\Repositories.Initializer.cs">
+      <DependentUpon>UoW.tt</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)_T4\Repositories.Interfaces.cs">
+      <DependentUpon>UoW.tt</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)_T4\UoW.cs">
+      <DependentUpon>UoW.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Repositories\Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)_T4\Manager.ttinclude" />
+    <None Include="$(MSBuildThisFileDirectory)_T4\UoW.tt">
+      <LastGenOutput>UoW.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+</Project>
