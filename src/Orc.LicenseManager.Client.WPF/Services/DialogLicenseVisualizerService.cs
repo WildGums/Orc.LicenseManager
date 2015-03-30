@@ -63,7 +63,7 @@ namespace Orc.LicenseManager.Services
                 AboutSite = aboutSiteUrl
             };
 
-            Log.Info("Showing license dialog with company info");
+            Log.Debug("Showing license dialog with company info");
 
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);
@@ -88,7 +88,7 @@ namespace Orc.LicenseManager.Services
                 PurchaseLink = purchaseLink
             };
 
-            Log.Info("Showing license dialog");
+            Log.Debug("Showing license dialog");
 
             var vm = _viewModelFactory.CreateViewModel<SingleLicenseViewModel>(model);
             _uiVisualizerService.ShowDialog(vm);

@@ -270,7 +270,7 @@ namespace Orc.LicenseManager.Services
                     DateTime expirationDateTime;
                     if (DateTime.TryParse(expData.Value, out expirationDateTime))
                     {
-                        Log.Info("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
+                        Log.Debug("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
 
                         var portableLicense = License.Load(license);
 
@@ -303,7 +303,7 @@ namespace Orc.LicenseManager.Services
                     }
                 }
 
-                Log.Info("The XML is invalid");
+                Log.Warning("The XML is invalid");
             }
             catch (XmlException xmlex)
             {
@@ -311,13 +311,13 @@ namespace Orc.LicenseManager.Services
 
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag("The pasted text is not valid XML.", "Please make sure that you copied the whole text."));
 
-                Log.Info("The XML is invalid");
+                Log.Warning("The XML is invalid");
             }
             catch (Exception ex)
             {
                 Log.Debug(ex);
 
-                string innermessage = string.Empty;
+                var innermessage = string.Empty;
                 if (ex.InnerException != null)
                 {
                     innermessage = ex.InnerException.Message;
@@ -325,7 +325,7 @@ namespace Orc.LicenseManager.Services
 
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateErrorWithTag(ex.Message, innermessage));
 
-                Log.Info("The XML is invalid");
+                Log.Warning("The XML is invalid");
             }
 
             return validationContext;
@@ -387,11 +387,11 @@ namespace Orc.LicenseManager.Services
             string xmlFilePath = GetLicenseInfoPath();
             if (File.Exists(xmlFilePath))
             {
-                Log.Info("License exists");
+                Log.Debug("License exists");
                 return true;
             }
 
-            Log.Info("License does not exist");
+            Log.Debug("License does not exist");
 
             return false;
         }
@@ -412,7 +412,7 @@ namespace Orc.LicenseManager.Services
 
                     CurrentLicense = licenseObject;
 
-                    Log.Info("License loaded: {0}", licenseObject.ToString());
+                    Log.Debug("License loaded: {0}", licenseObject.ToString());
 
                     return licenseObject.ToString();
                 }
@@ -468,7 +468,7 @@ namespace Orc.LicenseManager.Services
                     }
                 }
 
-                Log.Info("Returning xml successfull");
+                Log.Debug("Returning xml successful");
             }
             catch (Exception ex)
             {
