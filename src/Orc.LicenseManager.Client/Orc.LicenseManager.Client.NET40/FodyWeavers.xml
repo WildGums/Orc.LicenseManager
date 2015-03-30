@@ -6,6 +6,6 @@
     </IncludeAssemblies>
   </Costura>
   <ModuleInit/>
-  <LoadAssembliesOnStartup/>
   <Catel/>
+  <LoadAssembliesOnStartup/>
 </Weavers>
