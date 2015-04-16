@@ -60,6 +60,12 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="HorizontalGridSplitterStyle" TargetType="{x:Type GridSplitter}">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Height" Value="1" />
+            <Setter Property="Margin" Value="0 4 0 0" />
+        </Style>
     </catel:DataWindow.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -70,17 +76,21 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="420" />
         </Grid.ColumnDefinitions>
         <StackPanel>
-            <TextBlock Margin="10" TextWrapping="Wrap" FontSize="16" 
+            <StackPanel>
+                <TextBlock Margin="10" TextWrapping="Wrap" FontSize="16" 
                        Text="It appears that you have reached the maximum number of concurrent usages of the license."/>
+                <GridSplitter Style="{StaticResource HorizontalGridSplitterStyle}" IsEnabled="False"/>
+            </StackPanel>
+            
             <TextBlock Margin="10" TextWrapping="Wrap"
-                       Text="You are entitled to [] concurrent, but it looks this amount is already used."/>
+                       Text="{Binding MaximumNumberOfConcurrentUsages, StringFormat='You are entitled to {0} concurrent, but it looks this amount is already used.'}"/>
             <TextBlock Margin="10" TextWrapping="Wrap"
                        Text="Below is a list of current usages of your license.You can wait for a license to become available by keeping this window open. To speed up the process, you can contact one of the persons below to ask them to close the software. " />
         </StackPanel>
-        <ListBox Grid.Row="1" Margin="10" HorizontalAlignment="Stretch" Height="100"
+        <ListBox Grid.Row="1" Margin="10" HorizontalAlignment="Stretch" Height="150"
                  ItemsSource="{Binding CurrentUsers}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
            
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

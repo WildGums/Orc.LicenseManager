@@ -27,10 +27,12 @@ namespace Orc.LicenseManager.ViewModels
                 new NetworkLicenseUsage("12", "222", "Samuel", "Licence signature", DateTime.Now),
                 new NetworkLicenseUsage("12", "222", "Paula", "Licence signature", DateTime.Now)
             };
+            MaximumNumberOfConcurrentUsages = 4;
         }
         #endregion
 
         public string WindowTitle { get; set; }
-        public List<NetworkLicenseUsage> CurrentUsers{ get; set; }
+        public List<NetworkLicenseUsage> CurrentUsers { get; set; }
+        public int MaximumNumberOfConcurrentUsages { get; set; }
     }
 }
