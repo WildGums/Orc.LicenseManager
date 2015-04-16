@@ -1,0 +1,19 @@
+﻿<catel:DataWindow x:Class="Orc.LicenseManager.Views.LicenseUsage"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:catel="http://catel.codeplex.com" >
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="License usage"/>
+    </Grid>
+</catel:DataWindow>

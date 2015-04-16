@@ -12,6 +12,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
     using Catel;
     using Catel.MVVM;
     using Catel.Services;
+    using LicenseManager.ViewModels;
     using Models;
     using Services;
 
@@ -25,6 +26,8 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         private readonly IMessageService _messageService;
         private readonly INetworkLicenseService _networkLicenseService;
         private readonly ILicenseVisualizerService _licenseVisualizerService;
+        private readonly IUIVisualizerService _uiVisualizerService;
+
         #endregion
 
         #region Constructors
@@ -32,22 +35,25 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
         public MainWindowViewModel(ILicenseService licenseService, IMessageService messageService, INetworkLicenseService networkLicenseService,
-            ILicenseVisualizerService licenseVisualizerService)
+            ILicenseVisualizerService licenseVisualizerService, IUIVisualizerService uiVisualizerService)
             : base()
         {
             Argument.IsNotNull(() => licenseService);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => networkLicenseService);
             Argument.IsNotNull(() => licenseVisualizerService);
+            Argument.IsNotNull(() => uiVisualizerService);
 
             _licenseService = licenseService;
             _messageService = messageService;
             _networkLicenseService = networkLicenseService;
             _licenseVisualizerService = licenseVisualizerService;
+            _uiVisualizerService = uiVisualizerService;
 
             RemoveLicense = new Command(OnRemoveLicenseExecute);
             ValidateLicenseOnServer = new Command(OnValidateLicenseOnServerExecute, OnValidateLicenseOnServerCanExecute);
             ValidateLicenseOnLocalNetwork = new Command(OnValidateLicenseOnLocalNetworkExecute, OnValidateLicenseOnLocalNetworkCanExecute);
+            LicenseUsageCommand = new Command(OnLicenseUsageCommandExecute);
 
             ServerUri = string.Format("http://localhost:1815/api/license/validate");
         }
@@ -117,6 +123,13 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             validationResult = await _networkLicenseService.ValidateLicense();
 
             await _messageService.Show(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
+        }
+
+        public Command LicenseUsageCommand { get; set; }
+
+        private void OnLicenseUsageCommandExecute()
+        {
+            _uiVisualizerService.ShowDialog<LicenseUsageViewModel>();
         }
         #endregion
 

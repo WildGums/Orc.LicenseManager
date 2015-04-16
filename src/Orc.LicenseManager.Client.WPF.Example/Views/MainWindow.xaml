@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </catel:StackGrid.RowDefinitions>
         
         <Label Content="{Binding Title}" />
@@ -21,6 +22,9 @@
         <Button Content="Validate on server" Command="{Binding ValidateLicenseOnServer}" />
 
         <Button Content="Validate on local network" Command="{Binding ValidateLicenseOnLocalNetwork}" />
+
+        <Button Content="Show License Usage dialog" Command="{Binding LicenseUsageCommand}" />
+
     </catel:StackGrid>
     
 </catel:DataWindow>
