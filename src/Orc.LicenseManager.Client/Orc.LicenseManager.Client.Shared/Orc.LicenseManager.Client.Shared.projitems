@@ -27,7 +27,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EmptyLicenseVisualizerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\NetworkValidatedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IIdentificationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IdentificationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseInfoService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseVisualizerService.cs" />

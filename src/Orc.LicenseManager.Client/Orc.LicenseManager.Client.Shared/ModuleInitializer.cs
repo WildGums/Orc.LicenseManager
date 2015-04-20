@@ -1,8 +1,4 @@
-﻿using System;
-using Catel.IoC;
-using Catel.Reflection;
-using Catel.Services;
-using Catel.Services.Models;
+﻿using Catel.IoC;
 using Orc.LicenseManager;
 using Orc.LicenseManager.Services;
 
@@ -22,6 +18,7 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
         serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();
         serviceLocator.RegisterType<IExpirationBehavior, PreventUsageOfAnyVersionExpirationBehavior>();
+        serviceLocator.RegisterType<IIdentificationService, IdentificationService>();
 
         serviceLocator.RegisterTypeIfNotYetRegistered<ILicenseVisualizerService, EmptyLicenseVisualizerService>();
     }

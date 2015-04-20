@@ -8,21 +8,18 @@
 namespace Orc.LicenseManager.Services
 {
     using System;
-    using System.Globalization;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Management;
     using System.Net;
     using System.Net.Sockets;
-    using System.Security.Cryptography;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
     using Catel;
-    using Catel.Collections;
     using Catel.Logging;
-    using System.Text;
     using Models;
-    using System.Collections.Generic;
+    using Timer = System.Timers.Timer;
 
     public class NetworkLicenseService : INetworkLicenseService
     {
@@ -31,20 +28,23 @@ namespace Orc.LicenseManager.Services
         private const int Port = 1900;
 
         private readonly ILicenseService _licenseService;
+        private readonly IIdentificationService _identificationService;
 
-        private readonly System.Timers.Timer _pollingTimer = new System.Timers.Timer();
+        private readonly Timer _pollingTimer = new Timer();
 
         private bool _initialized;
         private readonly List<Thread> _listeningThreads = new List<Thread>();
-        private string _computerId;
+        private string _machineId;
         private string _userName;
         private readonly DateTime _startDateTime = DateTime.Now;
 
-        public NetworkLicenseService(ILicenseService licenseService)
+        public NetworkLicenseService(ILicenseService licenseService, IIdentificationService identificationService)
         {
             Argument.IsNotNull(() => licenseService);
+            Argument.IsNotNull(() => identificationService);
 
             _licenseService = licenseService;
+            _identificationService = identificationService;
 
             SearchTimeout = TimeSpan.FromSeconds(2);
         }
@@ -53,7 +53,7 @@ namespace Orc.LicenseManager.Services
         /// Gets the computer identifier.
         /// </summary>
         /// <value>The computer identifier.</value>
-        public string ComputerId { get { return _computerId; } }
+        public string ComputerId { get { return _machineId; } }
 
         /// <summary>
         /// Gets or sets the search timeout for other licenses on the network.
@@ -176,9 +176,9 @@ namespace Orc.LicenseManager.Services
                 _userName = Environment.UserName;
             }
 
-            if (string.IsNullOrEmpty(_computerId))
+            if (string.IsNullOrEmpty(_machineId))
             {
-                _computerId = await Task.Factory.StartNew(() => GetComputerId());
+                _machineId = await _identificationService.GetMachineIdAsync();
             }
 
             Log.Debug("Creating local license service and registering license sockets on local network");
@@ -323,7 +323,7 @@ namespace Orc.LicenseManager.Services
                         {
                             Log.Debug("Received request from '{0}' on '{1}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
 
-                            var licenseUsage = new NetworkLicenseUsage(_computerId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
+                            var licenseUsage = new NetworkLicenseUsage(_machineId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
 
                             var responseMessage = licenseUsage.ToNetworkMessage();
                             var responseBytes = ASCIIEncoding.ASCII.GetBytes(responseMessage);
@@ -341,48 +341,6 @@ namespace Orc.LicenseManager.Services
             {
                 Log.Error(ex, "Failed to handle incoming requests, probably a process is already running on the same port");
             }
-        }
-
-        private string GetComputerId()
-        {
-            Log.Debug("Retrieving CPU id");
-
-            var cpuId = string.Empty;
-
-            try
-            {
-                var managementClass = new ManagementClass("win32_processor");
-                var managementObjectCollection = managementClass.GetInstances();
-
-                foreach (var managementObject in managementObjectCollection)
-                {
-                    cpuId = managementObject.Properties["processorID"].Value.ToString();
-                    break;
-                }
-
-                Log.Debug("Retrieved CPU id '{0}'", cpuId);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to retrieve CPU id");
-            }
-
-            return CalculateMd5Hash(cpuId);
-        }
-
-        private string CalculateMd5Hash(string input)
-        {
-            var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2"));
-            }
-
-            return sb.ToString();
         }
 
         private List<string> GetIpAddresses()
