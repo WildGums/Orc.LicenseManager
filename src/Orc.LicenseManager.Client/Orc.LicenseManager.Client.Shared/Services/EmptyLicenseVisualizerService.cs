@@ -11,11 +11,7 @@ namespace Orc.LicenseManager.Services
 
     public class EmptyLicenseVisualizerService : ILicenseVisualizerService
     {
-        public async Task ShowLicense(string aboutTitle, string aboutImage, string aboutText, string aboutSiteUrl = null, string title = null, string purchaseLinkUrl = null)
-        {
-        }
-
-        public async Task ShowLicense(string title = null, string purchaseLink = null)
+        public async Task ShowLicense()
         {
         }
     }

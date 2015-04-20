@@ -10,10 +10,14 @@ namespace Orc.LicenseManager.Models
     using Catel.Data;
 
     /// <summary>
-    /// This is the model for passing data to the SingleLicenseViewModel
+    /// The license info model.
     /// </summary>
-    public class SingleLicenseModel : ModelBase
+    public class LicenseInfo : ModelBase
     {
+        public LicenseInfo()
+        {
+        }
+
         #region Properties
         /// <summary>
         /// Gets or sets the title.
@@ -24,12 +28,12 @@ namespace Orc.LicenseManager.Models
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the PurchaseLink.
+        /// Gets or sets the PurchaseUrl.
         /// </summary>
         /// <value>
         /// The website.
         /// </value>
-        public string PurchaseLink { get; set; }
+        public string PurchaseUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the company site.
@@ -37,15 +41,7 @@ namespace Orc.LicenseManager.Models
         /// <value>
         /// The company site.
         /// </value>
-        public string AboutSite { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Title for the about box
-        /// </summary>
-        /// <value>
-        /// The name of the company.
-        /// </value>
-        public string AboutTitle { get; set; }
+        public string InfoUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the company text that will be used in the about box
@@ -53,15 +49,15 @@ namespace Orc.LicenseManager.Models
         /// <value>
         /// The company text.
         /// </value>
-        public string AboutText { get; set; }
+        public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets the AboutImage source path.
+        /// Gets or sets the ImageUri source path.
         /// </summary>
         /// <value>
         /// The image source.
         /// </value>
-        public string AboutImage { get; set; }
+        public string ImageUri { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

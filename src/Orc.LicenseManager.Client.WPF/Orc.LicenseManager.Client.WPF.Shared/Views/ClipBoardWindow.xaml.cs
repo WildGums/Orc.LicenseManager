@@ -17,7 +17,7 @@
             InitializeComponent();
         }
                 /// <summary>
-        /// Initializes a new instance of the <see cref="SingleLicenseWindow"/> class.
+        /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
         public ClipBoardWindow(ClipBoardViewModel viewModel)

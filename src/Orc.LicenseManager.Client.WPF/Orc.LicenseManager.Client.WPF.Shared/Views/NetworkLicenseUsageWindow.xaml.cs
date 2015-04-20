@@ -10,15 +10,15 @@ namespace Orc.LicenseManager.Views
     using Catel.Windows;
     using ViewModels;
 
-    public partial class LicenseUsage
+    public partial class NetworkLicenseUsageWindow
     {
         #region Constructors
-        public LicenseUsage()
+        public NetworkLicenseUsageWindow()
             : this(null)
         {
         }
 
-        public LicenseUsage(LicenseUsageViewModel viewModel)
+        public NetworkLicenseUsageWindow(NetworkLicenseUsageViewModel viewModel)
             : base(viewModel, DataWindowMode.Custom)
         {
             InitializeComponent();

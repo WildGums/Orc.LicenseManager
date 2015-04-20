@@ -75,7 +75,6 @@ Global
 		Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.Shared\Orc.LicenseManager.Client.WPF.Shared.projitems*{f842e2f5-b81d-4a38-aa07-d9ea700e0033}*SharedItemsImports = 4
 		Orc.LicenseManager.Server.Core\Orc.LicenseManager.Server.Core.Shared\Orc.LicenseManager.Server.Core.Shared.projitems*{78f6cc61-a8a3-497d-b4fa-70c49229c9ca}*SharedItemsImports = 4
 		Orc.LicenseManager.Server.Data\Orc.LicenseManager.Server.Data.Shared\Orc.LicenseManager.Server.Data.Shared.projitems*{11ac62df-094e-46c6-981c-af888458b0ce}*SharedItemsImports = 4
-		Orc.LicenseManager.Server.Website\Orc.LicenseManager.Server.Website.Shared\Orc.LicenseManager.Server.Website.Shared.projitems*{f4cabaf1-4c10-4e01-b51c-6b6edf55ef11}*SharedItemsImports = 4
 		Orc.LicenseManager.Tests\Orc.LicenseManager.Tests.Shared\Orc.LicenseManager.Tests.Shared.projitems*{d9bd9c88-20c3-458a-9246-2ec0f55fc581}*SharedItemsImports = 13
 		Orc.LicenseManager.Client\Orc.LicenseManager.Client.Shared\Orc.LicenseManager.Client.Shared.projitems*{6402dce4-8b0c-47ca-a223-0b88b7ef8149}*SharedItemsImports = 4
 		Orc.LicenseManager.Client\Orc.LicenseManager.Client.Shared\Orc.LicenseManager.Client.Shared.projitems*{3651e161-fb49-4f7e-af1b-3a59ee97c674}*SharedItemsImports = 4

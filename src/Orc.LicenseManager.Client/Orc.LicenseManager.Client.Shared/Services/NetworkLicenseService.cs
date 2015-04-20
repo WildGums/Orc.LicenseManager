@@ -79,7 +79,7 @@ namespace Orc.LicenseManager.Services
         /// <returns>Task.</returns>
         /// <remarks>Note that this method is optional but will start the service. If this method is not called, the service will be initialized
         /// in the <see cref="ValidateLicense" /> method.</remarks>
-        public async Task Initialize(TimeSpan pollingInterval = default(TimeSpan))
+        public virtual async Task Initialize(TimeSpan pollingInterval = default(TimeSpan))
         {
             await CreateLicenseListeningSockets();
 
@@ -108,7 +108,7 @@ namespace Orc.LicenseManager.Services
             }
         }
 
-        public async Task<NetworkValidationResult> ValidateLicense()
+        public virtual async Task<NetworkValidationResult> ValidateLicense()
         {
             var networkValidationResult = new NetworkValidationResult();
 

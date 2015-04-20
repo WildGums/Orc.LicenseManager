@@ -53,7 +53,8 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             RemoveLicense = new Command(OnRemoveLicenseExecute);
             ValidateLicenseOnServer = new Command(OnValidateLicenseOnServerExecute, OnValidateLicenseOnServerCanExecute);
             ValidateLicenseOnLocalNetwork = new Command(OnValidateLicenseOnLocalNetworkExecute, OnValidateLicenseOnLocalNetworkCanExecute);
-            LicenseUsageCommand = new Command(OnLicenseUsageCommandExecute);
+            ShowLicense = new Command(OnShowLicenseExecute);
+            ShowLicenseUsage = new Command(OnShowLicenseUsageExecute);
 
             ServerUri = string.Format("http://localhost:1815/api/license/validate");
         }
@@ -125,11 +126,29 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             await _messageService.Show(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
         }
 
-        public Command LicenseUsageCommand { get; set; }
+        public Command ShowLicense { get; private set; }
 
-        private void OnLicenseUsageCommandExecute()
+        private async void OnShowLicenseExecute()
         {
-            _uiVisualizerService.ShowDialog<LicenseUsageViewModel>();
+            await _licenseVisualizerService.ShowLicense();
+        }
+
+        public Command ShowLicenseUsage { get; set; }
+
+        private void OnShowLicenseUsageExecute()
+        {
+            var networkValidationResult = new NetworkValidationResult();
+
+            networkValidationResult.MaximumConcurrentUsers = 2;
+            networkValidationResult.CurrentUsers.AddRange(new[]
+            {
+                new NetworkLicenseUsage("12", "192.168.1.100", "Jon", "Licence signature", DateTime.Now),
+                new NetworkLicenseUsage("13", "192.168.1.101", "Jane", "Licence signature", DateTime.Now),
+                new NetworkLicenseUsage("14", "192.168.1.102", "Samuel", "Licence signature", DateTime.Now),
+                new NetworkLicenseUsage("15", "192.168.1.103", "Paula", "Licence signature", DateTime.Now)
+            });
+
+            _uiVisualizerService.ShowDialog<NetworkLicenseUsageViewModel>(networkValidationResult);
         }
         #endregion
 
@@ -166,7 +185,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
                 if (validationResult.IsCurrentUserLatestUser())
                 {
-                    await _messageService.Show(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));                    
+                    await _messageService.Show(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
                 }
                 else
                 {
@@ -177,9 +196,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
         private async Task ShowLicenseDialog()
         {
-            await _licenseVisualizerService.ShowLicense("Catel", "/Orc.LicenseManager.Client.Example;component/Resources/Images/logo_with_text.png", "Catel is a company made in 2010 and is  dolor sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.catelproject.com/", "CatelSoftware License Required", "http://www.catelproject.com/product/buy/642");
-            //_licenseGenerationService.ShowSingleLicenseDialog("Orchestra", "http://staugustineorchestra.org/wp-content/uploads/2012/08/Violin-Logos-Color-Fin.jpg", "Orchestra is a project that has 2 sides a server and a shell sit amet, consectetur adipiscing elit. Etiam nec sem sit amet felis blandit semper. Morbi tempus ligula urna, feugiat rhoncus dolor elementum non.", "http://www.orchestra.com/", "Orchestra License Required", "http://www.orchestra.com/product/buy/642");
-            //_licenseGenerationService.ShowSingleLicenseDialog();
+            await _licenseVisualizerService.ShowLicense();
         }
         #endregion
     }
