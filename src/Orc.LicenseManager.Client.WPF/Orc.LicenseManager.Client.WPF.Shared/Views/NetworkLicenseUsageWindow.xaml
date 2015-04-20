@@ -42,7 +42,11 @@
         </Style>
         <DataTemplate x:Key="ListBoxItemTemplate" >
             <Grid>
-                <TextBlock Text="{Binding UserName}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding UserName}" />
+                    <TextBlock Text="{Binding Ip, StringFormat={} ({0})}" />
+                </StackPanel>
+                
             </Grid>
         </DataTemplate>
         
@@ -97,7 +101,8 @@
            
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Close application" Margin="4 10 2 4" Style="{StaticResource ButtonStyle}" Command="{Binding CloseApplication}" />
-            <Button Content="Buy more licences" Margin="4 10 10 4" Style="{StaticResource ButtonStyle}" Command="{Binding BuyLicenses}"/>
+            <Button Content="Buy more licenses" Margin="4 10 10 4" Style="{StaticResource ButtonStyle}" Command="{Binding BuyLicenses}" 
+                    Visibility="{Binding PurchaseUrl, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}"/>
         </StackPanel>
     </Grid>
 </catel:DataWindow>

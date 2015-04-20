@@ -10,12 +10,13 @@ namespace Orc.LicenseManager.ViewModels
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Reflection;
+    using Catel.Services;
     using Models;
+    using Services;
 
     public class NetworkLicenseUsageViewModel : ViewModelBase
     {
@@ -23,18 +24,25 @@ namespace Orc.LicenseManager.ViewModels
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly NetworkValidationResult _networkValidationResult;
+        private readonly ILicenseInfoService _licenseInfoService;
+        private readonly IProcessService _processService;
         #endregion
 
         #region Constructors
-        public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult)
+        public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService, IProcessService processService)
         {
             Argument.IsNotNull(() => networkValidationResult);
+            Argument.IsNotNull(() => licenseInfoService);
+            Argument.IsNotNull(() => processService);
 
             _networkValidationResult = networkValidationResult;
+            _licenseInfoService = licenseInfoService;
+            _processService = processService;
 
             var assembly = AssemblyHelper.GetEntryAssembly();
             Title = assembly.Title() + " licence usage";
 
+            PurchaseUrl = licenseInfoService.GetLicenseInfo().PurchaseUrl;
             CurrentUsers = networkValidationResult.CurrentUsers.ToList();
             MaximumNumberOfConcurrentUsages = networkValidationResult.MaximumConcurrentUsers;
 
@@ -44,7 +52,10 @@ namespace Orc.LicenseManager.ViewModels
         #endregion
 
         #region Properties
+        public string PurchaseUrl { get; set; }
+
         public List<NetworkLicenseUsage> CurrentUsers { get; set; }
+
         public int MaximumNumberOfConcurrentUsages { get; set; }
         #endregion
 
@@ -63,21 +74,11 @@ namespace Orc.LicenseManager.ViewModels
 
         private void OnBuyLicensesExecute()
         {
-            Log.Info("Buying licenses");
+            var purchaseUrl = PurchaseUrl;
 
+            Log.Info("Buying licenses using url '{0}'", purchaseUrl);
 
-        }
-        #endregion
-
-        #region Methods
-        protected override async Task Initialize()
-        {
-            await base.Initialize();
-        }
-
-        protected override async Task Close()
-        {
-            await base.Close();
+            _processService.StartProcess(purchaseUrl);
         }
         #endregion
     }
