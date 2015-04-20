@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Client
+namespace Orc.LicenseManager
 {
     using Catel.IoC;
     using Catel.Logging;
@@ -13,7 +13,7 @@ namespace Orc.LicenseManager.Client
     using Services;
     using ViewModels;
 
-    public static class NetworkValidationHelper
+    public static class WpfNetworkValidationHelper
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
