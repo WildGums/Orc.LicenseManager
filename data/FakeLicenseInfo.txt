@@ -15,3 +15,17 @@ License:
   </ProductFeatures>
   <Signature>MEYCIQDy3sr8qDwEFc/KegDbjWqm0YppikvlsuZfLyqpAJABKAIhANe1kDtTpG3Z4WMo/hSYiVxAbninJ9bNt4jSjqqNhbKh</Signature>
 </License>
+
+License:
+<License>
+  <Expiration>Sun, 31 Jul 2016 22:00:00 GMT</Expiration>
+  <Id>d77d20e0-c2b8-4182-9ec9-722b9cf76def</Id>
+  <Type>Standard</Type>
+  <Quantity>1</Quantity>
+  <ProductFeatures>
+    <Feature name="FirstName">John</Feature>
+    <Feature name="LastName">Doe</Feature>
+    <Feature name="Email">john@doe.com</Feature>
+  </ProductFeatures>
+  <Signature>MEQCIDmX/OnvsXwLXfk2CNd5bwxPOx52e3sXSbkfdYnpuEGSAiAm5Cxi5VE4twsTwRDqynHr9fjaJOA+a0oAfUn47rxXlQ==</Signature>
+</License>

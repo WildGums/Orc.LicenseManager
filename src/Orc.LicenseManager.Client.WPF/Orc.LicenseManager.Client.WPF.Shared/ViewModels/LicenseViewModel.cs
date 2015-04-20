@@ -23,7 +23,7 @@ namespace Orc.LicenseManager.ViewModels
     /// <summary>
     /// View model for a single License.
     /// </summary>
-    public class SingleLicenseViewModel : ViewModelBase
+    public class LicenseViewModel : ViewModelBase
     {
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -41,24 +41,24 @@ namespace Orc.LicenseManager.ViewModels
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleLicenseViewModel" /> class.
+        /// Initializes a new instance of the <see cref="LicenseViewModel" /> class.
         /// </summary>
-        /// <param name="singleLicenseModel">The single license model.</param>
+        /// <param name="licenseInfo">The single license model.</param>
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="processService">The process service.</param>
         /// <param name="licenseService">The license service.</param>
         /// <param name="uiVisualizerService">The uiVisualizer service.</param>
         /// <param name="viewModelFactory">The uiVisualizer service.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="singleLicenseModel" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="licenseInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="navigationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="processService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
-        public SingleLicenseViewModel(SingleLicenseModel singleLicenseModel, INavigationService navigationService, IProcessService processService,
+        public LicenseViewModel(LicenseInfo licenseInfo, INavigationService navigationService, IProcessService processService,
             ILicenseService licenseService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
         {
-            Argument.IsNotNull(() => singleLicenseModel);
+            Argument.IsNotNull(() => licenseInfo);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => processService);
             Argument.IsNotNull(() => licenseService);
@@ -71,7 +71,9 @@ namespace Orc.LicenseManager.ViewModels
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
 
-            SingleLicenseModel = singleLicenseModel;
+            LicenseInfo = licenseInfo;
+            Title = licenseInfo.Title;
+
             XmlData = new ObservableCollection<XmlDataModel>();
 
             Paste = new Command(OnPasteExecute);
@@ -120,14 +122,12 @@ namespace Orc.LicenseManager.ViewModels
         public Command AboutSiteClick { get; private set; }
 
         [Model]
-        [Catel.Fody.Expose("Title")]
-        [Catel.Fody.Expose("PurchaseLink")]
-        [Catel.Fody.Expose("AboutTitle")]
-        [Catel.Fody.Expose("AboutSite")]
-        [Catel.Fody.Expose("AboutText")]
-        [Catel.Fody.Expose("AboutImage")]
+        [Catel.Fody.Expose("PurchaseUrl")]
+        [Catel.Fody.Expose("InfoUrl")]
+        [Catel.Fody.Expose("Text")]
+        [Catel.Fody.Expose("ImageUri")]
         [Catel.Fody.Expose("Key")]
-        private SingleLicenseModel SingleLicenseModel { get; set; }
+        private LicenseInfo LicenseInfo { get; set; }
 
         /// <summary>
         /// Gets the about image URI.
@@ -135,7 +135,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <value>
         /// The about image URI.
         /// </value>
-        public Uri AboutImageUri { get { return new Uri(SingleLicenseModel.AboutImage, UriKind.RelativeOrAbsolute); } }
+        public Uri AboutImageUri { get { return new Uri(LicenseInfo.ImageUri, UriKind.RelativeOrAbsolute); } }
 
         /// <summary>
         /// Gets the Paste command.
@@ -175,7 +175,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnAboutSiteClickExecute()
         {
-            _processService.StartProcess(SingleLicenseModel.AboutSite);
+            _processService.StartProcess(LicenseInfo.InfoUrl);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private void OnPurchaseLinkClickExecute()
         {
-            _processService.StartProcess(SingleLicenseModel.PurchaseLink);
+            _processService.StartProcess(LicenseInfo.PurchaseUrl);
         }
 
         /// <summary>
@@ -222,22 +222,25 @@ namespace Orc.LicenseManager.ViewModels
 
         protected override async Task<bool> Save()
         {
-            var validationContext = _licenseService.ValidateLicense(SingleLicenseModel.Key);
+            var validationContext = _licenseService.ValidateLicense(LicenseInfo.Key);
             if (validationContext.HasErrors)
             {
                 return false;
             }
 
-            _licenseService.SaveLicense(SingleLicenseModel.Key);
+            _licenseService.SaveLicense(LicenseInfo.Key);
 
             return true;
         }
 
         protected override async Task<bool> Cancel()
         {
-            Log.Debug("Closing application");
+            if (!_licenseService.LicenseExists())
+            {
+                Log.Debug("Closing application");
 
-            _navigationService.CloseApplication();
+                _navigationService.CloseApplication();
+            }
 
             return true;
         }
@@ -252,16 +255,16 @@ namespace Orc.LicenseManager.ViewModels
                 XmlData.Clear();
                 if (Clipboard.GetText() != string.Empty)
                 {
-                    SingleLicenseModel.Key = Clipboard.GetText();
-                    var licenseKey = SingleLicenseModel.Key;
+                    LicenseInfo.Key = Clipboard.GetText();
+                    var licenseKey = LicenseInfo.Key;
 
                     var xmlFirstError = _licenseService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
                     if (xmlFirstError == null)
                     {
-                        var normalFirstError = _licenseService.ValidateLicense(SingleLicenseModel.Key).GetBusinessRuleErrors().FirstOrDefault();
+                        var normalFirstError = _licenseService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
                         if (normalFirstError == null)
                         {
-                            var xmlList = _licenseService.LoadXmlFromLicense(SingleLicenseModel.Key);
+                            var xmlList = _licenseService.LoadXmlFromLicense(LicenseInfo.Key);
                             xmlList.ForEach(x =>
                             {
                                 if (string.Equals(x.Name, "Expiration"))

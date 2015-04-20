@@ -14,22 +14,22 @@ namespace Orc.LicenseManager.Views
     /// <summary>
     /// Interaction logic for SingleLicenseWindow.xaml.
     /// </summary>
-    public partial class SingleLicenseWindow : DataWindow
+    public partial class LicenseWindow : DataWindow
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleLicenseWindow"/> class.
+        /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
         /// </summary>
-        public SingleLicenseWindow()
+        public LicenseWindow()
             : this(null)
         {
         }
 
         /// <summary>5
-        /// Initializes a new instance of the <see cref="SingleLicenseWindow"/> class.
+        /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public SingleLicenseWindow(SingleLicenseViewModel viewModel)
+        public LicenseWindow(LicenseViewModel viewModel)
             : base(viewModel, DataWindowMode.OkCancel)
         {
             InitializeComponent();
