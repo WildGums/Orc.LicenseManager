@@ -222,6 +222,10 @@ namespace Orc.LicenseManager.ViewModels
 
         protected override async Task<bool> Save()
         {
+            if (_licenseService.LicenseExists())
+            {
+                return true;
+            }
             var validationContext = _licenseService.ValidateLicense(LicenseInfo.Key);
             if (validationContext.HasErrors)
             {
