@@ -217,7 +217,7 @@ namespace Orc.LicenseManager.ViewModels
                 MessageImage.Question) == MessageResult.Yes)
             {
                 _licenseService.RemoveLicense();
-                await Cancel();
+                await CloseViewModel(true);
             }
         }
 
