@@ -129,6 +129,12 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="DeleteLicense" xml:space="preserve">
+    <value>Delete license</value>
+  </data>
+  <data name="DeleteLicenseHeader" xml:space="preserve">
+    <value>Delete license</value>
+  </data>
   <data name="InsertLicenseHeader" xml:space="preserve">
     <value>Insert license</value>
   </data>

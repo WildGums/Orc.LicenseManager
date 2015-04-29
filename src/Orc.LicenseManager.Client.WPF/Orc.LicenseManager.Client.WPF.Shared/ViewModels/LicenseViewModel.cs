@@ -37,6 +37,8 @@ namespace Orc.LicenseManager.ViewModels
 
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly IMessageService _messageService;
+
         #endregion
 
         #region Constructors
@@ -49,6 +51,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <param name="licenseService">The license service.</param>
         /// <param name="uiVisualizerService">The uiVisualizer service.</param>
         /// <param name="viewModelFactory">The uiVisualizer service.</param>
+        /// <param name="messageService"></param>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="navigationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="processService" /> is <c>null</c>.</exception>
@@ -56,7 +59,8 @@ namespace Orc.LicenseManager.ViewModels
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
         public LicenseViewModel(LicenseInfo licenseInfo, INavigationService navigationService, IProcessService processService,
-            ILicenseService licenseService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory)
+            ILicenseService licenseService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory,
+            IMessageService messageService)
         {
             Argument.IsNotNull(() => licenseInfo);
             Argument.IsNotNull(() => navigationService);
@@ -64,15 +68,18 @@ namespace Orc.LicenseManager.ViewModels
             Argument.IsNotNull(() => licenseService);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => viewModelFactory);
+            Argument.IsNotNull(() => messageService);
 
             _navigationService = navigationService;
             _processService = processService;
             _licenseService = licenseService;
             _uiVisualizerService = uiVisualizerService;
             _viewModelFactory = viewModelFactory;
+            _messageService = messageService;
 
             LicenseInfo = licenseInfo;
             Title = licenseInfo.Title;
+            LicenseExists = _licenseService.LicenseExists();
 
             XmlData = new ObservableCollection<XmlDataModel>();
 
@@ -80,6 +87,7 @@ namespace Orc.LicenseManager.ViewModels
             ShowClipboard = new Command(OnShowClipboardExecute);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
+            RemoveLicense = new Command(OnRemoveLicenseExecute);
         }
         #endregion
 
@@ -120,6 +128,11 @@ namespace Orc.LicenseManager.ViewModels
         /// Gets the AboutSiteClick command.
         /// </summary>
         public Command AboutSiteClick { get; private set; }
+
+        /// <summary>
+        /// Gets the RemoveLicense command.
+        /// </summary>
+        public Command RemoveLicense { get; private set; }
 
         [Model]
         [Catel.Fody.Expose("PurchaseUrl")]
@@ -167,6 +180,15 @@ namespace Orc.LicenseManager.ViewModels
         ///   <c>true</c> if [show failure]; otherwise, <c>false</c>.
         /// </value>
         public bool ShowFailure { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [license exists].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [license exists]; otherwise, <c>false</c>.
+        /// </value>
+        public bool LicenseExists { get; private set; }
+        
         #endregion
 
         #region Methods
@@ -184,6 +206,19 @@ namespace Orc.LicenseManager.ViewModels
         private void OnPurchaseLinkClickExecute()
         {
             _processService.StartProcess(LicenseInfo.PurchaseUrl);
+        }
+
+        /// <summary>
+        /// Method to invoke when the RemoveLicense command is executed.
+        /// </summary>
+        private async void OnRemoveLicenseExecute()
+        {
+            if (await _messageService.Show("Are you sure you want to delete the existing license ?", "Delete existing license ?", MessageButton.YesNo,
+                MessageImage.Question) == MessageResult.Yes)
+            {
+                _licenseService.RemoveLicense();
+                await Cancel();
+            }
         }
 
         /// <summary>
