@@ -9,7 +9,7 @@
         <ResourceDictionary Source="/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml" />
     </catel:DataWindow.Resources>
 
-    <StackPanel Orientation="Vertical" Width="800" >
+    <StackPanel Orientation="Vertical" Width="800">
         <i:Interaction.Behaviors>
             <catel:KeyPressToCommand Command="{Binding Paste}" Key="V" Modifiers="Control"  />
         </i:Interaction.Behaviors>
@@ -40,7 +40,8 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{catel:LanguageBinding InsertLicenseHeader}"  Visibility="{Binding FailureOccurred, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+        <GroupBox Header="{catel:LanguageBinding InsertLicenseHeader}"
+                  Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}, ConverterParameter=False}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -60,6 +61,20 @@
             </Grid>
         </GroupBox>
 
+        <GroupBox Header="{catel:LanguageBinding LicensePropsHeader}"
+                  Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+            <ListBox ItemsSource="{Binding XmlData}" BorderBrush="Transparent" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="4" Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name, StringFormat='{}{0}: '}" Foreground="ForestGreen" FontWeight="Bold" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Value}" Foreground="ForestGreen" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+
         <GroupBox Header="{catel:LanguageBinding DeleteLicenseHeader}"
                   Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
             <Grid>
@@ -70,19 +85,6 @@
                 <Button Grid.Column="1" Content="{catel:LanguageBinding DeleteLicense}" Command="{Binding RemoveLicense}"
                     Margin="40,5" Style="{StaticResource LicenseButtonStyle}" />
             </Grid>
-        </GroupBox>
-
-        <GroupBox Visibility="{Binding XmlData.Count, Converter={catel:CountCollapsedConverter}}" Header="{catel:LanguageBinding LicensePropsHeader}">
-            <ListBox  ItemsSource="{Binding XmlData}" BorderBrush="Transparent" HorizontalContentAlignment="Stretch">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="4" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name, StringFormat='{}{0}: '}" Foreground="ForestGreen" FontWeight="Bold" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding Value}" Foreground="ForestGreen" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
         </GroupBox>
 
         <StackPanel Orientation="Vertical" Visibility="{Binding ShowFailure, Converter={catel:BooleanToCollapsingVisibilityConverter}}" Margin="5,5,0,5">

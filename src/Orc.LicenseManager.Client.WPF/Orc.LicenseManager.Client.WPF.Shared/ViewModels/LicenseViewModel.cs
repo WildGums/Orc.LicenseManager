@@ -188,7 +188,7 @@ namespace Orc.LicenseManager.ViewModels
         ///   <c>true</c> if [license exists]; otherwise, <c>false</c>.
         /// </value>
         public bool LicenseExists { get; private set; }
-        
+
         #endregion
 
         #region Methods
@@ -217,7 +217,8 @@ namespace Orc.LicenseManager.ViewModels
                 MessageImage.Question) == MessageResult.Yes)
             {
                 _licenseService.RemoveLicense();
-                await CloseViewModel(true);
+
+                UpdateLicenseInfo();
             }
         }
 
@@ -236,23 +237,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </remarks>
         protected override async Task Initialize()
         {
-            if (_licenseService.LicenseExists())
-            {
-                var licenseText = _licenseService.LoadLicense();
-                var validationContext = _licenseService.ValidateLicense(licenseText);
-                if (validationContext.HasErrors == false)
-                {
-                    FailureOccurred = false;
-                }
-                else
-                {
-                    FailureOccurred = true;
-                }
-            }
-            else
-            {
-                FailureOccurred = true;
-            }
+            UpdateLicenseInfo();
         }
 
         protected override async Task<bool> Save()
@@ -261,6 +246,7 @@ namespace Orc.LicenseManager.ViewModels
             {
                 return true;
             }
+
             var validationContext = _licenseService.ValidateLicense(LicenseInfo.Key);
             if (validationContext.HasErrors)
             {
@@ -284,60 +270,92 @@ namespace Orc.LicenseManager.ViewModels
             return true;
         }
 
-        /// <summary>
-        /// Method to invoke when the Paste command is executed. Validates the license and xml, 
-        /// </summary>
-        private void OnPasteExecute()
+        private void UpdateLicenseInfo()
         {
-            if (FailureOccurred)
+            var licenseText = _licenseService.LoadLicense();
+            ApplyLicense(licenseText);
+        }
+
+        private void ApplyLicense(string licenseKey)
+        {
+            LicenseExists = false;
+            XmlData.Clear();
+            RaisePropertyChanged(() => XmlData);
+
+            if (string.IsNullOrWhiteSpace(licenseKey))
             {
-                XmlData.Clear();
-                if (Clipboard.GetText() != string.Empty)
+                return;
+            }
+
+            XmlData.Clear();
+
+            LicenseInfo.Key = licenseKey;
+
+            var xmlList = _licenseService.LoadXmlFromLicense(LicenseInfo.Key);
+            xmlList.ForEach(x =>
+            {
+                if (string.Equals(x.Name, "Expiration"))
                 {
-                    LicenseInfo.Key = Clipboard.GetText();
-                    var licenseKey = LicenseInfo.Key;
+                    x.Name = "Maintenance End Date";
+                }
 
-                    var xmlFirstError = _licenseService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
-                    if (xmlFirstError == null)
+                XmlData.Add(x);
+            });
+
+            var validationContext = _licenseService.ValidateLicense(licenseKey);
+            if (validationContext.HasErrors)
+            {
+                var xmlFirstError = _licenseService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
+                if (xmlFirstError == null)
+                {
+                    var normalFirstError = _licenseService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
+                    if (normalFirstError == null)
                     {
-                        var normalFirstError = _licenseService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
-                        if (normalFirstError == null)
-                        {
-                            var xmlList = _licenseService.LoadXmlFromLicense(LicenseInfo.Key);
-                            xmlList.ForEach(x =>
-                            {
-                                if (string.Equals(x.Name, "Expiration"))
-                                {
-                                    x.Name = "Maintenance End Date";
-                                }
 
-                                XmlData.Add(x);
-                            });
-                            FailureOccurred = false;
-                            ShowFailure = false;
-                        }
-                        else
-                        {
-                            ShowFailure = true;
-                            FailureMessage = normalFirstError.Message;
-                            FailureSolution = normalFirstError.Tag as string;
-                        }
                     }
                     else
                     {
                         ShowFailure = true;
-                        FailureMessage = xmlFirstError.Message;
-                        FailureSolution = xmlFirstError.Tag as string;
+                        FailureMessage = normalFirstError.Message;
+                        FailureSolution = normalFirstError.Tag as string;
                     }
                 }
                 else
                 {
                     ShowFailure = true;
+                    FailureMessage = xmlFirstError.Message;
+                    FailureSolution = xmlFirstError.Tag as string;
+                }
+            }
+            else
+            {
+                FailureOccurred = false;
+                ShowFailure = false;
+                LicenseExists = true;
+            }
+
+            RaisePropertyChanged(() => XmlData);
+        }
+
+        /// <summary>
+        /// Method to invoke when the Paste command is executed. Validates the license and xml, 
+        /// </summary>
+        private void OnPasteExecute()
+        {
+            if (Clipboard.GetText() != string.Empty)
+            {
+                var license = Clipboard.GetText();
+                if (string.IsNullOrWhiteSpace(license))
+                {
+                    ShowFailure = true;
 
                     // TODO: Read from resources (language service preferred)
-                    FailureMessage = "No text was pasted into the windows.";
+                    FailureMessage = "No text was pasted into the window.";
                     FailureSolution = "Please copy the license text into this window.";
+                    return;
                 }
+
+                ApplyLicense(license);
             }
         }
 
