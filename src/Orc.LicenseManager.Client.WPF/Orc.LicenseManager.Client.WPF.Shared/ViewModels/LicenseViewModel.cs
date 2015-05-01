@@ -284,6 +284,8 @@ namespace Orc.LicenseManager.ViewModels
 
             if (string.IsNullOrWhiteSpace(licenseKey))
             {
+                FailureOccurred = false;
+                ShowFailure = false;
                 return;
             }
 
@@ -331,9 +333,9 @@ namespace Orc.LicenseManager.ViewModels
             {
                 FailureOccurred = false;
                 ShowFailure = false;
-                LicenseExists = true;
             }
 
+            LicenseExists = true;
             RaisePropertyChanged(() => XmlData);
         }
 
