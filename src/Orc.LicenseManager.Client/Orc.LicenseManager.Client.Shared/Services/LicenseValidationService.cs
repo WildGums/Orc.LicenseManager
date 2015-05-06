@@ -166,11 +166,28 @@ namespace Orc.LicenseManager.Services
 
                 using (var sw = new StreamWriter(webRequest.GetRequestStream()))
                 {
+                    var version = "unknown version";
+                    if (assembly != null)
+                    {
+                        try
+                        {
+                            version = assembly.InformationalVersion();
+                            if (string.IsNullOrWhiteSpace(version))
+                            {
+                                version = assembly.Version();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to retrieve the product version");
+                        }
+                    }
+
                     var serviceLicenseValidation = new ServerLicenseValidation
                     {
                         MachineId = _identificationService.GetMachineId(),
-                        ProductName = (assembly != null) ? assembly.Product() : "unknown product (assembly null)",
-                        ProductVersion = (assembly != null) ? assembly.Version() : "unknown version (assembly null)",
+                        ProductName = (assembly != null) ? assembly.Product() : "unknown product",
+                        ProductVersion = version,
                         License = license
                     };
 
