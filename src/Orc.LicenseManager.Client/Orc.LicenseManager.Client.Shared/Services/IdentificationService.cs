@@ -24,7 +24,7 @@ namespace Orc.LicenseManager.Services
         {
             lock (_lock)
             {
-                if (string.IsNullOrWhiteSpace(_machineId))
+                if (!string.IsNullOrWhiteSpace(_machineId))
                 {
                     return _machineId;
                 }
