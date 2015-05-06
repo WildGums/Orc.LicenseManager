@@ -13,8 +13,10 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
- 
+
+        serviceLocator.RegisterType<IApplicationIdService, ApplicationIdService>();
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
+        serviceLocator.RegisterType<ILicenseValidationService, LicenseValidationService>();
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
         serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();
         serviceLocator.RegisterType<IExpirationBehavior, PreventUsageOfAnyVersionExpirationBehavior>();

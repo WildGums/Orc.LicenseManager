@@ -23,6 +23,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
     {
         #region Fields
         private readonly ILicenseService _licenseService;
+        private readonly ILicenseValidationService _licenseValidationService;
         private readonly IMessageService _messageService;
         private readonly INetworkLicenseService _networkLicenseService;
         private readonly ILicenseVisualizerService _licenseVisualizerService;
@@ -34,17 +35,20 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
-        public MainWindowViewModel(ILicenseService licenseService, IMessageService messageService, INetworkLicenseService networkLicenseService,
+        public MainWindowViewModel(ILicenseService licenseService, ILicenseValidationService licenseValidationService,
+            IMessageService messageService, INetworkLicenseService networkLicenseService,
             ILicenseVisualizerService licenseVisualizerService, IUIVisualizerService uiVisualizerService)
             : base()
         {
             Argument.IsNotNull(() => licenseService);
+            Argument.IsNotNull(() => licenseValidationService);
             Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => networkLicenseService);
             Argument.IsNotNull(() => licenseVisualizerService);
             Argument.IsNotNull(() => uiVisualizerService);
 
             _licenseService = licenseService;
+            _licenseValidationService = licenseValidationService;
             _messageService = messageService;
             _networkLicenseService = networkLicenseService;
             _licenseVisualizerService = licenseVisualizerService;
@@ -104,7 +108,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         {
             var licenseString = _licenseService.LoadLicense();
 
-            var result = await _licenseService.ValidateLicenseOnServer(licenseString, ServerUri);
+            var result = await _licenseValidationService.ValidateLicenseOnServer(licenseString, ServerUri);
 
             await _messageService.Show(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
         }
@@ -163,7 +167,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             if (_licenseService.LicenseExists())
             {
                 var licenseString = _licenseService.LoadLicense();
-                var licenseValidation = _licenseService.ValidateLicense(licenseString);
+                var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
                 if (licenseValidation.HasErrors)
                 {

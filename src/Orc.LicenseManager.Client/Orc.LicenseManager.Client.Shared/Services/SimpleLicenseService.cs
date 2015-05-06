@@ -21,7 +21,9 @@ namespace Orc.LicenseManager.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ILicenseService _licenseService;
+        private readonly ILicenseValidationService _licenseValidationService;
         private readonly ILicenseVisualizerService _licenseVisualizerService;
+        private readonly IExpirationBehavior _expirationBehavior;
         #endregion
 
         #region Constructors
@@ -29,15 +31,21 @@ namespace Orc.LicenseManager.Services
         /// Initializes a new instance of the <see cref="SimpleLicenseService" /> class.
         /// </summary>
         /// <param name="licenseService">The license service.</param>
+        /// <param name="licenseValidationService">The license validation service.</param>
         /// <param name="licenseVisualizerService">The license visualizer service.</param>
+        /// <param name="expirationBehavior">The expiration behavior.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
-        public SimpleLicenseService(ILicenseService licenseService, ILicenseVisualizerService licenseVisualizerService)
+        public SimpleLicenseService(ILicenseService licenseService, ILicenseValidationService licenseValidationService, ILicenseVisualizerService licenseVisualizerService, IExpirationBehavior expirationBehavior)
         {
             Argument.IsNotNull(() => licenseService);
+            Argument.IsNotNull(() => licenseValidationService);
             Argument.IsNotNull(() => licenseVisualizerService);
+            Argument.IsNotNull(() => expirationBehavior);
 
             _licenseService = licenseService;
+            _licenseValidationService = licenseValidationService;
             _licenseVisualizerService = licenseVisualizerService;
+            _expirationBehavior = expirationBehavior;
         }
         #endregion
 
@@ -47,12 +55,9 @@ namespace Orc.LicenseManager.Services
         /// is valid.
         /// </summary>
         /// <param name="serverUrl">The server URL.</param>
-        /// <param name="applicationId">The application identifier.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public async Task<bool> ValidateOnServer(string serverUrl, string applicationId)
+        public async Task<bool> ValidateOnServer(string serverUrl)
         {
-            await _licenseService.Initialize(applicationId);
-
             if (!_licenseService.LicenseExists())
             {
                 await _licenseVisualizerService.ShowLicense();
@@ -66,7 +71,7 @@ namespace Orc.LicenseManager.Services
             var licenseString = _licenseService.LoadLicense();
 
             // Server first so it's possible to make licenses invalid
-            var licenseValidationResult = await _licenseService.ValidateLicenseOnServer(licenseString, serverUrl);
+            var licenseValidationResult = await _licenseValidationService.ValidateLicenseOnServer(licenseString, serverUrl);
             if (!licenseValidationResult.IsValid)
             {
                 Log.Error("The server returned that the license is invalid and contains the following errors:");
@@ -77,7 +82,7 @@ namespace Orc.LicenseManager.Services
 
             Log.Debug("Server returned valid license, doing a local check to be sure that the server wasn't forged");
 
-            var validationContext = _licenseService.ValidateLicense(licenseString);
+            var validationContext = _licenseValidationService.ValidateLicense(licenseString);
             if (validationContext.HasErrors)
             {
                 Log.Error("The license is invalid and contains the following errors:");
@@ -95,13 +100,10 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Validates the license in a very simple manner. This method is wrapper around the <see cref="ILicenseService" />.
         /// </summary>
-        /// <param name="applicationId">The application identifier, can be any value but should be unique.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         /// <remarks>Note that this method might show a dialog so must be run on the UI thread.</remarks>
-        public async Task<bool> Validate(string applicationId)
+        public async Task<bool> Validate()
         {
-            await _licenseService.Initialize(applicationId);
-
             if (!_licenseService.LicenseExists())
             {
                 await _licenseVisualizerService.ShowLicense();
@@ -113,7 +115,7 @@ namespace Orc.LicenseManager.Services
             }
 
             var licenseString = _licenseService.LoadLicense();
-            var licenseValidation = _licenseService.ValidateLicense(licenseString);
+            var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
             return !licenseValidation.HasErrors;
         }

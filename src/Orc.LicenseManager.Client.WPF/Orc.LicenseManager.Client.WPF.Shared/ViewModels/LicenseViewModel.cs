@@ -34,9 +34,9 @@ namespace Orc.LicenseManager.ViewModels
         private readonly IProcessService _processService;
 
         private readonly ILicenseService _licenseService;
+        private readonly ILicenseValidationService _licenseValidationService;
 
         private readonly IUIVisualizerService _uiVisualizerService;
-        private readonly IViewModelFactory _viewModelFactory;
         private readonly IMessageService _messageService;
 
         #endregion
@@ -49,32 +49,31 @@ namespace Orc.LicenseManager.ViewModels
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="processService">The process service.</param>
         /// <param name="licenseService">The license service.</param>
+        /// <param name="licenseValidationService">The license validation service.</param>
         /// <param name="uiVisualizerService">The uiVisualizer service.</param>
-        /// <param name="viewModelFactory">The uiVisualizer service.</param>
-        /// <param name="messageService"></param>
+        /// <param name="messageService">The message service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="navigationService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="processService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
         public LicenseViewModel(LicenseInfo licenseInfo, INavigationService navigationService, IProcessService processService,
-            ILicenseService licenseService, IUIVisualizerService uiVisualizerService, IViewModelFactory viewModelFactory,
+            ILicenseService licenseService, ILicenseValidationService licenseValidationService, IUIVisualizerService uiVisualizerService, 
             IMessageService messageService)
         {
             Argument.IsNotNull(() => licenseInfo);
             Argument.IsNotNull(() => navigationService);
             Argument.IsNotNull(() => processService);
             Argument.IsNotNull(() => licenseService);
+            Argument.IsNotNull(() => licenseValidationService);
             Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => viewModelFactory);
             Argument.IsNotNull(() => messageService);
 
             _navigationService = navigationService;
             _processService = processService;
             _licenseService = licenseService;
+            _licenseValidationService = licenseValidationService;
             _uiVisualizerService = uiVisualizerService;
-            _viewModelFactory = viewModelFactory;
             _messageService = messageService;
 
             LicenseInfo = licenseInfo;
@@ -247,7 +246,7 @@ namespace Orc.LicenseManager.ViewModels
                 return true;
             }
 
-            var validationContext = _licenseService.ValidateLicense(LicenseInfo.Key);
+            var validationContext = _licenseValidationService.ValidateLicense(LicenseInfo.Key);
             if (validationContext.HasErrors)
             {
                 return false;
@@ -304,13 +303,13 @@ namespace Orc.LicenseManager.ViewModels
                 XmlData.Add(x);
             });
 
-            var validationContext = _licenseService.ValidateLicense(licenseKey);
+            var validationContext = _licenseValidationService.ValidateLicense(licenseKey);
             if (validationContext.HasErrors)
             {
-                var xmlFirstError = _licenseService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
+                var xmlFirstError = _licenseValidationService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
                 if (xmlFirstError == null)
                 {
-                    var normalFirstError = _licenseService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
+                    var normalFirstError = _licenseValidationService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
                     if (normalFirstError == null)
                     {
 

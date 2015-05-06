@@ -17,31 +17,49 @@ namespace Orc.LicenseManager.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly object _lock = new object();
+        private string _machineId = string.Empty;
+
         public string GetMachineId()
         {
-            Log.Debug("Retrieving machine id");
-
-            var cpuId = string.Empty;
-
-            try
+            lock (_lock)
             {
-                var managementClass = new ManagementClass("win32_processor");
-                var managementObjectCollection = managementClass.GetInstances();
-
-                foreach (var managementObject in managementObjectCollection)
+                if (string.IsNullOrWhiteSpace(_machineId))
                 {
-                    cpuId = managementObject.Properties["processorID"].Value.ToString();
-                    break;
+                    return _machineId;
                 }
 
-                Log.Debug("Retrieved machine id '{0}'", cpuId);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to retrieve machine id");
+                Log.Debug("Retrieving machine id");
+
+                var cpuId = string.Empty;
+
+                try
+                {
+                    //var managementClass = new ManagementClass("win32_processor");
+                    //var managementObjectCollection = managementClass.GetInstances();
+
+                    // Searching should be faster
+                    var query = "SELECT ProcessorId FROM Win32_Processor";
+                    var searcher = new ManagementObjectSearcher(query);
+                    var managementObjectCollection = searcher.Get();
+
+                    foreach (var managementObject in managementObjectCollection)
+                    {
+                        cpuId = managementObject.Properties["ProcessorID"].Value.ToString();
+                        break;
+                    }
+
+                    Log.Debug("Retrieved machine id '{0}'", cpuId);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to retrieve machine id");
+                }
+
+                _machineId = CalculateMd5Hash(cpuId);
             }
 
-            return CalculateMd5Hash(cpuId);
+            return _machineId;
         }
 
         private string CalculateMd5Hash(string input)
@@ -51,7 +69,7 @@ namespace Orc.LicenseManager.Services
             var hash = md5.ComputeHash(inputBytes);
 
             var sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
+            for (var i = 0; i < hash.Length; i++)
             {
                 sb.Append(hash[i].ToString("X2"));
             }

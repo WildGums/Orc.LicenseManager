@@ -17,7 +17,6 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <returns>Task.</returns>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
-        /// <exception cref="Exception">The <see cref="LicenseService.Initialize" /> method must be run first.</exception>
         Task ShowLicense();
     }
 }
