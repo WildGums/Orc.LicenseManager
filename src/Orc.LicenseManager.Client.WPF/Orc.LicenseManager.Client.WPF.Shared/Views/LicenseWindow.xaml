@@ -89,7 +89,6 @@
 
         <StackPanel Orientation="Vertical" Visibility="{Binding ShowFailure, Converter={catel:BooleanToCollapsingVisibilityConverter}}" Margin="5,5,0,5">
             <TextBlock Text="{Binding FailureMessage}" Foreground="Red" />
-            <TextBlock Text="{Binding FailureSolution}" Foreground="Red" />
         </StackPanel>
 
         <TextBlock Visibility="{Binding PurchaseUrl, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" Margin="9,5,0,5">

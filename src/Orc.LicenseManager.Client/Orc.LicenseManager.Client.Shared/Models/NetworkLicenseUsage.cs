@@ -47,7 +47,7 @@ namespace Orc.LicenseManager.Models
 
         public static NetworkLicenseUsage Parse(string text)
         {
-            var splitted = text.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            var splitted = text.Split(new[] { '|' }, StringSplitOptions.None);
 
             var computerId = GetValue(splitted, 0);
             var licenseSignature = GetValue(splitted, 1);

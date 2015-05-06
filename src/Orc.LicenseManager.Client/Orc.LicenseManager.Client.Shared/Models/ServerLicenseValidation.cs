@@ -10,6 +10,8 @@ namespace Orc.LicenseManager.Models
     public class ServerLicenseValidation
     {
         #region Properties
+        public string MachineId { get; set; }
+
         public string ProductName { get; set; }
 
         public string ProductVersion { get; set; }

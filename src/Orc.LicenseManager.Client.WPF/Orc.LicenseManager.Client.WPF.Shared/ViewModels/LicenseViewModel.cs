@@ -111,14 +111,6 @@ namespace Orc.LicenseManager.ViewModels
         public string FailureMessage { get; private set; }
 
         /// <summary>
-        /// Gets the failure solution.
-        /// </summary>
-        /// <value>
-        /// The failure solution.
-        /// </value>
-        public string FailureSolution { get; private set; }
-
-        /// <summary>
         /// Gets the PurchaseLinkClick command.
         /// </summary>
         public Command PurchaseLinkClick { get; private set; }
@@ -318,14 +310,12 @@ namespace Orc.LicenseManager.ViewModels
                     {
                         ShowFailure = true;
                         FailureMessage = normalFirstError.Message;
-                        FailureSolution = normalFirstError.Tag as string;
                     }
                 }
                 else
                 {
                     ShowFailure = true;
                     FailureMessage = xmlFirstError.Message;
-                    FailureSolution = xmlFirstError.Tag as string;
                 }
             }
             else
@@ -351,8 +341,7 @@ namespace Orc.LicenseManager.ViewModels
                     ShowFailure = true;
 
                     // TODO: Read from resources (language service preferred)
-                    FailureMessage = "No text was pasted into the window.";
-                    FailureSolution = "Please copy the license text into this window.";
+                    FailureMessage = "No text was pasted into the window";
                     return;
                 }
 
