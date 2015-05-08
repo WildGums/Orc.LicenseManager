@@ -238,6 +238,11 @@ namespace Orc.LicenseManager.ViewModels
                 return true;
             }
 
+            if (string.IsNullOrWhiteSpace(LicenseInfo.Key))
+            {
+                return false;
+            }
+
             var validationContext = _licenseValidationService.ValidateLicense(LicenseInfo.Key);
             if (validationContext.HasErrors)
             {
@@ -269,6 +274,11 @@ namespace Orc.LicenseManager.ViewModels
 
         private void ApplyLicense(string licenseKey)
         {
+            if (string.IsNullOrWhiteSpace(licenseKey))
+            {
+                return;
+            }
+
             LicenseExists = false;
             XmlData.Clear();
             RaisePropertyChanged(() => XmlData);

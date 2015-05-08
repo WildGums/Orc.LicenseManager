@@ -69,6 +69,10 @@ namespace Orc.LicenseManager.Services
             }
 
             var licenseString = _licenseService.LoadLicense();
+            if (string.IsNullOrWhiteSpace(licenseString))
+            {
+                return false;
+            }
 
             // Server first so it's possible to make licenses invalid
             var licenseValidationResult = await _licenseValidationService.ValidateLicenseOnServer(licenseString, serverUrl);
@@ -115,6 +119,11 @@ namespace Orc.LicenseManager.Services
             }
 
             var licenseString = _licenseService.LoadLicense();
+            if (string.IsNullOrWhiteSpace(licenseString))
+            {
+                return false;
+            }
+
             var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
             return !licenseValidation.HasErrors;
