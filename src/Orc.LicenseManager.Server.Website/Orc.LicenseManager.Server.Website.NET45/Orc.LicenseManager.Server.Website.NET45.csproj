@@ -48,21 +48,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.Core, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Core.4.1.0\lib\net45\Catel.Core.dll</HintPath>
+    <Reference Include="Catel.Core, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.Core.4.2.0-unstable0116\lib\net45\Catel.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Catel.Extensions.EntityFramework6, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Extensions.EntityFramework6.4.1.0\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
+    <Reference Include="Catel.Extensions.EntityFramework6, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.Extensions.EntityFramework6.4.2.0-unstable0116\lib\net45\Catel.Extensions.EntityFramework6.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Catel.Fody.Attributes, Version=2.5.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    <Reference Include="Catel.Fody.Attributes, Version=2.6.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.Fody.2.6.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Catel.MVC4, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Mvc.4.1.0\lib\net45\Catel.MVC4.dll</HintPath>
+    <Reference Include="Catel.MVC4, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.Mvc.4.2.0-unstable0116\lib\net45\Catel.MVC4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

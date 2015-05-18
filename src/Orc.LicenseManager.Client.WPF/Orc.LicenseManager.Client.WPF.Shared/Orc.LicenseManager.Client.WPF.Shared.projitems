@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WindowExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ResourceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\WpfNetworkValidationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MarkupExtensions\EnumerationExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\Resources.Designer.cs">

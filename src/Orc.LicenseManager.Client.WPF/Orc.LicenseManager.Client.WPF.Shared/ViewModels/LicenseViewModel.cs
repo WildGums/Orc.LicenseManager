@@ -17,6 +17,7 @@ namespace Orc.LicenseManager.ViewModels
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
+    using Enums.Extensions;
     using Models;
     using Services;
 
@@ -78,7 +79,6 @@ namespace Orc.LicenseManager.ViewModels
 
             LicenseInfo = licenseInfo;
             Title = licenseInfo.Title;
-            LicenseExists = _licenseService.LicenseExists();
 
             XmlData = new ObservableCollection<XmlDataModel>();
 
@@ -86,11 +86,15 @@ namespace Orc.LicenseManager.ViewModels
             ShowClipboard = new Command(OnShowClipboardExecute);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
-            RemoveLicense = new Command(OnRemoveLicenseExecute);
+            RemoveLicense = new Command(OnRemoveLicenseExecute, OnRemoveLicenseCanExecute);
         }
+
         #endregion
 
         #region Properties
+
+        public LicenseMode LicenseMode { get; set; }
+
         /// <summary>
         /// Gets the Close command.
         /// </summary>
@@ -179,10 +183,15 @@ namespace Orc.LicenseManager.ViewModels
         ///   <c>true</c> if [license exists]; otherwise, <c>false</c>.
         /// </value>
         public bool LicenseExists { get; private set; }
-
         #endregion
 
         #region Methods
+
+        private void OnLicenseModeChanged()
+        {
+            LoadAndApplyLicense();
+        }
+
         /// <summary>
         /// Method to invoke when the AboutSiteClick command is executed.
         /// </summary>
@@ -207,10 +216,14 @@ namespace Orc.LicenseManager.ViewModels
             if (await _messageService.Show("Are you sure you want to delete the existing license ?", "Delete existing license ?", MessageButton.YesNo,
                 MessageImage.Question) == MessageResult.Yes)
             {
-                _licenseService.RemoveLicense();
-
+                _licenseService.RemoveLicense(LicenseMode);
                 UpdateLicenseInfo();
             }
+        }
+
+        private bool OnRemoveLicenseCanExecute()
+        {
+            return _licenseService.LicenseExists(LicenseMode);
         }
 
         /// <summary>
@@ -233,7 +246,11 @@ namespace Orc.LicenseManager.ViewModels
 
         protected override async Task<bool> Save()
         {
-            if (_licenseService.LicenseExists())
+            var licenseExists = _licenseService.LicenseExists(LicenseMode);
+            var oppositeLicenseMode = LicenseMode.ToOpposite();
+            var oppositeLicenseExists = _licenseService.LicenseExists(oppositeLicenseMode);
+
+            if (licenseExists && !oppositeLicenseExists)
             {
                 return true;
             }
@@ -249,14 +266,25 @@ namespace Orc.LicenseManager.ViewModels
                 return false;
             }
 
-            _licenseService.SaveLicense(LicenseInfo.Key);
+            _licenseService.SaveLicense(LicenseInfo.Key, LicenseMode);
+
+            if (oppositeLicenseExists)
+            {
+                var messageResult = await _messageService.Show(string.Format("The {0} has been successfully created, would you like to remove {1}?",
+                    LicenseMode.ToDescriptionText(), oppositeLicenseMode.ToDescriptionText()), "Remove license confirmation", MessageButton.YesNo);
+
+                if (messageResult == MessageResult.Yes)
+                {
+                    _licenseService.RemoveLicense(oppositeLicenseMode);
+                }
+            }
 
             return true;
         }
 
         protected override async Task<bool> Cancel()
         {
-            if (!_licenseService.LicenseExists())
+            if (!_licenseService.LicenseExists(LicenseMode))
             {
                 Log.Debug("Closing application");
 
@@ -268,17 +296,41 @@ namespace Orc.LicenseManager.ViewModels
 
         private void UpdateLicenseInfo()
         {
-            var licenseText = _licenseService.LoadLicense();
+            DetectLicenseMode();
+
+            LoadAndApplyLicense();
+        }
+
+        private void LoadAndApplyLicense()
+        {
+            var licenseText = _licenseService.LoadLicense(LicenseMode);
+            if (string.IsNullOrWhiteSpace(licenseText) && LicenseMode == LicenseMode.MachineWide)
+            {
+                licenseText = _licenseService.LoadLicense(LicenseMode.CurrentUser);
+            }
+
+            if (string.IsNullOrWhiteSpace(licenseText) && LicenseMode == LicenseMode.CurrentUser)
+            {
+                licenseText = _licenseService.LoadLicense(LicenseMode.MachineWide);
+            }
+
             ApplyLicense(licenseText);
+        }
+
+        private void DetectLicenseMode()
+        {
+            LicenseExists = _licenseService.LicenseExists(LicenseMode.CurrentUser);
+            LicenseMode = LicenseMode.CurrentUser;
+
+            if (!LicenseExists && _licenseService.LicenseExists(LicenseMode.MachineWide))
+            {
+                LicenseExists = true;
+                LicenseMode = LicenseMode.MachineWide;
+            }
         }
 
         private void ApplyLicense(string licenseKey)
         {
-            if (string.IsNullOrWhiteSpace(licenseKey))
-            {
-                return;
-            }
-
             LicenseExists = false;
             XmlData.Clear();
             RaisePropertyChanged(() => XmlData);
@@ -295,6 +347,13 @@ namespace Orc.LicenseManager.ViewModels
             LicenseInfo.Key = licenseKey;
 
             var xmlList = _licenseService.LoadXmlFromLicense(LicenseInfo.Key);
+            if (xmlList == null)
+            {
+                FailureOccurred = false;
+                ShowFailure = false;
+                return;
+            }
+
             xmlList.ForEach(x =>
             {
                 if (string.Equals(x.Name, "Expiration"))

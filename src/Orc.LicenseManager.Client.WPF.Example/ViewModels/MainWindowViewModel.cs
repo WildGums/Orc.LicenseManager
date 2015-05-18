@@ -82,7 +82,8 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
         private async void OnRemoveLicenseExecute()
         {
-            _licenseService.RemoveLicense();
+            _licenseService.RemoveLicense(LicenseMode.CurrentUser);
+            _licenseService.RemoveLicense(LicenseMode.MachineWide);
 
             await ShowLicenseDialog();
         }
@@ -96,7 +97,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 return false;
             }
 
-            if (!_licenseService.LicenseExists())
+            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.MachineWide))
             {
                 return false;
             }
@@ -106,7 +107,12 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
         private async void OnValidateLicenseOnServerExecute()
         {
-            var licenseString = _licenseService.LoadLicense();
+            var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
+
+            if (string.IsNullOrWhiteSpace(licenseString))
+            {
+                licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
+            }
 
             var result = await _licenseValidationService.ValidateLicenseOnServer(licenseString, ServerUri);
 
@@ -164,9 +170,19 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
             await _networkLicenseService.Initialize(TimeSpan.FromSeconds(10));
 
-            if (_licenseService.LicenseExists())
+            if (_licenseService.LicenseExists(LicenseMode.CurrentUser))
             {
-                var licenseString = _licenseService.LoadLicense();
+                var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
+                var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
+
+                if (licenseValidation.HasErrors)
+                {
+                    await ShowLicenseDialog();
+                }
+            }
+            else if (_licenseService.LicenseExists(LicenseMode.MachineWide))
+            {
+                var licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
                 var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
                 if (licenseValidation.HasErrors)

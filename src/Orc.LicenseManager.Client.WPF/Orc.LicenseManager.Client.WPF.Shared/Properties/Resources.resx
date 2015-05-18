@@ -132,11 +132,11 @@
   <data name="DeleteLicense" xml:space="preserve">
     <value>Delete license</value>
   </data>
-  <data name="DeleteLicenseHeader" xml:space="preserve">
-    <value>Delete license</value>
-  </data>
   <data name="InsertLicenseHeader" xml:space="preserve">
     <value>Insert license</value>
+  </data>
+  <data name="LicenceManagementHeader" xml:space="preserve">
+    <value>License management</value>
   </data>
   <data name="LicensePropsHeader" xml:space="preserve">
     <value>License properties</value>

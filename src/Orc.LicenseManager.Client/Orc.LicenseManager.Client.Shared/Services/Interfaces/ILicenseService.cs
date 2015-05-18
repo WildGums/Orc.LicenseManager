@@ -27,26 +27,28 @@ namespace Orc.LicenseManager.Services
         /// Saves the license.
         /// </summary>
         /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
+        /// <param name="licenseMode"></param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        void SaveLicense(string license);
+        void SaveLicense(string license, LicenseMode licenseMode/* = LicenseMode.CurrentUser*/);
 
         /// <summary>
         /// Removes the license if exists.
         /// </summary>
-        void RemoveLicense();
+        /// <param name="licenseMode"></param>
+        void RemoveLicense(LicenseMode licenseMode/* = LicenseMode.CurrentUser*/);
 
         /// <summary>
         /// Check if the license exists.
         /// </summary>
         /// <returns>returns <c>true</c> if exists else <c>false</c></returns>
-        bool LicenseExists();
+        bool LicenseExists(LicenseMode licenseMode/* = LicenseMode.CurrentUser*/);
 
         /// <summary>
         /// Loads the license.
         /// </summary>
         /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
-        string LoadLicense();
+        string LoadLicense(LicenseMode licenseMode/* = LicenseMode.CurrentUser*/);
 
         /// <summary>
         /// Loads the XML out of license.

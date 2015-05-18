@@ -9,7 +9,9 @@ namespace Orc.LicenseManager.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
+    using System.Reflection;
     using System.Xml;
     using Catel;
     using Catel.Logging;
@@ -52,15 +54,16 @@ namespace Orc.LicenseManager.Services
         /// Saves the license.
         /// </summary>
         /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
+        /// <param name="licenseMode"></param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        public void SaveLicense(string license)
+        public void SaveLicense(string license, LicenseMode licenseMode)
         {
             Argument.IsNotNullOrWhitespace("license", license);
 
             try
             {
-                string xmlFilePath = GetLicenseInfoPath();
+                string xmlFilePath = GetLicenseInfoPath(licenseMode);
                 var licenseObject = License.Load(license);
 
                 using (var xmlWriter = XmlWriter.Create(xmlFilePath))
@@ -83,25 +86,26 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Removes the license if exists.
         /// </summary>
-        public void RemoveLicense()
+        /// <param name="licenseMode"></param>
+        public void RemoveLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
-            string xmlFilePath = GetLicenseInfoPath();
+            string xmlFilePath = GetLicenseInfoPath(licenseMode);
 
             if (File.Exists(xmlFilePath))
             {
                 File.Delete(xmlFilePath);
             }
 
-            Log.Info("License has been removed");
+            Log.Info("The '{0}' License has been removed", licenseMode);
         }
 
         /// <summary>
         /// Check if the license exists.
         /// </summary>
         /// <returns>returns <c>true</c> if exists else <c>false</c></returns>
-        public bool LicenseExists()
+        public bool LicenseExists(LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
-            string xmlFilePath = GetLicenseInfoPath();
+            string xmlFilePath = GetLicenseInfoPath(licenseMode);
             if (File.Exists(xmlFilePath))
             {
                 Log.Debug("License exists");
@@ -117,11 +121,11 @@ namespace Orc.LicenseManager.Services
         /// Loads the license.
         /// </summary>
         /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
-        public string LoadLicense()
+        public string LoadLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
             try
             {
-                var xmlFilePath = GetLicenseInfoPath();
+                var xmlFilePath = GetLicenseInfoPath(licenseMode);
 
                 using (var xmlReader = XmlReader.Create(xmlFilePath))
                 {
@@ -190,7 +194,7 @@ namespace Orc.LicenseManager.Services
             catch (Exception ex)
             {
                 Log.Debug(ex);
-                throw;
+                return null;
             }
 
             return xmlDataList;
@@ -198,9 +202,14 @@ namespace Orc.LicenseManager.Services
         #endregion
 
         #region Methods
-        private string GetLicenseInfoPath()
+        private string GetLicenseInfoPath(LicenseMode licenseMode)
         {
-            return Path.Combine(Catel.IO.Path.GetApplicationDataDirectory(), "LicenseInfo.xml");
+            if (licenseMode == LicenseMode.CurrentUser)
+            {
+                return Path.Combine(Catel.IO.Path.GetApplicationDataDirectory(), "LicenseInfo.xml");
+            }
+
+            return Path.Combine(Catel.IO.Path.GetApplicationDataDirectoryForAllUsers(), "LicenseInfo.xml");
         }
         #endregion
     }

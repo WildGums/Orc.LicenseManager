@@ -58,17 +58,22 @@ namespace Orc.LicenseManager.Services
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         public async Task<bool> ValidateOnServer(string serverUrl)
         {
-            if (!_licenseService.LicenseExists())
+            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
             {
                 await _licenseVisualizerService.ShowLicense();
             }
 
-            if (!_licenseService.LicenseExists())
+            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
             {
                 return false;
             }
 
-            var licenseString = _licenseService.LoadLicense();
+            var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
+            if (string.IsNullOrWhiteSpace(licenseString))
+            {
+                licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
+            }
+
             if (string.IsNullOrWhiteSpace(licenseString))
             {
                 return false;
@@ -108,17 +113,22 @@ namespace Orc.LicenseManager.Services
         /// <remarks>Note that this method might show a dialog so must be run on the UI thread.</remarks>
         public async Task<bool> Validate()
         {
-            if (!_licenseService.LicenseExists())
+            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
             {
                 await _licenseVisualizerService.ShowLicense();
             }
 
-            if (!_licenseService.LicenseExists())
+            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
             {
                 return false;
             }
 
-            var licenseString = _licenseService.LoadLicense();
+            var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
+            if (string.IsNullOrWhiteSpace(licenseString))
+            {
+                licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
+            }
+
             if (string.IsNullOrWhiteSpace(licenseString))
             {
                 return false;
