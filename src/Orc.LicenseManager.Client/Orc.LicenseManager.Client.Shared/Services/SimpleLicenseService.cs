@@ -58,21 +58,12 @@ namespace Orc.LicenseManager.Services
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         public async Task<bool> ValidateOnServer(string serverUrl)
         {
-            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
-            {
-                await _licenseVisualizerService.ShowLicense();
-            }
-
-            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
+            if (! await EnsureLicenseExists())
             {
                 return false;
             }
 
-            var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
-            if (string.IsNullOrWhiteSpace(licenseString))
-            {
-                licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
-            }
+            var licenseString = _licenseService.LoadExistedLicense();
 
             if (string.IsNullOrWhiteSpace(licenseString))
             {
@@ -113,21 +104,12 @@ namespace Orc.LicenseManager.Services
         /// <remarks>Note that this method might show a dialog so must be run on the UI thread.</remarks>
         public async Task<bool> Validate()
         {
-            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
-            {
-                await _licenseVisualizerService.ShowLicense();
-            }
-
-            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.CurrentUser))
+            if (!await EnsureLicenseExists())
             {
                 return false;
             }
 
-            var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
-            if (string.IsNullOrWhiteSpace(licenseString))
-            {
-                licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
-            }
+            var licenseString = _licenseService.LoadExistedLicense();
 
             if (string.IsNullOrWhiteSpace(licenseString))
             {
@@ -137,6 +119,16 @@ namespace Orc.LicenseManager.Services
             var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
             return !licenseValidation.HasErrors;
+        }
+
+        private async Task<bool> EnsureLicenseExists()
+        {
+            if (!_licenseService.AnyLicenseExists())
+            {
+                await _licenseVisualizerService.ShowLicense();
+            }
+
+            return _licenseService.AnyLicenseExists();
         }
         #endregion
     }

@@ -247,7 +247,9 @@ namespace Orc.LicenseManager.ViewModels
         protected override async Task<bool> Save()
         {
             var licenseExists = _licenseService.LicenseExists(LicenseMode);
+            
             var oppositeLicenseMode = LicenseMode.ToOpposite();
+            
             var oppositeLicenseExists = _licenseService.LicenseExists(oppositeLicenseMode);
 
             if (licenseExists && !oppositeLicenseExists)
@@ -284,7 +286,7 @@ namespace Orc.LicenseManager.ViewModels
 
         protected override async Task<bool> Cancel()
         {
-            if (!_licenseService.LicenseExists(LicenseMode))
+            if (!_licenseService.AnyLicenseExists())
             {
                 Log.Debug("Closing application");
 
@@ -304,14 +306,9 @@ namespace Orc.LicenseManager.ViewModels
         private void LoadAndApplyLicense()
         {
             var licenseText = _licenseService.LoadLicense(LicenseMode);
-            if (string.IsNullOrWhiteSpace(licenseText) && LicenseMode == LicenseMode.MachineWide)
+            if (string.IsNullOrWhiteSpace(licenseText))
             {
-                licenseText = _licenseService.LoadLicense(LicenseMode.CurrentUser);
-            }
-
-            if (string.IsNullOrWhiteSpace(licenseText) && LicenseMode == LicenseMode.CurrentUser)
-            {
-                licenseText = _licenseService.LoadLicense(LicenseMode.MachineWide);
+                licenseText = _licenseService.LoadLicense(LicenseMode.ToOpposite());
             }
 
             ApplyLicense(licenseText);
@@ -335,6 +332,8 @@ namespace Orc.LicenseManager.ViewModels
             XmlData.Clear();
             RaisePropertyChanged(() => XmlData);
 
+            LicenseInfo.Key = licenseKey;
+
             if (string.IsNullOrWhiteSpace(licenseKey))
             {
                 FailureOccurred = false;
@@ -343,8 +342,6 @@ namespace Orc.LicenseManager.ViewModels
             }
 
             XmlData.Clear();
-
-            LicenseInfo.Key = licenseKey;
 
             var xmlList = _licenseService.LoadXmlFromLicense(LicenseInfo.Key);
             if (xmlList == null)

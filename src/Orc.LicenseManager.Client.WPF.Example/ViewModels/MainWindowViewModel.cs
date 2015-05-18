@@ -97,7 +97,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 return false;
             }
 
-            if (!_licenseService.LicenseExists(LicenseMode.CurrentUser) && !_licenseService.LicenseExists(LicenseMode.MachineWide))
+            if (!_licenseService.AnyLicenseExists())
             {
                 return false;
             }
@@ -170,19 +170,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
             await _networkLicenseService.Initialize(TimeSpan.FromSeconds(10));
 
-            if (_licenseService.LicenseExists(LicenseMode.CurrentUser))
+            if (_licenseService.AnyLicenseExists())
             {
-                var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
-                var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
-
-                if (licenseValidation.HasErrors)
-                {
-                    await ShowLicenseDialog();
-                }
-            }
-            else if (_licenseService.LicenseExists(LicenseMode.MachineWide))
-            {
-                var licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
+                var licenseString = _licenseService.LoadExistedLicense();
                 var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
                 if (licenseValidation.HasErrors)

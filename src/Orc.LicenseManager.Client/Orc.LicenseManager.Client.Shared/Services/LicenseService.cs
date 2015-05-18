@@ -57,7 +57,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="licenseMode"></param>
         /// <returns>Returns only true if the license is valid.</returns>
         /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        public void SaveLicense(string license, LicenseMode licenseMode)
+        public void SaveLicense(string license, LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
             Argument.IsNotNullOrWhitespace("license", license);
 

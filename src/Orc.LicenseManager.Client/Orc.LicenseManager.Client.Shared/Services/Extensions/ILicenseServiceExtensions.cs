@@ -20,5 +20,21 @@ namespace Orc.LicenseManager
             var license = licenseService.CurrentLicense;
             return (license != null) ? license.Expiration : (DateTime?)null;
         }
+
+        public static bool AnyLicenseExists(this ILicenseService licenseService)
+        {
+            return licenseService.LicenseExists(LicenseMode.CurrentUser) || licenseService.LicenseExists(LicenseMode.MachineWide);
+        }
+
+        public static string LoadExistedLicense(this ILicenseService licenseService)
+        {
+            var licenseString = licenseService.LoadLicense(LicenseMode.CurrentUser);
+            if (string.IsNullOrWhiteSpace(licenseString))
+            {
+                licenseString = licenseService.LoadLicense(LicenseMode.MachineWide);
+            }
+
+            return licenseString;
+        }
     }
 }
