@@ -82,20 +82,21 @@
         <GroupBox Header="{catel:LanguageBinding LicenceManagementHeader}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*"/>
-                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="33*"/>
+                    <ColumnDefinition Width="33*"/>
+                    <ColumnDefinition Width="33*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="License for:"/>
-                <ComboBox Grid.Column="1" Grid.Row="0" Margin="40,5" ItemsSource="{Binding Source={licenseManager_xaml:Enumeration {x:Type licenseManager:LicenseMode}}}"
+                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="License for:" Margin="40,5"/>
+                
+                <ComboBox Grid.Column="1" Grid.Row="0" Margin="20,5,40,5" ItemsSource="{Binding Source={licenseManager_xaml:Enumeration {x:Type licenseManager:LicenseMode}}}"
                           DisplayMemberPath="Description" SelectedValuePath="Value" SelectedValue="{Binding LicenseMode}" />
 
-                <Button Grid.Column="1" Grid.Row="1" Content="{catel:LanguageBinding DeleteLicense}" Command="{Binding RemoveLicense}"
-					Margin="40,5" Style="{StaticResource LicenseButtonStyle}" Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}"/>
+                <Button Grid.Column="2" Grid.Row="0" Content="{catel:LanguageBinding DeleteLicense}" Command="{Binding RemoveLicense}"
+					Margin="10,5,40,5" Style="{StaticResource LicenseButtonStyle}" Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}"/>
 
             </Grid>
         </GroupBox>
