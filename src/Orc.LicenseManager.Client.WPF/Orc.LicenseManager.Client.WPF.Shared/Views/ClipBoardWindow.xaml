@@ -1,7 +1,7 @@
 ﻿<catel:DataWindow x:Class="Orc.LicenseManager.Views.ClipBoardWindow"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				  xmlns:catel="http://catel.codeplex.com">
+                  xmlns:catel="http://catel.codeplex.com">
     
     <catel:DataWindow.Resources>
         <ResourceDictionary Source="../Themes/Generic.xaml" />
@@ -13,7 +13,7 @@
             <RowDefinition Height="60" />
         </catel:StackGrid.RowDefinitions>
         
-        <TextBox Text="{Binding ClipBoardText}" AcceptsReturn="True" TextWrapping="Wrap" TextAlignment="Justify"  IsEnabled="False"/>
+        <TextBox Text="{Binding ClipBoardText}" AcceptsReturn="True" TextWrapping="Wrap" TextAlignment="Justify" IsEnabled="False"/>
         <Button Grid.Row="1" Command="{Binding Exit}" Width="100" Content="{catel:LanguageBinding Close}"/>
     </catel:StackGrid>
     

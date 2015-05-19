@@ -1,7 +1,13 @@
-﻿namespace Orc.LicenseManager.Views
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ClipBoardWindow.xaml.cs" company="Wild Gums">
+//   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Orc.LicenseManager.Views
 {
     using Catel.Windows;
-
     using ViewModels;
 
     /// <summary>
@@ -16,7 +22,8 @@
         {
             InitializeComponent();
         }
-                /// <summary>
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
