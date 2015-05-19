@@ -17,7 +17,6 @@ namespace Orc.LicenseManager.ViewModels
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
-    using Enums.Extensions;
     using Models;
     using Services;
 
@@ -272,7 +271,7 @@ namespace Orc.LicenseManager.ViewModels
 
             if (oppositeLicenseExists)
             {
-                var messageResult = await _messageService.Show(string.Format("The {0} has been successfully created, would you like to remove {1}?",
+                var messageResult = await _messageService.Show(string.Format("The license for {0} has been successfully created, would you like to remove license for {1}?",
                     LicenseMode.ToDescriptionText(), oppositeLicenseMode.ToDescriptionText()), "Remove license confirmation", MessageButton.YesNo);
 
                 if (messageResult == MessageResult.Yes)
