@@ -90,7 +90,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="License type:"/>
+                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="License for:"/>
                 <ComboBox Grid.Column="1" Grid.Row="0" Margin="40,5" ItemsSource="{Binding Source={licenseManager_xaml:Enumeration {x:Type licenseManager:LicenseMode}}}"
                           DisplayMemberPath="Description" SelectedValuePath="Value" SelectedValue="{Binding LicenseMode}" />
 

@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Enums.Extensions
+namespace Orc.LicenseManager
 {
     using System.ComponentModel;
     using System.Linq;

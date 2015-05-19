@@ -11,10 +11,10 @@ namespace Orc.LicenseManager
 
     public enum LicenseMode
     {
-        [Description("Current user license")]
+        [Description("Current user")]
         CurrentUser,
 
-        [Description("Machine wide license")]
+        [Description("All users")]
         MachineWide
     }
 }
