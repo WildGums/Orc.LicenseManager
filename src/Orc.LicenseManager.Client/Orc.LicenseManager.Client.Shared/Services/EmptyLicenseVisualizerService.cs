@@ -7,11 +7,9 @@
 
 namespace Orc.LicenseManager.Services
 {
-    using System.Threading.Tasks;
-
     public class EmptyLicenseVisualizerService : ILicenseVisualizerService
     {
-        public async Task ShowLicense()
+        public void ShowLicense()
         {
         }
     }

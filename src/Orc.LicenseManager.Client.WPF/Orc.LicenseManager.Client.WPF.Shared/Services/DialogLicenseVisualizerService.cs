@@ -19,15 +19,19 @@ namespace Orc.LicenseManager.Services
 
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly ILicenseInfoService _licenseInfoService;
+        private readonly IDispatcherService _dispatcherService;
 
         #region Constructors
-        public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService)
+        public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService,
+            IDispatcherService dispatcherService)
         {
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => licenseInfoService);
+            Argument.IsNotNull(() => dispatcherService);
 
             _uiVisualizerService = uiVisualizerService;
             _licenseInfoService = licenseInfoService;
+            _dispatcherService = dispatcherService;
         }
         #endregion
 
@@ -35,12 +39,16 @@ namespace Orc.LicenseManager.Services
         /// <summary>
         /// Shows the single license dialog including all company info. You will see the about box.
         /// </summary>
-        public async Task ShowLicense()
+        public void ShowLicense()
         {
             Log.Debug("Showing license dialog with company info");
 
-            var licenseInfo = _licenseInfoService.GetLicenseInfo();
-            _uiVisualizerService.ShowDialog<LicenseViewModel>(licenseInfo);
+            // Note: doesn't this cause deadlocks?
+            _dispatcherService.Invoke(() =>
+            {
+                var licenseInfo = _licenseInfoService.GetLicenseInfo();
+                _uiVisualizerService.ShowDialog<LicenseViewModel>(licenseInfo);
+            });
         }
         #endregion
     }

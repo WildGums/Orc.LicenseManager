@@ -33,6 +33,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\NetworkValidatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IIdentificationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\INetworkLicenseServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseValidationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IApplicationIdService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IIdentificationService.cs" />

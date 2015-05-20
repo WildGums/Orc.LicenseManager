@@ -79,9 +79,9 @@ namespace Orc.LicenseManager.Services
         /// <returns>Task.</returns>
         /// <remarks>Note that this method is optional but will start the service. If this method is not called, the service will be initialized
         /// in the <see cref="ValidateLicense" /> method.</remarks>
-        public virtual async Task Initialize(TimeSpan pollingInterval = default(TimeSpan))
+        public virtual void Initialize(TimeSpan pollingInterval = default(TimeSpan))
         {
-            await CreateLicenseListeningSockets();
+            CreateLicenseListeningSockets();
 
             if (_pollingTimer.Enabled)
             {
@@ -108,7 +108,7 @@ namespace Orc.LicenseManager.Services
             }
         }
 
-        public virtual async Task<NetworkValidationResult> ValidateLicense()
+        public virtual NetworkValidationResult ValidateLicense()
         {
             var networkValidationResult = new NetworkValidationResult();
 
@@ -124,23 +124,16 @@ namespace Orc.LicenseManager.Services
 
             try
             {
-                await CreateLicenseListeningSockets();
+                CreateLicenseListeningSockets();
 
                 var timeout = SearchTimeout != null ? (int)SearchTimeout.TotalMilliseconds : 2000;
 
                 var licenseUsages = new List<NetworkLicenseUsage>();
-                var tasks = new List<Task<List<NetworkLicenseUsage>>>();
 
                 foreach (var ipAddress in GetIpAddresses())
                 {
-                    tasks.Add(BroadcastMessage(ipAddress, license.Signature, timeout));
-                }
-
-                await Task.Factory.StartNew(() => Task.WaitAll(tasks.ToArray()));
-
-                foreach (var task in tasks)
-                {
-                    licenseUsages.AddRange(task.Result);
+                    var usages = BroadcastMessage(ipAddress, license.Signature, timeout);
+                    licenseUsages.AddRange(usages);
                 }
 
                 networkValidationResult.CurrentUsers.AddRange(licenseUsages.GroupBy(x => x.ComputerId).Select(group => group.First()));
@@ -157,12 +150,12 @@ namespace Orc.LicenseManager.Services
             return networkValidationResult;
         }
 
-        private async void OnPollingTimerElapsed(object sender, ElapsedEventArgs e)
+        private void OnPollingTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            await ValidateLicense();
+            ValidateLicense();
         }
 
-        private async Task CreateLicenseListeningSockets()
+        private void CreateLicenseListeningSockets()
         {
             if (_initialized)
             {
@@ -178,7 +171,7 @@ namespace Orc.LicenseManager.Services
 
             if (string.IsNullOrEmpty(_machineId))
             {
-                _machineId = await _identificationService.GetMachineIdAsync();
+                _machineId = _identificationService.GetMachineId();
             }
 
             Log.Debug("Creating local license service and registering license sockets on local network");
@@ -195,7 +188,7 @@ namespace Orc.LicenseManager.Services
             }
         }
 
-        private async Task<List<NetworkLicenseUsage>> BroadcastMessage(string ipAddress, string message, int maxTimeout = 1000)
+        private List<NetworkLicenseUsage> BroadcastMessage(string ipAddress, string message, int maxTimeout = 1000)
         {
             var licenseUsages = new Dictionary<string, NetworkLicenseUsage>();
 
@@ -216,57 +209,54 @@ namespace Orc.LicenseManager.Services
                     var remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, Port);
                     udpClient.Send(sendBuffer, sendBuffer.Length, remoteEndPoint);
 
-                    await Task.Factory.StartNew(() =>
+                    var endDateTime = DateTime.Now.AddMilliseconds(maxTimeout);
+
+                    while (endDateTime >= DateTime.Now)
                     {
-                        var endDateTime = DateTime.Now.AddMilliseconds(maxTimeout);
-
-                        while (endDateTime >= DateTime.Now)
+                        try
                         {
-                            try
+                            var ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                            var receiveBuffer = udpClient.Receive(ref ipEndPoint);
+                            if (receiveBuffer != null && receiveBuffer.Length > 0)
                             {
-                                var ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                                var receiveBuffer = udpClient.Receive(ref ipEndPoint);
-                                if (receiveBuffer != null && receiveBuffer.Length > 0)
+                                var receivedMessage = Encoding.ASCII.GetString(receiveBuffer);
+
+                                Log.Debug("Received message '{0}' from '{1}'", receivedMessage, ipEndPoint.Address);
+
+                                var licenseUsage = NetworkLicenseUsage.Parse(receivedMessage);
+                                if (licenseUsage == null)
                                 {
-                                    var receivedMessage = Encoding.ASCII.GetString(receiveBuffer);
+                                    continue;
+                                }
 
-                                    Log.Debug("Received message '{0}' from '{1}'", receivedMessage, ipEndPoint.Address);
+                                if (string.Equals(licenseUsage.LicenseSignature, message))
+                                {
+                                    Log.Debug("Received message from '{0}' that license is being used", ipEndPoint.Address);
 
-                                    var licenseUsage = NetworkLicenseUsage.Parse(receivedMessage);
-                                    if (licenseUsage == null)
+                                    var computerId = licenseUsage.ComputerId;
+
+                                    var add = true;
+                                    if (licenseUsages.ContainsKey(computerId))
                                     {
-                                        continue;
+                                        // Only update if this is an older timestamp
+                                        if (licenseUsages[computerId].StartDateTime < licenseUsage.StartDateTime)
+                                        {
+                                            add = false;
+                                        }
                                     }
 
-                                    if (string.Equals(licenseUsage.LicenseSignature, message))
+                                    if (add)
                                     {
-                                        Log.Debug("Received message from '{0}' that license is being used", ipEndPoint.Address);
-
-                                        var computerId = licenseUsage.ComputerId;
-
-                                        var add = true;
-                                        if (licenseUsages.ContainsKey(computerId))
-                                        {
-                                            // Only update if this is an older timestamp
-                                            if (licenseUsages[computerId].StartDateTime < licenseUsage.StartDateTime)
-                                            {
-                                                add = false;
-                                            }
-                                        }
-
-                                        if (add)
-                                        {
-                                            licenseUsages[computerId] = licenseUsage;
-                                        }
+                                        licenseUsages[computerId] = licenseUsage;
                                     }
                                 }
                             }
-                            catch (SocketException)
-                            {
-                                // ignore
-                            }
                         }
-                    });
+                        catch (SocketException)
+                        {
+                            // ignore
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -277,7 +267,7 @@ namespace Orc.LicenseManager.Services
             return licenseUsages.Values.ToList();
         }
 
-        private async void HandleIncomingRequests(object ipAddressAsObject)
+        private void HandleIncomingRequests(object ipAddressAsObject)
         {
             try
             {

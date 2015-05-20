@@ -80,12 +80,12 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         #region Commands
         public Command RemoveLicense { get; private set; }
 
-        private async void OnRemoveLicenseExecute()
+        private void OnRemoveLicenseExecute()
         {
             _licenseService.RemoveLicense(LicenseMode.CurrentUser);
             _licenseService.RemoveLicense(LicenseMode.MachineWide);
 
-            await ShowLicenseDialog();
+            ShowLicenseDialog();
         }
 
         public Command ValidateLicenseOnServer { get; private set; }
@@ -114,7 +114,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
             }
 
-            var result = await _licenseValidationService.ValidateLicenseOnServer(licenseString, ServerUri);
+            var result = _licenseValidationService.ValidateLicenseOnServer(licenseString, ServerUri);
 
             await _messageService.Show(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
         }
@@ -123,24 +123,28 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
         private bool OnValidateLicenseOnLocalNetworkCanExecute()
         {
-            var license = _licenseService.CurrentLicense;
-            return (license != null);
+            if (!_licenseService.AnyLicenseExists())
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private async void OnValidateLicenseOnLocalNetworkExecute()
         {
             NetworkValidationResult validationResult = null;
 
-            validationResult = await _networkLicenseService.ValidateLicense();
+            validationResult = _networkLicenseService.ValidateLicense();
 
             await _messageService.Show(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
         }
 
         public Command ShowLicense { get; private set; }
 
-        private async void OnShowLicenseExecute()
+        private void OnShowLicenseExecute()
         {
-            await _licenseVisualizerService.ShowLicense();
+            _licenseVisualizerService.ShowLicense();
         }
 
         public Command ShowLicenseUsage { get; set; }
@@ -168,7 +172,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             _networkLicenseService.Validated += OnNetworkLicenseValidated;
 
             // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
-            await _networkLicenseService.Initialize(TimeSpan.FromSeconds(10));
+            await _networkLicenseService.InitializeAsync(TimeSpan.FromSeconds(10));
 
             if (_licenseService.AnyLicenseExists())
             {
@@ -177,12 +181,12 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
                 if (licenseValidation.HasErrors)
                 {
-                    await ShowLicenseDialog();
+                    ShowLicenseDialog();
                 }
             }
             else
             {
-                await ShowLicenseDialog();
+                ShowLicenseDialog();
             }
         }
 
@@ -204,9 +208,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             }
         }
 
-        private async Task ShowLicenseDialog()
+        private void ShowLicenseDialog()
         {
-            await _licenseVisualizerService.ShowLicense();
+            _licenseVisualizerService.ShowLicense();
         }
         #endregion
     }

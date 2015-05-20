@@ -21,9 +21,9 @@ namespace Orc.LicenseManager.Services
         /// <returns>Task.</returns>
         /// <remarks>Note that this method is optional but will start the service. If this method is not called, the service will be initialized
         /// in the <see cref="ValidateLicense" /> method.</remarks>
-        Task Initialize(TimeSpan pollingInterval = default(TimeSpan));
+        void Initialize(TimeSpan pollingInterval = default(TimeSpan));
 
-        Task<NetworkValidationResult> ValidateLicense();
+        NetworkValidationResult ValidateLicense();
         #endregion
 
         /// <summary>

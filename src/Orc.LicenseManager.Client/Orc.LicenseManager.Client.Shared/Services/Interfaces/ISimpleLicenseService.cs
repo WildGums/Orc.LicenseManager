@@ -7,8 +7,6 @@
 
 namespace Orc.LicenseManager.Services
 {
-    using System.Threading.Tasks;
-
     /// <summary>
     /// A very simple implementation of the license service.
     /// </summary>
@@ -19,7 +17,7 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         /// <remarks>Note that this method might show a dialog so must be run on the UI thread.</remarks>
-        Task<bool> Validate();
+        bool Validate();
 
         /// <summary>
         /// Validates the license on the server. This method is the same as <see cref="SimpleLicenseService.Validate" /> but also checks the server if the license
@@ -27,6 +25,6 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        Task<bool> ValidateOnServer(string serverUrl);
+        bool ValidateOnServer(string serverUrl);
     }
 }

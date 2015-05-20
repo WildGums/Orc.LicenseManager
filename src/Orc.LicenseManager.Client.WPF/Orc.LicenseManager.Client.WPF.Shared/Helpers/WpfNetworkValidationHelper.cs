@@ -19,7 +19,7 @@ namespace Orc.LicenseManager
 
         private static bool _isInErrorHandling;
 
-        public static async void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
+        public static void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
         {
             if (_isInErrorHandling)
             {
@@ -43,7 +43,7 @@ namespace Orc.LicenseManager
 
                     // Force check
                     var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
-                    await networkLicenseService.ValidateLicense();
+                    networkLicenseService.ValidateLicense();
                 }
             }
         }

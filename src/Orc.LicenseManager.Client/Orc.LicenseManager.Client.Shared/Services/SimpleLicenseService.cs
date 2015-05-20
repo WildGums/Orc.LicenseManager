@@ -56,9 +56,9 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public async Task<bool> ValidateOnServer(string serverUrl)
+        public bool ValidateOnServer(string serverUrl)
         {
-            if (! await EnsureLicenseExists())
+            if (! EnsureLicenseExists())
             {
                 return false;
             }
@@ -71,7 +71,7 @@ namespace Orc.LicenseManager.Services
             }
 
             // Server first so it's possible to make licenses invalid
-            var licenseValidationResult = await _licenseValidationService.ValidateLicenseOnServer(licenseString, serverUrl);
+            var licenseValidationResult = _licenseValidationService.ValidateLicenseOnServer(licenseString, serverUrl);
             if (!licenseValidationResult.IsValid)
             {
                 Log.Error("The server returned that the license is invalid and contains the following errors:");
@@ -102,9 +102,9 @@ namespace Orc.LicenseManager.Services
         /// </summary>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         /// <remarks>Note that this method might show a dialog so must be run on the UI thread.</remarks>
-        public async Task<bool> Validate()
+        public bool Validate()
         {
-            if (!await EnsureLicenseExists())
+            if (!EnsureLicenseExists())
             {
                 return false;
             }
@@ -121,11 +121,11 @@ namespace Orc.LicenseManager.Services
             return !licenseValidation.HasErrors;
         }
 
-        private async Task<bool> EnsureLicenseExists()
+        private bool EnsureLicenseExists()
         {
             if (!_licenseService.AnyLicenseExists())
             {
-                await _licenseVisualizerService.ShowLicense();
+                _licenseVisualizerService.ShowLicense();
             }
 
             return _licenseService.AnyLicenseExists();

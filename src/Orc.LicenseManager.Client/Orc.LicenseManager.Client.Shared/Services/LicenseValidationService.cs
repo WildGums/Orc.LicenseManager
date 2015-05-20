@@ -146,7 +146,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="assembly">The assembly to get the information from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public async Task<LicenseValidationResult> ValidateLicenseOnServer(string license, string serverUrl, Assembly assembly = null)
+        public LicenseValidationResult ValidateLicenseOnServer(string license, string serverUrl, Assembly assembly = null)
         {
             Argument.IsNotNullOrWhitespace(() => license);
             Argument.IsNotNullOrWhitespace(() => serverUrl);
@@ -196,13 +196,13 @@ namespace Orc.LicenseManager.Services
                     sw.Write(json);
                 }
 
-                using (var httpWebResponse = await webRequest.GetResponseAsync())
+                using (var httpWebResponse = webRequest.GetResponse())
                 {
                     using (var responseStream = httpWebResponse.GetResponseStream())
                     {
                         using (var streamReader = new StreamReader(responseStream))
                         {
-                            var json = await streamReader.ReadToEndAsync();
+                            var json = streamReader.ReadToEnd();
                             validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(json);
                         }
                     }
