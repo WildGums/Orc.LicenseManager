@@ -16,6 +16,7 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<IApplicationIdService, ApplicationIdService>();
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
+        serviceLocator.RegisterType<ILicenseLocationService, LicenseLocationService>();
         serviceLocator.RegisterType<ILicenseValidationService, LicenseValidationService>();
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
         serviceLocator.RegisterType<INetworkLicenseService, NetworkLicenseService>();

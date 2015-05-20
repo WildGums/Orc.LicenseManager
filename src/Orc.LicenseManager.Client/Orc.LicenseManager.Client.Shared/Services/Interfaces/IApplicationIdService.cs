@@ -10,5 +10,9 @@ namespace Orc.LicenseManager.Services
     public interface IApplicationIdService
     {
         string ApplicationId { get; set; }
+
+        string CompanyName { get; set; }
+
+        string ProductName { get; set; }
     }
 }

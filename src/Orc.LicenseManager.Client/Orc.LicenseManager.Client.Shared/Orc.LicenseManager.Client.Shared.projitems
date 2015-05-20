@@ -39,11 +39,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IApplicationIdService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseInfoService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseLocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseVisualizerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\INetworkLicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISimpleLicenseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseLocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NetworkLicenseService.cs" />

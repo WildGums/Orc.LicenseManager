@@ -15,6 +15,7 @@ namespace Orc.LicenseManager.Services
     using System.Xml;
     using Catel;
     using Catel.Logging;
+    using Catel.Reflection;
     using Models;
     using Portable.Licensing;
 
@@ -23,25 +24,24 @@ namespace Orc.LicenseManager.Services
     /// </summary>
     public class LicenseService : ILicenseService
     {
-        private readonly IApplicationIdService _applicationIdService;
-
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region Fields
+        private readonly ILicenseLocationService _licenseLocationService;
         #endregion
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
         /// </summary>
-        /// <param name="applicationIdService">The application identifier service.</param>
-        public LicenseService(IApplicationIdService applicationIdService)
+        /// <param name="licenseLocationService">The application identifier service.</param>
+        public LicenseService(ILicenseLocationService licenseLocationService)
         {
-            Argument.IsNotNull(() => applicationIdService);
+            Argument.IsNotNull(() => licenseLocationService);
 
-            _applicationIdService = applicationIdService;
+            _licenseLocationService = licenseLocationService;
         }
         #endregion
 
@@ -63,8 +63,9 @@ namespace Orc.LicenseManager.Services
 
             try
             {
-                string xmlFilePath = GetLicenseInfoPath(licenseMode);
                 var licenseObject = License.Load(license);
+
+                var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
 
                 using (var xmlWriter = XmlWriter.Create(xmlFilePath))
                 {
@@ -89,7 +90,7 @@ namespace Orc.LicenseManager.Services
         /// <param name="licenseMode"></param>
         public void RemoveLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
-            string xmlFilePath = GetLicenseInfoPath(licenseMode);
+            var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
 
             if (File.Exists(xmlFilePath))
             {
@@ -105,7 +106,7 @@ namespace Orc.LicenseManager.Services
         /// <returns>returns <c>true</c> if exists else <c>false</c></returns>
         public bool LicenseExists(LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
-            string xmlFilePath = GetLicenseInfoPath(licenseMode);
+            var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
             if (File.Exists(xmlFilePath))
             {
                 Log.Debug("License exists");
@@ -125,18 +126,14 @@ namespace Orc.LicenseManager.Services
         {
             try
             {
-                var xmlFilePath = GetLicenseInfoPath(licenseMode);
+                var licenseString = _licenseLocationService.LoadLicense(licenseMode);
+                var licenseObject = License.Load(licenseString);
 
-                using (var xmlReader = XmlReader.Create(xmlFilePath))
-                {
-                    var licenseObject = License.Load(xmlReader);
+                CurrentLicense = licenseObject;
 
-                    CurrentLicense = licenseObject;
+                Log.Debug("License loaded: {0}", licenseObject.ToString());
 
-                    Log.Debug("License loaded: {0}", licenseObject.ToString());
-
-                    return licenseObject.ToString();
-                }
+                return licenseObject.ToString();
             }
             catch (Exception ex)
             {
@@ -198,18 +195,6 @@ namespace Orc.LicenseManager.Services
             }
 
             return xmlDataList;
-        }
-        #endregion
-
-        #region Methods
-        private string GetLicenseInfoPath(LicenseMode licenseMode)
-        {
-            if (licenseMode == LicenseMode.CurrentUser)
-            {
-                return Path.Combine(Catel.IO.Path.GetApplicationDataDirectory(), "LicenseInfo.xml");
-            }
-
-            return Path.Combine(Catel.IO.Path.GetApplicationDataDirectoryForAllUsers(), "LicenseInfo.xml");
         }
         #endregion
     }
