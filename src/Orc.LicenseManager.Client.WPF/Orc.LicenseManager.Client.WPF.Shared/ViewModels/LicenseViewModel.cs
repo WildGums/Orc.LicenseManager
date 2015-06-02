@@ -285,7 +285,7 @@ namespace Orc.LicenseManager.ViewModels
 
         protected override async Task<bool> Cancel()
         {
-            if (!_licenseService.AnyLicenseExists())
+            if (!_licenseService.AnyExistingLicense())
             {
                 Log.Debug("Closing application");
 

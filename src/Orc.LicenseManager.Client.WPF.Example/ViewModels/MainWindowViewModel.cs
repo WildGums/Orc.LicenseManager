@@ -97,7 +97,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 return false;
             }
 
-            if (!_licenseService.AnyLicenseExists())
+            if (!_licenseService.AnyExistingLicense())
             {
                 return false;
             }
@@ -123,7 +123,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
         private bool OnValidateLicenseOnLocalNetworkCanExecute()
         {
-            if (!_licenseService.AnyLicenseExists())
+            if (!_licenseService.AnyExistingLicense())
             {
                 return false;
             }
@@ -174,9 +174,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
             await _networkLicenseService.InitializeAsync(TimeSpan.FromSeconds(10));
 
-            if (_licenseService.AnyLicenseExists())
+            if (_licenseService.AnyExistingLicense())
             {
-                var licenseString = _licenseService.LoadExistedLicense();
+                var licenseString = _licenseService.LoadExistingLicense();
                 var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
 
                 if (licenseValidation.HasErrors)

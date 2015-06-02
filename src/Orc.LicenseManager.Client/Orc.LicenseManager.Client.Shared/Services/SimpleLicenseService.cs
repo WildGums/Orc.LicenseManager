@@ -63,8 +63,7 @@ namespace Orc.LicenseManager.Services
                 return false;
             }
 
-            var licenseString = _licenseService.LoadExistedLicense();
-
+            var licenseString = _licenseService.LoadExistingLicense();
             if (string.IsNullOrWhiteSpace(licenseString))
             {
                 return false;
@@ -109,8 +108,7 @@ namespace Orc.LicenseManager.Services
                 return false;
             }
 
-            var licenseString = _licenseService.LoadExistedLicense();
-
+            var licenseString = _licenseService.LoadExistingLicense();
             if (string.IsNullOrWhiteSpace(licenseString))
             {
                 return false;
@@ -123,12 +121,12 @@ namespace Orc.LicenseManager.Services
 
         private bool EnsureLicenseExists()
         {
-            if (!_licenseService.AnyLicenseExists())
+            if (!_licenseService.AnyExistingLicense())
             {
                 _licenseVisualizerService.ShowLicense();
             }
 
-            return _licenseService.AnyLicenseExists();
+            return _licenseService.AnyExistingLicense();
         }
         #endregion
     }
