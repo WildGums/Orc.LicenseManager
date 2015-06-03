@@ -8,12 +8,13 @@
 namespace Orc.LicenseManager.Services
 {
     using System.Threading.Tasks;
+    using Catel.Threading;
 
     public static class IIdentificationServiceExtensions
     {
-        public static async Task<string> GetMachineIdAsync(this IIdentificationService identificationService)
+        public static Task<string> GetMachineIdAsync(this IIdentificationService identificationService)
         {
-            return await Task.Factory.StartNew(() => identificationService.GetMachineId());
+            return TaskHelper.Run(() => identificationService.GetMachineId());
         }
     }
 }

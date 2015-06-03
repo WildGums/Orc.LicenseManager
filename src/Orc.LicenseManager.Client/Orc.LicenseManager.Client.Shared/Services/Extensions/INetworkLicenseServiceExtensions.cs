@@ -9,12 +9,13 @@ namespace Orc.LicenseManager.Services
 {
     using System;
     using System.Threading.Tasks;
+    using Catel.Threading;
 
     public static class INetworkLicenseServiceExtensions
     {
-        public static async Task InitializeAsync(this INetworkLicenseService networkLicenseService, TimeSpan pollingInterval = default(TimeSpan))
+        public static Task InitializeAsync(this INetworkLicenseService networkLicenseService, TimeSpan pollingInterval = default(TimeSpan))
         {
-            await Task.Factory.StartNew(() => networkLicenseService.Initialize(pollingInterval));
+            return TaskHelper.Run(() => networkLicenseService.Initialize(pollingInterval));
         }
     }
 }
