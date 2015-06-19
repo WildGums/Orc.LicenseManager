@@ -212,7 +212,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private async void OnRemoveLicenseExecute()
         {
-            if (await _messageService.Show("Are you sure you want to delete the existing license ?", "Delete existing license ?", MessageButton.YesNo,
+            if (await _messageService.Show("Are you sure you want to delete the existing license?", "Delete existing license?", MessageButton.YesNo,
                 MessageImage.Question) == MessageResult.Yes)
             {
                 _licenseService.RemoveLicense(LicenseMode);
