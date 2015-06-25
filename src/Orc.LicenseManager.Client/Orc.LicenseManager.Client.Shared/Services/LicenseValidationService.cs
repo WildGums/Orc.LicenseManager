@@ -322,16 +322,12 @@ namespace Orc.LicenseManager.Services
                         validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The version was not a valid version value"));
                     }
                 }
-
-                Log.Warning("The XML is invalid");
             }
             catch (XmlException xmlex)
             {
                 Log.Debug(xmlex);
 
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The license data is not a license"));
-
-                Log.Warning("The XML is invalid");
             }
             catch (Exception ex)
             {
@@ -344,10 +340,12 @@ namespace Orc.LicenseManager.Services
                 //}
 
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(ex.Message));
-
-                Log.Warning("The XML is invalid");
             }
 
+            if (validationContext.HasErrors || validationContext.HasWarnings)
+            {
+                Log.Warning("The XML is invalid");
+            }
             return validationContext;
         }
         #endregion
