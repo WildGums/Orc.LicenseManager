@@ -137,7 +137,7 @@ namespace Orc.LicenseManager.Services
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to load the license, returning empty string");
+                Log.Debug(ex, "Failed to load the license, returning empty string");
                 return string.Empty;
             }
         }
