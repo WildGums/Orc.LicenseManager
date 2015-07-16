@@ -48,7 +48,7 @@ namespace Orc.LicenseManager.Services
             {
                 var licenseInfo = _licenseInfoService.GetLicenseInfo();
                 _uiVisualizerService.ShowDialog<LicenseViewModel>(licenseInfo);
-            });
+            }, true);
         }
         #endregion
     }
