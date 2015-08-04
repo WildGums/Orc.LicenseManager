@@ -7,6 +7,7 @@
 
 namespace Orc.LicenseManager.ViewModels
 {
+    using System.Threading.Tasks;
     using System.Windows;
     using Catel.MVVM;
 
@@ -23,7 +24,7 @@ namespace Orc.LicenseManager.ViewModels
         {
             Title = "Clipboard";
 
-            Exit = new Command(OnExitExecute);
+            Exit = new TaskCommand(OnExitExecuteAsync);
 
             var clipBoardData = Clipboard.GetText();
             if (string.IsNullOrWhiteSpace(clipBoardData))
@@ -49,14 +50,14 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Gets the Exit command.
         /// </summary>
-        public Command Exit { get; private set; }
+        public TaskCommand Exit { get; private set; }
         #endregion
 
         #region Methods
         /// <summary>
         /// Method to invoke when the Exit command is executed.
         /// </summary>
-        private async void OnExitExecute()
+        private async Task OnExitExecuteAsync()
         {
             await CancelAndCloseViewModel();
         }

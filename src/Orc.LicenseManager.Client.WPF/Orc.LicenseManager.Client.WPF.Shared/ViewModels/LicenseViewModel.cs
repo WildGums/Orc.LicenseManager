@@ -85,7 +85,7 @@ namespace Orc.LicenseManager.ViewModels
             ShowClipboard = new Command(OnShowClipboardExecute);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
-            RemoveLicense = new Command(OnRemoveLicenseExecute, OnRemoveLicenseCanExecute);
+            RemoveLicense = new TaskCommand(OnRemoveLicenseExecuteAsync, OnRemoveLicenseCanExecute);
         }
 
         #endregion
@@ -94,23 +94,12 @@ namespace Orc.LicenseManager.ViewModels
 
         public LicenseMode LicenseMode { get; set; }
 
-        /// <summary>
-        /// Gets the Close command.
-        /// </summary>
-        /// <summary>
-        /// Gets the WebsiteClick command.
-        /// </summary>
-        /// <summary>
-        /// Gets or sets the property value.
-        /// </summary>
         public bool FailureOccurred { get; set; }
 
         /// <summary>
         /// Gets the failure message.
         /// </summary>
-        /// <value>
-        /// The failure message.
-        /// </value>
+        /// <value>The failure message.</value>
         public string FailureMessage { get; private set; }
 
         /// <summary>
@@ -126,7 +115,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Gets the RemoveLicense command.
         /// </summary>
-        public Command RemoveLicense { get; private set; }
+        public TaskCommand RemoveLicense { get; private set; }
 
         [Model]
         [Catel.Fody.Expose("PurchaseUrl")]
@@ -210,7 +199,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Method to invoke when the RemoveLicense command is executed.
         /// </summary>
-        private async void OnRemoveLicenseExecute()
+        private async Task OnRemoveLicenseExecuteAsync()
         {
             if (await _messageService.Show("Are you sure you want to delete the existing license?", "Delete existing license?", MessageButton.YesNo,
                 MessageImage.Question) == MessageResult.Yes)
@@ -238,12 +227,12 @@ namespace Orc.LicenseManager.ViewModels
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
             UpdateLicenseInfo();
         }
 
-        protected override async Task<bool> Save()
+        protected override async Task<bool> SaveAsync()
         {
             var licenseExists = _licenseService.LicenseExists(LicenseMode);
             
@@ -283,7 +272,7 @@ namespace Orc.LicenseManager.ViewModels
             return true;
         }
 
-        protected override async Task<bool> Cancel()
+        protected override async Task<bool> CancelAsync()
         {
             if (!_licenseService.AnyExistingLicense())
             {

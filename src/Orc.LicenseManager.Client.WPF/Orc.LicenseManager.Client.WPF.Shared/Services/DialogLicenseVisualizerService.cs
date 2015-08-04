@@ -7,7 +7,6 @@
 
 namespace Orc.LicenseManager.Services
 {
-    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
     using Catel.Services;

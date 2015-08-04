@@ -47,10 +47,3 @@ using System.Resources;
 [assembly: AssemblyConfiguration("NET45, Release")]
 
 #endif
-
-// CLS compliant
-#if !NETFX_CORE
-
-[assembly: CLSCompliant(true)]
-
-#endif

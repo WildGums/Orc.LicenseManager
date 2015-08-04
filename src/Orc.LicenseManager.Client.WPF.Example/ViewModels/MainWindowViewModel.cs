@@ -38,7 +38,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         public MainWindowViewModel(ILicenseService licenseService, ILicenseValidationService licenseValidationService,
             IMessageService messageService, INetworkLicenseService networkLicenseService,
             ILicenseVisualizerService licenseVisualizerService, IUIVisualizerService uiVisualizerService)
-            : base()
         {
             Argument.IsNotNull(() => licenseService);
             Argument.IsNotNull(() => licenseValidationService);
@@ -56,7 +55,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
             RemoveLicense = new Command(OnRemoveLicenseExecute);
             ValidateLicenseOnServer = new Command(OnValidateLicenseOnServerExecute, OnValidateLicenseOnServerCanExecute);
-            ValidateLicenseOnLocalNetwork = new Command(OnValidateLicenseOnLocalNetworkExecute, OnValidateLicenseOnLocalNetworkCanExecute);
+            ValidateLicenseOnLocalNetwork = new TaskCommand(OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
             ShowLicense = new Command(OnShowLicenseExecute);
             ShowLicenseUsage = new Command(OnShowLicenseUsageExecute);
 
@@ -119,7 +118,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             await _messageService.Show(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
         }
 
-        public Command ValidateLicenseOnLocalNetwork { get; private set; }
+        public TaskCommand ValidateLicenseOnLocalNetwork { get; private set; }
 
         private bool OnValidateLicenseOnLocalNetworkCanExecute()
         {
@@ -131,7 +130,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             return true;
         }
 
-        private async void OnValidateLicenseOnLocalNetworkExecute()
+        private async Task OnValidateLicenseOnLocalNetworkExecuteAsync()
         {
             NetworkValidationResult validationResult = null;
 
@@ -167,12 +166,12 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         #endregion
 
         #region Methods
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
             _networkLicenseService.Validated += OnNetworkLicenseValidated;
 
             // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
-            await _networkLicenseService.InitializeAsync(TimeSpan.FromSeconds(10));
+            await Task.Factory.StartNew(() => _networkLicenseService.Initialize(TimeSpan.FromSeconds(10)));
 
             if (_licenseService.AnyExistingLicense())
             {

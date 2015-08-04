@@ -18,7 +18,7 @@ namespace Orc.LicenseManager
 
         private static bool _isInErrorHandling;
 
-        public static async void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
+        public static void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
         {
             if (_isInErrorHandling)
             {

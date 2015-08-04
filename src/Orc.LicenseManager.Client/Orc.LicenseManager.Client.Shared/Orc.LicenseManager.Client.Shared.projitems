@@ -31,7 +31,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\ApplicationIdService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EmptyLicenseVisualizerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\NetworkValidatedEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IIdentificationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\INetworkLicenseServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseValidationServiceExtensions.cs" />

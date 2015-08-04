@@ -9,13 +9,10 @@ namespace Orc.LicenseManager.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
-    using System.Reflection;
     using System.Xml;
     using Catel;
     using Catel.Logging;
-    using Catel.Reflection;
     using Models;
     using Portable.Licensing;
 

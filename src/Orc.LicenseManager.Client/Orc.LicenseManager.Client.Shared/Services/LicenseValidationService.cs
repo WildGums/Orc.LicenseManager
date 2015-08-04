@@ -13,7 +13,6 @@ namespace Orc.LicenseManager.Services
     using System.Linq;
     using System.Net;
     using System.Reflection;
-    using System.Threading.Tasks;
     using System.Xml;
     using Catel;
     using Catel.Data;

@@ -21,21 +21,9 @@ namespace Orc.LicenseManager
             return (license != null) ? license.Expiration : (DateTime?)null;
         }
 
-        [Obsolete("Use AnyLicenseExists instead")]
-        public static bool AnyLicenseExists(this ILicenseService licenseService)
-        {
-            return AnyExistingLicense(licenseService);
-        }
-
         public static bool AnyExistingLicense(this ILicenseService licenseService)
         {
             return licenseService.LicenseExists(LicenseMode.CurrentUser) || licenseService.LicenseExists(LicenseMode.MachineWide);
-        }
-
-        [Obsolete("Use LoadExistingLicense instead")]
-        public static string LoadExistedLicense(this ILicenseService licenseService)
-        {
-            return LoadExistingLicense(licenseService);
         }
 
         public static string LoadExistingLicense(this ILicenseService licenseService)
