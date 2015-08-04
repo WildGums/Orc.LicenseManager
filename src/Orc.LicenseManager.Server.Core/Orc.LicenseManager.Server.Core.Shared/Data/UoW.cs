@@ -2,14 +2,28 @@
 {
     using System;
     using System.Data.Entity;
-    using System.Data.Entity.Core.Objects;
     using System.Linq;
+    using System.Threading.Tasks;
     using Catel.IoC;
     using Services;
 
     public partial class  UoW
     {
-        public override void SaveChanges(SaveOptions saveOptions = SaveOptions.None | SaveOptions.AcceptAllChangesAfterSave | SaveOptions.DetectChangesBeforeSave)
+        public override void SaveChanges()
+        {
+            UpdateCreationAndModificationDates();
+
+            base.SaveChanges();
+        }
+
+        public override Task SaveChangesAsync()
+        {
+            UpdateCreationAndModificationDates();
+
+            return base.SaveChangesAsync();
+        }
+
+        private void UpdateCreationAndModificationDates()
         {
             foreach (var ihascreatedate in DbContext.ChangeTracker.Entries<ICreator>().Where(x => x.State == EntityState.Added))
             {
@@ -27,7 +41,6 @@
             {
                 ihasmodifydate.Entity.ModificationDate = DateTime.UtcNow;
             }
-            base.SaveChanges(saveOptions);
         }
     }
 }
