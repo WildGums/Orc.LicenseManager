@@ -201,7 +201,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private async Task OnRemoveLicenseExecuteAsync()
         {
-            if (await _messageService.Show("Are you sure you want to delete the existing license?", "Delete existing license?", MessageButton.YesNo,
+            if (await _messageService.ShowAsync("Are you sure you want to delete the existing license?", "Delete existing license?", MessageButton.YesNo,
                 MessageImage.Question) == MessageResult.Yes)
             {
                 _licenseService.RemoveLicense(LicenseMode);
@@ -260,7 +260,7 @@ namespace Orc.LicenseManager.ViewModels
 
             if (oppositeLicenseExists)
             {
-                var messageResult = await _messageService.Show(string.Format("The license for {0} has been successfully created, would you like to remove license for {1}?",
+                var messageResult = await _messageService.ShowAsync(string.Format("The license for {0} has been successfully created, would you like to remove license for {1}?",
                     LicenseMode.ToDescriptionText(), oppositeLicenseMode.ToDescriptionText()), "Remove license confirmation", MessageButton.YesNo);
 
                 if (messageResult == MessageResult.Yes)

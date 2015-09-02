@@ -54,7 +54,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             _uiVisualizerService = uiVisualizerService;
 
             RemoveLicense = new Command(OnRemoveLicenseExecute);
-            ValidateLicenseOnServer = new Command(OnValidateLicenseOnServerExecute, OnValidateLicenseOnServerCanExecute);
+            ValidateLicenseOnServer = new TaskCommand(OnValidateLicenseOnServerExecuteAsync, OnValidateLicenseOnServerCanExecute);
             ValidateLicenseOnLocalNetwork = new TaskCommand(OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
             ShowLicense = new Command(OnShowLicenseExecute);
             ShowLicenseUsage = new Command(OnShowLicenseUsageExecute);
@@ -87,7 +87,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             ShowLicenseDialog();
         }
 
-        public Command ValidateLicenseOnServer { get; private set; }
+        public TaskCommand ValidateLicenseOnServer { get; private set; }
 
         private bool OnValidateLicenseOnServerCanExecute()
         {
@@ -104,7 +104,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             return true;
         }
 
-        private async void OnValidateLicenseOnServerExecute()
+        private async Task OnValidateLicenseOnServerExecuteAsync()
         {
             var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
 
@@ -115,7 +115,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
             var result = _licenseValidationService.ValidateLicenseOnServer(licenseString, ServerUri);
 
-            await _messageService.Show(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
+            await _messageService.ShowAsync(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
         }
 
         public TaskCommand ValidateLicenseOnLocalNetwork { get; private set; }
@@ -136,7 +136,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
             validationResult = _networkLicenseService.ValidateLicense();
 
-            await _messageService.Show(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
+            await _messageService.ShowAsync(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
         }
 
         public Command ShowLicense { get; private set; }
@@ -198,11 +198,11 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
                 if (validationResult.IsCurrentUserLatestUser())
                 {
-                    await _messageService.Show(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
+                    await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
                 }
                 else
                 {
-                    await _messageService.Show(string.Format("License is invalid, using '{0}' of '{1}' licenses. The latest user is '{2}' with ip '{3}', you can continue working", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers, latestUsage.UserName, latestUsage.Ip));
+                    await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. The latest user is '{2}' with ip '{3}', you can continue working", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers, latestUsage.UserName, latestUsage.Ip));
                 }
             }
         }

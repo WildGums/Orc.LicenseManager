@@ -59,7 +59,7 @@ namespace Orc.LicenseManager.ViewModels
         /// </summary>
         private async Task OnExitExecuteAsync()
         {
-            await CancelAndCloseViewModel();
+            await this.CancelAndCloseViewModelAsync();
         }
         #endregion
     }
