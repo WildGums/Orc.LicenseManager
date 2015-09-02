@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @*<link rel="stylesheet" type="text/css" href="http://bootswatch.com/superhero/bootstrap.min.css" />*@
+    <link rel="stylesheet" type="text/css" href="http://bootswatch.com/united/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://bootswatch.com/united/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/ng-table.min.css" />
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript" src="/Scripts/ng-table.min.js"></script>
+    <script type="text/javascript" src="/Scripts/ZeroClipboard.min.js"></script>
+
+    <script type="text/javascript" src="/MyScripts/Angular/LMapp.js"></script>
+
+    <script type="text/javascript" src="/MyScripts/Angular/Controllers/LicenseController.js"></script>
+    <script type="text/javascript" src="/MyScripts/Angular/Controllers/ItemsController.js"></script>
+    <script type="text/javascript" src="/MyScripts/Angular/Controllers/DashboardController.js"></script>
+
+    <script type="text/javascript" src="/MyScripts/maintablezeroclip.js"></script>
+</head>
+<body ng-app="LMApp">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Orc License Manager", "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (User.IsInRole("Admin"))
+                {
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Licenses", "Index", "License")</li>
+                        <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
+                        <li>@Html.ActionLink("Products", "Index", "Product")</li>
+                    </ul>
+                }
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Orc LicenseManager</p>
+        </footer>
+    </div>
+
+
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>

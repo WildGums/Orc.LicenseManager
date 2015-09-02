@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c42c5a3a-9146-419d-a2ef-5a8022a9e658</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.LicenseManager</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\Extensions\LicenseModeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\LicenseMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpirationBehaviors\ExpirationBehaviorBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpirationBehaviors\Interfaces\IExpirationBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpirationBehaviors\PreventUsageOfAnyVersionExpirationBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpirationBehaviors\PreventUsageOfLaterReleasedVersionsBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LicenseExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\NetworkValidationResultExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetworkValidationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkLicenseUsage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ServerLicenseValidation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\XmlDataModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ApplicationIdService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EmptyLicenseVisualizerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\NetworkValidatedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\INetworkLicenseServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseValidationServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IdentificationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IApplicationIdService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IIdentificationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseInfoService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseLocationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseValidationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseVisualizerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\INetworkLicenseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISimpleLicenseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseLocationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseValidationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NetworkLicenseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SimpleLicenseService.cs" />
+  </ItemGroup>
+</Project>

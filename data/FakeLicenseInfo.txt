@@ -1,0 +1,31 @@
+Public:
+MIIBKjCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBA0IABGO1VK0oiRQgYYynBbl+QVFk4VEAQmIqI0EkDmUcY6SP00lP2B6a6KVAtS2QY5qKld4ug0+IBm0eH7gk/E6yfOk=
+
+License:
+<License>
+  <Expiration>Fri, 28 Nov 2014 23:00:00 GMT</Expiration>
+  <Id>b8be0ff1-b76a-48e1-8e99-dcf4beb2e527</Id>
+  <Type>Standard</Type>
+  <Quantity>1</Quantity>
+  <ProductFeatures>
+    <Feature name="FirstName">John</Feature>
+    <Feature name="LastName">Doe</Feature>
+    <Feature name="Email">john@doe.com</Feature>
+    <Feature name="Version">2.0</Feature>
+  </ProductFeatures>
+  <Signature>MEYCIQDy3sr8qDwEFc/KegDbjWqm0YppikvlsuZfLyqpAJABKAIhANe1kDtTpG3Z4WMo/hSYiVxAbninJ9bNt4jSjqqNhbKh</Signature>
+</License>
+
+License:
+<License>
+  <Expiration>Sun, 31 Jul 2016 22:00:00 GMT</Expiration>
+  <Id>d77d20e0-c2b8-4182-9ec9-722b9cf76def</Id>
+  <Type>Standard</Type>
+  <Quantity>1</Quantity>
+  <ProductFeatures>
+    <Feature name="FirstName">John</Feature>
+    <Feature name="LastName">Doe</Feature>
+    <Feature name="Email">john@doe.com</Feature>
+  </ProductFeatures>
+  <Signature>MEQCIDmX/OnvsXwLXfk2CNd5bwxPOx52e3sXSbkfdYnpuEGSAiAm5Cxi5VE4twsTwRDqynHr9fjaJOA+a0oAfUn47rxXlQ==</Signature>
+</License>

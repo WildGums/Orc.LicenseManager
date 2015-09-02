@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Orc License Manager</h1>
+    <p class="lead">Orc license manager allows you to easily create licenses for your products you wish to disturb. <br />You'll need a user account to access the license manager server.</p>
+    <p><a href="https://github.com/Orcomp/Orc.LicenseManager" class="btn btn-primary btn-large">Github &raquo;</a></p>
+</div>
+@if (Request.IsAuthenticated)
+{
+    <div class="row" ng-controller="DashboardController">
+        <div class="col-md-3 ">
+            <div class="jumbotron" ng-hide="products.length==0">
+                <h5>Latest products</h5>
+                <div ng-repeat="product in products">
+                    <a href="/Product/Details?id={{product.Id}}">{{product.Name}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 ">
+            <div class="jumbotron" ng-hide="customers.length==0">
+                <h5>Latest Customers</h5>
+                <div ng-repeat="customer in customers">
+                    <a href="/Customer/Details?id={{customer.Id}}">{{customer.FullName}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 ">
+            <div class="jumbotron" ng-hide="licenses.length==0">
+                <h5>Latest Licenses</h5>
+                <div ng-repeat="license in licenses">
+                    A <a href="/License/Details?id={{license.Id}}">license</a> has been created for <a href="/Customer/Details?id={{license.Customer.Id}}">{{license.Customer.Name}}</a> ( <a href="/Product/Details?id={{license.Product.Id}}">{{license.Product.Name}}</a> )
+                </div>
+            </div>
+        </div>
+    </div>
+}

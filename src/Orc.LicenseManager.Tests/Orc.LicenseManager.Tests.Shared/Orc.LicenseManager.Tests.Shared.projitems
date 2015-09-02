@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d9bd9c88-20c3-458a-9246-2ec0f55fc581</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Orc.LicenseManager.Tests.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Client\ExpirationBehaviors\PreventUsageOfAnyVersionExpirationBehaviorFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Client\ExpirationBehaviors\PreventUsageOfLaterReleasedVersionsExpirationBehaviorFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Client\Models\NetworkLicenseUsageTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Client\Services\LicenseServiceFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestEnvironment.cs" />
+  </ItemGroup>
+</Project>
