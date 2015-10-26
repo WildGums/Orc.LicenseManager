@@ -49,7 +49,7 @@ namespace Orc.LicenseManager.Services
                     Log.Debug("* {0} => {1}", value, hashedValue);
                 }
 
-                var machineId = string.Join("|", hashedValues);
+                var machineId = string.Join(LicenseElements.IdentificationSeparator, hashedValues);
 
                 Log.Debug("Hashed machine id '{0}'", machineId);
 
@@ -174,8 +174,12 @@ namespace Orc.LicenseManager.Services
                             }
                         }
 
-                        result = managementObject[wmiProperty].ToString();
-                        break;
+                        var value = managementObject[wmiProperty];
+                        if (value != null)
+                        {
+                            result = value.ToString();
+                            break;
+                        }
                     }
                     catch (Exception ex)
                     {
