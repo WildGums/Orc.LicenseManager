@@ -41,8 +41,8 @@ namespace Orc.LicenseManager.Services
 
             Log.Debug("Validating machine id '{0}' against expected machine id '{1}'", machineId, machineIdToValidate);
 
-            var machineSplitted = machineId.Split(new []{'|'});
-            var expectedSplitter = machineIdToValidate.Split(new[] { '|' });
+            var machineSplitted = machineId.Split(new[] { LicenseElements.IdentificationSeparator }, StringSplitOptions.None);
+            var expectedSplitter = machineIdToValidate.Split(new[] { LicenseElements.IdentificationSeparator }, StringSplitOptions.None);
 
             if (machineSplitted.Length != expectedSplitter.Length)
             {
@@ -74,7 +74,7 @@ namespace Orc.LicenseManager.Services
 
             if (invalidEntries > 0)
             {
-                var warning = string.Format("One of the values is not equal, but we have a treshold of {0} so accepting machine id", Threshold);
+                var warning = string.Format("One of the values is not equal, but we have a threshold of {0} so accepting machine id", Threshold);
                 Log.Warning(warning);
 
                 validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
