@@ -12,183 +12,82 @@ namespace Orc.LicenseManager.Services
     using System.Management;
     using System.Security.Cryptography;
     using System.Text;
+    using SystemInfo;
+    using Catel;
     using Catel.Logging;
+    using Catel.Threading;
+    using MethodTimer;
 
     public class IdentificationService : IIdentificationService
     {
+        private readonly ISystemIdentificationService _systemIdentificationService;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly object _lock = new object();
         private string _machineId = string.Empty;
 
+        public IdentificationService(ISystemIdentificationService systemIdentificationService)
+        {
+            Argument.IsNotNull(() => systemIdentificationService);
+
+            _systemIdentificationService = systemIdentificationService;
+        }
+
         public virtual string GetMachineId()
         {
             lock (_lock)
             {
-                if (!string.IsNullOrWhiteSpace(_machineId))
+                if (string.IsNullOrWhiteSpace(_machineId))
                 {
-                    return _machineId;
+                    _machineId = CalculateMachineId();
                 }
 
-                Log.Debug("Retrieving machine id");
-
-                var values = new List<string>();
-                values.Add("CPU >> " + GetCpuId());
-                values.Add("BASE >> " + GetMotherboardId());
-                values.Add("HDD >> " + GetHardDriveId());
-                values.Add("GPU >> " + GetGpuId());
-                //values.Add("MAC >> " + GetMacId());
-
-                var hashedValues = new List<string>();
-
-                foreach (var value in values)
-                {
-                    var hashedValue = CalculateMd5Hash(value);
-                    hashedValues.Add(hashedValue);
-
-                    Log.Debug("* {0} => {1}", value, hashedValue);
-                }
-
-                var machineId = string.Join(LicenseElements.IdentificationSeparator, hashedValues);
-
-                Log.Debug("Hashed machine id '{0}'", machineId);
-
-                _machineId = machineId;
+                return _machineId;
             }
-
-            return _machineId;
         }
 
-        protected virtual string GetMacId()
+        [Time]
+        private string CalculateMachineId()
         {
-            var identifier = "Wireless: " + GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Wireless")
-                + "Wired: " + GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Ethernet 802.3");
+            Log.Debug("Retrieving machine id");
 
-            Log.Debug("Using mac id '{0}'", identifier);
+            var cpuId = string.Empty;
+            var motherboardId = string.Empty;
+            var hddId = string.Empty;
+            var gpuId = string.Empty;
 
-            return identifier;
-        }
-
-        protected virtual string GetGpuId()
-        {
-            var identifier = GetIdentifier("Win32_VideoController", "DeviceID")
-                + GetIdentifier("Win32_VideoController", "Name");
-
-            Log.Debug("Using gpu id '{0}'", identifier);
-
-            return identifier;
-        }
-
-        protected virtual string GetHardDriveId()
-        {
-            var identifier = GetIdentifier("Win32_DiskDrive", "Model", "InterfaceType", "!USB")
-                + GetIdentifier("Win32_DiskDrive", "Manufacturer", "InterfaceType", "!USB")
-                + GetIdentifier("Win32_DiskDrive", "Signature", "InterfaceType", "!USB")
-                + GetIdentifier("Win32_DiskDrive", "TotalHeads", "InterfaceType", "!USB")
-                + GetIdentifier("Win32_DiskDrive", "DeviceID", "InterfaceType", "!USB")
-                + GetIdentifier("Win32_DiskDrive", "SerialNumber", "InterfaceType", "!USB");
-
-            Log.Debug("Using hdd id '{0}'", identifier);
-
-            return identifier;
-        }
-
-        protected virtual string GetMotherboardId()
-        {
-            // Note: not sure why this returns empty strings on some machines
-            var identifier = GetIdentifier("Win32_ComputerSystemProduct", "IdentifyingNumber")
-                + GetIdentifier("Win32_ComputerSystemProduct", "UUID");
-
-            Log.Debug("Using motherboard id '{0}'", identifier);
-
-            return identifier;
-        }
-
-        protected virtual string GetCpuId()
-        {
-            // Uses first CPU identifier available in order of preference
-            var identifier = GetIdentifier("Win32_Processor", "UniqueId");
-            if (!string.IsNullOrWhiteSpace(identifier))
+            TaskHelper.RunAndWait(new Action[]
             {
-                Log.Debug("Using Processor.UniqueId to identify cpu '{0}'", identifier);
+                    () => cpuId = "CPU >> " + _systemIdentificationService.GetCpuId(),
+                    () => motherboardId = "BASE >> " + _systemIdentificationService.GetMotherboardId(),
+                    () => hddId = "HDD >> " + _systemIdentificationService.GetHardDriveId(),
+                    () => gpuId = "GPU >> " + _systemIdentificationService.GetGpuId(),
+                //() => gpuId = "MAC >> " + _systemIdentificationService.GetMacId(),
+            });
 
-                return identifier;
-            }
-
-            identifier = GetIdentifier("Win32_Processor", "ProcessorId");
-            if (!string.IsNullOrWhiteSpace(identifier))
+            var values = new List<string>(new[]
             {
-                Log.Debug("Using Processor.ProcessorId to identify cpu '{0}'", identifier);
+                    cpuId,
+                    motherboardId,
+                    hddId,
+                    gpuId
+                });
 
-                return identifier;
-            }
+            var hashedValues = new List<string>();
 
-            identifier += GetIdentifier("Win32_Processor", "Name")
-                + GetIdentifier("Win32_Processor", "SerialNumber")
-                + GetIdentifier("Win32_Processor", "Manufacturer")
-                + GetIdentifier("Win32_Processor", "NumberOfCores")
-                + GetIdentifier("Win32_Processor", "NumberOfLogicalProcessors")
-                + GetIdentifier("Win32_Processor", "MaxClockSpeed")
-                + GetIdentifier("Win32_Processor", "Version");
-
-            Log.Debug("Using Processor.Manufacturer + MaxClockSpeed + Version to identify cpu '{0}'", identifier);
-
-            return identifier;
-        }
-
-        protected static string GetIdentifier(string wmiClass, string wmiProperty)
-        {
-            return GetIdentifier(wmiClass, wmiProperty, null, null);
-        }
-
-        protected static string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue)
-        {
-            var result = string.Empty;
-
-            var managementClass = new ManagementClass(wmiClass);
-            var managementObjectCollection = managementClass.GetInstances();
-            foreach (var managementObject in managementObjectCollection)
+            foreach (var value in values)
             {
-                // Only get the first one
-                if (string.IsNullOrEmpty(result))
-                {
-                    try
-                    {
-                        if (!string.IsNullOrWhiteSpace(additionalWmiToCheck))
-                        {
-                            var wmiToCheckValue = managementObject[additionalWmiToCheck];
+                var hashedValue = CalculateMd5Hash(value);
+                hashedValues.Add(hashedValue);
 
-                            var wmiToCheckValueValue = additionalWmiToCheckValue;
-                            var invert = additionalWmiToCheckValue.StartsWith("!");
-                            if (invert)
-                            {
-                                wmiToCheckValueValue = additionalWmiToCheckValue.Substring(1);
-                            }
-
-                            var equals = string.Equals(wmiToCheckValue.ToString(), wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
-                            if ((!equals && !invert) || (equals && invert))
-                            {
-                                Log.Debug("Cannot use mgmt object '{0}', wmi property '{1}' is '{2}' but expected '{3}'", wmiClass,
-                                    additionalWmiToCheck, wmiToCheckValue, additionalWmiToCheckValue);
-                                continue;
-                            }
-                        }
-
-                        var value = managementObject[wmiProperty];
-                        if (value != null)
-                        {
-                            result = value.ToString();
-                            break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Debug(ex, "Failed to retrieve object '{0}.{1}', additional wmi to check: {2}", wmiClass, wmiProperty, additionalWmiToCheck);
-                    }
-                }
+                Log.Debug("* {0} => {1}", value, hashedValue);
             }
 
-            return result;
+            var machineId = string.Join(LicenseElements.IdentificationSeparator, hashedValues);
+
+            Log.Debug("Hashed machine id '{0}'", machineId);
+
+            return machineId;
         }
 
         private static string CalculateMd5Hash(string input)

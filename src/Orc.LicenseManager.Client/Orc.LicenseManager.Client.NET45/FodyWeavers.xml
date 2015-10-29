@@ -3,10 +3,12 @@
   <Costura>
     <IncludeAssemblies>
       Portable.Licensing
+      Orc.SystemInfo
     </IncludeAssemblies>
   </Costura>
   <ModuleInit />
-  <LoadAssembliesOnStartup />
-  <Catel />
   <Obsolete />
+  <Catel />
+  <MethodTimer />
+  <LoadAssembliesOnStartup />
 </Weavers>
