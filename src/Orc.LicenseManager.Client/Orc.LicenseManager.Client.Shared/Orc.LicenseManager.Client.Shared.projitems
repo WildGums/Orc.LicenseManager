@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\Extensions\LicenseModeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\LicenseMode.cs" />
@@ -21,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LicenseExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NetworkValidationResultExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetworkValidationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseValidationResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkLicenseUsage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkValidationResult.cs" />
