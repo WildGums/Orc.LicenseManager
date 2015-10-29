@@ -58,20 +58,20 @@ namespace Orc.LicenseManager.Services
 
             TaskHelper.RunAndWait(new Action[]
             {
-                    () => cpuId = "CPU >> " + _systemIdentificationService.GetCpuId(),
-                    () => motherboardId = "BASE >> " + _systemIdentificationService.GetMotherboardId(),
-                    () => hddId = "HDD >> " + _systemIdentificationService.GetHardDriveId(),
-                    () => gpuId = "GPU >> " + _systemIdentificationService.GetGpuId(),
+                () => cpuId = "CPU >> " + _systemIdentificationService.GetCpuId(),
+                () => motherboardId = "BASE >> " + _systemIdentificationService.GetMotherboardId(),
+                () => hddId = "HDD >> " + _systemIdentificationService.GetHardDriveId(),
+                () => gpuId = "GPU >> " + _systemIdentificationService.GetGpuId(),
                 //() => gpuId = "MAC >> " + _systemIdentificationService.GetMacId(),
             });
 
             var values = new List<string>(new[]
             {
-                    cpuId,
-                    motherboardId,
-                    hddId,
-                    gpuId
-                });
+                cpuId,
+                motherboardId,
+                hddId,
+                gpuId
+            });
 
             var hashedValues = new List<string>();
 
