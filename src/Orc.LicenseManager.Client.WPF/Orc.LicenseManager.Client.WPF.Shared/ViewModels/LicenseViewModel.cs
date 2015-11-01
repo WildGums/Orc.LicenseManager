@@ -81,7 +81,7 @@ namespace Orc.LicenseManager.ViewModels
 
             XmlData = new ObservableCollection<XmlDataModel>();
 
-            Paste = new Command(OnPasteExecute);
+            Paste = new TaskCommand(OnPasteExecuteAsync);
             ShowClipboard = new Command(OnShowClipboardExecute);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
@@ -136,7 +136,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Gets the Paste command.
         /// </summary>
-        public Command Paste { get; private set; }
+        public TaskCommand Paste { get; private set; }
 
         /// <summary>
         /// List of xml Data, only populated when license was valid.
@@ -147,14 +147,6 @@ namespace Orc.LicenseManager.ViewModels
         /// Gets the ShowClipboard command.
         /// </summary>
         public Command ShowClipboard { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [paste success].
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if [paste success]; otherwise, <c>false</c>.
-        /// </value>
-        public bool PasteSuccess { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [show failure].
@@ -385,7 +377,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Method to invoke when the Paste command is executed. Validates the license and xml, 
         /// </summary>
-        private void OnPasteExecute()
+        private async Task OnPasteExecuteAsync()
         {
             if (Clipboard.GetText() != string.Empty)
             {
@@ -400,6 +392,14 @@ namespace Orc.LicenseManager.ViewModels
                 }
 
                 ApplyLicense(license);
+
+                if (!string.IsNullOrEmpty(LicenseInfo.Key))
+                {
+                    if (LicenseExists)
+                    {
+                        await SaveAsync();
+                    }
+                }
             }
         }
 
