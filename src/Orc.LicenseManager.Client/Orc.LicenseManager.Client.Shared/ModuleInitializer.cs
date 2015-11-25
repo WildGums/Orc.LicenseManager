@@ -1,4 +1,6 @@
 ﻿using Catel.IoC;
+using Catel.Services;
+using Catel.Services.Models;
 using Orc.LicenseManager;
 using Orc.LicenseManager.Services;
 
@@ -25,5 +27,8 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IIdentificationService, IdentificationService>();
 
         serviceLocator.RegisterTypeIfNotYetRegistered<ILicenseVisualizerService, EmptyLicenseVisualizerService>();
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager", "Orc.LicenseManager.Properties", "Resources"));
     }
 }

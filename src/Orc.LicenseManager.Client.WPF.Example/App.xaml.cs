@@ -37,6 +37,14 @@ namespace Orc.LicenseManager.Client.Example
             LogManager.AddListener(new FileLogListener(logPath, 25 * 1024));
 #endif
 
+            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+
+            // Note: it's best to use .CurrentUICulture in actual apps since it will use the preferred language
+            // of the user. But in order to demo multilingual features for devs (who mostly have en-US as .CurrentUICulture),
+            // we use .CurrentCulture for the sake of the demo
+            languageService.PreferredCulture = CultureInfo.CurrentCulture;
+            languageService.FallbackCulture = new CultureInfo("en-US");
+
             //var consoleLogListener = new ConsoleLogListener();
             //consoleLogListener.IgnoreCatelLogging = true;
             //LogManager.AddListener(consoleLogListener);
@@ -44,14 +52,6 @@ namespace Orc.LicenseManager.Client.Example
             Console.WriteLine(typeof(ILicenseService));
 
             StyleHelper.CreateStyleForwardersForDefaultStyles();
-
-            var serviceLocator = ServiceLocator.Default;
-            var languageService = serviceLocator.ResolveType<ILanguageService>();
-
-            //languageService.PreferredCulture = new CultureInfo("nl-NL");
-            //languageService.FallbackCulture = new CultureInfo("en-US");
-
-            languageService.PreloadLanguageSources();
 
             base.OnStartup(e);
         }
