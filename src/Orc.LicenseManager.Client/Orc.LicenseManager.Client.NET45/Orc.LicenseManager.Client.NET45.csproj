@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="Catel.Core, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Core.4.4.0-unstable0058\lib\net45\Catel.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Core.4.4.0\lib\net45\Catel.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Catel.Fody.Attributes">
@@ -48,7 +48,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MethodTimer">
-      <HintPath>..\..\..\lib\MethodTimer.Fody.1.15.7.0\lib\dotnet\MethodTimer.dll</HintPath>
+      <HintPath>..\..\..\lib\MethodTimer.Fody.1.15.8.0\lib\dotnet\MethodTimer.dll</HintPath>
       <Private>True</Private>
       <Private>False</Private>
     </Reference>
@@ -64,7 +64,7 @@
     </Reference>
     <Reference Include="Orc.SystemInfo, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Orc.SystemInfo.1.1.0-unstable0007\lib\net45\Orc.SystemInfo.dll</HintPath>
+      <HintPath>..\..\..\lib\Orc.SystemInfo.1.1.0-unstable0010\lib\net45\Orc.SystemInfo.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Portable.Licensing">
@@ -128,12 +128,12 @@
     <Error Condition="!Exists('..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets'))" />
     <Error Condition="!Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets'))" />
     <Error Condition="!Exists('..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets'))" />
-    <Error Condition="!Exists('..\..\..\lib\MethodTimer.Fody.1.15.7.0\build\dotnet\MethodTimer.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\MethodTimer.Fody.1.15.7.0\build\dotnet\MethodTimer.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\MethodTimer.Fody.1.15.8.0\build\dotnet\MethodTimer.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\MethodTimer.Fody.1.15.8.0\build\dotnet\MethodTimer.Fody.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets" Condition="Exists('..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets')" />
   <Import Project="..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets" Condition="Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" />
   <Import Project="..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets" Condition="Exists('..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets')" />
-  <Import Project="..\..\..\lib\MethodTimer.Fody.1.15.7.0\build\dotnet\MethodTimer.Fody.targets" Condition="Exists('..\..\..\lib\MethodTimer.Fody.1.15.7.0\build\dotnet\MethodTimer.Fody.targets')" />
+  <Import Project="..\..\..\lib\MethodTimer.Fody.1.15.8.0\build\dotnet\MethodTimer.Fody.targets" Condition="Exists('..\..\..\lib\MethodTimer.Fody.1.15.8.0\build\dotnet\MethodTimer.Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
