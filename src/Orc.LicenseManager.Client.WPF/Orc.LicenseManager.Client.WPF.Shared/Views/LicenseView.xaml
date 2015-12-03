@@ -15,7 +15,7 @@
         <ResourceDictionary Source="/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml" />
     </UserControl.Resources>
     
-    <Grid Width="700">
+    <Grid Width="600">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
