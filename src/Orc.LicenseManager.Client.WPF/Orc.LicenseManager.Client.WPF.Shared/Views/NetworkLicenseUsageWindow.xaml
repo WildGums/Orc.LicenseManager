@@ -44,8 +44,8 @@
             </ListBox>
            
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Close application" Margin="4 10 2 4" Style="{StaticResource ButtonStyle}" Command="{Binding CloseApplication}" />
-            <Button Content="Buy more licenses" Margin="4 10 10 4" Style="{StaticResource ButtonStyle}" Command="{Binding BuyLicenses}" 
+            <Button Content="Close application" Margin="4 10 2 4" Command="{Binding CloseApplication}" />
+            <Button Content="Buy more licenses" Margin="4 10 10 4" Command="{Binding BuyLicenses}" 
                     Visibility="{Binding PurchaseUrl, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}"/>
         </StackPanel>
     </Grid>

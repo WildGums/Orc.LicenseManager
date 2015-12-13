@@ -15,7 +15,7 @@ namespace Orc.LicenseManager
 
         public const string Version = "Version";
 
+        public const string IdentificationSeparator = "-";
 
-        
     }
 }

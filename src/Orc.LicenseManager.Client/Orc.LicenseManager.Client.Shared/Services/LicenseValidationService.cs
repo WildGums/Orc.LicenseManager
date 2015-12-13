@@ -31,6 +31,7 @@ namespace Orc.LicenseManager.Services
         private readonly IApplicationIdService _applicationIdService;
         private readonly IExpirationBehavior _expirationBehavior;
         private readonly IIdentificationService _identificationService;
+        private readonly IMachineLicenseValidationService _machineLicenseValidationService;
         #endregion
 
         /// <summary>
@@ -39,16 +40,19 @@ namespace Orc.LicenseManager.Services
         /// <param name="applicationIdService">The application identifier service.</param>
         /// <param name="expirationBehavior">The expiration behavior.</param>
         /// <param name="identificationService">The identification service.</param>
+        /// <param name="machineLicenseValidationService">The machine license validation service.</param>
         public LicenseValidationService(IApplicationIdService applicationIdService, IExpirationBehavior expirationBehavior,
-            IIdentificationService identificationService)
+            IIdentificationService identificationService, IMachineLicenseValidationService machineLicenseValidationService)
         {
             Argument.IsNotNull(() => applicationIdService);
             Argument.IsNotNull(() => expirationBehavior);
             Argument.IsNotNull(() => identificationService);
+            Argument.IsNotNull(() => machineLicenseValidationService);
 
             _applicationIdService = applicationIdService;
             _expirationBehavior = expirationBehavior;
             _identificationService = identificationService;
+            _machineLicenseValidationService = machineLicenseValidationService;
         }
 
         #region Methods
@@ -90,14 +94,12 @@ namespace Orc.LicenseManager.Services
                         {
                             Log.Debug("Validating license using machine ID");
 
-                            var machineId = _identificationService.GetMachineId();
-                            if (!string.Equals(machineId, licenseAttribute.Value))
+                            var machineLicenseValidationContext = _machineLicenseValidationService.Validate(licenseAttribute.Value);
+                            validationContext.SynchronizeWithContext(machineLicenseValidationContext, true);
+
+                            if (machineLicenseValidationContext.HasErrors)
                             {
-                                var error = string.Format("The license can only run on machine with ID '{0}', current machine has ID '{1}'", licenseAttribute.Value, machineId);
-
-                                Log.Error(error);
-
-                                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
+                                Log.Error("The license can only run on machine with ID '{0}'", licenseAttribute.Value);
                             }
                         }
 

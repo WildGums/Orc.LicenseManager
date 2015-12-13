@@ -1,0 +1,143 @@
+﻿<catel:UserControl x:Class="Orc.LicenseManager.Views.LicenseView"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:local="using:Orc.LicenseManager.Views"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:catel="http://catel.codeplex.com"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:licenseManager="clr-namespace:Orc.LicenseManager"
+                   xmlns:licenseManager1="clr-namespace:Orc.LicenseManager;assembly=Orc.LicenseManager.Client"
+                   xmlns:views="clr-namespace:Orc.LicenseManager.Views"
+                   mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <ResourceDictionary Source="/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml" />
+    </UserControl.Resources>
+    
+    <Grid Width="600">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+   
+        <Grid Grid.Column="0"
+              Visibility="{Binding ShowAbout, RelativeSource={RelativeSource AncestorType={x:Type views:LicenseView}}, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+            <Grid Visibility="{Binding CompanyName, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}">
+                <Image Grid.Row="0" Grid.Column="0" Source="{Binding ImageUri}" MaxWidth="90" 
+                       HorizontalAlignment="Center" VerticalAlignment="Top" Margin="2 6 2 6"/>
+            </Grid>
+        </Grid>
+        
+        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
+            <i:Interaction.Behaviors>
+                <catel:KeyPressToCommand Command="{Binding Paste}" Key="V" Modifiers="Control" />
+            </i:Interaction.Behaviors>
+
+            <Grid Margin="0 6 0 10"
+                  Visibility="{Binding ShowAbout, RelativeSource={RelativeSource AncestorType={x:Type views:LicenseView}}, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+                <Grid Visibility="{Binding CompanyName, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title}" FontSize="16"
+                               FontWeight="Medium" Margin="0 10 0 0"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Text}" TextWrapping="Wrap"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="1"
+                               Visibility="{Binding InfoUrl, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" >
+                        <Hyperlink NavigateUri="{Binding InfoUrl}" Command="{Binding AboutSiteClick}">
+                            <InlineUIContainer>
+                                <TextBlock Text="{Binding InfoUrl}" Margin="-1" />
+                            </InlineUIContainer>
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
+            </Grid>
+
+            <GroupBox Header="{catel:LanguageBinding InsertLicenseHeader}"
+                      Padding="10" Style="{StaticResource GrayGroupBoxStyle}"
+                      Visibility="{Binding LicenseExists, ConverterParameter=False, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{catel:LanguageBinding PleasePaste}"
+                               HorizontalAlignment="Left" Foreground="Gray" FontSize="14"/>
+
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0 8 0 0">
+                        <Button Content="{catel:LanguageBinding PasteWithShortcut}"
+                                Command="{Binding Paste}" HorizontalAlignment="Right" Padding="4 2 4 2" Margin="4"/>
+
+                        <Button Content="{catel:LanguageBinding ShowClipboard}"
+                                Command="{Binding ShowClipboard}" HorizontalAlignment="Right" Padding="4 2 4 2" Margin="4"/>
+                    </StackPanel>
+                
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="{catel:LanguageBinding LicensePropsHeader}"
+                      Style="{StaticResource GrayGroupBoxStyle}"
+                      Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+                <ItemsControl ItemsSource="{Binding XmlData}" BorderBrush="Transparent" Padding="10">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Name, StringFormat='\{0\}: '}"
+                                           FontWeight="Bold" VerticalAlignment="Top" Margin="4"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Value}" VerticalAlignment="Top"
+                                           TextWrapping="Wrap" Margin="4"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+
+            <GroupBox Header="{catel:LanguageBinding LicenceManagementHeader}" 
+                      Style="{StaticResource GrayGroupBoxStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="License for:" />
+
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Source={licenseManager:Enumeration {x:Type licenseManager1:LicenseMode}}}"
+                              DisplayMemberPath="Description" SelectedValuePath="Value" SelectedValue="{Binding LicenseMode}" />
+
+                    <Button Grid.Column="2" Content="{catel:LanguageBinding DeleteLicense}"
+                            Command="{Binding RemoveLicense}" 
+                            Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}"/>
+                </Grid>
+            </GroupBox>
+
+            <StackPanel Orientation="Vertical" Visibility="{Binding ShowFailure, Converter={catel:BooleanToCollapsingVisibilityConverter}}" Margin="5,5,0,5">
+                <TextBlock Text="{Binding FailureMessage}" Foreground="Red" />
+            </StackPanel>
+            
+            <TextBlock Visibility="{Binding PurchaseUrl, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" Margin="9,5,0,5">
+                <Hyperlink NavigateUri="{Binding PurchaseUrl}" Command="{Binding PurchaseLinkClick}">
+                    <InlineUIContainer>
+                        <TextBlock Text="{catel:LanguageBinding ClickToBuyLicense}" Margin="-1" /></InlineUIContainer>
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</catel:UserControl>

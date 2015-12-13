@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutHeader" xml:space="preserve">
-    <value>Over</value>
+    <value>About</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Annuleren</value>
+    <value>Cancel</value>
   </data>
   <data name="ClickToBuyLicense" xml:space="preserve">
-    <value>Klik hier om een licentie te kopen</value>
+    <value>Click here to buy a license</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Sluiten</value>
+    <value>Close</value>
   </data>
   <data name="DeleteLicense" xml:space="preserve">
-    <value>Verwijder licentie</value>
+    <value>Delete license</value>
   </data>
   <data name="InsertLicenseHeader" xml:space="preserve">
-    <value>Voeg licentie toe</value>
+    <value>Insert license</value>
   </data>
   <data name="LicenceManagementHeader" xml:space="preserve">
-    <value>Licentie beheer</value>
+    <value>License management</value>
   </data>
   <data name="LicensePropsHeader" xml:space="preserve">
-    <value>Licentie eigenschappen</value>
+    <value>License properties</value>
   </data>
   <data name="PasteWithShortcut" xml:space="preserve">
-    <value>Plakken (CTRL + V)</value>
+    <value>Paste (CTRL + V)</value>
   </data>
   <data name="PleasePaste" xml:space="preserve">
-    <value>Plak a.u.b. de gehele licentie in dit scherm om de licentie te verifieren.</value>
+    <value>Please paste the whole license in this window to verify the license.</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Opslaan</value>
+    <value>Save</value>
   </data>
   <data name="ShowClipboard" xml:space="preserve">
-    <value>Toon klembord</value>
+    <value>Show clipboard</value>
   </data>
 </root>

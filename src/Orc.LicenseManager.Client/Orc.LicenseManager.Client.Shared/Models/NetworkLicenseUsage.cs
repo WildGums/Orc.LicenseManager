@@ -13,6 +13,7 @@ namespace Orc.LicenseManager.Models
     public class NetworkLicenseUsage
     {
         private const string DateTimeFormat = "yyyyMMddHHmmss";
+        private const string Splitter = "|+|";
 
         #region Constructors
         public NetworkLicenseUsage(string computerId, string ip, string userName, string licenseSignature, DateTime startDateTime)
@@ -42,12 +43,18 @@ namespace Orc.LicenseManager.Models
 
         public string ToNetworkMessage()
         {
-            return string.Format("{0}|{1}|{2}|{3}|{4}", ComputerId, LicenseSignature, StartDateTime.ToString(DateTimeFormat), UserName, Ip);
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", Splitter, ComputerId, LicenseSignature, StartDateTime.ToString(DateTimeFormat), UserName, Ip);
         }
 
         public static NetworkLicenseUsage Parse(string text)
         {
-            var splitted = text.Split(new[] { '|' }, StringSplitOptions.None);
+            var splitted = text.Split(new[] { Splitter }, StringSplitOptions.None);
+
+            // Backwards compatibility
+            if (splitted.Length < 2)
+            {
+                splitted = text.Split(new[] {'|'}, StringSplitOptions.None);
+            }
 
             var computerId = GetValue(splitted, 0);
             var licenseSignature = GetValue(splitted, 1);

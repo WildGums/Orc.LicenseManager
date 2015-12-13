@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LicenseExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NetworkValidationResultExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetworkValidationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseValidationResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkLicenseUsage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkValidationResult.cs" />
@@ -42,11 +43,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseVisualizerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IMachineLicenseValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\INetworkLicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISimpleLicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseLocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseValidationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MachineLicenseValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NetworkLicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SimpleLicenseService.cs" />
   </ItemGroup>
