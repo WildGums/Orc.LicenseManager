@@ -10,7 +10,8 @@ namespace Orc.LicenseManager.Server.Website.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
-    using Catel.Data;
+    using System.Data.Entity;
+
     [Authorize(Roles = "Admin")]
     public class DashboardController : ApiController
     {
