@@ -128,7 +128,7 @@ namespace Orc.LicenseManager.Services
 
                 CurrentLicense = licenseObject;
 
-                Log.Debug("License loaded: {0}", licenseObject.ToString());
+                //Log.Debug("License loaded: {0}", licenseObject.ToString());
 
                 return licenseObject.ToString();
             }
