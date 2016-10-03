@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExpirationBehaviors\PreventUsageOfLaterReleasedVersionsBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LicenseExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NetworkValidationResultExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CryptoHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetworkValidationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LicenseValidationResult.cs" />
