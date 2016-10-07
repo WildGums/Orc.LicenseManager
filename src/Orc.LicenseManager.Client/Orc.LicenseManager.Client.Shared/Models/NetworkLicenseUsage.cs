@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkLicenseUsage.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="NetworkLicenseUsage.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,6 +12,9 @@ namespace Orc.LicenseManager.Models
 
     public class NetworkLicenseUsage
     {
+        private const string EncryptionPrefix = "_enc_";
+        private const string EncryptionKey = "D274EB19-DD69-4A52-8EAF-AC2159F4D895";
+
         private const string DateTimeFormat = "yyyyMMddHHmmss";
         private const string Splitter = "|+|";
 
@@ -43,11 +46,21 @@ namespace Orc.LicenseManager.Models
 
         public string ToNetworkMessage()
         {
-            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", Splitter, ComputerId, LicenseSignature, StartDateTime.ToString(DateTimeFormat), UserName, Ip);
+            var message = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", Splitter, ComputerId, LicenseSignature, StartDateTime.ToString(DateTimeFormat), UserName, Ip);
+            var encrypted = CryptoHelper.Encrypt(message, EncryptionKey);
+
+            var finalMessage = $"{EncryptionPrefix}{encrypted}";
+            return finalMessage;
         }
 
         public static NetworkLicenseUsage Parse(string text)
         {
+            if (text.StartsWith(EncryptionPrefix))
+            {
+                var encryptedText = text.Substring(EncryptionPrefix.Length);
+                text = CryptoHelper.Decrypt(encryptedText, EncryptionKey);
+            }
+
             var splitted = text.Split(new[] { Splitter }, StringSplitOptions.None);
 
             // Backwards compatibility

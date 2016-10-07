@@ -29,8 +29,12 @@
             </Grid>
         </Grid>
         
-        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
+        <StackPanel Focusable="True" Grid.Column="1" Orientation="Vertical" Margin="10">
             <i:Interaction.Behaviors>
+                <!-- SA-259 -->
+                <catel:Focus Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type catel:UserControl}}}" FocusMoment="Loaded"/>
+                <catel:Focus Source="{Binding}" FocusMoment="PropertyChanged" PropertyName="LicenseExists"/>
+                
                 <catel:KeyPressToCommand Command="{Binding Paste}" Key="V" Modifiers="Control" />
             </i:Interaction.Behaviors>
 
@@ -90,7 +94,7 @@
             <GroupBox Header="{catel:LanguageBinding LicensePropsHeader}"
                       Style="{StaticResource GrayGroupBoxStyle}"
                       Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
-                <ItemsControl ItemsSource="{Binding XmlData}" BorderBrush="Transparent" Padding="10">
+                <ItemsControl Focusable="False" ItemsSource="{Binding XmlData}" BorderBrush="Transparent" Padding="10">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>

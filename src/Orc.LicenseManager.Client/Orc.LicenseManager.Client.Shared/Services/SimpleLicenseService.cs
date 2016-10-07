@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SimpleLicenseService.cs" company="Orchestra development team">
-//   Copyright (c) 2008 - 2014 Orchestra development team. All rights reserved.
+// <copyright file="SimpleLicenseService.cs" company="WildGums">
+//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ namespace Orc.LicenseManager.Services
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         public bool ValidateOnServer(string serverUrl)
         {
-            if (! EnsureLicenseExists())
+            if (!EnsureLicenseExists())
             {
                 return false;
             }
