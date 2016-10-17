@@ -189,7 +189,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             }
         }
 
+#pragma warning disable AvoidAsyncVoid
         private async void OnNetworkLicenseValidated(object sender, NetworkValidatedEventArgs e)
+#pragma warning restore AvoidAsyncVoid
         {
             var validationResult = e.ValidationResult;
             if (!validationResult.IsValid)

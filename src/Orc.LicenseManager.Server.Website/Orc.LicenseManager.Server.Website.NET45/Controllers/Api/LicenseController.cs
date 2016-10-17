@@ -31,7 +31,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers.Api
         {
             Argument.IsNotNull(() => licenseValidation);
 
-            var licenseValidationResult = await _licenseValidationService.ValidateLicense(licenseValidation.License);
+            var licenseValidationResult = await _licenseValidationService.ValidateLicenseAsync(licenseValidation.License);
 
             return new HttpResponseMessage
             {
