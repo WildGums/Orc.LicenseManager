@@ -60,9 +60,8 @@
       <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Orc.SystemInfo">
-      <HintPath>..\..\..\lib\Orc.SystemInfo.1.2.0-unstable0006\lib\net46\Orc.SystemInfo.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orc.SystemInfo, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Orc.SystemInfo.1.2.0\lib\net46\Orc.SystemInfo.dll</HintPath>
     </Reference>
     <Reference Include="Portable.Licensing">
       <HintPath>..\..\..\lib\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
