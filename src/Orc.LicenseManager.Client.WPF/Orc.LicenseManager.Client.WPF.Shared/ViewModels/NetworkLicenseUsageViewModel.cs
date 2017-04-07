@@ -114,7 +114,9 @@ namespace Orc.LicenseManager.ViewModels
             await base.CloseAsync();
         }
 
+#pragma warning disable AvoidAsyncVoid
         private async void OnDispatcherTimerTick(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid
         {
             var validationResult = await TaskHelper.Run(() => _networkLicenseService.ValidateLicense(), true);
 

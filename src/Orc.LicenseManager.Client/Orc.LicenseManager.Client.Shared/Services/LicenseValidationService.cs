@@ -297,7 +297,7 @@ namespace Orc.LicenseManager.Services
 
                         if (_expirationBehavior.IsExpired(portableLicense, expirationDateTime, DateTime.Now))
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The license is expired"));
+                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The license has expired. Please delete the current license if you have a new one."));
                         }
                     }
                     else

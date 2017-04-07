@@ -13,7 +13,7 @@ namespace Orc.LicenseManager.Server.Services
     public interface ILicenseValidationService
     {
         #region Methods
-        Task<LicenseValidationResult> ValidateLicense(string license);
+        Task<LicenseValidationResult> ValidateLicenseAsync(string license);
         #endregion
     }
 }
