@@ -13,6 +13,7 @@ namespace Orc.LicenseManager.Services
     using System.Xml;
     using Catel;
     using Catel.Logging;
+    using FileSystem;
     using Models;
     using Portable.Licensing;
 
@@ -27,6 +28,7 @@ namespace Orc.LicenseManager.Services
 
         #region Fields
         private readonly ILicenseLocationService _licenseLocationService;
+        private readonly IFileService _fileService;
         #endregion
 
         #region Constructors
@@ -34,11 +36,14 @@ namespace Orc.LicenseManager.Services
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
         /// </summary>
         /// <param name="licenseLocationService">The application identifier service.</param>
-        public LicenseService(ILicenseLocationService licenseLocationService)
+        /// <param name="fileService">The file service.</param>
+        public LicenseService(ILicenseLocationService licenseLocationService, IFileService fileService)
         {
             Argument.IsNotNull(() => licenseLocationService);
+            Argument.IsNotNull(() => fileService);
 
             _licenseLocationService = licenseLocationService;
+            _fileService = fileService;
         }
         #endregion
 
@@ -89,12 +94,16 @@ namespace Orc.LicenseManager.Services
         {
             var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
 
-            if (File.Exists(xmlFilePath))
+            try
             {
-                File.Delete(xmlFilePath);
-            }
+                _fileService.Delete(xmlFilePath);
 
-            Log.Info("The '{0}' License has been removed", licenseMode);
+                Log.Info("The '{0}' license has been removed", licenseMode);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to delete the license @ '{xmlFilePath}'");
+            }
         }
 
         /// <summary>
@@ -104,10 +113,18 @@ namespace Orc.LicenseManager.Services
         public bool LicenseExists(LicenseMode licenseMode = LicenseMode.CurrentUser)
         {
             var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
-            if (File.Exists(xmlFilePath))
+
+            try
             {
-                Log.Debug("License exists");
-                return true;
+                if (_fileService.Exists(xmlFilePath))
+                {
+                    Log.Debug("License exists");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to check whether the license exists @ 'xmlFilePath'");
             }
 
             Log.Debug("License does not exist");
@@ -159,7 +176,7 @@ namespace Orc.LicenseManager.Services
                 {
                     if (string.Equals(node.Name, "Customer"))
                     {
-                        var customerInfo = string.Format("{0} ({1})", node.ChildNodes[0].InnerText, node.ChildNodes[1].InnerText);
+                        var customerInfo = $"{node.ChildNodes[0].InnerText} ({node.ChildNodes[1].InnerText})";
                         xmlDataList.Add(new XmlDataModel("Licensed to", customerInfo));
                     }
                     else if (string.Equals(node.Name, "ProductFeatures"))

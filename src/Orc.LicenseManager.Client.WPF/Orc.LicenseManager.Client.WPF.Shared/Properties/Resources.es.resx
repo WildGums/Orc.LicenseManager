@@ -132,6 +132,9 @@
   <data name="DeleteLicense" xml:space="preserve">
     <value>Delete license</value>
   </data>
+  <data name="FailedToSaveLicense" xml:space="preserve">
+    <value>Failed to save license. Please try again or pick a different location.</value>
+  </data>
   <data name="InsertLicenseHeader" xml:space="preserve">
     <value>Insert license</value>
   </data>

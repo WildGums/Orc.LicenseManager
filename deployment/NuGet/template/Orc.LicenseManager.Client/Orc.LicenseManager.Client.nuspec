@@ -25,6 +25,7 @@
     
     <dependencies>
       <dependency id="Catel.Core" version="[replaced]" />
+      <dependency id="Orc.FileSystem" version="[replaced]" />
       <dependency id="Newtonsoft.Json" version="[replaced]" />
     </dependencies>    
   </metadata>

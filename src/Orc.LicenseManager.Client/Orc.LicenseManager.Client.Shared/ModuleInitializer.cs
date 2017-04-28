@@ -19,6 +19,7 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IApplicationIdService, ApplicationIdService>();
         serviceLocator.RegisterType<ILicenseService, LicenseService>();
         serviceLocator.RegisterType<ILicenseLocationService, LicenseLocationService>();
+        serviceLocator.RegisterType<ILicenseModeService, LicenseModeService>();
         serviceLocator.RegisterType<ILicenseValidationService, LicenseValidationService>();
         serviceLocator.RegisterType<IMachineLicenseValidationService, MachineLicenseValidationService>();
         serviceLocator.RegisterType<ISimpleLicenseService, SimpleLicenseService>();
@@ -29,6 +30,6 @@ public static class ModuleInitializer
         serviceLocator.RegisterTypeIfNotYetRegistered<ILicenseVisualizerService, EmptyLicenseVisualizerService>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
-        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager", "Orc.LicenseManager.Properties", "Resources"));
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client", "Orc.LicenseManager.Properties", "Resources"));
     }
 }

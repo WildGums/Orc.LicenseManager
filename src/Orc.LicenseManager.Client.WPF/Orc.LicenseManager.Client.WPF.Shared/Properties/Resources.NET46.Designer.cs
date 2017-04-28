@@ -106,6 +106,15 @@ namespace Orc.LicenseManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to save license. Please try again or pick a different location..
+        /// </summary>
+        internal static string FailedToSaveLicense {
+            get {
+                return ResourceManager.GetString("FailedToSaveLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Insert license.
         /// </summary>
         internal static string InsertLicenseHeader {

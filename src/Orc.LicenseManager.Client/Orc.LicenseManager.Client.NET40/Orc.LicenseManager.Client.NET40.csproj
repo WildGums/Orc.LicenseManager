@@ -69,6 +69,9 @@
       <HintPath>..\..\..\lib\Obsolete.Fody.4.2.2\lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Orc.FileSystem, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Orc.FileSystem.1.2.6\lib\net40\Orc.FileSystem.dll</HintPath>
+    </Reference>
     <Reference Include="Orc.SystemInfo, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Orc.SystemInfo.1.2.0\lib\net40\Orc.SystemInfo.dll</HintPath>
     </Reference>
