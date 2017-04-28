@@ -7,14 +7,14 @@
 
 namespace Orc.LicenseManager
 {
-    using System.ComponentModel;
+    using Catel.ComponentModel;
 
     public enum LicenseMode
     {
-        [Description("Current user")]
+        [DisplayName("CurrentUser")]
         CurrentUser,
 
-        [Description("All users")]
+        [DisplayName("AllUsers")]
         MachineWide
     }
 }

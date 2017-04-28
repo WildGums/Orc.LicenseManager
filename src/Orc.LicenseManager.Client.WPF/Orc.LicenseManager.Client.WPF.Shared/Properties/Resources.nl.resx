@@ -132,6 +132,9 @@
   <data name="DeleteLicense" xml:space="preserve">
     <value>Verwijder licentie</value>
   </data>
+  <data name="FailedToSaveLicense" xml:space="preserve">
+    <value>Het is niet gelukt de licentie op te slaan. Probeer opnieuw of kies een andere locatie.</value>
+  </data>
   <data name="InsertLicenseHeader" xml:space="preserve">
     <value>Voeg licentie toe</value>
   </data>
