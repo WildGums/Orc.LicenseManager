@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\Extensions\LicenseModeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\LicenseMode.cs" />
@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\INetworkLicenseServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\ILicenseValidationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IdentificationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseModeService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IApplicationIdService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILicenseInfoService.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\INetworkLicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISimpleLicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseLocationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseModeService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LicenseValidationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MachineLicenseValidationService.cs" />

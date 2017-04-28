@@ -11,18 +11,22 @@ namespace Orc.LicenseManager.Services
     using Catel;
     using Catel.Logging;
     using Catel.Reflection;
+    using FileSystem;
 
     public class LicenseLocationService : ILicenseLocationService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IApplicationIdService _applicationIdService;
+        private readonly IFileService _fileService;
 
-        public LicenseLocationService(IApplicationIdService applicationIdService)
+        public LicenseLocationService(IApplicationIdService applicationIdService, IFileService fileService)
         {
             Argument.IsNotNull(() => applicationIdService);
+            Argument.IsNotNull(() => fileService);
 
             _applicationIdService = applicationIdService;
+            _fileService = fileService;
         }
 
         public string LoadLicense(LicenseMode licenseMode)
@@ -31,7 +35,7 @@ namespace Orc.LicenseManager.Services
 
             Log.Debug("Loading license from '{0}'", fileName);
 
-            return File.ReadAllText(fileName);
+            return _fileService.ReadAllText(fileName);
         }
 
         public virtual string GetLicenseLocation(LicenseMode licenseMode)

@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
@@ -38,28 +39,14 @@ namespace Orc.LicenseManager.ViewModels
 
         private readonly IUIVisualizerService _uiVisualizerService;
         private readonly IMessageService _messageService;
-
+        private readonly ILanguageService _languageService;
+        private readonly ILicenseModeService _licenseModeService;
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LicenseViewModel" /> class.
-        /// </summary>
-        /// <param name="licenseInfo">The single license model.</param>
-        /// <param name="navigationService">The navigation service.</param>
-        /// <param name="processService">The process service.</param>
-        /// <param name="licenseService">The license service.</param>
-        /// <param name="licenseValidationService">The license validation service.</param>
-        /// <param name="uiVisualizerService">The uiVisualizer service.</param>
-        /// <param name="messageService">The message service.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="licenseInfo" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="navigationService" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="processService" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
         public LicenseViewModel(LicenseInfo licenseInfo, INavigationService navigationService, IProcessService processService,
             ILicenseService licenseService, ILicenseValidationService licenseValidationService, IUIVisualizerService uiVisualizerService, 
-            IMessageService messageService)
+            IMessageService messageService, ILanguageService languageService, ILicenseModeService licenseModeService)
         {
             Argument.IsNotNull(() => licenseInfo);
             Argument.IsNotNull(() => navigationService);
@@ -68,6 +55,8 @@ namespace Orc.LicenseManager.ViewModels
             Argument.IsNotNull(() => licenseValidationService);
             Argument.IsNotNull(() => uiVisualizerService);
             Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => languageService);
+            Argument.IsNotNull(() => licenseModeService);
 
             _navigationService = navigationService;
             _processService = processService;
@@ -75,6 +64,8 @@ namespace Orc.LicenseManager.ViewModels
             _licenseValidationService = licenseValidationService;
             _uiVisualizerService = uiVisualizerService;
             _messageService = messageService;
+            _languageService = languageService;
+            _licenseModeService = licenseModeService;
 
             LicenseInfo = licenseInfo;
             Title = licenseInfo.Title;
@@ -91,6 +82,8 @@ namespace Orc.LicenseManager.ViewModels
         #endregion
 
         #region Properties
+
+        public List<LicenseMode> AvailableLicenseModes { get; private set; }
 
         public LicenseMode LicenseMode { get; set; }
 
@@ -221,6 +214,8 @@ namespace Orc.LicenseManager.ViewModels
         /// </remarks>
         protected override async Task InitializeAsync()
         {
+            AvailableLicenseModes = _licenseModeService.GetAvailableLicenseModes();
+
             UpdateLicenseInfo();
         }
 
@@ -248,7 +243,17 @@ namespace Orc.LicenseManager.ViewModels
                 return false;
             }
 
-            _licenseService.SaveLicense(LicenseInfo.Key, LicenseMode);
+            try
+            {
+                _licenseService.SaveLicense(LicenseInfo.Key, LicenseMode);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to save license using '{LicenseMode}'");
+
+                await _messageService.ShowErrorAsync(_languageService.GetString("FailedToSaveLicense"));
+                return false;
+            }
 
             if (oppositeLicenseExists)
             {
