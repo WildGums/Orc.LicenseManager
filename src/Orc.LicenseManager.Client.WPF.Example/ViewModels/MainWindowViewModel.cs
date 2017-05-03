@@ -70,7 +70,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         /// <value>The title.</value>
         public override string Title
         {
-            get { return "License manager example"; }
+            get { return "Orc.LicenseManager example"; }
         }
 
         public string ServerUri { get; set; }

@@ -16,6 +16,7 @@ namespace Orc.LicenseManager.Client.Example
     using Catel.Reflection;
     using Catel.Services;
     using Catel.Windows;
+    using Orchestra;
     using Services;
 
     /// <summary>
@@ -51,7 +52,7 @@ namespace Orc.LicenseManager.Client.Example
 
             Console.WriteLine(typeof(ILicenseService));
 
-            StyleHelper.CreateStyleForwardersForDefaultStyles();
+            this.ApplyTheme();
 
             base.OnStartup(e);
         }
