@@ -156,4 +156,19 @@
   <data name="ShowClipboard" xml:space="preserve">
     <value>Toon klembord</value>
   </data>
+  <data name="LicenseManager_LicenseView_TextBlock_Text_LicenseFor" xml:space="preserve">
+    <value>License for:</value>
+</data>
+  <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_ItAppearsThatYouHaveReachedTheMaximumNumberOfConcurrentUsagesOfTheLicense" xml:space="preserve">
+    <value>It appears that you have reached the maximum number of concurrent usages of the license.</value>
+</data>
+  <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_BelowIsAListOfCurrentUsagesOfYourLicenseYouCanWaitForALicenseToBecomeAvailableByKeepingThisWindowOpenToSpeedUpTheProcessYouCanContactOneOfThePersonsBelowToAskThemToCloseTheSoftware" xml:space="preserve">
+    <value>Below is a list of current usages of your license. You can wait for a license to become available by keeping this window open. To speed up the process, you can contact one of the persons below to ask them to close the software. </value>
+</data>
+  <data name="LicenseManager_NetworkLicenseUsageWindow_Button_Content_CloseApplication" xml:space="preserve">
+    <value>Close application</value>
+</data>
+  <data name="LicenseManager_NetworkLicenseUsageWindow_Button_Content_BuyMoreLicenses" xml:space="preserve">
+    <value>Buy more licenses</value>
+</data>
 </root>
