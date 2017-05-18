@@ -49,6 +49,10 @@ namespace Orc.LicenseManager.Services
         public bool IsLicenseModeAvailable(LicenseMode licenseMode)
         {
             var licenseLocation = _licenseLocationService.GetLicenseLocation(licenseMode);
+            if (string.IsNullOrWhiteSpace(licenseLocation))
+            {
+                return false;
+            }
 
             try
             {
