@@ -9,10 +9,13 @@ namespace Orc.LicenseManager
 {
     using System;
     using Catel;
+    using Catel.Logging;
     using Services;
 
     public static class ILicenseServiceExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         public static DateTime? GetCurrentLicenseExpirationDateTime(this ILicenseService licenseService)
         {
             Argument.IsNotNull(() => licenseService);
@@ -28,10 +31,19 @@ namespace Orc.LicenseManager
 
         public static string LoadExistingLicense(this ILicenseService licenseService)
         {
-            var licenseString = licenseService.LoadLicense(LicenseMode.CurrentUser);
-            if (string.IsNullOrWhiteSpace(licenseString))
+            string licenseString = null;
+
+            try
             {
-                licenseString = licenseService.LoadLicense(LicenseMode.MachineWide);
+                licenseString = licenseService.LoadLicense(LicenseMode.CurrentUser);
+                if (string.IsNullOrWhiteSpace(licenseString))
+                {
+                    licenseString = licenseService.LoadLicense(LicenseMode.MachineWide);
+                }
+            }
+            catch (Exception)
+            {
+                // Tolerated
             }
 
             return licenseString;
