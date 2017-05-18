@@ -116,15 +116,18 @@ namespace Orc.LicenseManager.Services
 
             try
             {
-                if (_fileService.Exists(xmlFilePath))
+                if (!string.IsNullOrWhiteSpace(xmlFilePath))
                 {
-                    Log.Debug("License exists");
-                    return true;
+                    if (_fileService.Exists(xmlFilePath))
+                    {
+                        Log.Debug("License exists");
+                        return true;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to check whether the license exists @ 'xmlFilePath'");
+                Log.Warning(ex, $"Failed to check whether the license exists @ '{xmlFilePath}'");
             }
 
             Log.Debug("License does not exist");
