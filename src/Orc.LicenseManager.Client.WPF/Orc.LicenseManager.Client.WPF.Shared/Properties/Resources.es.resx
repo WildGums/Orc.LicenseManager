@@ -171,4 +171,7 @@
   <data name="LicenseManager_NetworkLicenseUsageWindow_Button_Content_BuyMoreLicenses" xml:space="preserve">
     <value>Buy more licenses</value>
 </data>
+  <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_ConverterParameter_YouAreEntitledToConcurrentUsagesOfTheLicenseButItLooksThisAmountIsAlreadyUsed" xml:space="preserve">
+    <value>You are entitled to {0} concurrent usages of the license, but it looks this amount is already used.</value>
+</data>
 </root>

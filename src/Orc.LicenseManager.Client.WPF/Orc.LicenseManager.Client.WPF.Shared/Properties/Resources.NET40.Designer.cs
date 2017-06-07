@@ -221,5 +221,14 @@ namespace Orc.LicenseManager.Properties {
                 return ResourceManager.GetString("LicenseManager_LicenseView_TextBlock_Text_LicenseFor", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to You are entitled to {0} concurrent usages of the license, but it looks this amount is already used..
+        /// </summary>
+        internal static string LicenseManager_NetworkLicenseUsageWindow_TextBlock_ConverterParameter_YouAreEntitledToConcurrentUsagesOfTheLicenseButItLooksThisAmountIsAlreadyUsed {
+            get {
+                return ResourceManager.GetString("LicenseManager_NetworkLicenseUsageWindow_TextBlock_ConverterParameter_YouAreEntitledToConcurrentUsagesOfTheLicenseButItLooksThisAmountIsAlreadyUsed", resourceCulture);
+            }
+        }
  }
 }
