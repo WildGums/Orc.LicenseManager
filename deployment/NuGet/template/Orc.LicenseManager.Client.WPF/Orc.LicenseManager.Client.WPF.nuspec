@@ -25,7 +25,7 @@
     
     <dependencies>
       <dependency id="Orc.LicenseManager.Client" version="[VERSION]" />
-      <dependency id="Catel.Extensions.Controls" version="[replaced]" />
+      <dependency id="Catel.MVVM" version="[replaced]" />
       <dependency id="Orc.FileSystem" version="[replaced]" />
       <dependency id="Newtonsoft.Json" version="[replaced]" />
     </dependencies>    

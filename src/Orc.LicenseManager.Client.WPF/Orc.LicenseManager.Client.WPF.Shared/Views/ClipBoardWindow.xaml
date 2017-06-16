@@ -7,14 +7,14 @@
         <ResourceDictionary Source="../Themes/Generic.xaml" />
     </catel:DataWindow.Resources>
 
-    <catel:StackGrid MinWidth="300" MinHeight="200">
-        <catel:StackGrid.RowDefinitions>
+    <Grid MinWidth="300" MinHeight="200">
+        <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto" />
-        </catel:StackGrid.RowDefinitions>
+        </Grid.RowDefinitions>
         
-        <TextBox Text="{Binding ClipBoardText}" AcceptsReturn="True" TextWrapping="Wrap" TextAlignment="Justify" IsEnabled="False"/>
+        <TextBox Grid.Row="0" Text="{Binding ClipBoardText}" AcceptsReturn="True" TextWrapping="Wrap" TextAlignment="Justify" IsEnabled="False"/>
         <Button Grid.Row="1" Command="{Binding Exit}" Width="100" Content="{catel:LanguageBinding Close}" HorizontalAlignment="Right"/>
-    </catel:StackGrid>
+    </Grid>
     
 </catel:DataWindow>

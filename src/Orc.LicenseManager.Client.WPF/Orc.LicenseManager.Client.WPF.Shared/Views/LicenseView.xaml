@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="Orc.LicenseManager.Views.LicenseView"
+<catel:UserControl x:Class="Orc.LicenseManager.Views.LicenseView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -119,7 +119,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="License for:" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{catel:LanguageBinding LicenseManager_LicenseView_TextBlock_Text_LicenseFor}" />
 
                     <ComboBox Grid.Column="1" ItemsSource="{Binding AvailableLicenseModes}" SelectedValue="{Binding LicenseMode}">
                         <ComboBox.ItemTemplate>
