@@ -73,7 +73,7 @@ namespace Orc.LicenseManager.ViewModels
             XmlData = new ObservableCollection<XmlDataModel>();
 
             Paste = new TaskCommand(OnPasteExecuteAsync);
-            ShowClipboard = new Command(OnShowClipboardExecute);
+            ShowClipboard = new TaskCommand(OnShowClipboardExecuteAsync);
             PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
             RemoveLicense = new TaskCommand(OnRemoveLicenseExecuteAsync, OnRemoveLicenseCanExecute);
@@ -139,7 +139,7 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Gets the ShowClipboard command.
         /// </summary>
-        public Command ShowClipboard { get; private set; }
+        public TaskCommand ShowClipboard { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [show failure].
@@ -411,9 +411,9 @@ namespace Orc.LicenseManager.ViewModels
         /// <summary>
         /// Method to invoke when the ShowClipboard command is executed.
         /// </summary>
-        private void OnShowClipboardExecute()
+        private async Task OnShowClipboardExecuteAsync()
         {
-            _uiVisualizerService.ShowDialog<ClipBoardViewModel>();
+            await _uiVisualizerService.ShowDialogAsync<ClipBoardViewModel>();
         }
         #endregion
     }

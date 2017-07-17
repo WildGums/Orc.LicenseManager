@@ -57,7 +57,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             ValidateLicenseOnServer = new TaskCommand(OnValidateLicenseOnServerExecuteAsync, OnValidateLicenseOnServerCanExecute);
             ValidateLicenseOnLocalNetwork = new TaskCommand(OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
             ShowLicense = new Command(OnShowLicenseExecute);
-            ShowLicenseUsage = new Command(OnShowLicenseUsageExecute);
+            ShowLicenseUsage = new TaskCommand(OnShowLicenseUsageExecuteAsync);
 
             ServerUri = string.Format("http://localhost:1815/api/license/validate");
         }
@@ -146,9 +146,9 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             _licenseVisualizerService.ShowLicense();
         }
 
-        public Command ShowLicenseUsage { get; set; }
+        public TaskCommand ShowLicenseUsage { get; set; }
 
-        private void OnShowLicenseUsageExecute()
+        private async Task OnShowLicenseUsageExecuteAsync()
         {
             var networkValidationResult = new NetworkValidationResult();
 
@@ -161,7 +161,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 new NetworkLicenseUsage("15", "192.168.1.103", "Paula", "Licence signature", DateTime.Now)
             });
 
-            _uiVisualizerService.ShowDialog<NetworkLicenseUsageViewModel>(networkValidationResult);
+            await _uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(networkValidationResult);
         }
         #endregion
 

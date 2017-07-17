@@ -42,12 +42,13 @@ namespace Orc.LicenseManager.Services
         {
             Log.Debug("Showing license dialog with company info");
 
-            // Note: doesn't this cause deadlocks?
-            _dispatcherService.Invoke(() =>
+#pragma warning disable AvoidAsyncVoid
+            _dispatcherService.Invoke(async () =>
             {
                 var licenseInfo = _licenseInfoService.GetLicenseInfo();
-                _uiVisualizerService.ShowDialog<LicenseViewModel>(licenseInfo);
+                await _uiVisualizerService.ShowDialogAsync<LicenseViewModel>(licenseInfo);
             }, true);
+#pragma warning restore AvoidAsyncVoid
         }
         #endregion
     }

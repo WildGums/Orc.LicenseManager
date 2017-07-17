@@ -48,7 +48,7 @@ namespace Orc.LicenseManager.Services
             {
                 var error = "The number of items inside the license differ too much, assuming machine ids do not match";
                 Log.Error(error);
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
+                validationContext.Add(BusinessRuleValidationResult.CreateError(error));
 
                 return validationContext;
             }
@@ -67,7 +67,7 @@ namespace Orc.LicenseManager.Services
             {
                 var error = string.Format("{0} values are not equal, not accepting the machine id, maximum threshold is '{1}'", invalidEntries, Threshold);
                 Log.Error(error);
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
+                validationContext.Add(BusinessRuleValidationResult.CreateError(error));
 
                 return validationContext;
             }
@@ -77,7 +77,7 @@ namespace Orc.LicenseManager.Services
                 var warning = string.Format("One of the values is not equal, but we have a threshold of {0} so accepting machine id", Threshold);
                 Log.Warning(warning);
 
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
+                validationContext.Add(BusinessRuleValidationResult.CreateWarning(warning));
             }
 
             return validationContext;

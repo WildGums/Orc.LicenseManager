@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers VerifyAssembly="true">
-  <Costura>
+  <Costura DisableCleanup="true">
     <IncludeAssemblies>
       Portable.Licensing
       Orc.SystemInfo
     </IncludeAssemblies>
   </Costura>
-  <ModuleInit />
   <Catel />
-  <MethodTimer />
   <LoadAssembliesOnStartup />
+  <MethodTimer />
+  <ModuleInit />
   <Obsolete />
 </Weavers>

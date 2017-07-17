@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Orc.LicenseManager.Client.WPF.Example.Properties {
+namespace Orc.LicenseManager.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Orc.LicenseManager.Client.WPF.Example.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.LicenseManager.Client.WPF.Example.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.LicenseManager.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,24 @@ namespace Orc.LicenseManager.Client.WPF.Example.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All users.
+        /// </summary>
+        internal static string AllUsers {
+            get {
+                return ResourceManager.GetString("AllUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current user.
+        /// </summary>
+        internal static string CurrentUser {
+            get {
+                return ResourceManager.GetString("CurrentUser", resourceCulture);
             }
         }
     }
