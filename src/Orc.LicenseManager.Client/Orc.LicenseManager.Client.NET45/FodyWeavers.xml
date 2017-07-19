@@ -6,9 +6,9 @@
       Orc.SystemInfo
     </IncludeAssemblies>
   </Costura>
-  <Catel />
-  <LoadAssembliesOnStartup />
-  <MethodTimer />
   <ModuleInit />
+  <Catel />
+  <MethodTimer />
+  <LoadAssembliesOnStartup />
   <Obsolete />
 </Weavers>
