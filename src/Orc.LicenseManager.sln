@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Website", "Website", "{04BE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client.WPF", "Client.WPF", "{CFE0CBFB-5F80-420A-904F-F467089B2EC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.WPF.NET40", "Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.NET40\Orc.LicenseManager.Client.WPF.NET40.csproj", "{8D9CDFE6-34E4-407C-95FB-BF582C8D344C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.WPF.NET47", "Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.NET47\Orc.LicenseManager.Client.WPF.NET47.csproj", "{8D9CDFE6-34E4-407C-95FB-BF582C8D344C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C7037131-F052-44C0-A4BF-E87B3D85976B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Tests.NET40", "Orc.LicenseManager.Tests\Orc.LicenseManager.Tests.NET40\Orc.LicenseManager.Tests.NET40.csproj", "{906B4E55-7BC7-48D2-A118-F3AE8DEC2E7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Tests.NET47", "Orc.LicenseManager.Tests\Orc.LicenseManager.Tests.NET47\Orc.LicenseManager.Tests.NET47.csproj", "{906B4E55-7BC7-48D2-A118-F3AE8DEC2E7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.WPF.Example", "Orc.LicenseManager.Client.WPF.Example\Orc.LicenseManager.Client.WPF.Example.csproj", "{71452771-3DE3-45E4-81A4-2CF0565F8133}"
 EndProject
@@ -42,7 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{008D3308-E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{D02E58A6-EF14-4F72-9BAC-0D7D21F1E93C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.NET40", "Orc.LicenseManager.Client\Orc.LicenseManager.Client.NET40\Orc.LicenseManager.Client.NET40.csproj", "{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Client.NET47", "Orc.LicenseManager.Client\Orc.LicenseManager.Client.NET47\Orc.LicenseManager.Client.NET47.csproj", "{6402DCE4-8B0C-47CA-A223-0B88B7EF8149}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.LicenseManager.Client.Shared", "Orc.LicenseManager.Client\Orc.LicenseManager.Client.Shared\Orc.LicenseManager.Client.Shared.shproj", "{C42C5A3A-9146-419D-A2EF-5A8022A9E658}"
 EndProject

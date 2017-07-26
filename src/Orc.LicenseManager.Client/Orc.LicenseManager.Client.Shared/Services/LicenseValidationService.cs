@@ -81,7 +81,7 @@ namespace Orc.LicenseManager.Services
                     foreach (var failure in failureList)
                     {
                         var businessRuleValidationResult = BusinessRuleValidationResult.CreateErrorWithTag(failure.Message, failure.HowToResolve);
-                        validationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
+                        validationContext.Add(businessRuleValidationResult);
                     }
                 }
 
@@ -115,7 +115,7 @@ namespace Orc.LicenseManager.Services
             {
                 Log.Error(ex, "An error occurred while loading the license");
 
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("An unknown error occurred while loading the license, please contact support"));
+                validationContext.Add(BusinessRuleValidationResult.CreateError("An unknown error occurred while loading the license, please contact support"));
             }
             finally
             {
@@ -241,7 +241,7 @@ namespace Orc.LicenseManager.Services
             var validationContext = new ValidationContext();
             if (string.IsNullOrWhiteSpace(license))
             {
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("No license available"));
+                validationContext.Add(BusinessRuleValidationResult.CreateError("No license available"));
             }
 
             var xmlDataList = new List<XmlDataModel>();
@@ -253,7 +253,7 @@ namespace Orc.LicenseManager.Services
                 var xmlRoot = xmlDoc.DocumentElement;
                 if (!string.Equals(xmlRoot.Name, "License"))
                 {
-                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("Please make sure that you pasted the complete license, including the <License> tags"));
+                    validationContext.Add(BusinessRuleValidationResult.CreateError("Please make sure that you pasted the complete license, including the <License> tags"));
                 }
 
                 var xmlNodes = xmlRoot.ChildNodes;
@@ -282,7 +282,7 @@ namespace Orc.LicenseManager.Services
 
                 if (xmlDataList.Count == 0)
                 {
-                    validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("License contains no valid data"));
+                    validationContext.Add(BusinessRuleValidationResult.CreateError("License contains no valid data"));
                 }
 
                 var expData = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, LicenseElements.Expiration));
@@ -297,12 +297,12 @@ namespace Orc.LicenseManager.Services
 
                         if (_expirationBehavior.IsExpired(portableLicense, expirationDateTime, DateTime.Now))
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The license has expired. Please delete the current license if you have a new one."));
+                            validationContext.Add(BusinessRuleValidationResult.CreateError("The license has expired. Please delete the current license if you have a new one."));
                         }
                     }
                     else
                     {
-                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The expiration date was not a valid date / tim value"));
+                        validationContext.Add(BusinessRuleValidationResult.CreateError("The expiration date was not a valid date / tim value"));
                     }
                 }
 
@@ -315,12 +315,12 @@ namespace Orc.LicenseManager.Services
                         var productVersion = Assembly.GetExecutingAssembly().GetName().Version;
                         if (productVersion > licenseVersion)
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("Your license only supports versions up to '{0}' while the current version of this product is '{1}'", licenseVersion, productVersion));
+                            validationContext.Add(BusinessRuleValidationResult.CreateError("Your license only supports versions up to '{0}' while the current version of this product is '{1}'", licenseVersion, productVersion));
                         }
                     }
                     else
                     {
-                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The version was not a valid version value"));
+                        validationContext.Add(BusinessRuleValidationResult.CreateError("The version was not a valid version value"));
                     }
                 }
             }
@@ -328,7 +328,7 @@ namespace Orc.LicenseManager.Services
             {
                 Log.Debug(xmlex);
 
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("The license data is not a license"));
+                validationContext.Add(BusinessRuleValidationResult.CreateError("The license data is not a license"));
             }
             catch (Exception ex)
             {
@@ -340,7 +340,7 @@ namespace Orc.LicenseManager.Services
                 //    innermessage = ex.InnerException.Message;
                 //}
 
-                validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(ex.Message));
+                validationContext.Add(BusinessRuleValidationResult.CreateError(ex.Message));
             }
 
             if (validationContext.HasErrors || validationContext.HasWarnings)

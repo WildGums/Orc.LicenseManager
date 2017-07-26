@@ -1,6 +1,5 @@
 ﻿using Catel.IoC;
 using Catel.Services;
-using Catel.Services.Models;
 using Orc.LicenseManager.Services;
 using Orc.LicenseManager.ViewModels;
 using Orc.LicenseManager.Views;
