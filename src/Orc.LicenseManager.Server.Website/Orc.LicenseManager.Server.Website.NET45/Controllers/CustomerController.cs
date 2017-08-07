@@ -126,7 +126,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
 				using(var uow = new UoW()){
 					var customersRepo = uow.GetRepository<ICustomerRepository>();
                     var customermodify = customersRepo.GetByKey(customer.Id);
-                    customermodify.FirstName = customer.LastName;
+                    customermodify.FirstName = customer.FirstName;
                     customermodify.LastName = customer.LastName;
                     customermodify.Company = customer.Company;
                     customermodify.Email = customer.Email;
