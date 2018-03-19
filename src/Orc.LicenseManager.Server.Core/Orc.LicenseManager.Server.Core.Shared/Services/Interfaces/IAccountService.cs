@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager.Server.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public interface IAccountService
     {
@@ -16,5 +17,7 @@ namespace Orc.LicenseManager.Server.Services
         bool RoleExists(string rolestr);
         void CreateRole(string role);
         #endregion
+
+        Task<bool> ResetPasswordAsync(string userName, string newPassword);
     }
 }

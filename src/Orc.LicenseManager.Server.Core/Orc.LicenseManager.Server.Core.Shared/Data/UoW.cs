@@ -33,10 +33,12 @@
                     ihascreatedate.Entity.CreatorId = membershipService.GetUserId();
                 }
             }
+
             foreach (var ihascreatedate in DbContext.ChangeTracker.Entries<ICreateDate>().Where(x => x.State == EntityState.Added))
             {
                 ihascreatedate.Entity.CreationDate = DateTime.UtcNow;
             }
+
             foreach (var ihasmodifydate in DbContext.ChangeTracker.Entries<IModifyDate>().Where(x => x.State == EntityState.Modified || x.State == EntityState.Added))
             {
                 ihasmodifydate.Entity.ModificationDate = DateTime.UtcNow;

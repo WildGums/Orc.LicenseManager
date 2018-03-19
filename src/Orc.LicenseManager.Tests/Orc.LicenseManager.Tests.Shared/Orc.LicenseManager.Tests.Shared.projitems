@@ -10,12 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client\ExpirationBehaviors\PreventUsageOfAnyVersionExpirationBehaviorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client\ExpirationBehaviors\PreventUsageOfLaterReleasedVersionsExpirationBehaviorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client\Models\NetworkLicenseUsageTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client\Services\LicenseServiceFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.approvaltests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PublicApiFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestEnvironment.cs" />
   </ItemGroup>
 </Project>
