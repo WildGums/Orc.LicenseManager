@@ -8,6 +8,17 @@ public class static ModuleInitializer
 {
     public static void Initialize() { }
 }
+namespace Orc.LicenseManager.Converters
+{
+    
+    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(string))]
+    public class FormattingConverter : Catel.MVVM.Converters.ValueConverterBase
+    {
+        public FormattingConverter() { }
+        protected FormattingConverter(string defaultFormatString) { }
+        protected override object Convert(object value, System.Type targetType, object parameter) { }
+    }
+}
 namespace Orc.LicenseManager.Services
 {
     
