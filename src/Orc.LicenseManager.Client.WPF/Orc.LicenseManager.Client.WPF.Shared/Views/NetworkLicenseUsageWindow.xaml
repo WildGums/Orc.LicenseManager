@@ -2,11 +2,18 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://schemas.catelproject.com"
+                  xmlns:converters="clr-namespace:Orc.LicenseManager.Converters"
                   Title="{Binding WindowTitle}">
 
-    <catel:DataWindow.Resources>
-        <ResourceDictionary Source="/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml" />
-    </catel:DataWindow.Resources>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:FormattingConverter x:Key="FormattingConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -18,10 +25,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="420" />
         </Grid.ColumnDefinitions>
+
         <StackPanel>
-            <StackPanel.Resources>
-                <catel:FormattingConverter x:Key="FormattingConverter" />
-            </StackPanel.Resources>
             <StackPanel>
                 <TextBlock Margin="10"
                            TextWrapping="Wrap"
@@ -38,6 +43,7 @@
                        TextWrapping="Wrap"
                        Text="{catel:LanguageBinding LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_BelowIsAListOfCurrentUsagesOfYourLicenseYouCanWaitForALicenseToBecomeAvailableByKeepingThisWindowOpenToSpeedUpTheProcessYouCanContactOneOfThePersonsBelowToAskThemToCloseTheSoftware}" />
         </StackPanel>
+
         <ListBox Grid.Row="1"
                  Margin="10"
                  HorizontalAlignment="Stretch"

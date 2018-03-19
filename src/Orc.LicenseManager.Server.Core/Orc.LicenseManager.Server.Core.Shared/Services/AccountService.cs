@@ -10,6 +10,7 @@ namespace Orc.LicenseManager.Server.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Catel.Data;
     using Catel.IoC;
     using Microsoft.AspNet.Identity;
@@ -18,7 +19,29 @@ namespace Orc.LicenseManager.Server.Services
     public class AccountService : IAccountService
     {
         #region Methods
- 
+        public AccountService()
+        {
+            
+        }
+
+        public async Task<bool> ResetPasswordAsync(string userName, string newPassword)
+        {
+            using (var dbContextManager = DbContextManager<LicenseManagerDbContext>.GetManager())
+            {
+                var userManager = new UserManager<User>(new UserStore<User>(dbContextManager.Context));
+                
+                var user = await userManager.FindByNameAsync(userName);
+                if (user == null)
+                {
+                    return false;
+                }
+
+                await userManager.RemovePasswordAsync(user.Id);
+                await userManager.AddPasswordAsync(user.Id, newPassword);
+
+                return true;
+            }
+        }
 
         public void CreateUserWithRoles(string userName, string password, List<string> userRoles)
         {
@@ -34,6 +57,7 @@ namespace Orc.LicenseManager.Server.Services
                     throw new Exception("Only created roles can be assigned to Users.", new Exception("The role \"" + role + "\" doesn't exist."));
                 }
             });
+
             using (var dbContextManager = DbContextManager<LicenseManagerDbContext>.GetManager())
             {
                 var userManager = new UserManager<User>(new UserStore<User>(dbContextManager.Context));
