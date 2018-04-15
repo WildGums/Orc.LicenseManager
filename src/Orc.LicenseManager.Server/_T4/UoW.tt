@@ -1,0 +1,211 @@
+﻿<#@ assembly name="$(ProjectDir)$(OutDir)$(TargetFileName)" #>
+<#@ import namespace="Orc.LicenseManager.Server"#>
+
+<#
+
+ //FILL IN BELOW THE CORRECT DBCONTEXT
+Type typeInfo = typeof(LicenseManagerDbContext);
+
+
+//change the following namespace to your base namespace
+var baseNameSpace = "Orc.LicenseManager.Server";
+
+#>
+
+// FINISHED
+
+
+<#@include file="Manager.ttinclude"#>
+<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="$(TargetDir)EntityFramework.dll" #>
+<#@ assembly name="$(TargetDir)Microsoft.AspNet.Identity.EntityFramework.dll" #>
+<#@ assembly name="$(TargetDir)Microsoft.AspNet.Identity.Core.dll" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Data.Entity" #>
+
+<#@ output extension=".cs" #>
+<# var manager = Manager.Create(Host, GenerationEnvironment); #>
+
+
+<#
+
+
+
+var entityNameSpace = "System.Data.Entity";
+var repositoriesNameSpace = baseNameSpace + ".Repositories";
+
+var catelDataRepostNameSpace = "Orc.EntityFramework.Repositories";
+var catelDataNameSpace = "Orc.EntityFramework";
+var catelIoCNameSpace = "Catel.IoC";
+
+
+
+//HEADER 
+
+Action<string> Using = s => this.WriteLine("using " + s + ";");
+#>
+<# manager.StartHeader(); #>
+<#
+Using(entityNameSpace);
+Using(catelDataRepostNameSpace);
+Using(catelDataNameSpace);
+Using(catelIoCNameSpace);
+Using(repositoriesNameSpace);
+Using(baseNameSpace);
+#>
+
+<# manager.EndBlock(); #>
+<#
+
+
+
+string dbcontextname = typeInfo.Name.ToString();
+//var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("DbSet") && !x.PropertyType.ToString().Contains("User") && !x.PropertyType.ToString().Contains("IdentityRole")).ToArray();
+var pocos = typeInfo.GetProperties().ToList().Where(x => x.PropertyType.ToString().Contains("DbSet") && !x.PropertyType.ToString().Contains("IdentityRole"));
+var poconames = new string[pocos.Count()];
+var propnames = new string[pocos.Count()];
+var pocopktype = new string[pocos.Count()];
+int counter = 0;
+foreach(var poco in pocos)
+{
+    if(poco.PropertyType.ToString().Contains("System.Data.Entity.IDbSet`1["))
+	{
+		poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.IDbSet`1[" + baseNameSpace+ ".","").Replace("]","");
+		pocopktype[counter] = "string";
+	}
+	else
+	{
+		poconames[counter] = poco.PropertyType.ToString().Replace("System.Data.Entity.DbSet`1[" + baseNameSpace+ ".","").Replace("]","");
+		pocopktype[counter] = "int";
+
+	}
+	propnames[counter] = poco.Name;
+	counter ++;
+}
+#>
+
+
+
+
+
+//		REPOSITORIES
+
+<# manager.StartNewFile("Repositories.cs"); #>
+
+namespace <#=repositoriesNameSpace#>
+{
+<#
+for(int x=0;x!=pocos.Count();x++)
+{
+var poconame = poconames[x];
+var proppk = pocopktype[x];
+#>
+    public partial class <#=poconame#>Repository : EntityRepositoryBase<<#=poconame#>, <#=proppk#>>, I<#=poconame#>Repository
+	{
+		 public <#=poconame#>Repository(<#=dbcontextname#> dbContext) 
+		 : base(dbContext)
+         {
+         }
+	} 
+
+<#}#>
+}
+
+<# manager.EndBlock(); #>
+
+
+//		REPOSITORIES INTERFACES
+
+
+<# manager.StartNewFile("Repositories.Interfaces.cs"); #>
+namespace <#=repositoriesNameSpace#>
+{
+<#
+for(int x=0;x!=pocos.Count();x++)
+{
+var poconame = poconames[x];
+var proppk = pocopktype[x];
+#>
+	public partial interface I<#=poconame#>Repository : IEntityRepository<<#=poconame#>, <#=proppk#>>
+	{
+		
+	} 
+<#}#>
+}
+
+<# manager.EndBlock(); #>
+
+//		REPOSITORIES Initializer
+
+<# manager.StartNewFile("Repositories.Initializer.cs"); #>
+namespace <#=baseNameSpace#>
+{
+	internal static partial class RepositoryInitializer
+	{
+		internal static void RegisterRepositories()
+		{
+<#
+foreach(var poconame in poconames){
+#>
+            ServiceLocator.Default.RegisterType<I<#=poconame#>Repository, <#=poconame#>Repository>();
+	<#}#>
+		}
+	}
+}
+<# manager.EndBlock(); #>
+
+//		AddReposToUoW
+
+
+
+// UOW
+
+
+<# manager.StartNewFile("AddReposToUoW.cs"); #>
+
+namespace <#=baseNameSpace#>
+{
+
+	public partial class UoW : UnitOfWork<<#=dbcontextname#>>, IUoW
+	{
+<#
+for(int x=0;x!=pocos.Count();x++)
+{
+var poconame = poconames[x];
+var propname = propnames[x];
+#>
+        private I<#=poconame#>Repository _<#=poconame#>Repository;
+
+        public I<#=poconame#>Repository <#=propname#>
+        {
+            get 
+			{ 
+				return _<#=poconame#>Repository ?? (_<#=poconame#>Repository = GetRepository<I<#=poconame#>Repository>());
+		    }
+        }
+<#
+} 
+#>
+	}
+	public partial interface IUoW
+	{
+<#
+for(int x=0;x!=pocos.Count();x++)
+{
+var poconame = poconames[x];
+var propname = propnames[x];
+#>
+            I<#=poconame#>Repository <#=propname#> { get; }
+<#
+}
+#>
+	}
+}
+
+
+<# manager.EndBlock(); #>
+
+
+<# manager.Process(true); #>

@@ -1,0 +1,76 @@
+<catel:DataWindow x:Class="Orc.LicenseManager.Views.NetworkLicenseUsageWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:catel="http://schemas.catelproject.com"
+                  xmlns:converters="clr-namespace:Orc.LicenseManager.Converters"
+                  Title="{Binding WindowTitle}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:FormattingConverter x:Key="FormattingConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="420" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <StackPanel>
+                <TextBlock Margin="10"
+                           TextWrapping="Wrap"
+                           FontSize="16"
+                           Text="{catel:LanguageBinding LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_ItAppearsThatYouHaveReachedTheMaximumNumberOfConcurrentUsagesOfTheLicense}" />
+                <GridSplitter Style="{StaticResource HorizontalGridSplitterStyle}"
+                              IsEnabled="False" />
+            </StackPanel>
+
+            <TextBlock Margin="10"
+                       TextWrapping="Wrap"
+                       Text="{Binding MaximumNumberOfConcurrentUsages, Converter={StaticResource FormattingConverter}, ConverterParameter='{catel:LanguageBinding LicenseManager_NetworkLicenseUsageWindow_TextBlock_ConverterParameter_YouAreEntitledToConcurrentUsagesOfTheLicenseButItLooksThisAmountIsAlreadyUsed}'}" />
+            <TextBlock Margin="10"
+                       TextWrapping="Wrap"
+                       Text="{catel:LanguageBinding LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_BelowIsAListOfCurrentUsagesOfYourLicenseYouCanWaitForALicenseToBecomeAvailableByKeepingThisWindowOpenToSpeedUpTheProcessYouCanContactOneOfThePersonsBelowToAskThemToCloseTheSoftware}" />
+        </StackPanel>
+
+        <ListBox Grid.Row="1"
+                 Margin="10"
+                 HorizontalAlignment="Stretch"
+                 Height="150"
+                 ItemsSource="{Binding CurrentUsers}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding UserName}" />
+                            <TextBlock Text="{Binding Ip, StringFormat={} ({0})}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="{catel:LanguageBinding LicenseManager_NetworkLicenseUsageWindow_Button_Content_CloseApplication}"
+                    Margin="4 10 2 4"
+                    Command="{Binding CloseApplication}" />
+            <Button Content="{catel:LanguageBinding LicenseManager_NetworkLicenseUsageWindow_Button_Content_BuyMoreLicenses}"
+                    Margin="4 10 10 4"
+                    Command="{Binding BuyLicenses}"
+                    Visibility="{Binding PurchaseUrl, Converter={catel:EmptyStringToCollapsingVisibilityConverter}}" />
+        </StackPanel>
+    </Grid>
+</catel:DataWindow>
