@@ -7,6 +7,7 @@
 
 namespace Orc.LicenseManager.Tests
 {
+    using System.Runtime.CompilerServices;
     using ApiApprover;
     using NUnit.Framework;
     using Services;
@@ -14,7 +15,7 @@ namespace Orc.LicenseManager.Tests
     [TestFixture]
     public class PublicApiFacts
     {
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_LicenseManager_Client_HasNoBreakingChanges()
         {
             var assembly = typeof(ApplicationIdService).Assembly;
@@ -22,7 +23,7 @@ namespace Orc.LicenseManager.Tests
             PublicApiApprover.ApprovePublicApi(assembly);
         }
 
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Orc_LicenseManager_Client_Wpf_HasNoBreakingChanges()
         {
             var assembly = typeof(DialogLicenseVisualizerService).Assembly;
