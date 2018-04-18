@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Orc.LicenseManager.Client.Properties {
+namespace Orc.LicenseManager.Properties {
     using System;
     using Catel.Reflection;
 
