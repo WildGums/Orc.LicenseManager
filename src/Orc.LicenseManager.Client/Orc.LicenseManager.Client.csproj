@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net46;net47</TargetFrameworks>
     <AssemblyName>Orc.LicenseManager.Client</AssemblyName>
-    <RootNamespace>Orc.LicenseManager.Client</RootNamespace>
+    <RootNamespace>Orc.LicenseManager</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Orc.LicenseManager.Client</PackageId>
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
