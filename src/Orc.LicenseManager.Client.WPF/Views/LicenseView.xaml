@@ -68,7 +68,7 @@
 
             <GroupBox Header="{catel:LanguageBinding InsertLicenseHeader}"
                       Padding="10" Style="{StaticResource GrayGroupBoxStyle}"
-                      Visibility="{Binding LicenseExists, ConverterParameter=False, Converter={catel:BooleanToCollapsingVisibilityConverter}}">
+                      Visibility="{Binding LicenseExists, Converter={catel:BooleanToCollapsingVisibilityConverter}, ConverterParameter=True}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
