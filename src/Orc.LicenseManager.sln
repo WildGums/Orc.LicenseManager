@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{008D3308-E
 		Directory.build.props = Directory.build.props
 		Directory.build.shared.explicit.props = Directory.build.shared.explicit.props
 		Directory.build.shared.implicit.props = Directory.build.shared.implicit.props
+		Directory.build.shared.mat.props = Directory.build.shared.mat.props
 		Directory.build.targets = Directory.build.targets
 		GlobalSuppressions.cs = GlobalSuppressions.cs
 		NuGet.config = NuGet.config
@@ -41,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Server",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Server.Website", "Orc.LicenseManager.Server.Website\Orc.LicenseManager.Server.Website.csproj", "{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Tests", "Orc.LicenseManager.Tests\Orc.LicenseManager.Tests.csproj", "{9FE19B06-29A8-4D6E-824E-DB6B7C959881}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Tests", "Orc.LicenseManager.Tests\Orc.LicenseManager.Tests.csproj", "{9FE19B06-29A8-4D6E-824E-DB6B7C959881}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
