@@ -11,7 +11,7 @@ namespace Orc.LicenseManager.Tests.Client.Services
     using System.IO;
     using System.Xml;
     using Catel.IoC;
-    using Catel.Test;
+    using Catel.Tests;
     using LicenseManager.Services;
     using NUnit.Framework;
     using Portable.Licensing;
