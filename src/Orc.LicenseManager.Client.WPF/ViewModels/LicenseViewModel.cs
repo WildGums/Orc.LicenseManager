@@ -353,11 +353,7 @@ namespace Orc.LicenseManager.ViewModels
                 if (xmlFirstError == null)
                 {
                     var normalFirstError = _licenseValidationService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
-                    if (normalFirstError == null)
-                    {
-
-                    }
-                    else
+                    if (normalFirstError != null)
                     {
                         ShowFailure = true;
                         FailureMessage = normalFirstError.Message;
@@ -392,7 +388,7 @@ namespace Orc.LicenseManager.ViewModels
                     ShowFailure = true;
 
                     // TODO: Read from resources (language service preferred)
-                    FailureMessage = "No text was pasted into the window";
+                    FailureMessage = LanguageHelper.GetString("NoTextWasPasted");
                     return;
                 }
 

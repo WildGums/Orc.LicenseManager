@@ -14,8 +14,6 @@ namespace Orc.LicenseManager
 
     public static class ILicenseServiceExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public static DateTime? GetCurrentLicenseExpirationDateTime(this ILicenseService licenseService)
         {
             Argument.IsNotNull(() => licenseService);

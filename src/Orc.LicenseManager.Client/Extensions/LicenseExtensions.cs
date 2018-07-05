@@ -13,8 +13,6 @@ namespace Orc.LicenseManager
 
     public static class LicenseExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public static int GetMaximumConcurrentLicenses(this License license)
         {
             Argument.IsNotNull(() => license);

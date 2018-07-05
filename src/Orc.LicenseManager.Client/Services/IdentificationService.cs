@@ -13,8 +13,6 @@ namespace Orc.LicenseManager.Services
 
     public class IdentificationService : IIdentificationService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly ISystemIdentificationService _systemIdentificationService;
         private readonly object _lock = new object();
         private string _machineId = string.Empty;

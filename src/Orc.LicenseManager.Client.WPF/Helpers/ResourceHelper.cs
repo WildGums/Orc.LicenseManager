@@ -30,7 +30,11 @@ namespace Orc.LicenseManager
                 return;
             }
 
-            var resourceDictionary = new ResourceDictionary() {Source = new Uri("/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)};
+            var resourceDictionary = new ResourceDictionary()
+            {
+                Source = new Uri("/Orc.LicenseManager.Client.WPF;component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
+            };
+
             app.Resources.MergedDictionaries.Add(resourceDictionary);
 
             InitializedStyles = true;

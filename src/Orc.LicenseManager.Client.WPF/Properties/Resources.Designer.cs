@@ -10,8 +10,8 @@
 
 namespace Orc.LicenseManager.Properties {
     using System;
-    using Catel.Reflection;
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -39,7 +39,7 @@ namespace Orc.LicenseManager.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.LicenseManager.Client.Properties.Resources", typeof(Resources).GetAssemblyEx());
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Orc.LicenseManager.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -196,6 +196,15 @@ namespace Orc.LicenseManager.Properties {
         internal static string LicensePropsHeader {
             get {
                 return ResourceManager.GetString("LicensePropsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No text was pasted into the window.
+        /// </summary>
+        internal static string NoTextWasPasted {
+            get {
+                return ResourceManager.GetString("NoTextWasPasted", resourceCulture);
             }
         }
         

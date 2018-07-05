@@ -261,7 +261,7 @@ namespace Orc.LicenseManager.Services
     }
     public class SimpleLicenseService : Orc.LicenseManager.Services.ISimpleLicenseService
     {
-        public SimpleLicenseService(Orc.LicenseManager.Services.ILicenseService licenseService, Orc.LicenseManager.Services.ILicenseValidationService licenseValidationService, Orc.LicenseManager.Services.ILicenseVisualizerService licenseVisualizerService, Orc.LicenseManager.IExpirationBehavior expirationBehavior) { }
+        public SimpleLicenseService(Orc.LicenseManager.Services.ILicenseService licenseService, Orc.LicenseManager.Services.ILicenseValidationService licenseValidationService, Orc.LicenseManager.Services.ILicenseVisualizerService licenseVisualizerService) { }
         public bool Validate() { }
         public bool ValidateOnServer(string serverUrl) { }
     }

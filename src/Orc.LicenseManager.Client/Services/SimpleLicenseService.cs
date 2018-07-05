@@ -22,7 +22,6 @@ namespace Orc.LicenseManager.Services
         private readonly ILicenseService _licenseService;
         private readonly ILicenseValidationService _licenseValidationService;
         private readonly ILicenseVisualizerService _licenseVisualizerService;
-        private readonly IExpirationBehavior _expirationBehavior;
         #endregion
 
         #region Constructors
@@ -32,19 +31,17 @@ namespace Orc.LicenseManager.Services
         /// <param name="licenseService">The license service.</param>
         /// <param name="licenseValidationService">The license validation service.</param>
         /// <param name="licenseVisualizerService">The license visualizer service.</param>
-        /// <param name="expirationBehavior">The expiration behavior.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="licenseService" /> is <c>null</c>.</exception>
-        public SimpleLicenseService(ILicenseService licenseService, ILicenseValidationService licenseValidationService, ILicenseVisualizerService licenseVisualizerService, IExpirationBehavior expirationBehavior)
+        public SimpleLicenseService(ILicenseService licenseService, ILicenseValidationService licenseValidationService, 
+            ILicenseVisualizerService licenseVisualizerService)
         {
             Argument.IsNotNull(() => licenseService);
             Argument.IsNotNull(() => licenseValidationService);
             Argument.IsNotNull(() => licenseVisualizerService);
-            Argument.IsNotNull(() => expirationBehavior);
 
             _licenseService = licenseService;
             _licenseValidationService = licenseValidationService;
             _licenseVisualizerService = licenseVisualizerService;
-            _expirationBehavior = expirationBehavior;
         }
         #endregion
 

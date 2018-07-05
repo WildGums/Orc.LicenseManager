@@ -11,6 +11,7 @@ namespace Orc.LicenseManager.Services
     {
         public void ShowLicense()
         {
+            // Empty for a reason
         }
     }
 }

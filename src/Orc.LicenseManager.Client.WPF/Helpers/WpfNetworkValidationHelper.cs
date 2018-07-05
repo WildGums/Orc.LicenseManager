@@ -29,27 +29,24 @@ namespace Orc.LicenseManager
             }
 
             var validationResult = e.ValidationResult;
-            if (!validationResult.IsValid)
+            if (!validationResult.IsValid && validationResult.IsCurrentUserLatestUser())
             {
-                if (validationResult.IsCurrentUserLatestUser())
+                _isInErrorHandling = true;
+
+                var serviceLocator = ServiceLocator.Default;
+
+                var dispatcherService = serviceLocator.ResolveType<IDispatcherService>();
+                await dispatcherService.InvokeAsync(async () =>
                 {
-                    _isInErrorHandling = true;
+                    var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
+                    await uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(validationResult);
+                });
 
-                    var serviceLocator = ServiceLocator.Default;
+                _isInErrorHandling = false;
 
-                    var dispatcherService = serviceLocator.ResolveType<IDispatcherService>();
-                    await dispatcherService.InvokeAsync(async () =>
-                    {
-                        var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
-                        await uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(validationResult);
-                    });
-
-                    _isInErrorHandling = false;
-
-                    // Force check
-                    var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
-                    networkLicenseService.ValidateLicense();
-                }
+                // Force check
+                var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
+                networkLicenseService.ValidateLicense();
             }
         }
     }

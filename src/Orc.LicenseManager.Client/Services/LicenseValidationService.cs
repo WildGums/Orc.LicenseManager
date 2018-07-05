@@ -102,8 +102,6 @@ namespace Orc.LicenseManager.Services
                                 Log.Error("The license can only run on machine with ID '{0}'", licenseAttribute.Value);
                             }
                         }
-
-                        // TODO: add additional attribute checks here
                     }
                 }
 
@@ -119,22 +117,7 @@ namespace Orc.LicenseManager.Services
             }
             finally
             {
-                if (validationContext.GetErrors().Count > 0)
-                {
-                    Log.Warning("License is not valid:");
-                    Log.Indent();
-
-                    foreach (var error in validationContext.GetErrors())
-                    {
-                        Log.Warning("- {0}\n{1}", error.Message, error.Tag as string);
-                    }
-
-                    Log.Unindent();
-                }
-                else
-                {
-                    Log.Info("License is valid");
-                }
+                LogLicenseValidity(validationContext);
             }
 
             return validationContext;
@@ -201,11 +184,9 @@ namespace Orc.LicenseManager.Services
                 {
                     using (var responseStream = httpWebResponse.GetResponseStream())
                     {
-                        using (var streamReader = new StreamReader(responseStream))
-                        {
-                            var json = streamReader.ReadToEnd();
-                            validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(json);
-                        }
+                        var streamReader = new StreamReader(responseStream);
+                        var json = streamReader.ReadToEnd();
+                        validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(json);
                     }
                 }
             }
@@ -334,12 +315,6 @@ namespace Orc.LicenseManager.Services
             {
                 Log.Debug(ex);
 
-                //var innermessage = string.Empty;
-                //if (ex.InnerException != null)
-                //{
-                //    innermessage = ex.InnerException.Message;
-                //}
-
                 validationContext.Add(BusinessRuleValidationResult.CreateError(ex.Message));
             }
 
@@ -350,5 +325,25 @@ namespace Orc.LicenseManager.Services
             return validationContext;
         }
         #endregion
+
+        private void LogLicenseValidity(IValidationContext validationContext)
+        {
+            if (validationContext.GetErrors().Count > 0)
+            {
+                Log.Warning("License is not valid:");
+                Log.Indent();
+
+                foreach (var error in validationContext.GetErrors())
+                {
+                    Log.Warning("- {0}\n{1}", error.Message, error.Tag as string);
+                }
+
+                Log.Unindent();
+            }
+            else
+            {
+                Log.Info("License is valid");
+            }
+        }
     }
 }

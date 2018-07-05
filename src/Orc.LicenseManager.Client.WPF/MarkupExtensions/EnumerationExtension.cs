@@ -36,7 +36,7 @@ namespace Orc.LicenseManager
 
                 var enumType = Nullable.GetUnderlyingType(value) ?? value;
 
-                if (enumType.IsEnum == false)
+                if (!enumType.IsEnum)
                 {
                     throw new ArgumentException("Type must be an Enum.");
                 }

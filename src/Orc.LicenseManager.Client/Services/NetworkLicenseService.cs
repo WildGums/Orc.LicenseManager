@@ -125,7 +125,7 @@ namespace Orc.LicenseManager.Services
             {
                 CreateLicenseListeningSockets();
 
-                var timeout = SearchTimeout != null ? (int)SearchTimeout.TotalMilliseconds : 2000;
+                var timeout = SearchTimeout.TotalMilliseconds > 0 ? (int)SearchTimeout.TotalMilliseconds : 2000;
 
                 var licenseUsages = new List<NetworkLicenseUsage>();
 
@@ -235,13 +235,11 @@ namespace Orc.LicenseManager.Services
                                     var computerId = licenseUsage.ComputerId;
 
                                     var add = true;
-                                    if (licenseUsages.ContainsKey(computerId))
+
+                                    // Only update if this is an older timestamp
+                                    if (licenseUsages.ContainsKey(computerId) && (licenseUsages[computerId].StartDateTime < licenseUsage.StartDateTime))
                                     {
-                                        // Only update if this is an older timestamp
-                                        if (licenseUsages[computerId].StartDateTime < licenseUsage.StartDateTime)
-                                        {
-                                            add = false;
-                                        }
+                                        add = false;
                                     }
 
                                     if (add)
@@ -274,55 +272,56 @@ namespace Orc.LicenseManager.Services
 
                 Log.Debug("Creating listener for ip '{0}'", ipAddress);
 
-                var udpClient = new UdpClient();
-
-                udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                udpClient.ExclusiveAddressUse = false;
-                udpClient.EnableBroadcast = true;
-
-                udpClient.Client.Bind(new IPEndPoint(ipAddress, Port));
-
-                var licenseSignature = string.Empty;
-
-                while (true)
+                using (var udpClient = new UdpClient())
                 {
-                    try
+                    udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                    udpClient.ExclusiveAddressUse = false;
+                    udpClient.EnableBroadcast = true;
+
+                    udpClient.Client.Bind(new IPEndPoint(ipAddress, Port));
+
+                    var licenseSignature = string.Empty;
+
+                    while (true)
                     {
-                        if (string.IsNullOrEmpty(licenseSignature))
+                        try
                         {
-                            var currentLicense = _licenseService.CurrentLicense;
-                            if (currentLicense != null)
+                            if (string.IsNullOrEmpty(licenseSignature))
                             {
-                                licenseSignature = currentLicense.Signature;
+                                var currentLicense = _licenseService.CurrentLicense;
+                                if (currentLicense != null)
+                                {
+                                    licenseSignature = currentLicense.Signature;
+                                }
+                            }
+
+                            if (string.IsNullOrWhiteSpace(licenseSignature))
+                            {
+                                // No reason to wait for something, wait and continue
+                                Thread.Sleep(5000);
+                                continue;
+                            }
+
+                            var ipEndPoint = new IPEndPoint(IPAddress.Any, Port);
+                            var data = udpClient.Receive(ref ipEndPoint);
+
+                            var message = Encoding.ASCII.GetString(data);
+                            if (string.Equals(message, licenseSignature))
+                            {
+                                Log.Debug("Received request from '{0}' on '{1}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
+
+                                var licenseUsage = new NetworkLicenseUsage(_machineId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
+
+                                var responseMessage = licenseUsage.ToNetworkMessage();
+                                var responseBytes = ASCIIEncoding.ASCII.GetBytes(responseMessage);
+
+                                udpClient.Send(responseBytes, responseBytes.Length, ipEndPoint);
                             }
                         }
-
-                        if (string.IsNullOrWhiteSpace(licenseSignature))
+                        catch (SocketException)
                         {
-                            // No reason to wait for something, wait and continue
-                            Thread.Sleep(5000);
-                            continue;
+                            // Ignore, it's probably the timeout
                         }
-
-                        var ipEndPoint = new IPEndPoint(IPAddress.Any, Port);
-                        var data = udpClient.Receive(ref ipEndPoint);
-
-                        var message = Encoding.ASCII.GetString(data);
-                        if (string.Equals(message, licenseSignature))
-                        {
-                            Log.Debug("Received request from '{0}' on '{1}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
-
-                            var licenseUsage = new NetworkLicenseUsage(_machineId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
-
-                            var responseMessage = licenseUsage.ToNetworkMessage();
-                            var responseBytes = ASCIIEncoding.ASCII.GetBytes(responseMessage);
-
-                            udpClient.Send(responseBytes, responseBytes.Length, ipEndPoint);
-                        }
-                    }
-                    catch (SocketException)
-                    {
-                        // Ignore, it's probably the timeout
                     }
                 }
             }
@@ -341,12 +340,9 @@ namespace Orc.LicenseManager.Services
 
             foreach (var ip in host.AddressList)
             {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                if ((ip.AddressFamily == AddressFamily.InterNetwork) && (!ip.ToString().StartsWith("169")))
                 {
-                    if (!ip.ToString().StartsWith("169"))
-                    {
-                        selfIps.Add(ip.ToString());
-                    }
+                    selfIps.Add(ip.ToString());
                 }
             }
 

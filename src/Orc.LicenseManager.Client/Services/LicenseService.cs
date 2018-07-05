@@ -9,7 +9,6 @@ namespace Orc.LicenseManager.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Xml;
     using Catel;
     using Catel.Logging;
@@ -116,13 +115,10 @@ namespace Orc.LicenseManager.Services
 
             try
             {
-                if (!string.IsNullOrWhiteSpace(xmlFilePath))
+                if (!string.IsNullOrWhiteSpace(xmlFilePath) && _fileService.Exists(xmlFilePath))
                 {
-                    if (_fileService.Exists(xmlFilePath))
-                    {
-                        Log.Debug("License exists");
-                        return true;
-                    }
+                    Log.Debug("License exists");
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -208,7 +204,7 @@ namespace Orc.LicenseManager.Services
             catch (Exception ex)
             {
                 Log.Debug(ex);
-                return null;
+                return new List<XmlDataModel>();
             }
 
             return xmlDataList;

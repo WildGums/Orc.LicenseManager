@@ -158,20 +158,23 @@
   </data>
   <data name="LicenseManager_LicenseView_TextBlock_Text_LicenseFor" xml:space="preserve">
     <value>License for:</value>
-</data>
+  </data>
   <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_ItAppearsThatYouHaveReachedTheMaximumNumberOfConcurrentUsagesOfTheLicense" xml:space="preserve">
     <value>It appears that you have reached the maximum number of concurrent usages of the license.</value>
-</data>
+  </data>
   <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_Text_BelowIsAListOfCurrentUsagesOfYourLicenseYouCanWaitForALicenseToBecomeAvailableByKeepingThisWindowOpenToSpeedUpTheProcessYouCanContactOneOfThePersonsBelowToAskThemToCloseTheSoftware" xml:space="preserve">
     <value>Below is a list of current usages of your license. You can wait for a license to become available by keeping this window open. To speed up the process, you can contact one of the persons below to ask them to close the software. </value>
-</data>
+  </data>
   <data name="LicenseManager_NetworkLicenseUsageWindow_Button_Content_CloseApplication" xml:space="preserve">
     <value>Close application</value>
-</data>
+  </data>
   <data name="LicenseManager_NetworkLicenseUsageWindow_Button_Content_BuyMoreLicenses" xml:space="preserve">
     <value>Buy more licenses</value>
-</data>
+  </data>
   <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_ConverterParameter_YouAreEntitledToConcurrentUsagesOfTheLicenseButItLooksThisAmountIsAlreadyUsed" xml:space="preserve">
     <value>You are entitled to {0} concurrent usages of the license, but it looks this amount is already used.</value>
-</data>
+  </data>
+  <data name="NoTextWasPasted" xml:space="preserve">
+    <value>No text was pasted into the window</value>
+  </data>
 </root>
