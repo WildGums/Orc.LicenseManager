@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers VerifyAssembly="true">
+  <Costura DisableCleanup="true">
+    <IncludeAssemblies>
+      Portable.Licensing
+    </IncludeAssemblies>
+  </Costura>
+  <ModuleInit />
+  <Catel />
+  <MethodTimer />
+  <LoadAssembliesOnStartup />
+  <Obsolete />
+</Weavers>
