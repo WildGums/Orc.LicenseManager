@@ -23,48 +23,11 @@ Parameters["StartYear"] = "2014";
 // DEFINE COMPONENTS TO BUILD / PACKAGE
 //=======================================================
 
-var ComponentsToBuild = new string[]
-{
-    "Orc.LicenseManager.Client", 
-    "Orc.LicenseManager.Client.WPF", 
-    "Orc.LicenseManager.Server"
-};
+Components.Add("Orc.LicenseManager.Client");
+Components.Add("Orc.LicenseManager.Client.WPF");
+Components.Add("Orc.LicenseManager.Server");
 
-//=======================================================
-// DEFINE WEB APPS TO BUILD / PACKAGE
-//=======================================================
-
-var WebAppsToBuild = new string[]
-{
-
-};
-
-//=======================================================
-// DEFINE WPF APPS TO BUILD / PACKAGE
-//=======================================================
-
-var WpfAppsToBuild = new string[]
-{
-
-};
-
-//=======================================================
-// DEFINE UWP APPS TO BUILD / PACKAGE
-//=======================================================
-
-var UwpAppsToBuild = new string[]
-{
-
-};
-
-//=======================================================
-// DEFINE TEST PROJECTS TO BUILD
-//=======================================================
-
-var TestProjectsToBuild = new string[]
-{
-    string.Format("{0}.Tests", GetBuildServerVariable("SolutionName"))
-};
+TestProjects.Add(string.Format("{0}.Tests", GetBuildServerVariable("SolutionName")));
 
 //=======================================================
 // REQUIRED INITIALIZATION, DO NOT CHANGE
