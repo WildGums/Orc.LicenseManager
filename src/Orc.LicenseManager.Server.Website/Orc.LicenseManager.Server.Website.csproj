@@ -57,8 +57,8 @@
     <Reference Include="Catel.Core, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Catel.Core.5.6.0\lib\net46\Catel.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Catel.Fody.Attributes, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Catel.Fody.3.3.0\lib\net452\Catel.Fody.Attributes.dll</HintPath>
+    <Reference Include="Catel.Fody.Attributes, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Catel.Fody.3.5.0\lib\net452\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\lib\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -353,10 +353,8 @@
     <Analyzer Include="..\..\lib\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\..\lib\PublicApiAnalyzer.1.0.0-beta001\analyzers\dotnet\cs\PublicApiAnalyzer.CodeFixes.dll" />
     <Analyzer Include="..\..\lib\PublicApiAnalyzer.1.0.0-beta001\analyzers\dotnet\cs\PublicApiAnalyzer.dll" />
-    <Analyzer Include="..\..\lib\WpfAnalyzers.2.1.3.2\analyzers\dotnet\cs\Gu.Roslyn.AnalyzerExtensions.dll" />
-    <Analyzer Include="..\..\lib\WpfAnalyzers.2.1.3.2\analyzers\dotnet\cs\Gu.Roslyn.CodeFixExtensions.dll" />
-    <Analyzer Include="..\..\lib\WpfAnalyzers.2.1.3.2\analyzers\dotnet\cs\WpfAnalyzers.CodeFixes.dll" />
-    <Analyzer Include="..\..\lib\WpfAnalyzers.2.1.3.2\analyzers\dotnet\cs\WpfAnalyzers.dll" />
+    <Analyzer Include="..\..\lib\WpfAnalyzers.2.2.0.2\analyzers\dotnet\cs\WpfAnalyzers.dll" />
+    <Analyzer Include="..\..\lib\WpfAnalyzers.2.2.0.2\analyzers\dotnet\cs\Gu.Roslyn.Extensions.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Orc.LicenseManager.Server\Orc.LicenseManager.Server.csproj">
@@ -400,12 +398,12 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="..\..\lib\Fody.3.1.3\build\Fody.targets" Condition="Exists('..\..\lib\Fody.3.1.3\build\Fody.targets')" />
+  <Import Project="..\..\lib\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\..\lib\Fody.3.3.2\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\lib\Fody.3.1.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.3.1.3\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\lib\Fody.3.3.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.3.3.2\build\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
