@@ -20,7 +20,7 @@ namespace Orc.LicenseManager.Server.Services
 
         public async Task<LicenseValidationResult> ValidateLicenseAsync(string license)
         {
-            Argument.IsNotNullOrWhitespace(() => license);
+            //Argument.IsNotNullOrWhitespace(() => license);
 
             // TODO: Verify license
 
