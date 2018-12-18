@@ -25,7 +25,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="1.8.3" PrivateAssets="all" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
     <PackageReference Include="Orc.FileSystem" Version="3.1.0-alpha0009" />
     <PackageReference Include="Orc.SystemInfo" Version="3.1.0-alpha0009" />
