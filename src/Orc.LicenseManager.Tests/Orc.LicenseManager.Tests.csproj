@@ -16,12 +16,12 @@
     <PackageReference Include="ApiApprover" Version="7.1.0" PrivateAssets="all" />
     <PackageReference Include="Catel.Core" Version="5.9.0" />
     <PackageReference Include="Catel.Fody" Version="3.8.0" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="3.3.3" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="3.3.5" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="MethodTimer.Fody" Version="2.2.2" PrivateAssets="all" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.8.3" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.3.0" PrivateAssets="all" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.9.0" PrivateAssets="all" />
     <PackageReference Include="NUnit" Version="3.11.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
