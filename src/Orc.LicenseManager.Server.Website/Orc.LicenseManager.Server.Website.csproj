@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\lib\LoadAssembliesOnStartup.Fody.3.0.3\build\LoadAssembliesOnStartup.Fody.props" Condition="Exists('..\..\lib\LoadAssembliesOnStartup.Fody.3.0.3\build\LoadAssembliesOnStartup.Fody.props')" />
+  <Import Project="..\..\lib\LoadAssembliesOnStartup.Fody.3.0.8\build\LoadAssembliesOnStartup.Fody.props" Condition="Exists('..\..\lib\LoadAssembliesOnStartup.Fody.3.0.8\build\LoadAssembliesOnStartup.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -409,11 +409,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\lib\Microsoft.NETCore.UniversalWindowsPlatform.6.2.2\build\Microsoft.NetCore.UniversalWindowsPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Microsoft.NETCore.UniversalWindowsPlatform.6.2.2\build\Microsoft.NetCore.UniversalWindowsPlatform.targets'))" />
-    <Error Condition="!Exists('..\..\lib\Fody.4.0.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.4.0.2\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\..\lib\LoadAssembliesOnStartup.Fody.3.0.3\build\LoadAssembliesOnStartup.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\LoadAssembliesOnStartup.Fody.3.0.3\build\LoadAssembliesOnStartup.Fody.props'))" />
+    <Error Condition="!Exists('..\..\lib\Fody.4.2.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\Fody.4.2.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\lib\LoadAssembliesOnStartup.Fody.3.0.8\build\LoadAssembliesOnStartup.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\LoadAssembliesOnStartup.Fody.3.0.8\build\LoadAssembliesOnStartup.Fody.props'))" />
   </Target>
   <Import Project="..\..\lib\Microsoft.NETCore.UniversalWindowsPlatform.6.2.2\build\Microsoft.NetCore.UniversalWindowsPlatform.targets" Condition="Exists('..\..\lib\Microsoft.NETCore.UniversalWindowsPlatform.6.2.2\build\Microsoft.NetCore.UniversalWindowsPlatform.targets')" />
-  <Import Project="..\..\lib\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\..\lib\Fody.4.0.2\build\Fody.targets')" />
+  <Import Project="..\..\lib\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\..\lib\Fody.4.2.1\build\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
