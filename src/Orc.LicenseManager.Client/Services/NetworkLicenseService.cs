@@ -139,7 +139,7 @@ namespace Orc.LicenseManager.Services
 
                 Log.Debug("Found {0}", networkValidationResult);
 
-                Validated.SafeInvoke(this, new NetworkValidatedEventArgs(networkValidationResult));
+                Validated?.Invoke(this, new NetworkValidatedEventArgs(networkValidationResult));
             }
             catch (Exception ex)
             {
