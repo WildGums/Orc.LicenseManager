@@ -21,16 +21,11 @@ namespace Orc.LicenseManager.Services
     /// </summary>
     public class LicenseService : ILicenseService
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         private readonly ILicenseLocationService _licenseLocationService;
         private readonly IFileService _fileService;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
         /// </summary>
@@ -44,13 +39,9 @@ namespace Orc.LicenseManager.Services
             _licenseLocationService = licenseLocationService;
             _fileService = fileService;
         }
-        #endregion
 
-        #region Properties
         public License CurrentLicense { get; private set; }
-        #endregion
 
-        #region ILicenseService Members
         /// <summary>
         /// Saves the license.
         /// </summary>
@@ -209,6 +200,5 @@ namespace Orc.LicenseManager.Services
 
             return xmlDataList;
         }
-        #endregion
     }
 }
