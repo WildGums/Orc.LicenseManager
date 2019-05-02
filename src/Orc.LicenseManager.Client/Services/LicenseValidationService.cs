@@ -55,7 +55,6 @@ namespace Orc.LicenseManager.Services
             _machineLicenseValidationService = machineLicenseValidationService;
         }
 
-        #region Methods
         /// <summary>
         /// Validates the license.
         /// </summary>
@@ -322,9 +321,9 @@ namespace Orc.LicenseManager.Services
             {
                 Log.Warning("The XML is invalid");
             }
+
             return validationContext;
         }
-        #endregion
 
         private void LogLicenseValidity(IValidationContext validationContext)
         {

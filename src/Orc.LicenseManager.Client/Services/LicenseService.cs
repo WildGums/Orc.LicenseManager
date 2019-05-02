@@ -26,6 +26,8 @@ namespace Orc.LicenseManager.Services
         private readonly ILicenseLocationService _licenseLocationService;
         private readonly IFileService _fileService;
 
+        private Tuple<License, LicenseMode> _currentLicense;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
         /// </summary>
@@ -40,7 +42,15 @@ namespace Orc.LicenseManager.Services
             _fileService = fileService;
         }
 
-        public License CurrentLicense { get; private set; }
+        public License CurrentLicense
+        {
+            get => _currentLicense?.Item1;
+        }
+
+        /// <summary>
+        /// Raised when the current license changes.
+        /// </summary>
+        public event EventHandler<EventArgs> CurrentLicenseChanged;
 
         /// <summary>
         /// Saves the license.
@@ -68,6 +78,11 @@ namespace Orc.LicenseManager.Services
                 }
 
                 Log.Info("License saved");
+
+                if (_currentLicense is null || _currentLicense.Item2 == licenseMode)
+                {
+                    LoadLicense(licenseMode);
+                }
             }
             catch (Exception ex)
             {
@@ -88,7 +103,12 @@ namespace Orc.LicenseManager.Services
             {
                 _fileService.Delete(xmlFilePath);
 
-                Log.Info("The '{0}' license has been removed", licenseMode);
+                Log.Info($"The '{licenseMode}' license has been removed");
+
+                if (_currentLicense?.Item2 == licenseMode)
+                {
+                    SetCurrentLicense(null, licenseMode);
+                }
             }
             catch (Exception ex)
             {
@@ -133,7 +153,7 @@ namespace Orc.LicenseManager.Services
                 var licenseString = _licenseLocationService.LoadLicense(licenseMode);
                 var licenseObject = License.Load(licenseString);
 
-                CurrentLicense = licenseObject;
+                SetCurrentLicense(licenseObject, licenseMode);
 
                 //Log.Debug("License loaded: {0}", licenseObject.ToString());
 
@@ -142,6 +162,9 @@ namespace Orc.LicenseManager.Services
             catch (Exception ex)
             {
                 Log.Debug(ex, "Failed to load the license, returning empty string");
+
+                SetCurrentLicense(null, licenseMode);
+
                 return string.Empty;
             }
         }
@@ -171,12 +194,12 @@ namespace Orc.LicenseManager.Services
                     }
                     else if (string.Equals(node.Name, "ProductFeatures"))
                     {
-                        foreach (XmlNode featrureNode in node.ChildNodes)
+                        foreach (XmlNode featureNode in node.ChildNodes)
                         {
                             xmlDataList.Add(new XmlDataModel
                             {
-                                Name = featrureNode.Attributes[0].Value,
-                                Value = featrureNode.InnerText
+                                Name = featureNode.Attributes[0].Value,
+                                Value = featureNode.InnerText
                             });
                         }
                     }
@@ -199,6 +222,13 @@ namespace Orc.LicenseManager.Services
             }
 
             return xmlDataList;
+        }
+
+        private void SetCurrentLicense(License license, LicenseMode licenseMode)
+        {
+            _currentLicense = license != null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
+
+            CurrentLicenseChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
