@@ -151,22 +151,27 @@ namespace Orc.LicenseManager.Services
             try
             {
                 var licenseString = _licenseLocationService.LoadLicense(licenseMode);
-                var licenseObject = License.Load(licenseString);
+                if (!string.IsNullOrWhiteSpace(licenseString))
+                {
+                    var licenseObject = License.Load(licenseString);
 
-                SetCurrentLicense(licenseObject, licenseMode);
+                    SetCurrentLicense(licenseObject, licenseMode);
 
-                //Log.Debug("License loaded: {0}", licenseObject.ToString());
+                    //Log.Debug("License loaded: {0}", licenseObject.ToString());
 
-                return licenseObject.ToString();
+                    return licenseObject.ToString();
+                }
             }
             catch (Exception ex)
             {
-                Log.Debug(ex, "Failed to load the license, returning empty string");
-
-                SetCurrentLicense(null, licenseMode);
-
-                return string.Empty;
+                Log.Error(ex, "Failed to load the license");
             }
+
+            Log.Debug("Failed to load the license, returning empty string");
+
+            SetCurrentLicense(null, licenseMode);
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -226,6 +231,17 @@ namespace Orc.LicenseManager.Services
 
         private void SetCurrentLicense(License license, LicenseMode licenseMode)
         {
+            var currentLicense = _currentLicense?.Item1;
+            if (ReferenceEquals(currentLicense, license))
+            {
+                return;
+            }
+
+            if (currentLicense?.Id == license?.Id)
+            {
+                return;
+            }
+
             _currentLicense = license != null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
 
             CurrentLicenseChanged?.Invoke(this, EventArgs.Empty);

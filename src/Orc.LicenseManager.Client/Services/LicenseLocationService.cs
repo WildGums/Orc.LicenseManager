@@ -35,9 +35,9 @@ namespace Orc.LicenseManager.Services
             try
             {
                 var fileName = GetLicenseLocation(licenseMode);
-                if (!string.IsNullOrWhiteSpace(fileName))
+                if (!string.IsNullOrWhiteSpace(fileName) && _fileService.Exists(fileName))
                 {
-                    Log.Debug("Loading license from '{0}'", fileName);
+                    Log.Debug($"Loading license from '{fileName}'");
 
                     return _fileService.ReadAllText(fileName);
                 }
