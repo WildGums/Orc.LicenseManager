@@ -292,7 +292,7 @@ namespace Orc.LicenseManager.Services
                     Version licenseVersion;
                     if (Version.TryParse(xmlDataVersion.Value, out licenseVersion))
                     {
-                        var productVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                        var productVersion = AssemblyHelper.GetEntryAssembly().GetName().Version;
                         if (productVersion > licenseVersion)
                         {
                             validationContext.Add(BusinessRuleValidationResult.CreateError("Your license only supports versions up to '{0}' while the current version of this product is '{1}'", licenseVersion, productVersion));
