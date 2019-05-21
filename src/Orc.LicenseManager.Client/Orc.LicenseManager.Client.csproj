@@ -26,7 +26,7 @@
     <PackageReference Include="MethodTimer.Fody" Version="3.0.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.0.0" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Include="Orc.FileSystem" Version="3.1.0" />
     <PackageReference Include="Orc.SystemInfo" Version="3.1.0" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
