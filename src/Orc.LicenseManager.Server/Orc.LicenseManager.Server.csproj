@@ -22,7 +22,7 @@
     <PackageReference Include="Fody" Version="5.0.6" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MethodTimer.Fody" Version="2.3.3" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
     <PackageReference Include="ModuleInit.Fody" Version="2.0.0" PrivateAssets="all" />
