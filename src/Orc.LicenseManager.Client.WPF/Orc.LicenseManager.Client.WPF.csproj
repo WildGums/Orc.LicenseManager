@@ -8,7 +8,13 @@
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
     <Description>LicenseManager - WPF client library.</Description>
     <PackageTags>orc;license;client;xaml;wpf</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>
 
   <PropertyGroup>
