@@ -36,7 +36,7 @@ namespace Orc.LicenseManager
                 var serviceLocator = ServiceLocator.Default;
 
                 var dispatcherService = serviceLocator.ResolveType<IDispatcherService>();
-                await dispatcherService.InvokeAsync(async () =>
+                await dispatcherService.InvokeTaskAsync(async () =>
                 {
                     var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
                     await uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(validationResult);
