@@ -183,6 +183,11 @@ namespace Orc.LicenseManager.Services
         {
             var xmlDataList = new List<XmlDataModel>();
 
+            if (string.IsNullOrWhiteSpace(license))
+            {
+                return xmlDataList;
+            }
+
             try
             {
                 var xmlDoc = new XmlDocument();
