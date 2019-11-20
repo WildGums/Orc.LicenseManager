@@ -212,7 +212,7 @@ namespace Orc.LicenseManager.Services
     }
     public class LicenseLocationService : Orc.LicenseManager.Services.ILicenseLocationService
     {
-        public LicenseLocationService(Orc.LicenseManager.Services.IApplicationIdService applicationIdService, Orc.FileSystem.IFileService fileService) { }
+        public LicenseLocationService(Orc.LicenseManager.Services.IApplicationIdService applicationIdService, Orc.FileSystem.IFileService fileService, Catel.Services.IAppDataService appDataService) { }
         public virtual string GetLicenseLocation(Orc.LicenseManager.LicenseMode licenseMode) { }
         public string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode) { }
     }

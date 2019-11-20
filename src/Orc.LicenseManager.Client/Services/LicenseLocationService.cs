@@ -12,6 +12,7 @@ namespace Orc.LicenseManager.Services
     using Catel;
     using Catel.Logging;
     using Catel.Reflection;
+    using Catel.Services;
     using FileSystem;
 
     public class LicenseLocationService : ILicenseLocationService
@@ -20,14 +21,18 @@ namespace Orc.LicenseManager.Services
 
         private readonly IApplicationIdService _applicationIdService;
         private readonly IFileService _fileService;
+        private readonly IAppDataService _appDataService;
 
-        public LicenseLocationService(IApplicationIdService applicationIdService, IFileService fileService)
+        public LicenseLocationService(IApplicationIdService applicationIdService, IFileService fileService,
+            IAppDataService appDataService)
         {
             Argument.IsNotNull(() => applicationIdService);
             Argument.IsNotNull(() => fileService);
+            Argument.IsNotNull(() => appDataService);
 
             _applicationIdService = applicationIdService;
             _fileService = fileService;
+            _appDataService = appDataService;
         }
 
         public string LoadLicense(LicenseMode licenseMode)
@@ -70,9 +75,10 @@ namespace Orc.LicenseManager.Services
 
                 if (licenseMode == LicenseMode.CurrentUser)
                 {
-                    return Path.Combine(Catel.IO.Path.GetApplicationDataDirectory(companyName, productName), "LicenseInfo.xml");
+                    return Path.Combine(_appDataService.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "LicenseInfo.xml");
                 }
 
+                // Keep using static path
                 return Path.Combine(Catel.IO.Path.GetApplicationDataDirectoryForAllUsers(companyName, productName), "LicenseInfo.xml");
             }
             catch (Exception ex)
