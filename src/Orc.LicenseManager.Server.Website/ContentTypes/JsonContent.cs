@@ -35,8 +35,8 @@ namespace Orc.LicenseManager.Server.Website
 
             using (var jw = new JsonTextWriter(new StreamWriter(stream)))
             {
-                jw.WriteRaw(json);
-                jw.Flush();
+                await jw.WriteRawAsync(json);
+                await jw.FlushAsync();
             }
         }
 

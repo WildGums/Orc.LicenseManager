@@ -172,6 +172,7 @@ namespace Orc.LicenseManager.Services
     public interface ILicenseService
     {
         Portable.Licensing.License CurrentLicense { get; }
+        public event System.EventHandler<System.EventArgs> CurrentLicenseChanged;
         bool LicenseExists(Orc.LicenseManager.LicenseMode licenseMode = 0);
         string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode = 0);
         System.Collections.Generic.List<Orc.LicenseManager.Models.XmlDataModel> LoadXmlFromLicense(string license);
@@ -211,7 +212,7 @@ namespace Orc.LicenseManager.Services
     }
     public class LicenseLocationService : Orc.LicenseManager.Services.ILicenseLocationService
     {
-        public LicenseLocationService(Orc.LicenseManager.Services.IApplicationIdService applicationIdService, Orc.FileSystem.IFileService fileService) { }
+        public LicenseLocationService(Orc.LicenseManager.Services.IApplicationIdService applicationIdService, Orc.FileSystem.IFileService fileService, Catel.Services.IAppDataService appDataService) { }
         public virtual string GetLicenseLocation(Orc.LicenseManager.LicenseMode licenseMode) { }
         public string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode) { }
     }
@@ -225,6 +226,7 @@ namespace Orc.LicenseManager.Services
     {
         public LicenseService(Orc.LicenseManager.Services.ILicenseLocationService licenseLocationService, Orc.FileSystem.IFileService fileService) { }
         public Portable.Licensing.License CurrentLicense { get; }
+        public event System.EventHandler<System.EventArgs> CurrentLicenseChanged;
         public bool LicenseExists(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
         public string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
         public System.Collections.Generic.List<Orc.LicenseManager.Models.XmlDataModel> LoadXmlFromLicense(string license) { }

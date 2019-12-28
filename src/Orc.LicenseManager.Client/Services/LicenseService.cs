@@ -21,16 +21,13 @@ namespace Orc.LicenseManager.Services
     /// </summary>
     public class LicenseService : ILicenseService
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         private readonly ILicenseLocationService _licenseLocationService;
         private readonly IFileService _fileService;
-        #endregion
 
-        #region Constructors
+        private Tuple<License, LicenseMode> _currentLicense;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
         /// </summary>
@@ -44,13 +41,17 @@ namespace Orc.LicenseManager.Services
             _licenseLocationService = licenseLocationService;
             _fileService = fileService;
         }
-        #endregion
 
-        #region Properties
-        public License CurrentLicense { get; private set; }
-        #endregion
+        public License CurrentLicense
+        {
+            get => _currentLicense?.Item1;
+        }
 
-        #region ILicenseService Members
+        /// <summary>
+        /// Raised when the current license changes.
+        /// </summary>
+        public event EventHandler<EventArgs> CurrentLicenseChanged;
+
         /// <summary>
         /// Saves the license.
         /// </summary>
@@ -77,6 +78,11 @@ namespace Orc.LicenseManager.Services
                 }
 
                 Log.Info("License saved");
+
+                if (_currentLicense is null || _currentLicense.Item2 == licenseMode)
+                {
+                    LoadLicense(licenseMode);
+                }
             }
             catch (Exception ex)
             {
@@ -97,7 +103,12 @@ namespace Orc.LicenseManager.Services
             {
                 _fileService.Delete(xmlFilePath);
 
-                Log.Info("The '{0}' license has been removed", licenseMode);
+                Log.Info($"The '{licenseMode}' license has been removed");
+
+                if (_currentLicense?.Item2 == licenseMode)
+                {
+                    SetCurrentLicense(null, licenseMode);
+                }
             }
             catch (Exception ex)
             {
@@ -140,19 +151,27 @@ namespace Orc.LicenseManager.Services
             try
             {
                 var licenseString = _licenseLocationService.LoadLicense(licenseMode);
-                var licenseObject = License.Load(licenseString);
+                if (!string.IsNullOrWhiteSpace(licenseString))
+                {
+                    var licenseObject = License.Load(licenseString);
 
-                CurrentLicense = licenseObject;
+                    SetCurrentLicense(licenseObject, licenseMode);
 
-                //Log.Debug("License loaded: {0}", licenseObject.ToString());
+                    //Log.Debug("License loaded: {0}", licenseObject.ToString());
 
-                return licenseObject.ToString();
+                    return licenseObject.ToString();
+                }
             }
             catch (Exception ex)
             {
-                Log.Debug(ex, "Failed to load the license, returning empty string");
-                return string.Empty;
+                Log.Error(ex, "Failed to load the license");
             }
+
+            Log.Debug("Failed to load the license, returning empty string");
+
+            SetCurrentLicense(null, licenseMode);
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -163,6 +182,11 @@ namespace Orc.LicenseManager.Services
         public List<XmlDataModel> LoadXmlFromLicense(string license)
         {
             var xmlDataList = new List<XmlDataModel>();
+
+            if (string.IsNullOrWhiteSpace(license))
+            {
+                return xmlDataList;
+            }
 
             try
             {
@@ -180,12 +204,12 @@ namespace Orc.LicenseManager.Services
                     }
                     else if (string.Equals(node.Name, "ProductFeatures"))
                     {
-                        foreach (XmlNode featrureNode in node.ChildNodes)
+                        foreach (XmlNode featureNode in node.ChildNodes)
                         {
                             xmlDataList.Add(new XmlDataModel
                             {
-                                Name = featrureNode.Attributes[0].Value,
-                                Value = featrureNode.InnerText
+                                Name = featureNode.Attributes[0].Value,
+                                Value = featureNode.InnerText
                             });
                         }
                     }
@@ -209,6 +233,23 @@ namespace Orc.LicenseManager.Services
 
             return xmlDataList;
         }
-        #endregion
+
+        private void SetCurrentLicense(License license, LicenseMode licenseMode)
+        {
+            var currentLicense = _currentLicense?.Item1;
+            if (ReferenceEquals(currentLicense, license))
+            {
+                return;
+            }
+
+            if (currentLicense?.Id == license?.Id)
+            {
+                return;
+            }
+
+            _currentLicense = license != null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
+
+            CurrentLicenseChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

@@ -24,6 +24,11 @@ namespace Orc.LicenseManager.Services
         License CurrentLicense { get; }
 
         /// <summary>
+        /// Raised when the current license changes.
+        /// </summary>
+        event EventHandler<EventArgs> CurrentLicenseChanged;
+
+        /// <summary>
         /// Saves the license.
         /// </summary>
         /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>

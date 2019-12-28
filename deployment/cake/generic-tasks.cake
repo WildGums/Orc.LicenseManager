@@ -2,13 +2,17 @@
 
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
+#addin "nuget:?package=Cake.DependencyCheck&version=1.2.0"
 
+#tool "nuget:?package=DependencyCheck.Runner.Tool&include=./**/dependency-check.sh&include=./**/dependency-check.bat"
 #tool "nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.3"
 
 //-------------------------------------------------------------
 
 private void ValidateRequiredInput(string parameterName)
 {
+    // TODO: Do we want to check the configuration as well?
+
     if (!Parameters.ContainsKey(parameterName))
     {
         throw new Exception(string.Format("Parameter '{0}' is required but not defined", parameterName));
@@ -17,85 +21,86 @@ private void ValidateRequiredInput(string parameterName)
 
 //-------------------------------------------------------------
 
-private void ValidateGenericInput()
-{
-    ValidateRequiredInput("SolutionName");
-    ValidateRequiredInput("Company");
-    ValidateRequiredInput("RepositoryUrl");
-}
-
-//-------------------------------------------------------------
-
 private void CleanUpCode(bool failOnChanges)
 {
-    Information("Cleaning up code using CodeCleanup (R# command line tools)");
+    Information("Cleaning up code using dotnet-format");
 
-    Information("Code cleanup is (temporarily) disabled. The following will need to be supported for being able to use CodeCleanup:");
-    Information("- respect xml indentation for xml comments (seems to enforce to 4 spaces)");
-    Information("- respect xml indentation for xml files");
-    Information("- don't change the order of regions / members or maybe them configurable via .editorConfig");
-    Information("- ignore wildcard files as configured at the bottom of .editorConfig");
+    // --check: return non-0 exit code if changes are needed
+    // --dry-run: don't save files
 
-    // var processFileName = "./tools/JetBrains.ReSharper.CommandLineTools.2018.1.3/tools/cleanupcode.exe";
-    // var processArguments = string.Format("{0} -o=\".\\output\\codecleanup.xml\"", SolutionFileName);
+    // Note: disabled for now, see:
+    // * https://github.com/onovotny/MSBuildSdkExtras/issues/164
+    // * https://github.com/microsoft/msbuild/issues/4376
+    // var arguments = new List<string>();
 
-    // using (var process = StartAndReturnProcess(processFileName, new ProcessSettings 
-    //     { 
-    //         Arguments = processArguments 
-    //     }))
-    // {
-    //     process.WaitForExit();
-
-    //     var exitCode = process.GetExitCode();
-
-    //     Information("CodeCleanup exited with exit code: '{0}'", exitCode);
-        
-    //     if (exitCode != 0)
-    //     {
-    //         throw new Exception("Unexpected exit code '{0}' from CodeCleanup");
-    //     }
-    // }
+    // //arguments.Add("--dry-run");
 
     // if (failOnChanges)
     // {
-    //     // TODO: Do a diff. If there are changes, throw an exception
+    //     arguments.Add("--check");
     // }
+
+    // DotNetCoreTool(null, "format", string.Join(" ", arguments),
+    //     new DotNetCoreToolSettings
+    //     {
+    //         WorkingDirectory = "./src/"
+    //     });
 }
 
 //-------------------------------------------------------------
 
-private void UpdateSolutionAssemblyInfo()
+private void VerifyDependencies(string pathToScan = "./src/**/*.csproj")
 {
-    Information("Updating assembly info to '{0}'", VersionFullSemVer);
+    Information("Verifying dependencies for security vulnerabilities in '{0}'", pathToScan);
 
-    var assemblyInfoParseResult = ParseAssemblyInfo(SolutionAssemblyInfoFileName);
+    // Disabled for now
+    //DependencyCheck(new DependencyCheckSettings
+    //{
+    //    Project = SolutionName,
+    //    Scan = pathToScan,
+    //    FailOnCVSS = "0",
+    //    Format = "HTML",
+    //    Data = "%temp%/dependency-check/data"
+    //});
+}
+
+//-------------------------------------------------------------
+
+private void UpdateSolutionAssemblyInfo(BuildContext buildContext)
+{
+    Information("Updating assembly info to '{0}'", buildContext.General.Version.FullSemVer);
+
+    var assemblyInfoParseResult = ParseAssemblyInfo(buildContext.General.Solution.AssemblyInfoFileName);
 
     var assemblyInfo = new AssemblyInfoSettings 
     {
-        Company = assemblyInfoParseResult.Company,
-        Version = VersionMajorMinorPatch,
-        FileVersion = VersionMajorMinorPatch,
-        InformationalVersion = VersionFullSemVer,
-        Copyright = string.Format("Copyright © {0} {1} - {2}", Company, StartYear, DateTime.Now.Year)
+        Company = buildContext.General.Copyright.Company,
+        Version = buildContext.General.Version.MajorMinorPatch,
+        FileVersion = buildContext.General.Version.MajorMinorPatch,
+        InformationalVersion = buildContext.General.Version.FullSemVer,
+        Copyright = string.Format("Copyright © {0} {1} - {2}", 
+            buildContext.General.Copyright.Company, buildContext.General.Copyright.StartYear, DateTime.Now.Year)
     };
 
-    CreateAssemblyInfo(SolutionAssemblyInfoFileName, assemblyInfo);
+    CreateAssemblyInfo(buildContext.General.Solution.AssemblyInfoFileName, assemblyInfo);
 }
 
 //-------------------------------------------------------------
 
 Task("UpdateNuGet")
     .ContinueOnError()
-    .Does(() => 
+    .Does<BuildContext>(buildContext => 
 {
     Information("Making sure NuGet is using the latest version");
 
-    var exitCode = StartProcess(NuGetExe, new ProcessSettings
+    var nuGetExecutable = buildContext.General.NuGet.Executable;
+
+    var exitCode = StartProcess(nuGetExecutable, new ProcessSettings
     {
         Arguments = "update -self"
     });
 
-    var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(NuGetExe);
+    var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(nuGetExecutable);
     var newNuGetVersion = newNuGetVersionInfo.FileVersion;
 
     Information("Updating NuGet.exe exited with '{0}', version is '{1}'", exitCode, newNuGetVersion);
@@ -106,18 +111,29 @@ Task("UpdateNuGet")
 Task("RestorePackages")
     .IsDependentOn("UpdateNuGet")
     .ContinueOnError()
-    .Does(() =>
+    .Does<BuildContext>(buildContext =>
 {
-    var projects = GetFiles("./**/*.csproj");
+    // var csharpProjects = GetFiles("./**/*.csproj");
+    // var cProjects = GetFiles("./**/*.vcxproj");
     var solutions = GetFiles("./**/*.sln");
     
     var allFiles = new List<FilePath>();
-    //allFiles.AddRange(projects);
+    // //allFiles.AddRange(projects);
+    // //allFiles.AddRange(cProjects);
     allFiles.AddRange(solutions);
 
     foreach(var file in allFiles)
     {
-        RestoreNuGetPackages(file);
+        RestoreNuGetPackages(buildContext, file);
+    }
+
+    foreach (var project in buildContext.AllProjects)
+    {
+        var projectFileName = GetProjectFileName(buildContext, project);
+        if (IsCppProject(projectFileName))
+        {
+            RestoreNuGetPackages(buildContext, projectFileName);
+        }
     }
 });
 
@@ -128,9 +144,9 @@ Task("RestorePackages")
 // some targets files that come in via packages
 
 Task("Clean")
-    .IsDependentOn("RestorePackages")
+    //.IsDependentOn("RestorePackages")
     .ContinueOnError()
-    .Does(() => 
+    .Does<BuildContext>(buildContext => 
 {
     var platforms = new Dictionary<string, PlatformTarget>();
     platforms["AnyCPU"] = PlatformTarget.MSIL;
@@ -148,16 +164,16 @@ Task("Clean")
             {
                 Verbosity = Verbosity.Minimal,
                 ToolVersion = MSBuildToolVersion.Default,
-                Configuration = ConfigurationName,
+                Configuration = buildContext.General.Solution.ConfigurationName,
                 MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
                 PlatformTarget = platform.Value
             };
 
-            ConfigureMsBuild(msBuildSettings, platform.Key, "clean");
+            ConfigureMsBuild(buildContext, msBuildSettings, platform.Key, "clean");
 
             msBuildSettings.Targets.Add("Clean");
 
-            MSBuild(SolutionFileName, msBuildSettings);
+            MSBuild(buildContext.General.Solution.FileName, msBuildSettings);
         }
         catch (System.Exception ex)
         {
@@ -165,21 +181,76 @@ Task("Clean")
         }
     }
 
-    if (DirectoryExists(OutputRootDirectory))
+    var directoriesToDelete = new List<string>();
+
+    // Output directory
+    directoriesToDelete.Add(buildContext.General.OutputRootDirectory);
+
+    // obj directories
+    foreach (var project in buildContext.AllProjects)
     {
-        DeleteDirectory(OutputRootDirectory, new DeleteDirectorySettings()
+        var projectDirectory = GetProjectDirectory(project);
+
+        Information($"Investigating paths to clean up in '{projectDirectory}'");
+
+        var binDirectory = System.IO.Path.Combine(projectDirectory, "bin");
+        directoriesToDelete.Add(binDirectory);
+
+        var objDirectory = System.IO.Path.Combine(projectDirectory, "obj");
+        directoriesToDelete.Add(objDirectory);
+
+        // Special C++ scenarios
+        var projectFileName = GetProjectFileName(buildContext, project);
+        if (IsCppProject(projectFileName))
         {
-            Force = true,
-            Recursive = true
-        });
+            var debugDirectory = System.IO.Path.Combine(projectDirectory, "Debug");
+            directoriesToDelete.Add(debugDirectory);
+
+            var releaseDirectory = System.IO.Path.Combine(projectDirectory, "Release");
+            directoriesToDelete.Add(releaseDirectory);
+
+            var x64Directory = System.IO.Path.Combine(projectDirectory, "x64");
+            directoriesToDelete.Add(x64Directory);
+
+            var x86Directory = System.IO.Path.Combine(projectDirectory, "x86");
+            directoriesToDelete.Add(x86Directory);
+        }
+    }
+
+    foreach (var directoryToDelete in directoriesToDelete)
+    {
+        if (DirectoryExists(directoryToDelete))
+        {
+            Information($"Cleaning up directory '{directoryToDelete}'");
+
+            DeleteDirectory(directoryToDelete, new DeleteDirectorySettings()
+            {
+                Force = true,
+                Recursive = true
+            });
+        }
     }
 });
 
 //-------------------------------------------------------------
 
+Task("VerifyDependencies")
+    .IsDependentOn("Prepare")
+    .Does(async () =>
+{
+    // if (DependencyCheckDisabled)
+    // {
+    //     Information("Dependency analysis is disabled");
+    //     return;
+    // }
+
+    // VerifyDependencies();
+});
+
+//-------------------------------------------------------------
+
 Task("CleanupCode")
-    .ContinueOnError()
-    .Does(() => 
+    .Does<BuildContext>(buildContext => 
 {
     CleanUpCode(true);
 });
@@ -188,21 +259,22 @@ Task("CleanupCode")
 
 Task("CodeSign")
     .ContinueOnError()
-    .Does(() =>
+    .Does<BuildContext>(buildContext =>
 {
-    if (IsCiBuild)
+    if (buildContext.General.IsCiBuild)
     {
         Information("Skipping code signing because this is a CI build");
         return;
     }
 
-    if (IsLocalBuild)
+    if (buildContext.General.IsLocalBuild)
     {
         Information("Skipping code signing because this is a local package build");
         return;
     }
 
-    if (string.IsNullOrWhiteSpace(CodeSignCertificateSubjectName))
+    var certificateSubjectName = buildContext.General.CodeSign.CertificateSubjectName;
+    if (string.IsNullOrWhiteSpace(certificateSubjectName))
     {
         Information("Skipping code signing because the certificate subject name was not specified");
         return;
@@ -212,12 +284,12 @@ Task("CodeSign")
 
     // Note: only code-sign components & wpf apps, skip test projects & uwp apps
     var projectsToCodeSign = new List<string>();
-    projectsToCodeSign.AddRange(Components);
-    projectsToCodeSign.AddRange(WpfApps);
+    projectsToCodeSign.AddRange(buildContext.Components.Items);
+    projectsToCodeSign.AddRange(buildContext.Wpf.Items);
 
     foreach (var projectToCodeSign in projectsToCodeSign)
     {
-        var codeSignWildCard = CodeSignWildCard;
+        var codeSignWildCard = buildContext.General.CodeSign.WildCard;
         if (string.IsNullOrWhiteSpace(codeSignWildCard))
         {
             // Empty, we need to override with project name for valid default value
@@ -226,7 +298,7 @@ Task("CodeSign")
     
         var projectFilesToSign = new List<FilePath>();
 
-        var outputDirectory = string.Format("{0}/{1}", OutputRootDirectory, projectToCodeSign);
+        var outputDirectory = string.Format("{0}/{1}", buildContext.General.OutputRootDirectory, projectToCodeSign);
 
         var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, codeSignWildCard);
         Information(exeSignFilesSearchPattern);
@@ -247,13 +319,13 @@ Task("CodeSign")
         return;
     }
 
-    Information("Found '{0}' files to code sign using subject name '{1}', this can take a few minutes...", filesToSign.Count, CodeSignCertificateSubjectName);
+    Information("Found '{0}' files to code sign using subject name '{1}', this can take a few minutes...", filesToSign.Count, certificateSubjectName);
 
     var signToolSignSettings = new SignToolSignSettings 
     {
         AppendSignature = false,
-        TimeStampUri = new Uri(CodeSignTimeStampUri),
-        CertSubjectName = CodeSignCertificateSubjectName
+        TimeStampUri = new Uri(buildContext.General.CodeSign.TimeStampUri),
+        CertSubjectName = certificateSubjectName
     };
 
     Sign(filesToSign, signToolSignSettings);
