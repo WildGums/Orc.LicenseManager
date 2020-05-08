@@ -10,8 +10,6 @@ namespace Orc.LicenseManager
     using System.Linq;
     using Catel;
     using Catel.IoC;
-    using Models;
-    using Services;
 
     public static class NetworkValidationResultExtensions
     {

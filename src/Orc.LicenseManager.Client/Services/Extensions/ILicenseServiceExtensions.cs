@@ -9,8 +9,6 @@ namespace Orc.LicenseManager
 {
     using System;
     using Catel;
-    using Catel.Logging;
-    using Services;
 
     public static class ILicenseServiceExtensions
     {

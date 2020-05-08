@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace Orc.LicenseManager.Services
     using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
-    using Models;
     using Newtonsoft.Json;
     using Portable.Licensing;
     using Portable.Licensing.Validation;

@@ -21,7 +21,7 @@ namespace Orc.LicenseManager.Views
             set { SetValue(ShowAboutProperty, value); }
         }
 
-        public static readonly DependencyProperty ShowAboutProperty = DependencyProperty.Register("ShowAbout", typeof(bool), 
+        public static readonly DependencyProperty ShowAboutProperty = DependencyProperty.Register(nameof(ShowAbout), typeof(bool), 
             typeof(LicenseView), new PropertyMetadata(true));
     }
 }

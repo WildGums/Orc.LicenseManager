@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Models
+namespace Orc.LicenseManager
 {
     /// <summary>
     /// XMLDataModel is used for extracting the data from a XML file

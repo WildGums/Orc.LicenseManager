@@ -5,10 +5,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using System;
-    using Models;
 
     public class NetworkValidatedEventArgs : EventArgs
     {

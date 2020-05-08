@@ -13,7 +13,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
     using Catel.MVVM;
     using Catel.Services;
     using LicenseManager.ViewModels;
-    using Models;
     using Services;
 
     /// <summary>

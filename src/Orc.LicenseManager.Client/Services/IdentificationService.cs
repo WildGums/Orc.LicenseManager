@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using SystemInfo;
     using Catel;

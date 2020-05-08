@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,6 @@ namespace Orc.LicenseManager.Services
     using System.Timers;
     using Catel;
     using Catel.Logging;
-    using Models;
     using Timer = System.Timers.Timer;
 
     public class NetworkLicenseService : INetworkLicenseService

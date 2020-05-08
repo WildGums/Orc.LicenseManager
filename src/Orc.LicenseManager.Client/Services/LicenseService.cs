@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +13,6 @@ namespace Orc.LicenseManager.Services
     using Catel;
     using Catel.Logging;
     using FileSystem;
-    using Models;
     using Portable.Licensing;
 
     /// <summary>
