@@ -18,7 +18,7 @@ namespace Orc.LicenseManager
     /// </summary>
     internal static class CryptoHelper
     {
-        private const int Keysize = 256;
+        private const int Keysize = 128;
         private const int DerivationIterations = 1024;
 
         private static readonly Encoding Encoding = Encoding.UTF8;
@@ -37,7 +37,7 @@ namespace Orc.LicenseManager
 
                 using (var symmetricKey = new RijndaelManaged())
                 {
-                    symmetricKey.BlockSize = 256;
+                    symmetricKey.BlockSize = Keysize;
                     symmetricKey.Mode = CipherMode.CBC;
                     symmetricKey.Padding = PaddingMode.PKCS7;
 
@@ -81,7 +81,7 @@ namespace Orc.LicenseManager
 
                 using (var symmetricKey = new RijndaelManaged())
                 {
-                    symmetricKey.BlockSize = 256;
+                    symmetricKey.BlockSize = Keysize;
                     symmetricKey.Mode = CipherMode.CBC;
                     symmetricKey.Padding = PaddingMode.PKCS7;
 

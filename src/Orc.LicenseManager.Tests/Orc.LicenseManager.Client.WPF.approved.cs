@@ -141,4 +141,3 @@ namespace Orc.LicenseManager.Views
         public void InitializeComponent() { }
     }
 }
-}
