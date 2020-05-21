@@ -313,7 +313,7 @@ namespace Orc.LicenseManager.ViewModels
         {
             LicenseExists = false;
             XmlData.Clear();
-            RaisePropertyChanged(() => XmlData);
+            RaisePropertyChanged(nameof(XmlData));
 
             LicenseInfo.Key = licenseKey;
 
@@ -370,7 +370,7 @@ namespace Orc.LicenseManager.ViewModels
             }
 
             LicenseExists = true;
-            RaisePropertyChanged(() => XmlData);
+            RaisePropertyChanged(nameof(XmlData));
         }
 
         /// <summary>
