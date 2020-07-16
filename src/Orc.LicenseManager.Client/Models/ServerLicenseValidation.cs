@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Models
+namespace Orc.LicenseManager
 {
     public class ServerLicenseValidation
     {

@@ -1,19 +1,18 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ILicenseValidationService.cs" company="WildGums">
 //   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using System;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Xml;
     using Catel.Data;
-    using Models;
-
+    
     public interface ILicenseValidationService
     {
         #region Methods

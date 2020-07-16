@@ -11,7 +11,6 @@ namespace Orc.LicenseManager
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
-    using Services;
     using ViewModels;
 
     public static class WpfNetworkValidationHelper

@@ -5,10 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
-    using Models;
-
     public interface ILicenseInfoService
     {
         #region Methods

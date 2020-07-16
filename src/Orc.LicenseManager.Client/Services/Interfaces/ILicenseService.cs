@@ -5,11 +5,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
     using System;
     using System.Collections.Generic;
-    using Models;
     using Portable.Licensing;
 
     /// <summary>

@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Client",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Client.WPF", "Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.csproj", "{3C2F09AC-F23F-439F-BB6F-A502241CA829}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Client.WPF.Example.NET", "Orc.LicenseManager.Client.WPF.Example.NET\Orc.LicenseManager.Client.WPF.Example.NET.csproj", "{F797C9A9-5740-42A1-B6E4-1A99F0851A72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Client.WPF.Example", "Orc.LicenseManager.Client.WPF.Example\Orc.LicenseManager.Client.WPF.Example.csproj", "{F797C9A9-5740-42A1-B6E4-1A99F0851A72}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Server", "Orc.LicenseManager.Server\Orc.LicenseManager.Server.csproj", "{42E112E3-4CB2-4274-AA21-7B952D488F8D}"
 EndProject

@@ -10,7 +10,6 @@ namespace Orc.LicenseManager
     using System.Diagnostics;
     using Catel.Logging;
     using Catel.Reflection;
-    using Services;
 
     public static class NetworkValidationHelper
     {

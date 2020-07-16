@@ -7,8 +7,6 @@
 
 namespace Orc.LicenseManager.Services
 {
-    using Models;
-
     public class LicenseInfoService : ILicenseInfoService
     {
         public LicenseInfo GetLicenseInfo()

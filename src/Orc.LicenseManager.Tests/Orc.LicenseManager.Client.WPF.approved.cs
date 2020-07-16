@@ -1,17 +1,16 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager.Converters")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager.Views")]
-[assembly: System.Windows.Markup.XmlnsPrefixAttribute("http://schemas.wildgums.com/orc/licensemanager", "orclicensemanager")]
-public class static LoadAssembliesOnStartup { }
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager.Converters")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager.Views")]
+[assembly: System.Windows.Markup.XmlnsPrefix("http://schemas.wildgums.com/orc/licensemanager", "orclicensemanager")]
+public static class LoadAssembliesOnStartup { }
+public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
 namespace Orc.LicenseManager.Converters
 {
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(string))]
     public class FormattingConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public FormattingConverter() { }
@@ -19,12 +18,21 @@ namespace Orc.LicenseManager.Converters
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
 }
-namespace Orc.LicenseManager.Services
+namespace Orc.LicenseManager
 {
-    public class DialogLicenseVisualizerService : Orc.LicenseManager.Services.ILicenseVisualizerService
+    public class DialogLicenseVisualizerService : Orc.LicenseManager.ILicenseVisualizerService
     {
-        public DialogLicenseVisualizerService(Catel.Services.IUIVisualizerService uiVisualizerService, Orc.LicenseManager.Services.ILicenseInfoService licenseInfoService, Catel.Services.IDispatcherService dispatcherService) { }
+        public DialogLicenseVisualizerService(Catel.Services.IUIVisualizerService uiVisualizerService, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IDispatcherService dispatcherService) { }
         public void ShowLicense() { }
+    }
+    public static class WindowExtensions
+    {
+        public static void ApplyIconFromApplication(this System.Windows.Window window) { }
+        public static void RemoveCloseButton(this System.Windows.Window window) { }
+    }
+    public static class WpfNetworkValidationHelper
+    {
+        public static System.Threading.Tasks.Task DefaultNetworkLicenseServiceValidationHandlerAsync(object sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
     }
 }
 namespace Orc.LicenseManager.ViewModels
@@ -51,39 +59,39 @@ namespace Orc.LicenseManager.ViewModels
         public static readonly Catel.Data.PropertyData ShowFailureProperty;
         public static readonly Catel.Data.PropertyData TextProperty;
         public static readonly Catel.Data.PropertyData XmlDataProperty;
-        public LicenseViewModel(Orc.LicenseManager.Models.LicenseInfo licenseInfo, Catel.Services.INavigationService navigationService, Catel.Services.IProcessService processService, Orc.LicenseManager.Services.ILicenseService licenseService, Orc.LicenseManager.Services.ILicenseValidationService licenseValidationService, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService, Orc.LicenseManager.Services.ILicenseModeService licenseModeService) { }
+        public LicenseViewModel(Orc.LicenseManager.LicenseInfo licenseInfo, Catel.Services.INavigationService navigationService, Catel.Services.IProcessService processService, Orc.LicenseManager.ILicenseService licenseService, Orc.LicenseManager.ILicenseValidationService licenseValidationService, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService, Orc.LicenseManager.ILicenseModeService licenseModeService) { }
         public System.Uri AboutImageUri { get; }
         public Catel.MVVM.Command AboutSiteClick { get; }
         public System.Collections.Generic.List<Orc.LicenseManager.LicenseMode> AvailableLicenseModes { get; }
         public string FailureMessage { get; }
         public bool FailureOccurred { get; set; }
-        [Catel.MVVM.ViewModelToModelAttribute("LicenseInfo", "ImageUri")]
+        [Catel.MVVM.ViewModelToModel("LicenseInfo", "ImageUri")]
         public string ImageUri { get; set; }
-        [Catel.MVVM.ViewModelToModelAttribute("LicenseInfo", "InfoUrl")]
+        [Catel.MVVM.ViewModelToModel("LicenseInfo", "InfoUrl")]
         public string InfoUrl { get; set; }
-        [Catel.MVVM.ViewModelToModelAttribute("LicenseInfo", "Key")]
+        [Catel.MVVM.ViewModelToModel("LicenseInfo", "Key")]
         public string Key { get; set; }
         public bool LicenseExists { get; }
         public Orc.LicenseManager.LicenseMode LicenseMode { get; set; }
         public Catel.MVVM.TaskCommand Paste { get; }
         public Catel.MVVM.Command PurchaseLinkClick { get; }
-        [Catel.MVVM.ViewModelToModelAttribute("LicenseInfo", "PurchaseUrl")]
+        [Catel.MVVM.ViewModelToModel("LicenseInfo", "PurchaseUrl")]
         public string PurchaseUrl { get; set; }
         public Catel.MVVM.TaskCommand RemoveLicense { get; }
         public Catel.MVVM.TaskCommand ShowClipboard { get; }
         public bool ShowFailure { get; set; }
-        [Catel.MVVM.ViewModelToModelAttribute("LicenseInfo", "Text")]
+        [Catel.MVVM.ViewModelToModel("LicenseInfo", "Text")]
         public string Text { get; set; }
-        public System.Collections.ObjectModel.ObservableCollection<Orc.LicenseManager.Models.XmlDataModel> XmlData { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<Orc.LicenseManager.XmlDataModel> XmlData { get; set; }
         protected override System.Threading.Tasks.Task<bool> CancelAsync() { }
+        protected override System.Threading.Tasks.Task InitializeAsync() { }
+        protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override System.Threading.Tasks.Task<bool> SaveAsync() { }
         public string get_ImageUri() { }
         public string get_InfoUrl() { }
         public string get_Key() { }
         public string get_PurchaseUrl() { }
         public string get_Text() { }
-        protected override System.Threading.Tasks.Task InitializeAsync() { }
-        protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
-        protected override System.Threading.Tasks.Task<bool> SaveAsync() { }
         public void set_ImageUri(string ) { }
         public void set_InfoUrl(string ) { }
         public void set_Key(string ) { }
@@ -95,10 +103,10 @@ namespace Orc.LicenseManager.ViewModels
         public static readonly Catel.Data.PropertyData CurrentUsersProperty;
         public static readonly Catel.Data.PropertyData MaximumNumberOfConcurrentUsagesProperty;
         public static readonly Catel.Data.PropertyData PurchaseUrlProperty;
-        public NetworkLicenseUsageViewModel(Orc.LicenseManager.Models.NetworkValidationResult networkValidationResult, Orc.LicenseManager.Services.ILicenseInfoService licenseInfoService, Catel.Services.IProcessService processService, Orc.LicenseManager.Services.INetworkLicenseService networkLicenseService, Catel.Services.IDispatcherService dispatcherService) { }
+        public NetworkLicenseUsageViewModel(Orc.LicenseManager.NetworkValidationResult networkValidationResult, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IProcessService processService, Orc.LicenseManager.INetworkLicenseService networkLicenseService, Catel.Services.IDispatcherService dispatcherService) { }
         public Catel.MVVM.Command BuyLicenses { get; }
         public Catel.MVVM.Command CloseApplication { get; }
-        public System.Collections.Generic.List<Orc.LicenseManager.Models.NetworkLicenseUsage> CurrentUsers { get; set; }
+        public System.Collections.Generic.List<Orc.LicenseManager.NetworkLicenseUsage> CurrentUsers { get; set; }
         public int MaximumNumberOfConcurrentUsages { get; set; }
         public string PurchaseUrl { get; set; }
         protected override System.Threading.Tasks.Task CloseAsync() { }
@@ -131,17 +139,5 @@ namespace Orc.LicenseManager.Views
         public NetworkLicenseUsageWindow() { }
         public NetworkLicenseUsageWindow(Orc.LicenseManager.ViewModels.NetworkLicenseUsageViewModel viewModel) { }
         public void InitializeComponent() { }
-    }
-}
-namespace Orc.LicenseManager
-{
-    public class static WindowExtensions
-    {
-        public static void ApplyIconFromApplication(this System.Windows.Window window) { }
-        public static void RemoveCloseButton(this System.Windows.Window window) { }
-    }
-    public class static WpfNetworkValidationHelper
-    {
-        public static System.Threading.Tasks.Task DefaultNetworkLicenseServiceValidationHandlerAsync(object sender, Orc.LicenseManager.Services.NetworkValidatedEventArgs e) { }
     }
 }

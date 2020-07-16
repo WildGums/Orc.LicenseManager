@@ -289,6 +289,30 @@ private static void RestoreNuGetPackages(BuildContext buildContext, Cake.Core.IO
 
 //-------------------------------------------------------------
 
+private static void BuildSolution(BuildContext buildContext)
+{
+    var solutionName = buildContext.General.Solution.Name;
+    var solutionFileName = buildContext.General.Solution.FileName;
+
+    buildContext.CakeContext.LogSeparator("Building solution '{0}'", solutionName);
+
+    var msBuildSettings = new MSBuildSettings 
+    {
+        Verbosity = Verbosity.Quiet,
+        //Verbosity = Verbosity.Diagnostic,
+        ToolVersion = MSBuildToolVersion.Default,
+        Configuration = buildContext.General.Solution.ConfigurationName,
+        MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform,
+        PlatformTarget = PlatformTarget.MSIL
+    };
+
+    //ConfigureMsBuild(buildContext, msBuildSettings, dependency);
+
+    buildContext.CakeContext.MSBuild(solutionFileName, msBuildSettings);
+}
+
+//-------------------------------------------------------------
+
 private static void ConfigureMsBuild(BuildContext buildContext, MSBuildSettings msBuildSettings, 
     string projectName, string action = "build", bool? allowVsPrerelease = null)
 {
@@ -300,8 +324,20 @@ private static void ConfigureMsBuild(BuildContext buildContext, MSBuildSettings 
         msBuildSettings.ToolPath = toolPath;
     }
 
+    // Continuous integration build
+    msBuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
+
     // No NuGet restore (should already be done)
     msBuildSettings.WithProperty("ResolveNuGetPackages", "false");
+    msBuildSettings.Restore = false;
+
+    // Solution info
+    // msBuildSettings.WithProperty("SolutionFileName", System.IO.Path.GetFileName(buildContext.General.Solution.FileName));
+    // msBuildSettings.WithProperty("SolutionPath", System.IO.Path.GetFullPath(buildContext.General.Solution.FileName));
+    // msBuildSettings.WithProperty("SolutionDir", System.IO.Path.GetFullPath(buildContext.General.Solution.Directory));
+    // msBuildSettings.WithProperty("SolutionName", buildContext.General.Solution.Name);
+    // msBuildSettings.WithProperty("SolutionExt", ".sln");
+    // msBuildSettings.WithProperty("DefineExplicitDefaults", "true");
 
     // Use as much CPU as possible
     msBuildSettings.MaxCpuCount = 0;
@@ -335,6 +371,21 @@ private static void ConfigureMsBuildForDotNetCore(BuildContext buildContext, Dot
 
         msBuildSettings.ToolPath = toolPath;
     }
+
+    // Continuous integration build
+    msBuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
+
+    // No NuGet restore (should already be done)
+    msBuildSettings.WithProperty("ResolveNuGetPackages", "false");
+    //msBuildSettings.Restore = false;
+
+    // Solution info
+    // msBuildSettings.WithProperty("SolutionFileName", System.IO.Path.GetFileName(buildContext.General.Solution.FileName));
+    // msBuildSettings.WithProperty("SolutionPath", System.IO.Path.GetFullPath(buildContext.General.Solution.FileName));
+    // msBuildSettings.WithProperty("SolutionDir", System.IO.Path.GetFullPath(buildContext.General.Solution.Directory));
+    // msBuildSettings.WithProperty("SolutionName", buildContext.General.Solution.Name);
+    // msBuildSettings.WithProperty("SolutionExt", ".sln");
+    // msBuildSettings.WithProperty("DefineExplicitDefaults", "true");
 
     // Use as much CPU as possible
     msBuildSettings.MaxCpuCount = 0;
@@ -381,40 +432,29 @@ private static string GetVisualStudioDirectory(BuildContext buildContext, bool? 
            //buildContext.General.SonarQube.IsDisabled = true;
            return pathFor2019Preview;
         }
-
-        buildContext.CakeContext.Debug("Checking for installation of Visual Studio 2017 preview");
-
-        var pathFor2017Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\";
-        if (System.IO.Directory.Exists(pathFor2017Preview))
-        {
-            buildContext.CakeContext.Information("Using Visual Studio 2017 preview");
-            return pathFor2017Preview;
-        }
     }
     
     buildContext.CakeContext.Debug("Checking for installation of Visual Studio 2019");
 
-    var pathFor2019 = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\";
-    if (System.IO.Directory.Exists(pathFor2019))
+    var pathFor2019Enterprise = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\";
+    if (System.IO.Directory.Exists(pathFor2019Enterprise))
     {
-       buildContext.CakeContext.Information("Using Visual Studio 2019");
-       return pathFor2019;
+       buildContext.CakeContext.Information("Using Visual Studio 2019 Enterprise");
+       return pathFor2019Enterprise;
+    }
+
+    var pathFor2019Professional = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\";
+    if (System.IO.Directory.Exists(pathFor2019Professional))
+    {
+       buildContext.CakeContext.Information("Using Visual Studio 2019 Professional");
+       return pathFor2019Professional;
     }
 	
-	var pathFor2019Community = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\";
+    var pathFor2019Community = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\";
     if (System.IO.Directory.Exists(pathFor2019Community))
     {
        buildContext.CakeContext.Information("Using Visual Studio 2019 CE");
        return pathFor2019Community;
-    }
-
-    buildContext.CakeContext.Debug("Checking for installation of Visual Studio 2017");
-
-    var pathFor2017 = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\";
-    if (System.IO.Directory.Exists(pathFor2017))
-    {
-        buildContext.CakeContext.Information("Using Visual Studio 2017");
-        return pathFor2017;
     }
 
     // Failed
@@ -435,7 +475,7 @@ private static string GetVisualStudioPath(BuildContext buildContext, bool? allow
 
     foreach (var potentialPath in potentialPaths)
     {
-        var pathToCheck = string.Format(@"{0}\{1}", directory, potentialPath);
+        var pathToCheck = System.IO.Path.Combine(directory, potentialPath);
         if (System.IO.File.Exists(pathToCheck))
         {
             return pathToCheck;
@@ -456,7 +496,7 @@ private static bool IsCppProject(string projectName)
 
 private static string GetProjectDirectory(string projectName)
 {
-    var projectDirectory = string.Format("./src/{0}/", projectName);
+    var projectDirectory = System.IO.Path.Combine(".", "src", projectName);
     return projectDirectory;
 }
 
@@ -464,7 +504,7 @@ private static string GetProjectDirectory(string projectName)
 
 private static string GetProjectOutputDirectory(BuildContext buildContext, string projectName)
 {
-    var projectDirectory = string.Format("{0}/{1}", buildContext.General.OutputRootDirectory, projectName);
+    var projectDirectory = System.IO.Path.Combine(buildContext.General.OutputRootDirectory, projectName);
     return projectDirectory;
 }
 
@@ -480,8 +520,8 @@ private static string GetProjectFileName(BuildContext buildContext, string proje
 
     foreach (var allowedExtension in allowedExtensions)
     {
-        var fileName = string.Format("{0}{1}.{2}", GetProjectDirectory(projectName), projectName, allowedExtension);
-
+        var fileName = System.IO.Path.Combine(GetProjectDirectory(projectName), $"{projectName}.{allowedExtension}");
+       
         //buildContext.CakeContext.Information(fileName);
 
         if (buildContext.CakeContext.FileExists(fileName))
@@ -491,7 +531,7 @@ private static string GetProjectFileName(BuildContext buildContext, string proje
     }
 
     // Old behavior
-    var fallbackFileName = string.Format("{0}{1}.{2}", GetProjectDirectory(projectName), projectName, allowedExtensions[0]);
+    var fallbackFileName = System.IO.Path.Combine(GetProjectDirectory(projectName), $"{projectName}.{allowedExtensions[0]}");
     return fallbackFileName;
 }
 
@@ -499,8 +539,48 @@ private static string GetProjectFileName(BuildContext buildContext, string proje
 
 private static string GetProjectSlug(string projectName)
 {
-    var slug = projectName.Replace(".", "").Replace(" ", "");
+    var slug = projectName.Replace(".", string.Empty).Replace(" ", string.Empty);
     return slug;
+}
+
+//-------------------------------------------------------------
+
+private static string[] GetTargetFrameworks(BuildContext buildContext, string projectName)
+{
+    var targetFrameworks = new List<string>();
+
+    var projectFileName = GetProjectFileName(buildContext, projectName);
+    var projectFileContents = System.IO.File.ReadAllText(projectFileName);
+
+    var xmlDocument = XDocument.Parse(projectFileContents);
+    var projectElement = xmlDocument.Root;
+
+    foreach (var propertyGroupElement in projectElement.Elements("PropertyGroup"))
+    {
+        // Step 1: check TargetFramework
+        var targetFrameworkElement = projectElement.Element("TargetFramework");
+        if (targetFrameworkElement != null)
+        {
+            targetFrameworks.Add(targetFrameworkElement.Value);
+            break;
+        }
+
+        // Step 2: check TargetFrameworks
+        var targetFrameworksElement = propertyGroupElement.Element("TargetFrameworks");
+        if (targetFrameworksElement != null)
+        {
+            var value = targetFrameworksElement.Value;
+            targetFrameworks.AddRange(value.Split(new [] { ';' }));
+            break;
+        }
+    }
+
+    if (targetFrameworks.Count == 0)
+    {
+        throw new Exception(string.Format("No target frameworks could be detected for project '{0}'", projectName));
+    }
+
+    return targetFrameworks.ToArray();
 }
 
 //-------------------------------------------------------------
@@ -524,6 +604,63 @@ private static string GetProjectSpecificConfigurationValue(BuildContext buildCon
 
     var value = buildContext.BuildServer.GetVariable(keyToCheck, fallbackValue);
     return value;
+}
+
+//-------------------------------------------------------------
+
+private static void CleanProject(BuildContext buildContext, string projectName)
+{
+    buildContext.CakeContext.LogSeparator("Cleaning project '{0}'", projectName);
+
+    var projectDirectory = GetProjectDirectory(projectName);
+
+    buildContext.CakeContext.Information($"Investigating paths to clean up in '{projectDirectory}'");
+
+    var directoriesToDelete = new List<string>();
+
+    var binDirectory = System.IO.Path.Combine(projectDirectory, "bin");
+    directoriesToDelete.Add(binDirectory);
+
+    var objDirectory = System.IO.Path.Combine(projectDirectory, "obj");
+    directoriesToDelete.Add(objDirectory);
+
+    // Special C++ scenarios
+    var projectFileName = GetProjectFileName(buildContext, projectName);
+    if (IsCppProject(projectFileName))
+    {
+        var debugDirectory = System.IO.Path.Combine(projectDirectory, "Debug");
+        directoriesToDelete.Add(debugDirectory);
+
+        var releaseDirectory = System.IO.Path.Combine(projectDirectory, "Release");
+        directoriesToDelete.Add(releaseDirectory);
+
+        var x64Directory = System.IO.Path.Combine(projectDirectory, "x64");
+        directoriesToDelete.Add(x64Directory);
+
+        var x86Directory = System.IO.Path.Combine(projectDirectory, "x86");
+        directoriesToDelete.Add(x86Directory);
+    }
+
+    foreach (var directoryToDelete in directoriesToDelete)
+    {
+        DeleteDirectoryWithLogging(buildContext, directoryToDelete);
+    }
+}
+
+//-------------------------------------------------------------
+
+private static void DeleteDirectoryWithLogging(BuildContext buildContext, string directoryToDelete)
+{
+    if (buildContext.CakeContext.DirectoryExists(directoryToDelete))
+    {
+        buildContext.CakeContext.Information($"Cleaning up directory '{directoryToDelete}'");
+
+        buildContext.CakeContext.DeleteDirectory(directoryToDelete, new DeleteDirectorySettings
+        {
+            Force = true,
+            Recursive = true
+        });
+    }
 }
 
 //-------------------------------------------------------------
@@ -586,6 +723,23 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
         }
 
         return process;
+    }
+
+    if (buildContext.General.IsCiBuild)
+    {
+        // In CI builds, we always want to include all projects
+        return true;
+    }
+
+    // Experimental mode where we ignore projects that are not on the deploy list when not in CI mode, but
+    // it can only work if they are not part of unit tests (but that should never happen)
+    if (buildContext.Tests.Items.Count == 0)
+    {
+        if (!ShouldDeployProject(buildContext, projectName))
+        {
+            buildContext.CakeContext.Warning("Project '{0}' should not be processed because this is not a CI build, does not contain tests and the project should not be deployed, removing from projects to process", projectName);
+            return false;
+        }
     }
 
     return true;

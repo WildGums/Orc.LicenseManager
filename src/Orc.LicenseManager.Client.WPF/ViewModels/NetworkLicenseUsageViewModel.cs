@@ -19,8 +19,6 @@ namespace Orc.LicenseManager.ViewModels
     using Catel.Reflection;
     using Catel.Services;
     using Catel.Threading;
-    using Models;
-    using Services;
 
     public class NetworkLicenseUsageViewModel : ViewModelBase
     {

@@ -18,8 +18,6 @@ namespace Orc.LicenseManager.ViewModels
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
-    using Models;
-    using Services;
 
     /// <summary>
     /// View model for a single License.
@@ -315,7 +313,7 @@ namespace Orc.LicenseManager.ViewModels
         {
             LicenseExists = false;
             XmlData.Clear();
-            RaisePropertyChanged(() => XmlData);
+            RaisePropertyChanged(nameof(XmlData));
 
             LicenseInfo.Key = licenseKey;
 
@@ -372,7 +370,7 @@ namespace Orc.LicenseManager.ViewModels
             }
 
             LicenseExists = true;
-            RaisePropertyChanged(() => XmlData);
+            RaisePropertyChanged(nameof(XmlData));
         }
 
         /// <summary>

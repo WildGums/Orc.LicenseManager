@@ -9,7 +9,6 @@ namespace Orc.LicenseManager.Tests.Client.Models
 {
     using System;
     using Catel;
-    using LicenseManager.Models;
     using NUnit.Framework;
 
     public class NetworkLicenseUsageTests

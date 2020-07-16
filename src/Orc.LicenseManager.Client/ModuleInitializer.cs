@@ -1,7 +1,6 @@
 ﻿using Catel.IoC;
 using Catel.Services;
 using Orc.LicenseManager;
-using Orc.LicenseManager.Services;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
