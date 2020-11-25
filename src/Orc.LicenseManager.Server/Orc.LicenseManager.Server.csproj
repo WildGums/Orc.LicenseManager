@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net46;net47</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <AssemblyName>Orc.LicenseManager.Server</AssemblyName>
     <RootNamespace>Orc.LicenseManager.Server</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
