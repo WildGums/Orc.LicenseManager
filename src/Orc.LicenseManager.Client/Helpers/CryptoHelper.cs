@@ -48,7 +48,10 @@ namespace Orc.LicenseManager
                             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                             {
                                 cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                                cryptoStream.Flush();
                                 cryptoStream.FlushFinalBlock();
+
+                                memoryStream.Position = 0L;
 
                                 // Create the final bytes as a concatenation of the random salt bytes, the random iv bytes and the cipher bytes
                                 var cipherTextBytes = saltStringBytes;
@@ -65,19 +68,21 @@ namespace Orc.LicenseManager
 
         public static string Decrypt(string cipherText, string passPhrase)
         {
+            var fixedDataLength = Keysize / 8;
+
             // Get the complete stream of bytes that represent:
             // [32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]
             var cipherTextBytesWithSaltAndIv = Convert.FromBase64String(cipherText);
             // Get the saltbytes by extracting the first 32 bytes from the supplied cipherText bytes.
-            var saltStringBytes = cipherTextBytesWithSaltAndIv.Take(Keysize / 8).ToArray();
+            var saltStringBytes = cipherTextBytesWithSaltAndIv.Take(fixedDataLength).ToArray();
             // Get the IV bytes by extracting the next 32 bytes from the supplied cipherText bytes.
-            var ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(Keysize / 8).Take(Keysize / 8).ToArray();
+            var ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(fixedDataLength).Take(fixedDataLength).ToArray();
             // Get the actual cipher text bytes by removing the first 64 bytes from the cipherText string.
-            var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((Keysize / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((Keysize / 8) * 2)).ToArray();
+            var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip(fixedDataLength * 2).ToArray();
 
             using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
             {
-                var keyBytes = password.GetBytes(Keysize / 8);
+                var keyBytes = password.GetBytes(fixedDataLength);
 
                 using (var symmetricKey = new RijndaelManaged())
                 {

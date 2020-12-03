@@ -143,4 +143,8 @@ BundleArtifacts/
 FodyWeavers.xsd
 
 # Approval tests
-*.received.cs
+*.received.*
+
+# ANTLR
+data/dsl/*.class
+data/dsl/*.java

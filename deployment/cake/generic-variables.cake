@@ -1,6 +1,6 @@
 #l "buildserver.cake"
 
-#tool "nuget:?package=GitVersion.CommandLine&version=5.3.5"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.3.7"
 
 //-------------------------------------------------------------
 
@@ -75,24 +75,24 @@ public class VersionContext : BuildContextBase
             {
                 CakeContext.Information("No local .git directory found, treating as dynamic repository");
 
+                // Make a *BIG* assumption that the solution name == repository name
+                var repositoryName = generalContext.Solution.Name;
+                var dynamicRepositoryPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), repositoryName);
+
                 if (ClearCache)
                 {
                     CakeContext.Warning("Cleaning the cloned temp directory, disable by setting 'GitVersion_ClearCache' to 'false'");
-                    
-                    // Make a *BIG* assumption that the solution name == repository name
-                    var repositoryName = generalContext.Solution.Name;
-                    var tempDirectory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), repositoryName);
-                    
-                    if (CakeContext.DirectoryExists(tempDirectory))
+    
+                    if (CakeContext.DirectoryExists(dynamicRepositoryPath))
                     {
-                        CakeContext.DeleteDirectory(tempDirectory, new DeleteDirectorySettings
+                        CakeContext.DeleteDirectory(dynamicRepositoryPath, new DeleteDirectorySettings
                         {
                             Force = true,
                             Recursive = true
                         });
                     }
                 }
-          
+
                 // Validate first
                 if (string.IsNullOrWhiteSpace(generalContext.Repository.BranchName))
                 {
@@ -104,6 +104,8 @@ public class VersionContext : BuildContextBase
                     throw new Exception("No local .git directory was found, but repository url was not specified either. Make sure to specify the branch");
                 }
 
+                CakeContext.Information($"Fetching dynamic repository from url '{generalContext.Repository.Url}' => '{dynamicRepositoryPath}'");
+
                 // Dynamic repository
                 gitVersionSettings.UserName = generalContext.Repository.Username;
                 gitVersionSettings.Password = generalContext.Repository.Password;
@@ -112,6 +114,8 @@ public class VersionContext : BuildContextBase
                 gitVersionSettings.Commit = generalContext.Repository.CommitId;
                 gitVersionSettings.NoFetch = false;
                 gitVersionSettings.WorkingDirectory = generalContext.RootDirectory;
+                gitVersionSettings.DynamicRepositoryPath = dynamicRepositoryPath;
+                gitVersionSettings.Verbosity = GitVersionVerbosity.Debug;
             }
 
             _gitVersionContext = CakeContext.GitVersion(gitVersionSettings);
@@ -320,6 +324,7 @@ public class SonarQubeContext : BuildContextBase
     public bool IsDisabled { get; set; }
     public bool SupportBranches { get; set; }
     public string Url { get; set; }
+    public string Organization { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
     public string Project { get; set; }
@@ -407,8 +412,8 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
     data.CodeSign = new CodeSignContext(data)
     {
         WildCard = buildContext.BuildServer.GetVariable("CodeSignWildcard", showValue: true),
-        CertificateSubjectName = buildContext.BuildServer.GetVariable("CodeSignCertificateSubjectName", data.Copyright.Company, showValue: true),
-        TimeStampUri = buildContext.BuildServer.GetVariable("CodeSignTimeStampUri", "http://timestamp.comodoca.com/authenticode", showValue: true)
+        CertificateSubjectName = buildContext.BuildServer.GetVariable("CodeSignCertificateSubjectName", showValue: true),
+        TimeStampUri = buildContext.BuildServer.GetVariable("CodeSignTimeStampUri", "http://timestamp.digicert.com", showValue: true)
     };
 
     data.Repository = new RepositoryContext(data)
@@ -425,6 +430,7 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
         IsDisabled = buildContext.BuildServer.GetVariableAsBool("SonarDisabled", false, showValue: true),
         SupportBranches = buildContext.BuildServer.GetVariableAsBool("SonarSupportBranches", true, showValue: true),
         Url = buildContext.BuildServer.GetVariable("SonarUrl", showValue: true),
+        Organization = buildContext.BuildServer.GetVariable("SonarOrganization", showValue: true),
         Username = buildContext.BuildServer.GetVariable("SonarUsername", showValue: false),
         Password = buildContext.BuildServer.GetVariable("SonarPassword", showValue: false),
         Project = buildContext.BuildServer.GetVariable("SonarProject", data.Solution.Name, showValue: true)

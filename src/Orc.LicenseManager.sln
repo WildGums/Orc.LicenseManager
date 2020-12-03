@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26020.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C1DA253A-2C9B-40E1-94DE-2D1F14F3B6ED}"
 EndProject
@@ -40,8 +40,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Client.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Server", "Orc.LicenseManager.Server\Orc.LicenseManager.Server.csproj", "{42E112E3-4CB2-4274-AA21-7B952D488F8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.LicenseManager.Server.Website", "Orc.LicenseManager.Server.Website\Orc.LicenseManager.Server.Website.csproj", "{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.LicenseManager.Tests", "Orc.LicenseManager.Tests\Orc.LicenseManager.Tests.csproj", "{9FE19B06-29A8-4D6E-824E-DB6B7C959881}"
 EndProject
 Global
@@ -66,10 +64,6 @@ Global
 		{42E112E3-4CB2-4274-AA21-7B952D488F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E112E3-4CB2-4274-AA21-7B952D488F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E112E3-4CB2-4274-AA21-7B952D488F8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9FE19B06-29A8-4D6E-824E-DB6B7C959881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9FE19B06-29A8-4D6E-824E-DB6B7C959881}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FE19B06-29A8-4D6E-824E-DB6B7C959881}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,7 +81,6 @@ Global
 		{3C2F09AC-F23F-439F-BB6F-A502241CA829} = {D02E58A6-EF14-4F72-9BAC-0D7D21F1E93C}
 		{F797C9A9-5740-42A1-B6E4-1A99F0851A72} = {D118DB17-17CB-4143-A296-7281B4656463}
 		{42E112E3-4CB2-4274-AA21-7B952D488F8D} = {091017C1-FAC1-4734-AF27-81A4B02CB08F}
-		{F4CABAF1-4C10-4E01-B51C-6B6EDF55EF11} = {091017C1-FAC1-4734-AF27-81A4B02CB08F}
 		{9FE19B06-29A8-4D6E-824E-DB6B7C959881} = {C7037131-F052-44C0-A4BF-E87B3D85976B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
