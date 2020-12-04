@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="Orc.EntityFramework6" Version="4.0.0" />
+    <PackageReference Include="Orc.EntityFramework6" Version="4.1.0" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" />
   </ItemGroup>
 
