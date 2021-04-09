@@ -111,7 +111,7 @@ namespace Orc.LicenseManager
             var networkValidationResult = new NetworkValidationResult();
 
             var license = _licenseService.CurrentLicense;
-            if (license == null)
+            if (license is null)
             {
                 return networkValidationResult;
             }
@@ -215,14 +215,14 @@ namespace Orc.LicenseManager
                         {
                             var ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
                             var receiveBuffer = udpClient.Receive(ref ipEndPoint);
-                            if (receiveBuffer != null && receiveBuffer.Length > 0)
+                            if (receiveBuffer is not null && receiveBuffer.Length > 0)
                             {
                                 var receivedMessage = Encoding.ASCII.GetString(receiveBuffer);
 
                                 Log.Debug("Received message '{0}' from '{1}'", receivedMessage, ipEndPoint.Address);
 
                                 var licenseUsage = NetworkLicenseUsage.Parse(receivedMessage);
-                                if (licenseUsage == null)
+                                if (licenseUsage is null)
                                 {
                                     continue;
                                 }
@@ -267,7 +267,7 @@ namespace Orc.LicenseManager
         {
             try
             {
-                var ipAddress = (ipAddressAsObject != null) ? IPAddress.Parse((string)ipAddressAsObject) : IPAddress.Any;
+                var ipAddress = (ipAddressAsObject is not null) ? IPAddress.Parse((string)ipAddressAsObject) : IPAddress.Any;
 
                 Log.Debug("Creating listener for ip '{0}'", ipAddress);
 
@@ -288,7 +288,7 @@ namespace Orc.LicenseManager
                             if (string.IsNullOrEmpty(licenseSignature))
                             {
                                 var currentLicense = _licenseService.CurrentLicense;
-                                if (currentLicense != null)
+                                if (currentLicense is not null)
                                 {
                                     licenseSignature = currentLicense.Signature;
                                 }

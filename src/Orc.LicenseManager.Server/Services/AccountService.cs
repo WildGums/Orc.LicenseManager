@@ -29,7 +29,7 @@ namespace Orc.LicenseManager.Server.Services
                 var userManager = new UserManager<User>(new UserStore<User>(dbContextManager.Context));
 
                 var user = await userManager.FindByNameAsync(userName);
-                if (user == null)
+                if (user is null)
                 {
                     return false;
                 }
@@ -71,7 +71,7 @@ namespace Orc.LicenseManager.Server.Services
             {
                 var roleManager = new RoleManager<Role>(new RoleStore<Role>(dbContextManager.Context));
                 var role = roleManager.FindByName(rolestr);
-                if (role != null)
+                if (role is not null)
                 {
                     return true;
                 }

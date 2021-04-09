@@ -34,19 +34,19 @@ namespace Orc.LicenseManager
 
             try
             {
-                if (window.Icon != null)
+                if (window.Icon is not null)
                 {
                     return;
                 }
 
                 var currentApplication = Application.Current;
-                if (currentApplication != null)
+                if (currentApplication is not null)
                 {
                     var entryAssembly = Assembly.GetEntryAssembly();
-                    if (entryAssembly != null)
+                    if (entryAssembly is not null)
                     {
                         var icon = Icon.ExtractAssociatedIcon(entryAssembly.Location);
-                        if (icon != null)
+                        if (icon is not null)
                         {
                             window.SetCurrentValue(Window.IconProperty, Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
                                 new Int32Rect(0, 0, icon.Width, icon.Height), BitmapSizeOptions.FromEmptyOptions()));

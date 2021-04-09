@@ -84,7 +84,7 @@ namespace Orc.LicenseManager
                 }
 
                 var licenseAttributes = licenseObject.AdditionalAttributes;
-                if (licenseAttributes != null)
+                if (licenseAttributes is not null)
                 {
                     foreach (var licenseAttribute in licenseAttributes.GetAll())
                     {
@@ -133,7 +133,7 @@ namespace Orc.LicenseManager
             Argument.IsNotNullOrWhitespace(() => license);
             Argument.IsNotNullOrWhitespace(() => serverUrl);
 
-            if (assembly == null)
+            if (assembly is null)
             {
                 assembly = AssemblyHelper.GetEntryAssembly();
             }
@@ -149,7 +149,7 @@ namespace Orc.LicenseManager
                 using (var sw = new StreamWriter(webRequest.GetRequestStream()))
                 {
                     var version = "unknown version";
-                    if (assembly != null)
+                    if (assembly is not null)
                     {
                         try
                         {
@@ -168,7 +168,7 @@ namespace Orc.LicenseManager
                     var serviceLicenseValidation = new ServerLicenseValidation
                     {
                         MachineId = _identificationService.GetMachineId(),
-                        ProductName = (assembly != null) ? assembly.Product() : "unknown product",
+                        ProductName = (assembly is not null) ? assembly.Product() : "unknown product",
                         ProductVersion = version,
                         License = license
                     };
@@ -193,7 +193,7 @@ namespace Orc.LicenseManager
                 Log.Error(ex, "Failed to validate the license on the server");
             }
 
-            if (validationResult == null)
+            if (validationResult is null)
             {
                 validationResult = new LicenseValidationResult()
                 {
@@ -265,7 +265,7 @@ namespace Orc.LicenseManager
                 }
 
                 var expData = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, LicenseElements.Expiration));
-                if (expData != null)
+                if (expData is not null)
                 {
                     DateTime expirationDateTime;
                     if (DateTime.TryParse(expData.Value, out expirationDateTime))
@@ -286,7 +286,7 @@ namespace Orc.LicenseManager
                 }
 
                 var xmlDataVersion = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, LicenseElements.Version));
-                if (xmlDataVersion != null)
+                if (xmlDataVersion is not null)
                 {
                     Version licenseVersion;
                     if (Version.TryParse(xmlDataVersion.Value, out licenseVersion))

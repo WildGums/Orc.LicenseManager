@@ -25,7 +25,7 @@ namespace Orc.LicenseManager
             }
 
             var app = System.Windows.Application.Current;
-            if (app == null)
+            if (app is null)
             {
                 return;
             }

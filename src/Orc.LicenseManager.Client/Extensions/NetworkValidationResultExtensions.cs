@@ -21,7 +21,7 @@ namespace Orc.LicenseManager
             var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
 
             var latestUser = validationResult.GetLatestUser();
-            if (latestUser != null)
+            if (latestUser is not null)
             {
                 return string.Equals(networkLicenseService.ComputerId, latestUser.ComputerId);
             }

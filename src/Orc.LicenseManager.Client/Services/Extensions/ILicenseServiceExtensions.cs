@@ -17,7 +17,7 @@ namespace Orc.LicenseManager
             Argument.IsNotNull(() => licenseService);
 
             var license = licenseService.CurrentLicense;
-            return (license != null) ? license.Expiration : (DateTime?)null;
+            return (license is not null) ? license.Expiration : (DateTime?)null;
         }
 
         public static bool AnyExistingLicense(this ILicenseService licenseService)

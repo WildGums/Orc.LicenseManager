@@ -67,8 +67,7 @@ namespace Orc.LicenseManager
                 .GetCustomAttributes(typeof (DescriptionAttribute), false)
                 .FirstOrDefault() as DescriptionAttribute;
 
-            return descriptionAttribute != null
-                ? descriptionAttribute.Description
+            return descriptionAttribute is not null ? descriptionAttribute.Description
                 : enumValue.ToString();
         }
 

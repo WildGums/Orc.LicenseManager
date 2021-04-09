@@ -327,7 +327,7 @@ namespace Orc.LicenseManager.ViewModels
             XmlData.Clear();
 
             var xmlList = _licenseService.LoadXmlFromLicense(LicenseInfo.Key);
-            if (xmlList == null)
+            if (xmlList is null)
             {
                 FailureOccurred = false;
                 ShowFailure = false;
@@ -348,10 +348,10 @@ namespace Orc.LicenseManager.ViewModels
             if (validationContext.HasErrors)
             {
                 var xmlFirstError = _licenseValidationService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
-                if (xmlFirstError == null)
+                if (xmlFirstError is null)
                 {
                     var normalFirstError = _licenseValidationService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
-                    if (normalFirstError != null)
+                    if (normalFirstError is not null)
                     {
                         ShowFailure = true;
                         FailureMessage = normalFirstError.Message;

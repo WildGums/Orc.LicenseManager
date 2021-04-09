@@ -246,7 +246,7 @@ namespace Orc.LicenseManager
                 return;
             }
 
-            _currentLicense = license != null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
+            _currentLicense = license is not null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
 
             CurrentLicenseChanged?.Invoke(this, EventArgs.Empty);
         }
