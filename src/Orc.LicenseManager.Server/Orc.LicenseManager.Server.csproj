@@ -16,7 +16,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Catel.Core" Version="5.12.12" />
+    <PackageReference Include="Catel.Core" Version="5.12.13" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Fody" Version="6.5.1" PrivateAssets="all">
