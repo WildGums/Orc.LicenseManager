@@ -158,9 +158,9 @@ namespace Orc.LicenseManager.ViewModels
 
         #region Methods
 
-        private void OnLicenseModeChanged()
+        private async void OnLicenseModeChanged()
         {
-            LoadAndApplyLicense();
+            await LoadAndApplyLicenseAsync();
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Orc.LicenseManager.ViewModels
                 MessageImage.Question) == MessageResult.Yes)
             {
                 _licenseService.RemoveLicense(LicenseMode);
-                UpdateLicenseInfo();
+                await UpdateLicenseInfoAsync();
             }
         }
 
@@ -214,7 +214,7 @@ namespace Orc.LicenseManager.ViewModels
         {
             AvailableLicenseModes = _licenseModeService.GetAvailableLicenseModes();
 
-            UpdateLicenseInfo();
+            await UpdateLicenseInfoAsync();
         }
 
         protected override async Task<bool> SaveAsync()
@@ -235,7 +235,7 @@ namespace Orc.LicenseManager.ViewModels
                 return false;
             }
 
-            var validationContext = _licenseValidationService.ValidateLicense(LicenseInfo.Key);
+            var validationContext = await _licenseValidationService.ValidateLicenseAsync(LicenseInfo.Key);
             if (validationContext.HasErrors)
             {
                 return false;
@@ -279,14 +279,14 @@ namespace Orc.LicenseManager.ViewModels
             return true;
         }
 
-        private void UpdateLicenseInfo()
+        private async Task UpdateLicenseInfoAsync()
         {
             DetectLicenseMode();
 
-            LoadAndApplyLicense();
+            await LoadAndApplyLicenseAsync();
         }
 
-        private void LoadAndApplyLicense()
+        private async Task LoadAndApplyLicenseAsync()
         {
             var licenseText = _licenseService.LoadLicense(LicenseMode);
             if (string.IsNullOrWhiteSpace(licenseText))
@@ -294,7 +294,7 @@ namespace Orc.LicenseManager.ViewModels
                 licenseText = _licenseService.LoadLicense(LicenseMode.ToOpposite());
             }
 
-            ApplyLicense(licenseText);
+            await ApplyLicenseAsync(licenseText);
         }
 
         private void DetectLicenseMode()
@@ -309,7 +309,7 @@ namespace Orc.LicenseManager.ViewModels
             }
         }
 
-        private void ApplyLicense(string licenseKey)
+        private async Task ApplyLicenseAsync(string licenseKey)
         {
             LicenseExists = false;
             XmlData.Clear();
@@ -344,13 +344,16 @@ namespace Orc.LicenseManager.ViewModels
                 XmlData.Add(x);
             });
 
-            var validationContext = _licenseValidationService.ValidateLicense(licenseKey);
+            var validationContext = await _licenseValidationService.ValidateLicenseAsync(licenseKey);
             if (validationContext.HasErrors)
             {
-                var xmlFirstError = _licenseValidationService.ValidateXml(licenseKey).GetBusinessRuleErrors().FirstOrDefault();
+                var xmlValidationContext = await _licenseValidationService.ValidateXmlAsync(licenseKey);
+
+                var xmlFirstError = xmlValidationContext.GetBusinessRuleErrors().FirstOrDefault();
                 if (xmlFirstError is null)
                 {
-                    var normalFirstError = _licenseValidationService.ValidateLicense(LicenseInfo.Key).GetBusinessRuleErrors().FirstOrDefault();
+                    var normalValidationContext = await _licenseValidationService.ValidateLicenseAsync(LicenseInfo.Key);
+                    var normalFirstError = normalValidationContext.GetBusinessRuleErrors().FirstOrDefault();
                     if (normalFirstError is not null)
                     {
                         ShowFailure = true;
@@ -390,7 +393,7 @@ namespace Orc.LicenseManager.ViewModels
                     return;
                 }
 
-                ApplyLicense(license);
+                await ApplyLicenseAsync(license);
 
                 if (!string.IsNullOrEmpty(LicenseInfo.Key))
                 {

@@ -35,7 +35,7 @@ namespace Orc.LicenseManager
             {
                 var keyBytes = password.GetBytes(Keysize / 8);
 
-                using (var symmetricKey = new RijndaelManaged())
+                using (var symmetricKey = Aes.Create())
                 {
                     symmetricKey.BlockSize = Keysize;
                     symmetricKey.Mode = CipherMode.CBC;
@@ -48,7 +48,6 @@ namespace Orc.LicenseManager
                             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                             {
                                 cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
-                                cryptoStream.Flush();
                                 cryptoStream.FlushFinalBlock();
 
                                 memoryStream.Position = 0L;
@@ -58,7 +57,8 @@ namespace Orc.LicenseManager
                                 cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
                                 cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
 
-                                return Convert.ToBase64String(cipherTextBytes);
+                                var base64 = Convert.ToBase64String(cipherTextBytes);
+                                return base64;
                             }
                         }
                     }
@@ -71,20 +71,23 @@ namespace Orc.LicenseManager
             var fixedDataLength = Keysize / 8;
 
             // Get the complete stream of bytes that represent:
-            // [32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]
+            // [16 bytes of Salt] + [16 bytes of IV] + [n bytes of CipherText]
             var cipherTextBytesWithSaltAndIv = Convert.FromBase64String(cipherText);
-            // Get the saltbytes by extracting the first 32 bytes from the supplied cipherText bytes.
+
+            // Get the saltbytes by extracting the first 16 bytes from the supplied cipherText bytes.
             var saltStringBytes = cipherTextBytesWithSaltAndIv.Take(fixedDataLength).ToArray();
-            // Get the IV bytes by extracting the next 32 bytes from the supplied cipherText bytes.
+
+            // Get the IV bytes by extracting the next 16 bytes from the supplied cipherText bytes.
             var ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(fixedDataLength).Take(fixedDataLength).ToArray();
-            // Get the actual cipher text bytes by removing the first 64 bytes from the cipherText string.
+
+            // Get the actual cipher text bytes by removing the first 32 bytes from the cipherText string.
             var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip(fixedDataLength * 2).ToArray();
 
             using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
             {
                 var keyBytes = password.GetBytes(fixedDataLength);
 
-                using (var symmetricKey = new RijndaelManaged())
+                using (var symmetricKey = Aes.Create())
                 {
                     symmetricKey.BlockSize = Keysize;
                     symmetricKey.Mode = CipherMode.CBC;
@@ -99,7 +102,8 @@ namespace Orc.LicenseManager
                                 var plainTextBytes = new byte[cipherTextBytes.Length];
                                 var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
 
-                                return Encoding.GetString(plainTextBytes, 0, decryptedByteCount);
+                                var decryptedText = Encoding.GetString(plainTextBytes, 0, decryptedByteCount);
+                                return decryptedText;
                             }
                         }
                     }
@@ -112,7 +116,7 @@ namespace Orc.LicenseManager
             var length = keySizeInBits / 8;
             var randomBytes = new byte[length];
 
-            using (var rngCsp = new RNGCryptoServiceProvider())
+            using (var rngCsp = RandomNumberGenerator.Create())
             {
                 rngCsp.GetBytes(randomBytes);
             }

@@ -12,7 +12,10 @@ namespace Orc.LicenseManager
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Json;
     using System.Reflection;
+    using System.Threading.Tasks;
     using System.Xml;
     using Catel;
     using Catel.Data;
@@ -59,7 +62,7 @@ namespace Orc.LicenseManager
         /// </summary>
         /// <param name="license">The license key the user has given to be validated.</param>
         /// <returns>The validation context containing all the validation results.</returns>
-        public IValidationContext ValidateLicense(string license)
+        public async Task<IValidationContext> ValidateLicenseAsync(string license)
         {
             Argument.IsNotNullOrWhitespace(() => license);
 
@@ -104,7 +107,7 @@ namespace Orc.LicenseManager
                 }
 
                 // Also validate the xml, very important for expiration date and version
-                var xmlValidationContext = ValidateXml(license);
+                var xmlValidationContext = await ValidateXmlAsync(license);
                 validationContext.SynchronizeWithContext(xmlValidationContext, true);
             }
             catch (Exception ex)
@@ -128,7 +131,7 @@ namespace Orc.LicenseManager
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="assembly">The assembly to get the information from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public LicenseValidationResult ValidateLicenseOnServer(string license, string serverUrl, Assembly assembly = null)
+        public async Task<LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, Assembly assembly = null)
         {
             Argument.IsNotNullOrWhitespace(() => license);
             Argument.IsNotNullOrWhitespace(() => serverUrl);
@@ -142,11 +145,7 @@ namespace Orc.LicenseManager
 
             try
             {
-                var webRequest = WebRequest.Create(serverUrl);
-                webRequest.ContentType = "application/json";
-                webRequest.Method = "POST";
-
-                using (var sw = new StreamWriter(webRequest.GetRequestStream()))
+                using (var httpClient = new HttpClient())
                 {
                     var version = "unknown version";
                     if (assembly is not null)
@@ -174,17 +173,12 @@ namespace Orc.LicenseManager
                     };
 
                     var json = JsonConvert.SerializeObject(serviceLicenseValidation);
+                    var httpContent = JsonContent.Create(json);
 
-                    sw.Write(json);
-                }
-
-                using (var httpWebResponse = webRequest.GetResponse())
-                {
-                    using (var responseStream = httpWebResponse.GetResponseStream())
+                    using (var response = await httpClient.PostAsync(serverUrl, httpContent))
                     {
-                        var streamReader = new StreamReader(responseStream);
-                        var json = streamReader.ReadToEnd();
-                        validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(json);
+                        var responseJson = await response.Content.ReadAsStringAsync();
+                        validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(responseJson);
                     }
                 }
             }
@@ -215,7 +209,7 @@ namespace Orc.LicenseManager
         /// <exception cref="XmlException">The license text is not valid XML.</exception>
         /// <exception cref="Exception">The root element is not License.</exception>
         /// <exception cref="Exception">There were no inner nodes found.</exception>
-        public IValidationContext ValidateXml(string license)
+        public async Task<IValidationContext> ValidateXmlAsync(string license)
         {
             var validationContext = new ValidationContext();
             if (string.IsNullOrWhiteSpace(license))
