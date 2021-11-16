@@ -16,7 +16,7 @@ namespace Orc.LicenseManager
     /// <summary>
     /// This code originally comes from http://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-s
     /// </summary>
-    internal static class CryptoHelper
+    public static class CryptoHelper
     {
         private const int Keysize = 128;
         private const int DerivationIterations = 1024;
@@ -48,6 +48,7 @@ namespace Orc.LicenseManager
                             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                             {
                                 cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+
                                 cryptoStream.FlushFinalBlock();
 
                                 memoryStream.Position = 0L;
@@ -97,13 +98,22 @@ namespace Orc.LicenseManager
                     {
                         using (var memoryStream = new MemoryStream(cipherTextBytes))
                         {
-                            using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                            using(var outputMemoryStream = new MemoryStream())
                             {
-                                var plainTextBytes = new byte[cipherTextBytes.Length];
-                                var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                                {
+                                    var plainTextBytesBuffer = new byte[cipherTextBytes.Length];
+                                    var decryptedByteCount = cryptoStream.Read(plainTextBytesBuffer, 0, plainTextBytesBuffer.Length);
+                                    while (decryptedByteCount > 0)
+                                    {
+                                        outputMemoryStream.Write(plainTextBytesBuffer, 0, decryptedByteCount);
+                                        decryptedByteCount = cryptoStream.Read(plainTextBytesBuffer, 0, plainTextBytesBuffer.Length);
+                                    }
 
-                                var decryptedText = Encoding.GetString(plainTextBytes, 0, decryptedByteCount);
-                                return decryptedText;
+                                    cryptoStream.Flush();
+                                    var decryptedText = Encoding.GetString(outputMemoryStream.ToArray());
+                                    return decryptedText;
+                                }
                             }
                         }
                     }

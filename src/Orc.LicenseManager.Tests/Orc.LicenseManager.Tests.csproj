@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Orc.LicenseManager.Client.WPF.Example\Orc.LicenseManager.Client.WPF.Example.csproj" />
     <ProjectReference Include="..\Orc.LicenseManager.Client\Orc.LicenseManager.Client.csproj" />
     <ProjectReference Include="..\Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.csproj" />
   </ItemGroup>
