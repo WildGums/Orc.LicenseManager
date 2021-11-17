@@ -133,7 +133,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         {
             NetworkValidationResult validationResult = null;
 
-            validationResult = _networkLicenseService.ValidateLicense();
+            validationResult = await _networkLicenseService.ValidateLicenseAsync();
 
             await _messageService.ShowAsync(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
         }

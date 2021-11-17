@@ -1,4 +1,5 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Orc.LicenseManager.Tests")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
 public static class LoadAssembliesOnStartup { }
 public static class ModuleInitializer
@@ -92,7 +93,7 @@ namespace Orc.LicenseManager
         System.TimeSpan SearchTimeout { get; set; }
         event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
         void Initialize(System.TimeSpan pollingInterval = default);
-        Orc.LicenseManager.NetworkValidationResult ValidateLicense();
+        System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync();
     }
     public static class INetworkLicenseServiceExtensions { }
     public interface ISimpleLicenseService
@@ -194,7 +195,7 @@ namespace Orc.LicenseManager
         public System.TimeSpan SearchTimeout { get; set; }
         public event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
         public virtual void Initialize(System.TimeSpan pollingInterval = default) { }
-        public virtual Orc.LicenseManager.NetworkValidationResult ValidateLicense() { }
+        public virtual System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync() { }
     }
     public class NetworkLicenseUsage
     {
@@ -204,9 +205,9 @@ namespace Orc.LicenseManager
         public string LicenseSignature { get; }
         public System.DateTime StartDateTime { get; }
         public string UserName { get; }
-        public string ToNetworkMessage() { }
+        public System.Threading.Tasks.Task<string> ToNetworkMessageAsync() { }
         public override string ToString() { }
-        public static Orc.LicenseManager.NetworkLicenseUsage Parse(string text) { }
+        public static System.Threading.Tasks.Task<Orc.LicenseManager.NetworkLicenseUsage> ParseAsync(string text) { }
     }
     public class NetworkValidatedEventArgs : System.EventArgs
     {

@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager
 {
     using System;
+    using System.Threading.Tasks;
 
     public interface INetworkLicenseService
     {
@@ -18,10 +19,10 @@ namespace Orc.LicenseManager
         /// <param name="pollingInterval">The polling interval. If <c>default(TimeSpan)</c>, no polling will be enabled.</param>
         /// <returns>Task.</returns>
         /// <remarks>Note that this method is optional but will start the service. If this method is not called, the service will be initialized
-        /// in the <see cref="ValidateLicense" /> method.</remarks>
+        /// in the <see cref="ValidateLicenseAsync" /> method.</remarks>
         void Initialize(TimeSpan pollingInterval = default(TimeSpan));
 
-        NetworkValidationResult ValidateLicense();
+        Task<NetworkValidationResult> ValidateLicenseAsync();
         #endregion
 
         /// <summary>

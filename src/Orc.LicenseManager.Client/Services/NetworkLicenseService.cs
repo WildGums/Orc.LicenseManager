@@ -14,6 +14,7 @@ namespace Orc.LicenseManager
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Timers;
     using Catel;
     using Catel.Logging;
@@ -76,7 +77,7 @@ namespace Orc.LicenseManager
         /// <param name="pollingInterval">The polling interval. If <c>default(TimeSpan)</c>, no polling will be enabled.</param>
         /// <returns>Task.</returns>
         /// <remarks>Note that this method is optional but will start the service. If this method is not called, the service will be initialized
-        /// in the <see cref="ValidateLicense" /> method.</remarks>
+        /// in the <see cref="ValidateLicenseAsync" /> method.</remarks>
         public virtual void Initialize(TimeSpan pollingInterval = default(TimeSpan))
         {
             CreateLicenseListeningSockets();
@@ -106,7 +107,7 @@ namespace Orc.LicenseManager
             }
         }
 
-        public virtual NetworkValidationResult ValidateLicense()
+        public virtual async Task<NetworkValidationResult> ValidateLicenseAsync()
         {
             var networkValidationResult = new NetworkValidationResult();
 
@@ -130,7 +131,7 @@ namespace Orc.LicenseManager
 
                 foreach (var ipAddress in GetIpAddresses())
                 {
-                    var usages = BroadcastMessage(ipAddress, license.Signature, timeout);
+                    var usages = await BroadcastMessageAsync(ipAddress, license.Signature, timeout);
                     licenseUsages.AddRange(usages);
                 }
 
@@ -148,9 +149,9 @@ namespace Orc.LicenseManager
             return networkValidationResult;
         }
 
-        private void OnPollingTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnPollingTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            ValidateLicense();
+            await ValidateLicenseAsync();
         }
 
         private void CreateLicenseListeningSockets()
@@ -186,7 +187,7 @@ namespace Orc.LicenseManager
             }
         }
 
-        private List<NetworkLicenseUsage> BroadcastMessage(string ipAddress, string message, int maxTimeout = 1000)
+        private async Task<List<NetworkLicenseUsage>> BroadcastMessageAsync(string ipAddress, string message, int maxTimeout = 1000)
         {
             var licenseUsages = new Dictionary<string, NetworkLicenseUsage>();
 
@@ -205,7 +206,7 @@ namespace Orc.LicenseManager
                     var sendBuffer = Encoding.ASCII.GetBytes(message);
 
                     var remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, Port);
-                    udpClient.Send(sendBuffer, sendBuffer.Length, remoteEndPoint);
+                    await udpClient.SendAsync(sendBuffer, sendBuffer.Length, remoteEndPoint);
 
                     var endDateTime = DateTime.Now.AddMilliseconds(maxTimeout);
 
@@ -221,7 +222,7 @@ namespace Orc.LicenseManager
 
                                 Log.Debug("Received message '{0}' from '{1}'", receivedMessage, ipEndPoint.Address);
 
-                                var licenseUsage = NetworkLicenseUsage.Parse(receivedMessage);
+                                var licenseUsage = await NetworkLicenseUsage.ParseAsync(receivedMessage);
                                 if (licenseUsage is null)
                                 {
                                     continue;
@@ -263,7 +264,7 @@ namespace Orc.LicenseManager
             return licenseUsages.Values.ToList();
         }
 
-        private void HandleIncomingRequests(object ipAddressAsObject)
+        private async void HandleIncomingRequests(object ipAddressAsObject)
         {
             try
             {
@@ -311,7 +312,7 @@ namespace Orc.LicenseManager
 
                                 var licenseUsage = new NetworkLicenseUsage(_machineId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
 
-                                var responseMessage = licenseUsage.ToNetworkMessage();
+                                var responseMessage = await licenseUsage.ToNetworkMessageAsync();
                                 var responseBytes = ASCIIEncoding.ASCII.GetBytes(responseMessage);
 
                                 udpClient.Send(responseBytes, responseBytes.Length, ipEndPoint);

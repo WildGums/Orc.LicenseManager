@@ -12,18 +12,19 @@ namespace Orc.LicenseManager
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// This code originally comes from http://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-s
     /// </summary>
-    public static class CryptoHelper
+    internal static class CryptoHelper
     {
         private const int Keysize = 128;
         private const int DerivationIterations = 1024;
 
         private static readonly Encoding Encoding = Encoding.UTF8;
 
-        public static string Encrypt(string plainText, string passPhrase)
+        public static async Task<string> EncryptAsync(string plainText, string passPhrase)
         {
             // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
             // so that the same Salt and IV values can be used when decrypting
@@ -47,9 +48,9 @@ namespace Orc.LicenseManager
                         {
                             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                             {
-                                cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                                await cryptoStream.WriteAsync(plainTextBytes, 0, plainTextBytes.Length);
 
-                                cryptoStream.FlushFinalBlock();
+                                await cryptoStream.FlushFinalBlockAsync();
 
                                 memoryStream.Position = 0L;
 
@@ -67,7 +68,7 @@ namespace Orc.LicenseManager
             }
         }
 
-        public static string Decrypt(string cipherText, string passPhrase)
+        public static async Task<string> DecryptAsync(string cipherText, string passPhrase)
         {
             var fixedDataLength = Keysize / 8;
 
@@ -103,14 +104,16 @@ namespace Orc.LicenseManager
                                 using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                                 {
                                     var plainTextBytesBuffer = new byte[cipherTextBytes.Length];
-                                    var decryptedByteCount = cryptoStream.Read(plainTextBytesBuffer, 0, plainTextBytesBuffer.Length);
+                                    var decryptedByteCount = await cryptoStream.ReadAsync(plainTextBytesBuffer, 0, plainTextBytesBuffer.Length);
+
                                     while (decryptedByteCount > 0)
                                     {
-                                        outputMemoryStream.Write(plainTextBytesBuffer, 0, decryptedByteCount);
-                                        decryptedByteCount = cryptoStream.Read(plainTextBytesBuffer, 0, plainTextBytesBuffer.Length);
+                                        await outputMemoryStream.WriteAsync(plainTextBytesBuffer, 0, decryptedByteCount);
+                                        decryptedByteCount = await cryptoStream.ReadAsync(plainTextBytesBuffer, 0, plainTextBytesBuffer.Length);
                                     }
 
-                                    cryptoStream.Flush();
+                                    await cryptoStream.FlushAsync();
+
                                     var decryptedText = Encoding.GetString(outputMemoryStream.ToArray());
                                     return decryptedText;
                                 }

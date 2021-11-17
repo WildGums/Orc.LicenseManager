@@ -9,6 +9,7 @@ namespace Orc.LicenseManager
 {
     using System;
     using System.Globalization;
+    using System.Threading.Tasks;
 
     public class NetworkLicenseUsage
     {
@@ -44,21 +45,21 @@ namespace Orc.LicenseManager
             return string.Format("Id: {0} | Ip: {1} | Start time: {2}", ComputerId, Ip, StartDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
-        public string ToNetworkMessage()
+        public async Task<string> ToNetworkMessageAsync()
         {
             var message = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", Splitter, ComputerId, LicenseSignature, StartDateTime.ToString(DateTimeFormat), UserName, Ip);
-            var encrypted = CryptoHelper.Encrypt(message, EncryptionKey);
+            var encrypted = await CryptoHelper.EncryptAsync(message, EncryptionKey);
 
             var finalMessage = $"{EncryptionPrefix}{encrypted}";
             return finalMessage;
         }
 
-        public static NetworkLicenseUsage Parse(string text)
+        public static async Task<NetworkLicenseUsage> ParseAsync(string text)
         {
             if (text.StartsWith(EncryptionPrefix))
             {
                 var encryptedText = text.Substring(EncryptionPrefix.Length);
-                text = CryptoHelper.Decrypt(encryptedText, EncryptionKey);
+                text = await CryptoHelper.DecryptAsync(encryptedText, EncryptionKey);
             }
 
             var splitted = text.Split(new[] { Splitter }, StringSplitOptions.None);

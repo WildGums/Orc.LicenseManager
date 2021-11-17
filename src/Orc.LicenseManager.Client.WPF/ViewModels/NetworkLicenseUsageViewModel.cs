@@ -34,7 +34,7 @@ namespace Orc.LicenseManager.ViewModels
         #endregion
 
         #region Constructors
-        public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService, 
+        public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService,
             IProcessService processService, INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
         {
             Argument.IsNotNull(() => networkValidationResult);
@@ -116,7 +116,7 @@ namespace Orc.LicenseManager.ViewModels
         private async void OnDispatcherTimerTick(object sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid
         {
-            var validationResult = await TaskHelper.Run(() => _networkLicenseService.ValidateLicense(), true);
+            var validationResult = await TaskHelper.Run(async () => await _networkLicenseService.ValidateLicenseAsync(), true);
 
             UpdateValidationResult(validationResult);
         }
