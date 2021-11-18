@@ -7,15 +7,8 @@
 
 namespace Orc.LicenseManager.Tests.Client.Services
 {
-    using System;
-    using System.IO;
-    using System.Xml;
     using Catel.IoC;
-    using Catel.Services;
-    using Catel.Tests;
     using NUnit.Framework;
-    using Orc.LicenseManager.Services;
-    using Portable.Licensing;
 
     public class LicenseServiceFacts
     {
@@ -41,20 +34,20 @@ namespace Orc.LicenseManager.Tests.Client.Services
             //}
         }
 
-        [TestFixture]
-        public class TheShowLicense
-        {
-            [Test, Explicit]
-            public void ShowsDialog()
-            {
-                var typeFactory = TypeFactory.Default;
-                ServiceLocator.Default.RegisterType<ILicenseInfoService, LicenseInfoService>();
+        //[TestFixture]
+        //public class TheShowLicense
+        //{
+        //    [Test, Explicit]
+        //    public void ShowsDialog()
+        //    {
+        //        var typeFactory = TypeFactory.Default;
+        //        ServiceLocator.Default.RegisterType<ILicenseInfoService, LicenseInfoService>();
 
-                var service = typeFactory.CreateInstance<DialogLicenseVisualizerService>();
+        //        var service = typeFactory.CreateInstance<DialogLicenseVisualizerService>();
 
-                service.ShowLicense();
-            }
-        }
+        //        service.ShowLicense();
+        //    }
+        //}
 
         [TestFixture]
         public class LicenseIO
