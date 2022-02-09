@@ -22,6 +22,8 @@ namespace Orc.LicenseManager.Server.Services
         {
         }
 
+#pragma warning disable IDISP001 // Dispose created
+#pragma warning disable IDISP004 // Don't ignore created IDisposable
         public async Task<bool> ResetPasswordAsync(string userName, string newPassword)
         {
             using (var dbContextManager = DbContextManager<LicenseManagerDbContext>.GetManager())
@@ -88,6 +90,8 @@ namespace Orc.LicenseManager.Server.Services
                 roleManager.Create(new Role(role));
             }
         }
+#pragma warning restore IDISP004 // Don't ignore created IDisposable
+#pragma warning restore IDISP001 // Dispose created
         #endregion
     }
 }
