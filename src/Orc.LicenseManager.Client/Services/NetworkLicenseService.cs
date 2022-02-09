@@ -29,7 +29,7 @@ namespace Orc.LicenseManager
         private readonly ILicenseService _licenseService;
         private readonly IIdentificationService _identificationService;
 
-        private readonly Timer _pollingTimer = new Timer();
+        private readonly Timer _pollingTimer = new();
 
         private bool _initialized;
         private readonly List<Thread> _listeningThreads = new List<Thread>();

@@ -11,6 +11,7 @@ public static class ModuleInitializer
 }
 namespace Orc.LicenseManager.Converters
 {
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(string))]
     public class FormattingConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public FormattingConverter() { }

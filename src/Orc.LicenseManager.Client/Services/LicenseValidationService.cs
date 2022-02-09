@@ -173,12 +173,13 @@ namespace Orc.LicenseManager
                     };
 
                     var json = JsonConvert.SerializeObject(serviceLicenseValidation);
-                    var httpContent = JsonContent.Create(json);
-
-                    using (var response = await httpClient.PostAsync(serverUrl, httpContent))
+                    using (var httpContent = JsonContent.Create(json))
                     {
-                        var responseJson = await response.Content.ReadAsStringAsync();
-                        validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(responseJson);
+                        using (var response = await httpClient.PostAsync(serverUrl, httpContent))
+                        {
+                            var responseJson = await response.Content.ReadAsStringAsync();
+                            validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(responseJson);
+                        }
                     }
                 }
             }
