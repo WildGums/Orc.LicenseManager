@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager.Tests.Client.Models
 {
     using System;
+    using System.Threading.Tasks;
     using Catel;
     using NUnit.Framework;
 
@@ -17,7 +18,7 @@ namespace Orc.LicenseManager.Tests.Client.Models
         public class TheParsing
         {
             [Test]
-            public void TestParsing()
+            public async Task TestParsingAsync()
             {
                 var dateTime = DateTime.Now;
 
@@ -29,8 +30,8 @@ namespace Orc.LicenseManager.Tests.Client.Models
                 Assert.AreEqual("userName", usage.UserName);
                 //Assert.IsTrue(ObjectHelper.AreEqual(dateTime, usage.StartDateTime));
 
-                var networkString = usage.ToNetworkMessage();
-                var usage2 = NetworkLicenseUsage.Parse(networkString);
+                var networkString = await usage.ToNetworkMessageAsync();
+                var usage2 = await NetworkLicenseUsage.ParseAsync(networkString);
 
                 Assert.AreEqual(usage.ComputerId, usage2.ComputerId);
                 Assert.AreEqual(usage.Ip, usage2.Ip);

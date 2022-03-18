@@ -1,5 +1,5 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager.Converters")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.wildgums.com/orc/licensemanager", "Orc.LicenseManager.Views")]
@@ -11,6 +11,7 @@ public static class ModuleInitializer
 }
 namespace Orc.LicenseManager.Converters
 {
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(string))]
     public class FormattingConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public FormattingConverter() { }

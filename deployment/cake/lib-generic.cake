@@ -3,6 +3,7 @@ using System.Reflection;
 //-------------------------------------------------------------
 
 private static readonly Dictionary<string, bool> _dotNetCoreCache = new Dictionary<string, bool>();
+private static readonly Dictionary<string, bool> _blazorCache = new Dictionary<string, bool>();
 
 //-------------------------------------------------------------
 
@@ -263,13 +264,6 @@ private static List<string> SplitSeparatedList(string value, params char[] separ
 
 //-------------------------------------------------------------
 
-private static bool IsCppProject(string projectName)
-{
-    return projectName.EndsWith(".vcxproj");
-}
-
-//-------------------------------------------------------------
-
 private static string GetProjectDirectory(string projectName)
 {
     var projectDirectory = System.IO.Path.Combine(".", "src", projectName);
@@ -441,6 +435,44 @@ private static void DeleteDirectoryWithLogging(BuildContext buildContext, string
 
 //-------------------------------------------------------------
 
+private static bool IsCppProject(string projectName)
+{
+    return projectName.EndsWith(".vcxproj");
+}
+
+//-------------------------------------------------------------
+
+private static bool IsBlazorProject(BuildContext buildContext, string projectName)
+{
+    var projectFileName = GetProjectFileName(buildContext, projectName);
+
+    if (!_blazorCache.TryGetValue(projectFileName, out var isBlazor))
+    {
+        isBlazor = false;
+
+        var lines = System.IO.File.ReadAllLines(projectFileName);
+        foreach (var line in lines)
+        {
+            // Match both *TargetFramework* and *TargetFrameworks* 
+            var lowerCase = line.ToLower();
+            if (lowerCase.Contains("<project"))
+            {
+                if (lowerCase.Contains("microsoft.net.sdk.razor"))
+                {
+                    isBlazor = true;
+                    break;
+                }
+            }
+        }
+
+        _blazorCache[projectFileName] = isBlazor;
+    }
+
+    return _blazorCache[projectFileName];
+}
+
+//-------------------------------------------------------------
+
 private static bool IsDotNetCoreProject(BuildContext buildContext, string projectName)
 {
     var projectFileName = GetProjectFileName(buildContext, projectName);
@@ -516,18 +548,74 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
         return true;
     }
 
+    if (ShouldBuildProject(buildContext, projectName))
+    {
+        // Always build
+        return true;
+    }
+
     // Experimental mode where we ignore projects that are not on the deploy list when not in CI mode, but
     // it can only work if they are not part of unit tests (but that should never happen)
-    if (buildContext.Tests.Items.Count == 0)
-    {
+    // if (buildContext.Tests.Items.Count == 0)
+    // {
         if (checkDeployment && !ShouldDeployProject(buildContext, projectName))
         {
             buildContext.CakeContext.Warning("Project '{0}' should not be processed because this is not a CI build, does not contain tests and the project should not be deployed, removing from projects to process", projectName);
             return false;
         }
-    }
+    //}
 
     return true;
+}
+
+//-------------------------------------------------------------
+
+private static List<string> GetProjectRuntimesIdentifiers(BuildContext buildContext, Cake.Core.IO.FilePath solutionOrProjectFileName, List<string> runtimeIdentifiersToInvestigate)
+{
+    var projectFileContents = System.IO.File.ReadAllText(solutionOrProjectFileName.FullPath)?.ToLower();
+
+    var supportedRuntimeIdentifiers = new List<string>();
+
+    foreach (var runtimeIdentifier in runtimeIdentifiersToInvestigate)
+    {
+        if (!string.IsNullOrWhiteSpace(runtimeIdentifier))
+        {
+            if (!projectFileContents.Contains(runtimeIdentifier.ToLower()))
+            {
+                buildContext.CakeContext.Information("Project '{0}' does not support runtime identifier '{1}', removing from supported runtime identifiers list", solutionOrProjectFileName, runtimeIdentifier);
+                continue;
+            }
+        }
+
+        supportedRuntimeIdentifiers.Add(runtimeIdentifier);
+    }
+
+    if (supportedRuntimeIdentifiers.Count == 0)
+    {
+        buildContext.CakeContext.Information("Project '{0}' does not have any explicit runtime identifiers left, adding empty one as default", solutionOrProjectFileName);
+
+        // Default
+        supportedRuntimeIdentifiers.Add(string.Empty);
+    }
+
+    return supportedRuntimeIdentifiers;
+}
+
+//-------------------------------------------------------------
+
+private static bool ShouldBuildProject(BuildContext buildContext, string projectName)
+{
+    // Allow the build server to configure this via "Build[ProjectName]"
+    var slug = GetProjectSlug(projectName);
+    var keyToCheck = string.Format("Build{0}", slug);
+
+    // Note: we return false by default. This method is only used to explicitly
+    // force a build even when a project is not deployable
+    var shouldBuild = buildContext.BuildServer.GetVariableAsBool(keyToCheck, false);
+
+    buildContext.CakeContext.Information($"Value for '{keyToCheck}': {shouldBuild}");
+
+    return shouldBuild;
 }
 
 //-------------------------------------------------------------

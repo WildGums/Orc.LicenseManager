@@ -18,7 +18,7 @@ namespace Orc.LicenseManager.Server.Services
         {
             var tempProduct = licensepoco.Product;
             var tempCustomer = licensepoco.Customer;
-            if (tempProduct == null)
+            if (tempProduct is null)
             {
                 using (var uow = new UoW())
                 {
@@ -26,7 +26,7 @@ namespace Orc.LicenseManager.Server.Services
                 }
             }
 
-            if (tempCustomer == null)
+            if (tempCustomer is null)
             {
                 using (var uow = new UoW())
                 {
@@ -42,12 +42,12 @@ namespace Orc.LicenseManager.Server.Services
                 {"Email", tempCustomer.Email}
             };
 
-            if (licensepoco.ExpireDate != null)
+            if (licensepoco.ExpireDate is not null)
             {
                 license = license.ExpiresAt((DateTime) licensepoco.ExpireDate);
             }
 
-            if (licensepoco.ExpireVersion != null)
+            if (licensepoco.ExpireVersion is not null)
             {
                 productFeatures.Add("Version", licensepoco.ExpireVersion.ToString());
             }

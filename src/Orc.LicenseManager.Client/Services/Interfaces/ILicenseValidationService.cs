@@ -22,7 +22,7 @@ namespace Orc.LicenseManager
         /// <param name="license">The license key the user has given to be validated.</param>
         /// <returns>The validation context containing all the validation results.</returns>
         /// <exception cref="System.Exception">Please use the Initialize method first</exception>
-        IValidationContext ValidateLicense(string license);
+        Task<IValidationContext> ValidateLicenseAsync(string license);
 
         /// <summary>
         /// Validates the license on the server.
@@ -31,7 +31,7 @@ namespace Orc.LicenseManager
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="assembly">The assembly to get the information from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        LicenseValidationResult ValidateLicenseOnServer(string license, string serverUrl, Assembly assembly = null);
+        Task<LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, Assembly assembly = null);
 
         /// <summary>
         /// Validates the XML
@@ -42,7 +42,7 @@ namespace Orc.LicenseManager
         /// <exception cref="XmlException">The license text is not valid XML.</exception>
         /// <exception cref="Exception">The root element is not License.</exception>
         /// <exception cref="Exception">There were no inner nodes found.</exception>
-        IValidationContext ValidateXml(string license);
+        Task<IValidationContext> ValidateXmlAsync(string license);
         #endregion
     }
 }

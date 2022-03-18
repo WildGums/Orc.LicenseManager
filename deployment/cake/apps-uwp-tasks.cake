@@ -1,12 +1,6 @@
-#pragma warning disable 1998
-
 #l "apps-uwp-variables.cake"
 
-#addin "nuget:?package=MagicChunks&version=2.0.0.119"
-#addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
-#addin "nuget:?package=Microsoft.Azure.KeyVault.Core&version=1.0.0"
-#addin "nuget:?package=WindowsAzure.Storage&version=9.1.1"
-#addin "nuget:?package=Cake.WindowsAppStore&version=1.4.0"
+#addin "nuget:?package=Cake.WindowsAppStore&version=2.0.0"
 
 //-------------------------------------------------------------
 
@@ -132,7 +126,7 @@ public class UwpProcessor : ProcessorBase
                 PlatformTarget = platform.Value
             };
 
-            ConfigureMsBuild(BuildContext, msBuildSettings, uwpApp);
+            ConfigureMsBuild(BuildContext, msBuildSettings, uwpApp, "build");
 
             // Always disable SourceLink
             msBuildSettings.WithProperty("EnableSourceLink", "false");
@@ -151,7 +145,7 @@ public class UwpProcessor : ProcessorBase
 
             // Note: if csproj doesn't work, use SolutionFileName instead
             //var projectFileName = SolutionFileName;
-            RunMsBuild(BuildContext, uwpApp, projectFileName, msBuildSettings);
+            RunMsBuild(BuildContext, uwpApp, projectFileName, msBuildSettings, "build");
 
             // Recalculate!
             appxUploadFileName = GetAppxUploadFileName(artifactsDirectory, uwpApp, BuildContext.General.Version.MajorMinorPatch);

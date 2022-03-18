@@ -1,9 +1,6 @@
-#pragma warning disable 1998
-
 #l "apps-wpf-variables.cake"
 
-#addin "nuget:?package=MagicChunks&version=2.0.0.119"
-#tool "nuget:?package=AzureStorageSync&version=2.0.0-alpha0028&prerelease"
+#tool "nuget:?package=AzureStorageSync&version=2.0.0-alpha0039&prerelease"
 
 //-------------------------------------------------------------
 
@@ -82,7 +79,7 @@ public class WpfProcessor : ProcessorBase
                 PlatformTarget = PlatformTarget.MSIL
             };
 
-            ConfigureMsBuild(BuildContext, msBuildSettings, wpfApp);
+            ConfigureMsBuild(BuildContext, msBuildSettings, wpfApp, "build");
 
             // Always disable SourceLink
             msBuildSettings.WithProperty("EnableSourceLink", "false");
@@ -96,7 +93,7 @@ public class WpfProcessor : ProcessorBase
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
             msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
 
-            RunMsBuild(BuildContext, wpfApp, projectFileName, msBuildSettings);
+            RunMsBuild(BuildContext, wpfApp, projectFileName, msBuildSettings, "build");
         }
     }
 
@@ -234,6 +231,15 @@ public class WpfProcessor : ProcessorBase
             }
             
             BuildContext.CakeContext.LogSeparator($"Deploying WPF app '{wpfApp}'");
+
+            // TODO: Respect the deploy settings per category, requires changes to AzureStorageSync
+            if (!BuildContext.Wpf.DeployUpdatesToAlphaChannel ||
+                !BuildContext.Wpf.DeployUpdatesToBetaChannel ||
+                !BuildContext.Wpf.DeployUpdatesToStableChannel ||
+                !BuildContext.Wpf.DeployInstallers)
+            {
+                throw new Exception("Not deploying a specific channel is not yet supported, please implement");
+            }
 
             //%DeploymentsShare%\%ProjectName% /%ProjectName% -c %AzureDeploymentsStorageConnectionString%
             var deploymentShare = BuildContext.Wpf.GetDeploymentShareForProject(wpfApp);

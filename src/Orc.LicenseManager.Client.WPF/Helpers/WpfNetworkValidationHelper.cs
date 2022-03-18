@@ -45,7 +45,7 @@ namespace Orc.LicenseManager
 
                 // Force check
                 var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
-                networkLicenseService.ValidateLicense();
+                await networkLicenseService.ValidateLicenseAsync();
             }
         }
     }

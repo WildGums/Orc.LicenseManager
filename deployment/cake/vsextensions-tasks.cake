@@ -1,7 +1,5 @@
 #l "vsextensions-variables.cake"
 
-#addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
-
 using System.Xml.Linq;
 
 //-------------------------------------------------------------
@@ -87,7 +85,7 @@ public class VsExtensionsProcessor : ProcessorBase
                 PlatformTarget = PlatformTarget.MSIL
             };
 
-            ConfigureMsBuild(BuildContext, msBuildSettings, vsExtension);
+            ConfigureMsBuild(BuildContext, msBuildSettings, vsExtension, "build");
             
             // Note: we need to set OverridableOutputPath because we need to be able to respect
             // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
@@ -102,7 +100,7 @@ public class VsExtensionsProcessor : ProcessorBase
             // msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
             msBuildSettings.WithProperty("OutputPath", outputDirectory);
 
-            RunMsBuild(BuildContext, vsExtension, projectFileName, msBuildSettings);
+            RunMsBuild(BuildContext, vsExtension, projectFileName, msBuildSettings, "build");
         }       
     }
 

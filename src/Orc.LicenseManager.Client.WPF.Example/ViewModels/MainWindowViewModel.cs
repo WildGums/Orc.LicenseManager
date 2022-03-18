@@ -112,7 +112,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
                 licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
             }
 
-            var result = _licenseValidationService.ValidateLicenseOnServer(licenseString, ServerUri);
+            var result = await _licenseValidationService.ValidateLicenseOnServerAsync(licenseString, ServerUri);
 
             await _messageService.ShowAsync(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
         }
@@ -133,7 +133,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         {
             NetworkValidationResult validationResult = null;
 
-            validationResult = _networkLicenseService.ValidateLicense();
+            validationResult = await _networkLicenseService.ValidateLicenseAsync();
 
             await _messageService.ShowAsync(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
         }
@@ -175,7 +175,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
             if (_licenseService.AnyExistingLicense())
             {
                 var licenseString = _licenseService.LoadExistingLicense();
-                var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
+                var licenseValidation = await _licenseValidationService.ValidateLicenseAsync(licenseString);
 
                 if (licenseValidation.HasErrors)
                 {

@@ -1,5 +1,6 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Orc.LicenseManager.Tests")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
 public static class LoadAssembliesOnStartup { }
 public static class ModuleInitializer
 {
@@ -71,9 +72,9 @@ namespace Orc.LicenseManager
     }
     public interface ILicenseValidationService
     {
-        Catel.Data.IValidationContext ValidateLicense(string license);
-        Orc.LicenseManager.LicenseValidationResult ValidateLicenseOnServer(string license, string serverUrl, System.Reflection.Assembly assembly = null);
-        Catel.Data.IValidationContext ValidateXml(string license);
+        System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateLicenseAsync(string license);
+        System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly assembly = null);
+        System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateXmlAsync(string license);
     }
     public static class ILicenseValidationServiceExtensions { }
     public interface ILicenseVisualizerService
@@ -92,13 +93,13 @@ namespace Orc.LicenseManager
         System.TimeSpan SearchTimeout { get; set; }
         event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
         void Initialize(System.TimeSpan pollingInterval = default);
-        Orc.LicenseManager.NetworkValidationResult ValidateLicense();
+        System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync();
     }
     public static class INetworkLicenseServiceExtensions { }
     public interface ISimpleLicenseService
     {
-        bool Validate();
-        bool ValidateOnServer(string serverUrl);
+        System.Threading.Tasks.Task<bool> ValidateAsync();
+        System.Threading.Tasks.Task<bool> ValidateOnServerAsync(string serverUrl);
     }
     public class IdentificationService : Orc.LicenseManager.IIdentificationService
     {
@@ -176,9 +177,9 @@ namespace Orc.LicenseManager
     public class LicenseValidationService : Orc.LicenseManager.ILicenseValidationService
     {
         public LicenseValidationService(Orc.LicenseManager.IApplicationIdService applicationIdService, Orc.LicenseManager.IExpirationBehavior expirationBehavior, Orc.LicenseManager.IIdentificationService identificationService, Orc.LicenseManager.IMachineLicenseValidationService machineLicenseValidationService) { }
-        public Catel.Data.IValidationContext ValidateLicense(string license) { }
-        public Orc.LicenseManager.LicenseValidationResult ValidateLicenseOnServer(string license, string serverUrl, System.Reflection.Assembly assembly = null) { }
-        public Catel.Data.IValidationContext ValidateXml(string license) { }
+        public System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateLicenseAsync(string license) { }
+        public System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly assembly = null) { }
+        public System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateXmlAsync(string license) { }
     }
     public class MachineLicenseValidationService : Orc.LicenseManager.IMachineLicenseValidationService
     {
@@ -194,7 +195,7 @@ namespace Orc.LicenseManager
         public System.TimeSpan SearchTimeout { get; set; }
         public event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
         public virtual void Initialize(System.TimeSpan pollingInterval = default) { }
-        public virtual Orc.LicenseManager.NetworkValidationResult ValidateLicense() { }
+        public virtual System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync() { }
     }
     public class NetworkLicenseUsage
     {
@@ -204,9 +205,9 @@ namespace Orc.LicenseManager
         public string LicenseSignature { get; }
         public System.DateTime StartDateTime { get; }
         public string UserName { get; }
-        public string ToNetworkMessage() { }
+        public System.Threading.Tasks.Task<string> ToNetworkMessageAsync() { }
         public override string ToString() { }
-        public static Orc.LicenseManager.NetworkLicenseUsage Parse(string text) { }
+        public static System.Threading.Tasks.Task<Orc.LicenseManager.NetworkLicenseUsage> ParseAsync(string text) { }
     }
     public class NetworkValidatedEventArgs : System.EventArgs
     {
@@ -251,8 +252,8 @@ namespace Orc.LicenseManager
     public class SimpleLicenseService : Orc.LicenseManager.ISimpleLicenseService
     {
         public SimpleLicenseService(Orc.LicenseManager.ILicenseService licenseService, Orc.LicenseManager.ILicenseValidationService licenseValidationService, Orc.LicenseManager.ILicenseVisualizerService licenseVisualizerService) { }
-        public bool Validate() { }
-        public bool ValidateOnServer(string serverUrl) { }
+        public System.Threading.Tasks.Task<bool> ValidateAsync() { }
+        public System.Threading.Tasks.Task<bool> ValidateOnServerAsync(string serverUrl) { }
     }
     public class XmlDataModel
     {

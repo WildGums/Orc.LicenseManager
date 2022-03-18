@@ -8,6 +8,7 @@
 namespace Orc.LicenseManager
 {
     using System;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Logging;
 
@@ -47,12 +48,12 @@ namespace Orc.LicenseManager
 
         #region Methods
         /// <summary>
-        /// Validates the license on the server. This method is the same as <see cref="Validate" /> but also checks the server if the license
+        /// Validates the license on the server. This method is the same as <see cref="ValidateAsync" /> but also checks the server if the license
         /// is valid.
         /// </summary>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public bool ValidateOnServer(string serverUrl)
+        public async Task<bool> ValidateOnServerAsync(string serverUrl)
         {
             if (!EnsureLicenseExists())
             {
@@ -66,7 +67,7 @@ namespace Orc.LicenseManager
             }
 
             // Server first so it's possible to make licenses invalid
-            var licenseValidationResult = _licenseValidationService.ValidateLicenseOnServer(licenseString, serverUrl);
+            var licenseValidationResult = await _licenseValidationService.ValidateLicenseOnServerAsync(licenseString, serverUrl);
             if (!licenseValidationResult.IsValid)
             {
                 Log.Error("The server returned that the license is invalid and contains the following errors:");
@@ -77,7 +78,7 @@ namespace Orc.LicenseManager
 
             Log.Debug("Server returned valid license, doing a local check to be sure that the server wasn't forged");
 
-            var validationContext = _licenseValidationService.ValidateLicense(licenseString);
+            var validationContext = await _licenseValidationService.ValidateLicenseAsync(licenseString);
             if (validationContext.HasErrors)
             {
                 Log.Error("The license is invalid and contains the following errors:");
@@ -97,7 +98,7 @@ namespace Orc.LicenseManager
         /// </summary>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
         /// <remarks>Note that this method might show a dialog so must be run on the UI thread.</remarks>
-        public bool Validate()
+        public async Task<bool> ValidateAsync()
         {
             if (!EnsureLicenseExists())
             {
@@ -110,7 +111,7 @@ namespace Orc.LicenseManager
                 return false;
             }
 
-            var licenseValidation = _licenseValidationService.ValidateLicense(licenseString);
+            var licenseValidation = await _licenseValidationService.ValidateLicenseAsync(licenseString);
 
             return !licenseValidation.HasErrors;
         }

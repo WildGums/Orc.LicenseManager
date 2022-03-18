@@ -1,11 +1,9 @@
 #l "generic-variables.cake"
 
-#addin "nuget:?package=MagicChunks&version=2.0.0.119"
-#addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
-#addin "nuget:?package=Cake.DependencyCheck&version=1.2.0"
+//#addin "nuget:?package=Cake.DependencyCheck&version=1.2.0"
 
-#tool "nuget:?package=DependencyCheck.Runner.Tool&version=3.2.1&include=./**/dependency-check.sh&include=./**/dependency-check.bat"
-#tool "nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.3"
+//#tool "nuget:?package=DependencyCheck.Runner.Tool&version=3.2.1&include=./**/dependency-check.sh&include=./**/dependency-check.bat"
+//#tool "nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.3"
 
 //-------------------------------------------------------------
 
@@ -40,8 +38,8 @@ private void CleanUpCode(bool failOnChanges)
     //     arguments.Add("--check");
     // }
 
-    // DotNetCoreTool(null, "format", string.Join(" ", arguments),
-    //     new DotNetCoreToolSettings
+    // DotNetTool(null, "format", string.Join(" ", arguments),
+    //     new DotNetToolSettings
     //     {
     //         WorkingDirectory = "./src/"
     //     });
@@ -91,30 +89,33 @@ Task("UpdateNuGet")
     .ContinueOnError()
     .Does<BuildContext>(buildContext => 
 {
-    Information("Making sure NuGet is using the latest version");
+    // DISABLED UNTIL NUGET GETS FIXED: https://github.com/NuGet/Home/issues/10853
 
-    if (buildContext.General.IsLocalBuild && buildContext.General.MaximizePerformance)
-    {
-        Information("Local build with maximized performance detected, skipping NuGet update check");
-        return;
-    }
+    // Information("Making sure NuGet is using the latest version");
 
-    var nuGetExecutable = buildContext.General.NuGet.Executable;
+    // if (buildContext.General.IsLocalBuild && buildContext.General.MaximizePerformance)
+    // {
+    //     Information("Local build with maximized performance detected, skipping NuGet update check");
+    //     return;
+    // }
 
-    var exitCode = StartProcess(nuGetExecutable, new ProcessSettings
-    {
-        Arguments = "update -self"
-    });
+    // var nuGetExecutable = buildContext.General.NuGet.Executable;
 
-    var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(nuGetExecutable);
-    var newNuGetVersion = newNuGetVersionInfo.FileVersion;
+    // var exitCode = StartProcess(nuGetExecutable, new ProcessSettings
+    // {
+    //     Arguments = "update -self"
+    // });
 
-    Information("Updating NuGet.exe exited with '{0}', version is '{1}'", exitCode, newNuGetVersion);
+    // var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(nuGetExecutable);
+    // var newNuGetVersion = newNuGetVersionInfo.FileVersion;
+
+    // Information("Updating NuGet.exe exited with '{0}', version is '{1}'", exitCode, newNuGetVersion);
 });
 
 //-------------------------------------------------------------
 
 Task("RestorePackages")
+    .IsDependentOn("Prepare")
     .IsDependentOn("UpdateNuGet")
     .ContinueOnError()
     .Does<BuildContext>(buildContext =>
@@ -125,13 +126,31 @@ Task("RestorePackages")
         return;
     }
 
-    var csharpProjects = GetFiles("./**/*.csproj");
+    //var csharpProjects = GetFiles("./**/*.csproj");
     // var cProjects = GetFiles("./**/*.vcxproj");
     var solutions = GetFiles("./**/*.sln");
-    
+    var csharpProjects = new List<FilePath>();
+
+    foreach (var project in buildContext.AllProjects)
+    {
+        // if (ShouldProcessProject(buildContext, project))
+        // {
+            var projectFileName = GetProjectFileName(buildContext, project);
+            if (projectFileName.EndsWith(".csproj"))
+            {
+                Information("Adding '{0}' as C# specific project to restore", project);
+
+                csharpProjects.Add(projectFileName);
+
+                // Inject source link *before* package restore
+                InjectSourceLinkInProjectFile(buildContext, projectFileName);
+            }
+        //}
+    }
+
     var allFiles = new List<FilePath>();
-    allFiles.AddRange(solutions);
-    //allFiles.AddRange(csharpProjects);
+    //allFiles.AddRange(solutions);
+    allFiles.AddRange(csharpProjects);
     // //allFiles.AddRange(cProjects);
 
     foreach (var file in allFiles)
@@ -163,6 +182,7 @@ Task("RestorePackages")
 
 Task("Clean")
     //.IsDependentOn("RestorePackages")
+    .IsDependentOn("Prepare")
     .ContinueOnError()
     .Does<BuildContext>(buildContext => 
 {
