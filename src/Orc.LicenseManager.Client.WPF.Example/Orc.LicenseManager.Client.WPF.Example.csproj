@@ -5,6 +5,7 @@
     <RootNamespace>Orc.LicenseManager.Client.WPF.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <SonarQubeExclude>true</SonarQubeExclude>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -24,10 +25,6 @@
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Orc.Controls" Version="4.8.0" />
     <PackageReference Include="Orchestra.Core" Version="6.8.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>

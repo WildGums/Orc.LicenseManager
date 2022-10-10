@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <AssemblyName>Orc.LicenseManager.Server</AssemblyName>
     <RootNamespace>Orc.LicenseManager.Server</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -8,6 +8,7 @@
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
     <Description>LicenseManager - server library.</Description>
     <PackageTags>orc;license;server</PackageTags>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -41,10 +42,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UoW.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>

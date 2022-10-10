@@ -10,6 +10,7 @@
     <PackageTags></PackageTags>
     <SonarQubeExclude>true</SonarQubeExclude>
     <UseWpf>true</UseWpf>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,10 +25,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" PrivateAssets="all" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
     <PackageReference Include="PublicApiGenerator" Version="10.3.0" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
