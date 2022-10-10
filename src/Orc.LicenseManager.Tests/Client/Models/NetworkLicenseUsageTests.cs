@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkLicenseUsageTests.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Tests.Client.Models
+﻿namespace Orc.LicenseManager.Tests.Client.Models
 {
     using System;
     using System.Threading.Tasks;

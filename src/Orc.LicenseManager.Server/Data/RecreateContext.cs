@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RecreateContext.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Server.Data
+﻿namespace Orc.LicenseManager.Server.Data
 {
     using System.Collections.Generic;
     using System.Data.Entity;
@@ -13,20 +6,15 @@ namespace Orc.LicenseManager.Server.Data
 
     public class RecreateContext : DropCreateDatabaseAlways<LicenseManagerDbContext>
     {
-        #region Fields
         private readonly IAccountService _accountService;
         private readonly ILicenseGenerationService _licenseGenerationService;
-        #endregion
 
-        #region Constructors
         public RecreateContext(IAccountService accountService, ILicenseGenerationService licenseGenerationService)
         {
             _accountService = accountService;
             _licenseGenerationService = licenseGenerationService;
         }
-        #endregion
 
-        #region Methods
         protected override void Seed(LicenseManagerDbContext context)
         {
             _accountService.CreateRole("Admin");
@@ -56,6 +44,5 @@ namespace Orc.LicenseManager.Server.Data
             //}
             base.Seed(context);
         }
-        #endregion
     }
 }

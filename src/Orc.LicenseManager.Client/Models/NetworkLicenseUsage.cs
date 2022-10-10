@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkLicenseUsage.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System;
     using System.Globalization;
@@ -19,7 +12,6 @@ namespace Orc.LicenseManager
         private const string DateTimeFormat = "yyyyMMddHHmmss";
         private const string Splitter = "|+|";
 
-        #region Constructors
         public NetworkLicenseUsage(string computerId, string ip, string userName, string licenseSignature, DateTime startDateTime)
         {
             ComputerId = computerId;
@@ -28,7 +20,6 @@ namespace Orc.LicenseManager
             LicenseSignature = licenseSignature;
             StartDateTime = startDateTime;
         }
-        #endregion
 
         public string ComputerId { get; private set; }
 

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleLicenseViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.ViewModels
+﻿namespace Orc.LicenseManager.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -24,11 +17,8 @@ namespace Orc.LicenseManager.ViewModels
     /// </summary>
     public class LicenseViewModel : ViewModelBase
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         private readonly INavigationService _navigationService;
         private readonly IProcessService _processService;
 
@@ -39,9 +29,7 @@ namespace Orc.LicenseManager.ViewModels
         private readonly IMessageService _messageService;
         private readonly ILanguageService _languageService;
         private readonly ILicenseModeService _licenseModeService;
-        #endregion
 
-        #region Constructors
         public LicenseViewModel(LicenseInfo licenseInfo, INavigationService navigationService, IProcessService processService,
             ILicenseService licenseService, ILicenseValidationService licenseValidationService, IUIVisualizerService uiVisualizerService, 
             IMessageService messageService, ILanguageService languageService, ILicenseModeService licenseModeService)
@@ -76,10 +64,6 @@ namespace Orc.LicenseManager.ViewModels
             AboutSiteClick = new Command(OnAboutSiteClickExecute);
             RemoveLicense = new TaskCommand(OnRemoveLicenseExecuteAsync, OnRemoveLicenseCanExecute);
         }
-
-        #endregion
-
-        #region Properties
 
         public List<LicenseMode> AvailableLicenseModes { get; private set; }
 
@@ -154,9 +138,6 @@ namespace Orc.LicenseManager.ViewModels
         ///   <c>true</c> if [license exists]; otherwise, <c>false</c>.
         /// </value>
         public bool LicenseExists { get; private set; }
-        #endregion
-
-        #region Methods
 
         private async void OnLicenseModeChanged()
         {
@@ -412,6 +393,5 @@ namespace Orc.LicenseManager.ViewModels
         {
             await _uiVisualizerService.ShowDialogAsync<ClipBoardViewModel>();
         }
-        #endregion
     }
 }

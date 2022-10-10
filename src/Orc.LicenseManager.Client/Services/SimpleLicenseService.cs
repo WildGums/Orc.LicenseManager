@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SimpleLicenseService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System;
     using System.Threading.Tasks;
@@ -17,15 +10,12 @@ namespace Orc.LicenseManager
     /// </summary>
     public class SimpleLicenseService : ISimpleLicenseService
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ILicenseService _licenseService;
         private readonly ILicenseValidationService _licenseValidationService;
         private readonly ILicenseVisualizerService _licenseVisualizerService;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleLicenseService" /> class.
         /// </summary>
@@ -44,9 +34,7 @@ namespace Orc.LicenseManager
             _licenseValidationService = licenseValidationService;
             _licenseVisualizerService = licenseVisualizerService;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Validates the license on the server. This method is the same as <see cref="ValidateAsync" /> but also checks the server if the license
         /// is valid.
@@ -125,6 +113,5 @@ namespace Orc.LicenseManager
 
             return _licenseService.AnyExistingLicense();
         }
-        #endregion
     }
 }

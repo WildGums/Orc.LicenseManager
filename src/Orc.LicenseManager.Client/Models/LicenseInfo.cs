@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleLicenseModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using Catel.Data;
 
@@ -18,7 +11,6 @@ namespace Orc.LicenseManager
         {
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
@@ -66,7 +58,5 @@ namespace Orc.LicenseManager
         /// The key.
         /// </value>
         public string Key { get; set; }
-
-        #endregion
     }
 }

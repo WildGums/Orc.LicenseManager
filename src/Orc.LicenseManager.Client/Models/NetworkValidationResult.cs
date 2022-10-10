@@ -1,24 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkValidationResult.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System.Collections.Generic;
 
     public class NetworkValidationResult
     {
-        #region Constructors
         public NetworkValidationResult()
         {
             CurrentUsers = new List<NetworkLicenseUsage>();
         }
-        #endregion
 
-        #region Properties
         public int MaximumConcurrentUsers { get; set; }
 
         public List<NetworkLicenseUsage> CurrentUsers { get; private set; }
@@ -27,7 +17,6 @@ namespace Orc.LicenseManager
         {
             get { return CurrentUsers.Count <= MaximumConcurrentUsers; }
         }
-        #endregion
 
         public override string ToString()
         {

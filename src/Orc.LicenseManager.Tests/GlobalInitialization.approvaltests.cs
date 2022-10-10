@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GlobalInitialization.approvaltests.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-using ApprovalTests.Reporters;
+﻿using ApprovalTests.Reporters;
 
 #if DEBUG
 [assembly: UseReporter(typeof(BeyondCompareReporter))]

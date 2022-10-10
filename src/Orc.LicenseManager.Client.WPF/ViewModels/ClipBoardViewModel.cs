@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClipBoardViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.ViewModels
+﻿namespace Orc.LicenseManager.ViewModels
 {
     using System.Threading.Tasks;
     using System.Windows;
@@ -16,7 +9,6 @@ namespace Orc.LicenseManager.ViewModels
     /// </summary>
     public class ClipBoardViewModel : ViewModelBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ClipBoardViewModel"/> class.
         /// </summary>
@@ -36,9 +28,7 @@ namespace Orc.LicenseManager.ViewModels
                 ClipBoardText = clipBoardData;
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the clip board text.
         /// </summary>
@@ -51,9 +41,7 @@ namespace Orc.LicenseManager.ViewModels
         /// Gets the Exit command.
         /// </summary>
         public TaskCommand Exit { get; private set; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Method to invoke when the Exit command is executed.
         /// </summary>
@@ -61,6 +49,5 @@ namespace Orc.LicenseManager.ViewModels
         {
             await this.CancelAndCloseViewModelAsync();
         }
-        #endregion
     }
 }

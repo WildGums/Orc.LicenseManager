@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseValidationService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System;
     using System.Collections.Generic;
@@ -27,14 +20,12 @@ namespace Orc.LicenseManager
 
     public class LicenseValidationService : ILicenseValidationService
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IApplicationIdService _applicationIdService;
         private readonly IExpirationBehavior _expirationBehavior;
         private readonly IIdentificationService _identificationService;
         private readonly IMachineLicenseValidationService _machineLicenseValidationService;
-        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseValidationService" /> class.

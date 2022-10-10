@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FormattingConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Orc.LicenseManager.Converters
+﻿namespace Orc.LicenseManager.Converters
 {
     using System;
     using Catel.MVVM.Converters;
@@ -17,11 +11,8 @@ namespace Orc.LicenseManager.Converters
 #endif
     public class FormattingConverter : ValueConverterBase
     {
-        #region Fields
         private readonly string _defaultFormatString;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FormattingConverter"/> class.
         /// </summary>
@@ -38,9 +29,7 @@ namespace Orc.LicenseManager.Converters
         {
             _defaultFormatString = defaultFormatString;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>
@@ -61,6 +50,5 @@ namespace Orc.LicenseManager.Converters
             var finalValue = string.Format(CurrentCulture, formatString, value);
             return finalValue;
         }
-        #endregion
     }
 }

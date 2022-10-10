@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Server.Services
+﻿namespace Orc.LicenseManager.Server.Services
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +10,6 @@ namespace Orc.LicenseManager.Server.Services
 
     public class AccountService : IAccountService
     {
-        #region Methods
         public AccountService()
         {
         }
@@ -92,6 +84,5 @@ namespace Orc.LicenseManager.Server.Services
         }
 #pragma warning restore IDISP004 // Don't ignore created IDisposable
 #pragma warning restore IDISP001 // Dispose created
-        #endregion
     }
 }

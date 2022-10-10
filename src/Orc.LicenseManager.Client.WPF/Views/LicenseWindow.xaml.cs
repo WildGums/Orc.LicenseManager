@@ -1,22 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleLicenseWindow.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Views
+﻿namespace Orc.LicenseManager.Views
 {
     using Catel;
     using Catel.Windows;
     using ViewModels;
 
-    /// <summary>
-    /// Interaction logic for SingleLicenseWindow.xaml.
-    /// </summary>
     public partial class LicenseWindow : DataWindow
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
         /// </summary>
@@ -45,6 +34,5 @@ namespace Orc.LicenseManager.Views
 
             this.RemoveCloseButton();
         }
-        #endregion
     }
 }

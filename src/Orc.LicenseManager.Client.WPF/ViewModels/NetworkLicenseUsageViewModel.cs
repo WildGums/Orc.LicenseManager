@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkLicenseUsageViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.ViewModels
+﻿namespace Orc.LicenseManager.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +15,6 @@ namespace Orc.LicenseManager.ViewModels
 
     public class NetworkLicenseUsageViewModel : ViewModelBase
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ILicenseInfoService _licenseInfoService;
@@ -31,9 +23,7 @@ namespace Orc.LicenseManager.ViewModels
         private readonly IDispatcherService _dispatcherService;
 
         private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
-        #endregion
 
-        #region Constructors
         public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService,
             IProcessService processService, INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
         {
@@ -58,17 +48,13 @@ namespace Orc.LicenseManager.ViewModels
             CloseApplication = new Command(OnCloseApplicationExecute);
             BuyLicenses = new Command(OnBuyLicensesExecute);
         }
-        #endregion
 
-        #region Properties
         public string PurchaseUrl { get; set; }
 
         public List<NetworkLicenseUsage> CurrentUsers { get; set; }
 
         public int MaximumNumberOfConcurrentUsages { get; set; }
-        #endregion
 
-        #region Commands
         public Command CloseApplication { get; private set; }
 
         private void OnCloseApplicationExecute()
@@ -89,9 +75,7 @@ namespace Orc.LicenseManager.ViewModels
 
             _processService.StartProcess(purchaseUrl);
         }
-        #endregion
 
-        #region Methods
         protected override async Task InitializeAsync()
         {
             await base.InitializeAsync();
@@ -146,6 +130,5 @@ namespace Orc.LicenseManager.ViewModels
 #pragma warning restore 4014
             }
         }
-        #endregion
     }
 }

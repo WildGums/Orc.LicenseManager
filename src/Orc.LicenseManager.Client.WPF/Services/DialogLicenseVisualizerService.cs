@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DialogRequestLicenseService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using Catel;
     using Catel.Logging;
@@ -20,7 +13,6 @@ namespace Orc.LicenseManager
         private readonly ILicenseInfoService _licenseInfoService;
         private readonly IDispatcherService _dispatcherService;
 
-        #region Constructors
         public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService,
             IDispatcherService dispatcherService)
         {
@@ -32,9 +24,7 @@ namespace Orc.LicenseManager
             _licenseInfoService = licenseInfoService;
             _dispatcherService = dispatcherService;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Shows the single license dialog including all company info. You will see the about box.
         /// </summary>
@@ -50,6 +40,5 @@ namespace Orc.LicenseManager
             }, true);
 #pragma warning restore AvoidAsyncVoid
         }
-        #endregion
     }
 }

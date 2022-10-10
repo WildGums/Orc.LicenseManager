@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainWindowViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Client.Example.ViewModels
+﻿namespace Orc.LicenseManager.Client.Example.ViewModels
 {
     using System;
     using System.Threading.Tasks;
@@ -20,7 +13,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-        #region Fields
         private readonly ILicenseService _licenseService;
         private readonly ILicenseValidationService _licenseValidationService;
         private readonly IMessageService _messageService;
@@ -28,9 +20,6 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         private readonly ILicenseVisualizerService _licenseVisualizerService;
         private readonly IUIVisualizerService _uiVisualizerService;
 
-        #endregion
-
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
@@ -60,9 +49,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
             ServerUri = string.Format("http://localhost:1815/api/license/validate");
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the title of the view model.
         /// </summary>
@@ -73,9 +60,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         }
 
         public string ServerUri { get; set; }
-        #endregion
 
-        #region Commands
         public Command RemoveLicense { get; private set; }
 
         private void OnRemoveLicenseExecute()
@@ -162,9 +147,7 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
 
             await _uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(networkValidationResult);
         }
-        #endregion
 
-        #region Methods
         protected override async Task InitializeAsync()
         {
             _networkLicenseService.Validated += OnNetworkLicenseValidated;
@@ -212,6 +195,5 @@ namespace Orc.LicenseManager.Client.Example.ViewModels
         {
             _licenseVisualizerService.ShowLicense();
         }
-        #endregion
     }
 }

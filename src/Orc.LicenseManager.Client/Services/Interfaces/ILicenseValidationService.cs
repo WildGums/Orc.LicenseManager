@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ILicenseValidationService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System;
     using System.Reflection;
@@ -15,7 +8,6 @@ namespace Orc.LicenseManager
     
     public interface ILicenseValidationService
     {
-        #region Methods
         /// <summary>
         /// Validates the license.
         /// </summary>
@@ -43,6 +35,5 @@ namespace Orc.LicenseManager
         /// <exception cref="Exception">The root element is not License.</exception>
         /// <exception cref="Exception">There were no inner nodes found.</exception>
         Task<IValidationContext> ValidateXmlAsync(string license);
-        #endregion
     }
 }

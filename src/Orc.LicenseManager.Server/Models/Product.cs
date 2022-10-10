@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Product.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Server
+﻿namespace Orc.LicenseManager.Server
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +7,6 @@ namespace Orc.LicenseManager.Server
 
     public class Product : ICreateDate, ICreator
     {
-        #region Properties
         public int Id { get; set; }
         public string Name { get; set; }
 
@@ -26,7 +18,6 @@ namespace Orc.LicenseManager.Server
 
         public string PublicKey { get; set; }
         public virtual ICollection<LicensePoco> Licenses { get; set; }
-        #endregion
 
         #region ICreateDate Members
         [ScaffoldColumn(false)]

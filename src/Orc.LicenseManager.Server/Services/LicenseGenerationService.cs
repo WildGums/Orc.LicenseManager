@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Server.Services
+﻿namespace Orc.LicenseManager.Server.Services
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +6,6 @@ namespace Orc.LicenseManager.Server.Services
 
     public class LicenseGenerationGenerationService : ILicenseGenerationService
     {
-        #region ILicenseGenerationService Members
         public void GenerateLicenseValue(LicensePoco licensepoco)
         {
             var tempProduct = licensepoco.Product;
@@ -77,11 +69,7 @@ namespace Orc.LicenseManager.Server.Services
 
         public void GeneratePassPhraseForProduct(Product product)
         {
-            //var stringService = ServiceLocator.Default.ResolveType<IRngService>();
-            //product.PassPhrase = stringService.GenerateString(15);
-
             product.PassPhrase = Guid.NewGuid().ToString();
         }
-        #endregion
     }
 }

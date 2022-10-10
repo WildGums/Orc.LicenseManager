@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlDataModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     /// <summary>
     /// XMLDataModel is used for extracting the data from a XML file
@@ -23,7 +16,6 @@ namespace Orc.LicenseManager
             Value = value;
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -39,6 +31,5 @@ namespace Orc.LicenseManager
         /// The value.
         /// </value>
         public string Value { get; set; }
-        #endregion
     }
 }

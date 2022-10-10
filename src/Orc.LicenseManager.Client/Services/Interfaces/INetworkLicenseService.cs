@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="INetworkLicenseService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System;
     using System.Threading.Tasks;
 
     public interface INetworkLicenseService
     {
-        #region Methods
         /// <summary>
         /// Initializes the service.
         /// </summary>
@@ -23,7 +15,6 @@ namespace Orc.LicenseManager
         void Initialize(TimeSpan pollingInterval = default(TimeSpan));
 
         Task<NetworkValidationResult> ValidateLicenseAsync();
-        #endregion
 
         /// <summary>
         /// Gets or sets the search timeout for other licenses on the network.

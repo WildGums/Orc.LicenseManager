@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PreventUsageOfAnyVersionExpirationBehaviorFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Tests.Client.ExpirationBehaviors
+﻿namespace Orc.LicenseManager.Tests.Client.ExpirationBehaviors
 {
     using System;
     using System.Globalization;

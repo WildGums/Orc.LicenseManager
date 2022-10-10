@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicensePoco.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Server
+﻿namespace Orc.LicenseManager.Server
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -13,7 +6,6 @@ namespace Orc.LicenseManager.Server
 
     public class LicensePoco : IDates, ICreator
     {
-        #region Properties
         [Key]
         public int Id { get; set; }
 
@@ -31,7 +23,6 @@ namespace Orc.LicenseManager.Server
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
-        #endregion
 
         #region ICreator Members
         [ScaffoldColumn(false)]

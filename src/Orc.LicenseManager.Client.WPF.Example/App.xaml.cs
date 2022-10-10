@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="App.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Client.Example
+﻿namespace Orc.LicenseManager.Client.Example
 {
     using System;
     using System.Globalization;
@@ -24,7 +17,6 @@ namespace Orc.LicenseManager.Client.Example
     /// </summary>
     public partial class App : Application
     {
-        #region Methods
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Application.Startup"/> event.
         /// </summary>
@@ -56,6 +48,5 @@ namespace Orc.LicenseManager.Client.Example
 
             base.OnStartup(e);
         }
-        #endregion
     }
 }

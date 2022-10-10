@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseServiceFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager.Tests.Client.Services
+﻿namespace Orc.LicenseManager.Tests.Client.Services
 {
     using Catel.IoC;
     using NUnit.Framework;

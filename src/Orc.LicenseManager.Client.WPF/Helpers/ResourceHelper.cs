@@ -1,22 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResourceHelper.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager
 {
     using System;
     using System.Windows;
 
     internal static class ResourceHelper
     {
-        #region Constants
         private static bool InitializedStyles = false;
-        #endregion
 
-        #region Methods
         public static void EnsureStyles()
         {
             if (InitializedStyles)
@@ -39,6 +29,5 @@ namespace Orc.LicenseManager
 
             InitializedStyles = true;
         }
-        #endregion
     }
 }
