@@ -18,9 +18,9 @@
             return licenseService.LicenseExists(LicenseMode.CurrentUser) || licenseService.LicenseExists(LicenseMode.MachineWide);
         }
 
-        public static string LoadExistingLicense(this ILicenseService licenseService)
+        public static string? LoadExistingLicense(this ILicenseService licenseService)
         {
-            string licenseString = null;
+            string? licenseString = null;
 
             try
             {

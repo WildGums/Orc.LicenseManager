@@ -28,7 +28,7 @@
             _appDataService = appDataService;
         }
 
-        public string LoadLicense(LicenseMode licenseMode)
+        public string? LoadLicense(LicenseMode licenseMode)
         {
             try
             {
@@ -48,7 +48,7 @@
             return null;
         }
 
-        public virtual string GetLicenseLocation(LicenseMode licenseMode)
+        public virtual string? GetLicenseLocation(LicenseMode licenseMode)
         {
             try
             {
@@ -57,13 +57,13 @@
                 var companyName = _applicationIdService.CompanyName;
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = entryAssembly.Company();
+                    companyName = entryAssembly?.Company();
                 }
 
                 var productName = _applicationIdService.ProductName;
                 if (string.IsNullOrWhiteSpace(productName))
                 {
-                    productName = entryAssembly.Product();
+                    productName = entryAssembly?.Product();
                 }
 
                 if (licenseMode == LicenseMode.CurrentUser)

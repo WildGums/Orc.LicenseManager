@@ -11,7 +11,7 @@
             Argument.IsNotNull(() => validationResult);
 
             var serviceLocator = ServiceLocator.Default;
-            var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
+            var networkLicenseService = serviceLocator.ResolveRequiredType<INetworkLicenseService>();
 
             var latestUser = validationResult.GetLatestUser();
             if (latestUser is not null)
@@ -22,7 +22,7 @@
             return false;
         }
 
-        public static NetworkLicenseUsage GetLatestUser(this NetworkValidationResult validationResult)
+        public static NetworkLicenseUsage? GetLatestUser(this NetworkValidationResult validationResult)
         {
             Argument.IsNotNull(() => validationResult);
 

@@ -13,12 +13,12 @@
         /// Gets the current license.
         /// </summary>
         /// <value>The current license.</value>
-        License CurrentLicense { get; }
+        License? CurrentLicense { get; }
 
         /// <summary>
         /// Raised when the current license changes.
         /// </summary>
-        event EventHandler<EventArgs> CurrentLicenseChanged;
+        event EventHandler<EventArgs>? CurrentLicenseChanged;
 
         /// <summary>
         /// Saves the license.

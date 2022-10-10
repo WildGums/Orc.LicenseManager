@@ -122,17 +122,14 @@
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="assembly">The assembly to get the information from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns><c>true</c> if the license is valid, <c>false</c> otherwise.</returns>
-        public async Task<LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, Assembly assembly = null)
+        public async Task<LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, Assembly? assembly = null)
         {
             Argument.IsNotNullOrWhitespace(() => license);
             Argument.IsNotNullOrWhitespace(() => serverUrl);
 
-            if (assembly is null)
-            {
-                assembly = AssemblyHelper.GetEntryAssembly();
-            }
+            assembly ??= AssemblyHelper.GetEntryAssembly();
 
-            LicenseValidationResult validationResult = null;
+            var validationResult = new LicenseValidationResult();
 
             try
             {
@@ -143,7 +140,7 @@
                     {
                         try
                         {
-                            version = assembly.InformationalVersion();
+                            version = assembly.InformationalVersion() ?? string.Empty;
                             if (string.IsNullOrWhiteSpace(version))
                             {
                                 version = assembly.Version();
@@ -155,15 +152,15 @@
                         }
                     }
 
-                    var serviceLicenseValidation = new ServerLicenseValidation
+                    var serverLicenseValidation = new ServerLicenseValidation
                     {
                         MachineId = _identificationService.GetMachineId(),
-                        ProductName = (assembly is not null) ? assembly.Product() : "unknown product",
+                        ProductName = (assembly is not null) ? assembly.Product()! : "unknown product",
                         ProductVersion = version,
                         License = license
                     };
 
-                    var json = JsonConvert.SerializeObject(serviceLicenseValidation);
+                    var json = JsonConvert.SerializeObject(serverLicenseValidation);
                     using (var httpContent = JsonContent.Create(json))
                     {
                         using (var response = await httpClient.PostAsync(serverUrl, httpContent))
@@ -179,15 +176,12 @@
                 Log.Error(ex, "Failed to validate the license on the server");
             }
 
-            if (validationResult is null)
+            validationResult ??= new LicenseValidationResult()
             {
-                validationResult = new LicenseValidationResult()
-                {
-                    // We return success if we can't validate on the server, then it's up to the client to validate
-                    IsValid = true,
-                    AdditionalInfo = "Failed to check the license on the server"
-                };
-            }
+                // We return success if we can't validate on the server, then it's up to the client to validate
+                IsValid = true,
+                AdditionalInfo = "Failed to check the license on the server"
+            };
 
             return validationResult;
         }
@@ -216,6 +210,10 @@
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(license);
                 var xmlRoot = xmlDoc.DocumentElement;
+                if (xmlRoot is null)
+                {
+                    return validationContext;
+                }
                 if (!string.Equals(xmlRoot.Name, "License"))
                 {
                     validationContext.Add(BusinessRuleValidationResult.CreateError("Please make sure that you pasted the complete license, including the <License> tags"));
@@ -238,7 +236,7 @@
                         {
                             xmlDataList.Add(new XmlDataModel
                             {
-                                Name = featureNode.Attributes[0].Value,
+                                Name = featureNode.Attributes?[0]?.Value ?? string.Empty,
                                 Value = featureNode.InnerText
                             });
                         }
@@ -253,8 +251,7 @@
                 var expData = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, LicenseElements.Expiration));
                 if (expData is not null)
                 {
-                    DateTime expirationDateTime;
-                    if (DateTime.TryParse(expData.Value, out expirationDateTime))
+                    if (DateTime.TryParse(expData.Value, out var expirationDateTime))
                     {
                         Log.Debug("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
 
@@ -274,10 +271,9 @@
                 var xmlDataVersion = xmlDataList.FirstOrDefault(x => string.Equals(x.Name, LicenseElements.Version));
                 if (xmlDataVersion is not null)
                 {
-                    Version licenseVersion;
-                    if (Version.TryParse(xmlDataVersion.Value, out licenseVersion))
+                    if (Version.TryParse(xmlDataVersion.Value, out var licenseVersion))
                     {
-                        var productVersion = AssemblyHelper.GetEntryAssembly().GetName().Version;
+                        var productVersion = AssemblyHelper.GetEntryAssembly()?.GetName()?.Version;
                         if (productVersion > licenseVersion)
                         {
                             validationContext.Add(BusinessRuleValidationResult.CreateError("Your license only supports versions up to '{0}' while the current version of this product is '{1}'", licenseVersion, productVersion));

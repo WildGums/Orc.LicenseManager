@@ -7,13 +7,13 @@
         /// </summary>
         /// <param name="licenseMode">The license mode.</param>
         /// <returns>System.String.</returns>
-        string LoadLicense(LicenseMode licenseMode);
+        string? LoadLicense(LicenseMode licenseMode);
 
         /// <summary>
         /// Gets the license information path.
         /// </summary>
         /// <param name="licenseMode">The license mode.</param>
         /// <returns>System.String.</returns>
-        string GetLicenseLocation(LicenseMode licenseMode);
+        string? GetLicenseLocation(LicenseMode licenseMode);
     }
 }

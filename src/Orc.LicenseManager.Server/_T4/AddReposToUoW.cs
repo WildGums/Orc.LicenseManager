@@ -17,7 +17,7 @@ namespace Orc.LicenseManager.Server
         {
             get 
 			{ 
-				return _LicensePocoRepository ?? (_LicensePocoRepository = GetRepository<ILicensePocoRepository>());
+				return _LicensePocoRepository ??= GetRepository<ILicensePocoRepository>();
 		    }
         }
         private IProductRepository _ProductRepository;
@@ -26,7 +26,7 @@ namespace Orc.LicenseManager.Server
         {
             get 
 			{ 
-				return _ProductRepository ?? (_ProductRepository = GetRepository<IProductRepository>());
+				return _ProductRepository ??= GetRepository<IProductRepository>();
 		    }
         }
         private ICustomerRepository _CustomerRepository;
@@ -35,7 +35,7 @@ namespace Orc.LicenseManager.Server
         {
             get 
 			{ 
-				return _CustomerRepository ?? (_CustomerRepository = GetRepository<ICustomerRepository>());
+				return _CustomerRepository ??= GetRepository<ICustomerRepository>();
 		    }
         }
         private IRoleRepository _RoleRepository;
@@ -44,7 +44,7 @@ namespace Orc.LicenseManager.Server
         {
             get 
 			{ 
-				return _RoleRepository ?? (_RoleRepository = GetRepository<IRoleRepository>());
+				return _RoleRepository ??= GetRepository<IRoleRepository>();
 		    }
         }
         private IUserRepository _UserRepository;
@@ -53,7 +53,7 @@ namespace Orc.LicenseManager.Server
         {
             get 
 			{ 
-				return _UserRepository ?? (_UserRepository = GetRepository<IUserRepository>());
+				return _UserRepository ??= GetRepository<IUserRepository>();
 		    }
         }
 	}

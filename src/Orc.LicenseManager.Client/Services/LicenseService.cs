@@ -18,7 +18,7 @@
         private readonly ILicenseLocationService _licenseLocationService;
         private readonly IFileService _fileService;
 
-        private Tuple<License, LicenseMode> _currentLicense;
+        private Tuple<License, LicenseMode>? _currentLicense;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseService" /> class.
@@ -34,7 +34,7 @@
             _fileService = fileService;
         }
 
-        public License CurrentLicense
+        public License? CurrentLicense
         {
             get => _currentLicense?.Item1;
         }
@@ -42,7 +42,7 @@
         /// <summary>
         /// Raised when the current license changes.
         /// </summary>
-        public event EventHandler<EventArgs> CurrentLicenseChanged;
+        public event EventHandler<EventArgs>? CurrentLicenseChanged;
 
         /// <summary>
         /// Saves the license.
@@ -60,6 +60,10 @@
                 var licenseObject = License.Load(license);
 
                 var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
+                if (string.IsNullOrEmpty(xmlFilePath))
+                {
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("License path not found");
+                }
 
                 using (var xmlWriter = XmlWriter.Create(xmlFilePath))
                 {
@@ -185,13 +189,18 @@
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(license);
                 var xmlRoot = xmlDoc.DocumentElement;
+                if (xmlRoot is null)
+                {
+                    return xmlDataList;
+                }
+
                 var xmlNodes = xmlRoot.ChildNodes;
 
                 foreach (XmlNode node in xmlNodes)
                 {
                     if (string.Equals(node.Name, "Customer"))
                     {
-                        var customerInfo = $"{node.ChildNodes[0].InnerText} ({node.ChildNodes[1].InnerText})";
+                        var customerInfo = $"{node.ChildNodes[0]?.InnerText} ({node.ChildNodes[1]?.InnerText})";
                         xmlDataList.Add(new XmlDataModel("Licensed to", customerInfo));
                     }
                     else if (string.Equals(node.Name, "ProductFeatures"))
@@ -200,7 +209,7 @@
                         {
                             xmlDataList.Add(new XmlDataModel
                             {
-                                Name = featureNode.Attributes[0].Value,
+                                Name = featureNode.Attributes?[0]?.Value ?? string.Empty,
                                 Value = featureNode.InnerText
                             });
                         }
@@ -226,7 +235,7 @@
             return xmlDataList;
         }
 
-        private void SetCurrentLicense(License license, LicenseMode licenseMode)
+        private void SetCurrentLicense(License? license, LicenseMode licenseMode)
         {
             var currentLicense = _currentLicense?.Item1;
             if (ReferenceEquals(currentLicense, license))
