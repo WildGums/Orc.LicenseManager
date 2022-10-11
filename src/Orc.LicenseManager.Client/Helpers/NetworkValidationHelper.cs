@@ -8,11 +8,11 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static bool _isInErrorHandling;
+        private static bool IsInErrorHandling;
 
         public static void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
         {
-            if (_isInErrorHandling)
+            if (IsInErrorHandling)
             {
                 Log.Warning("Already handling the invalid license usage");
                 return;
@@ -21,11 +21,12 @@
             var validationResult = e.ValidationResult;
             if (!validationResult.IsValid && validationResult.IsCurrentUserLatestUser())
             {
-                _isInErrorHandling = true;
+                IsInErrorHandling = true;
 
-                var entryAssembly = AssemblyHelper.GetEntryAssembly();
+                var entryAssembly = AssemblyHelper.GetRequiredEntryAssembly();
 
-                var message = string.Format("The current number of usages for {0} is higher than the maximum number of concurrent users allowed based on the current license. Since this computer is the last one using the license, the software has to shut down.\n\nIf you feel that you have not reached the maximum number of usages, please contact support.\n\nThe maximum allowed is {1}, the current usage is {2}.", entryAssembly.Title(), validationResult.MaximumConcurrentUsers, validationResult.CurrentUsers.Count);
+                var message = string.Format(
+                    "The current number of usages for {0} is higher than the maximum number of concurrent users allowed based on the current license. Since this computer is the last one using the license, the software has to shut down.\n\nIf you feel that you have not reached the maximum number of usages, please contact support.\n\nThe maximum allowed is {1}, the current usage is {2}.", entryAssembly.Title(), validationResult.MaximumConcurrentUsers, validationResult.CurrentUsers.Count);
 
                 Log.Error(message);
 

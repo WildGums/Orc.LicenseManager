@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Json;
     using System.Reflection;
@@ -224,21 +222,14 @@
                 {
                     if (!string.Equals(node.Name, "ProductFeatures"))
                     {
-                        xmlDataList.Add(new XmlDataModel
-                        {
-                            Name = node.Name,
-                            Value = node.InnerText
-                        });
+                        xmlDataList.Add(new XmlDataModel(node.Name, node.InnerText));
                     }
                     else
                     {
                         foreach (XmlNode featureNode in node.ChildNodes)
                         {
-                            xmlDataList.Add(new XmlDataModel
-                            {
-                                Name = featureNode.Attributes?[0]?.Value ?? string.Empty,
-                                Value = featureNode.InnerText
-                            });
+                            var name = featureNode.Attributes?[0]?.Value ?? string.Empty;
+                            xmlDataList.Add(new XmlDataModel(name, featureNode.InnerText));
                         }
                     }
                 }

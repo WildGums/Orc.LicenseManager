@@ -32,7 +32,7 @@
         /// Gets the computer identifier.
         /// </summary>
         /// <value>The computer identifier.</value>
-        string ComputerId { get; }
+        string? ComputerId { get; }
 
         /// <summary>
         /// Occurs every time when the network validation has finished.

@@ -18,7 +18,7 @@
         public static string ToDescriptionText(this LicenseMode licenseMode)
         {
             var descriptionAttribute = typeof(LicenseMode)
-                .GetField(licenseMode.ToString())
+                .GetField(licenseMode.ToString())?
                 .GetCustomAttributes(typeof(DescriptionAttribute), false)
                 .FirstOrDefault() as DescriptionAttribute;
 

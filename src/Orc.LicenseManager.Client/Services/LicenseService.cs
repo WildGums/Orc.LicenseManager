@@ -207,20 +207,13 @@
                     {
                         foreach (XmlNode featureNode in node.ChildNodes)
                         {
-                            xmlDataList.Add(new XmlDataModel
-                            {
-                                Name = featureNode.Attributes?[0]?.Value ?? string.Empty,
-                                Value = featureNode.InnerText
-                            });
+                            var name = featureNode.Attributes?[0]?.Value ?? string.Empty;
+                            xmlDataList.Add(new XmlDataModel(name, featureNode.InnerText));
                         }
                     }
                     else
                     {
-                        xmlDataList.Add(new XmlDataModel
-                        {
-                            Name = node.Name,
-                            Value = node.InnerText
-                        });
+                        xmlDataList.Add(new XmlDataModel(node.Name, node.InnerText));
                     }
                 }
 

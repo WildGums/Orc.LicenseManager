@@ -5,11 +5,6 @@
     /// </summary>
     public class XmlDataModel
     {
-        public XmlDataModel()
-        {
-            
-        }
-
         public XmlDataModel(string name, string value)
         {
             Name = name;

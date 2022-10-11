@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
@@ -26,8 +27,8 @@
 
         private bool _initialized;
         private readonly List<Thread> _listeningThreads = new List<Thread>();
-        private string _machineId;
-        private string _userName;
+        private string? _machineId;
+        private string? _userName;
         private readonly DateTime _startDateTime = DateTime.Now;
 
         public NetworkLicenseService(ILicenseService licenseService, IIdentificationService identificationService)
@@ -45,7 +46,7 @@
         /// Gets the computer identifier.
         /// </summary>
         /// <value>The computer identifier.</value>
-        public string ComputerId { get { return _machineId; } }
+        public string? ComputerId => _machineId;
 
         /// <summary>
         /// Gets or sets the search timeout for other licenses on the network.
@@ -62,7 +63,7 @@
         /// <summary>
         /// Occurs every time when the network validation has finished.
         /// </summary>
-        public event EventHandler<NetworkValidatedEventArgs> Validated;
+        public event EventHandler<NetworkValidatedEventArgs>? Validated;
 
         /// <summary>
         /// Initializes the service.
@@ -142,7 +143,7 @@
             return networkValidationResult;
         }
 
-        private async void OnPollingTimerElapsed(object sender, ElapsedEventArgs e)
+        private async void OnPollingTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             await ValidateLicenseAsync();
         }
@@ -257,7 +258,7 @@
             return licenseUsages.Values.ToList();
         }
 
-        private async void HandleIncomingRequests(object ipAddressAsObject)
+        private async void HandleIncomingRequests(object? ipAddressAsObject)
         {
             try
             {
@@ -302,6 +303,11 @@
                             if (string.Equals(message, licenseSignature))
                             {
                                 Log.Debug("Received request from '{0}' on '{1}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
+
+                                if (string.IsNullOrEmpty(_machineId) || string.IsNullOrEmpty(_userName))
+                                {
+                                    throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to identify license usage");
+                                }
 
                                 var licenseUsage = new NetworkLicenseUsage(_machineId, ipAddress.ToString(), _userName, licenseSignature, _startDateTime);
 

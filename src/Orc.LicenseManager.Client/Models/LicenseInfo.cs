@@ -17,7 +17,7 @@
         /// <value>
         /// The title.
         /// </value>
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         /// <summary>
         /// Gets or sets the PurchaseUrl.
@@ -25,7 +25,7 @@
         /// <value>
         /// The website.
         /// </value>
-        public string PurchaseUrl { get; set; }
+        public string? PurchaseUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the company site.
@@ -33,7 +33,7 @@
         /// <value>
         /// The company site.
         /// </value>
-        public string InfoUrl { get; set; }
+        public string? InfoUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the company text that will be used in the about box
@@ -41,7 +41,7 @@
         /// <value>
         /// The company text.
         /// </value>
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// Gets or sets the ImageUri source path.
@@ -49,7 +49,7 @@
         /// <value>
         /// The image source.
         /// </value>
-        public string ImageUri { get; set; }
+        public string? ImageUri { get; set; }
 
         /// <summary>
         /// Gets or sets the key.
@@ -57,6 +57,6 @@
         /// <value>
         /// The key.
         /// </value>
-        public string Key { get; set; }
+        public string? Key { get; set; }
     }
 }

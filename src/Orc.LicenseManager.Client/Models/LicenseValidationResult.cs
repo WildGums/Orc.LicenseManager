@@ -4,6 +4,6 @@
     {
         public bool IsValid { get; set; }
 
-        public string AdditionalInfo { get; set; }
+        public string? AdditionalInfo { get; set; }
     }
 }

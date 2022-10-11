@@ -52,18 +52,18 @@
         {
             try
             {
-                var entryAssembly = AssemblyHelper.GetEntryAssembly();
+                var entryAssembly = AssemblyHelper.GetRequiredEntryAssembly();
 
                 var companyName = _applicationIdService.CompanyName;
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = entryAssembly?.Company();
+                    companyName = entryAssembly.Company() ?? string.Empty;
                 }
 
                 var productName = _applicationIdService.ProductName;
                 if (string.IsNullOrWhiteSpace(productName))
                 {
-                    productName = entryAssembly?.Product();
+                    productName = entryAssembly.Product() ?? string.Empty;
                 }
 
                 if (licenseMode == LicenseMode.CurrentUser)

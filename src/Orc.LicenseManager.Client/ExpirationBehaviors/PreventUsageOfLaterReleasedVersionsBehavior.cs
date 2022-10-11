@@ -8,7 +8,7 @@
     {
         protected override bool IsNormalLicenseExpired(License license, DateTime expirationDateTime, DateTime validationDateTime)
         {
-            var entryAssembly = AssemblyHelper.GetEntryAssembly();
+            var entryAssembly = AssemblyHelper.GetRequiredEntryAssembly();
             var linkerTimestamp = entryAssembly.GetBuildDateTime();
 
             return (linkerTimestamp > expirationDateTime);

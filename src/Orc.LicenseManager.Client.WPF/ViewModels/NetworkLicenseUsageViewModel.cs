@@ -97,7 +97,7 @@
         }
 
 #pragma warning disable AvoidAsyncVoid
-        private async void OnDispatcherTimerTick(object sender, EventArgs e)
+        private async void OnDispatcherTimerTick(object? sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid
         {
             var validationResult = await TaskHelper.Run(async () => await _networkLicenseService.ValidateLicenseAsync(), true);
@@ -105,7 +105,7 @@
             UpdateValidationResult(validationResult);
         }
 
-        private void OnNetworkLicenseValidated(object sender, NetworkValidatedEventArgs e)
+        private void OnNetworkLicenseValidated(object sender?, NetworkValidatedEventArgs e)
         {
             UpdateValidationResult(e.ValidationResult);
         }
