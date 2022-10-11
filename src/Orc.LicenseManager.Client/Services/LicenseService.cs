@@ -97,9 +97,16 @@
 
             try
             {
-                _fileService.Delete(xmlFilePath);
+                if (string.IsNullOrEmpty(xmlFilePath))
+                {
+                    Log.Warning($"Failed to find '{licenseMode}' license file");
+                }
+                else
+                {
+                    _fileService.Delete(xmlFilePath);
 
-                Log.Info($"The '{licenseMode}' license has been removed");
+                    Log.Info($"The '{licenseMode}' license has been removed");
+                }
 
                 if (_currentLicense?.Item2 == licenseMode)
                 {
