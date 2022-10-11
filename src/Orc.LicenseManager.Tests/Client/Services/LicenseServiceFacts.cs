@@ -1,6 +1,5 @@
 ﻿namespace Orc.LicenseManager.Tests.Client.Services
 {
-    using Catel.IoC;
     using NUnit.Framework;
 
     public class LicenseServiceFacts

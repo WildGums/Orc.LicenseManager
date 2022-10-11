@@ -18,11 +18,11 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<ILicenseVisualizerService, DialogLicenseVisualizerService>();
 
-        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        var languageService = serviceLocator.ResolveRequiredType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client.WPF", "Orc.LicenseManager.Properties", "Resources"));
 
         // Register some custom windows (since we combine windows and views)
-        var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
+        var uiVisualizerService = serviceLocator.ResolveRequiredType<IUIVisualizerService>();
         uiVisualizerService.Register<LicenseViewModel, LicenseWindow>();
     }
 }

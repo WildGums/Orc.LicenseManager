@@ -2,7 +2,6 @@
 {
     using SystemInfo;
     using Catel;
-    using Catel.Logging;
 
     public class IdentificationService : IIdentificationService
     {

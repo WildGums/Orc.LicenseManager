@@ -18,7 +18,7 @@
         /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public LicenseWindow(LicenseViewModel viewModel)
+        public LicenseWindow(LicenseViewModel? viewModel)
             : base(viewModel, DataWindowMode.OkCancel)
         {
             InitializeComponent();

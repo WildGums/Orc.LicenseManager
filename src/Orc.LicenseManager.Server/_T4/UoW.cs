@@ -8,12 +8,6 @@
 
 
 
-using System.Data.Entity;
-using Orc.EntityFramework.Repositories;
-using Catel.Data;
-using Catel.IoC;
-using Orc.LicenseManager.Server.Repositories;
-using Orc.LicenseManager.Server;
 
 
 

@@ -1,9 +1,4 @@
-using System.Data.Entity;
 using Orc.EntityFramework.Repositories;
-using Orc.EntityFramework;
-using Catel.IoC;
-using Orc.LicenseManager.Server.Repositories;
-using Orc.LicenseManager.Server;
 
 
 namespace Orc.LicenseManager.Server.Repositories

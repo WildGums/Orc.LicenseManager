@@ -1,7 +1,6 @@
 ﻿namespace Orc.LicenseManager.Server.Services
 {
     using System.Threading.Tasks;
-    using Catel;
     using Models;
 
     public class LicenseValidationService : ILicenseValidationService

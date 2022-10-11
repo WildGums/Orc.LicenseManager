@@ -1,7 +1,6 @@
 ﻿namespace Orc.LicenseManager
 {
     using Catel;
-    using Catel.Logging;
     using Portable.Licensing;
 
     public static class LicenseExtensions

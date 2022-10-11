@@ -27,17 +27,17 @@
 
                 var serviceLocator = ServiceLocator.Default;
 
-                var dispatcherService = serviceLocator.ResolveType<IDispatcherService>();
+                var dispatcherService = serviceLocator.ResolveRequiredType<IDispatcherService>();
                 await dispatcherService.InvokeTaskAsync(async () =>
                 {
-                    var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
+                    var uiVisualizerService = serviceLocator.ResolveRequiredType<IUIVisualizerService>();
                     await uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(validationResult);
                 });
 
                 _isInErrorHandling = false;
 
                 // Force check
-                var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
+                var networkLicenseService = serviceLocator.ResolveRequiredType<INetworkLicenseService>();
                 await networkLicenseService.ValidateLicenseAsync();
             }
         }

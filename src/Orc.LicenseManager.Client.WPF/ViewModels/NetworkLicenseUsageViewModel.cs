@@ -11,7 +11,6 @@
     using Catel.MVVM;
     using Catel.Reflection;
     using Catel.Services;
-    using Catel.Threading;
 
     public class NetworkLicenseUsageViewModel : ViewModelBase
     {
@@ -38,7 +37,7 @@
             _networkLicenseService = networkLicenseService;
             _dispatcherService = dispatcherService;
 
-            var assembly = AssemblyHelper.GetEntryAssembly();
+            var assembly = AssemblyHelper.GetRequiredEntryAssembly();
             Title = assembly.Title() + " licence usage";
             PurchaseUrl = _licenseInfoService.GetLicenseInfo().PurchaseUrl;
             UpdateValidationResult(networkValidationResult, false);
@@ -51,7 +50,7 @@
 
         public string PurchaseUrl { get; set; }
 
-        public List<NetworkLicenseUsage> CurrentUsers { get; set; }
+        public List<NetworkLicenseUsage> CurrentUsers { get; set; } = new List<NetworkLicenseUsage>();
 
         public int MaximumNumberOfConcurrentUsages { get; set; }
 
@@ -100,12 +99,12 @@
         private async void OnDispatcherTimerTick(object? sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid
         {
-            var validationResult = await TaskHelper.Run(async () => await _networkLicenseService.ValidateLicenseAsync(), true);
+            var validationResult = await Task.Run(async () => await _networkLicenseService.ValidateLicenseAsync());
 
             UpdateValidationResult(validationResult);
         }
 
-        private void OnNetworkLicenseValidated(object sender?, NetworkValidatedEventArgs e)
+        private void OnNetworkLicenseValidated(object? sender, NetworkValidatedEventArgs e)
         {
             UpdateValidationResult(e.ValidationResult);
         }

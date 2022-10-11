@@ -10,7 +10,7 @@
         {
         }
 
-        public NetworkLicenseUsageWindow(NetworkLicenseUsageViewModel viewModel)
+        public NetworkLicenseUsageWindow(NetworkLicenseUsageViewModel? viewModel)
             : base(viewModel, DataWindowMode.Custom)
         {
             InitializeComponent();

@@ -3,14 +3,11 @@
     using System;
     using System.Globalization;
     using System.Windows;
-    using Catel.IO;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Services;
-    using Catel.Windows;
     using Orchestra;
-    using Services;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -24,9 +21,9 @@
         protected override void OnStartup(StartupEventArgs e)
         {
 #if DEBUG
-            Catel.Logging.LogManager.AddDebugListener(true);
+            LogManager.AddDebugListener(true);
 
-            var logPath = Path.Combine(GetType().Assembly.GetDirectory(), "debug.log");
+            var logPath = System.IO.Path.Combine(GetType().Assembly.GetDirectory(), "debug.log");
             LogManager.AddListener(new FileLogListener(logPath, 25 * 1024));
 #endif
 

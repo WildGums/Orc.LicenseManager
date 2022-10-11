@@ -71,9 +71,11 @@
             SetWindowLong(windowInteropHelper.Handle, GWL_STYLE, style & ~WS_SYSMENU);
         }
 
-        private static void OnWindowInitializedForRemoveCloseButton(object sender, EventArgs e)
+        private static void OnWindowInitializedForRemoveCloseButton(object? sender, EventArgs e)
         {
-            var window = (Window) sender;
+            ArgumentNullException.ThrowIfNull(sender);
+
+            var window = (Window)sender;
             window.SourceInitialized -= OnWindowInitializedForRemoveCloseButton;
 
             RemoveCloseButton(window);

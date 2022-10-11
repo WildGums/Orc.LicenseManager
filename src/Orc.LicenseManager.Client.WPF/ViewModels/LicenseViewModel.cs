@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
     using System.Windows;
     using Catel;
-    using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
@@ -65,7 +64,7 @@
             RemoveLicense = new TaskCommand(OnRemoveLicenseExecuteAsync, OnRemoveLicenseCanExecute);
         }
 
-        public List<LicenseMode> AvailableLicenseModes { get; private set; }
+        public List<LicenseMode> AvailableLicenseModes { get; private set; } = new List<LicenseMode>();
 
         public LicenseMode LicenseMode { get; set; }
 
@@ -75,7 +74,7 @@
         /// Gets the failure message.
         /// </summary>
         /// <value>The failure message.</value>
-        public string FailureMessage { get; private set; }
+        public string? FailureMessage { get; private set; }
 
         /// <summary>
         /// Gets the PurchaseLinkClick command.
@@ -230,7 +229,7 @@
             {
                 Log.Error(ex, $"Failed to save license using '{LicenseMode}'");
 
-                await _messageService.ShowErrorAsync(_languageService.GetString("FailedToSaveLicense"));
+                await _messageService.ShowErrorAsync(_languageService.GetRequiredString("FailedToSaveLicense"));
                 return false;
             }
 
@@ -254,7 +253,7 @@
             {
                 Log.Debug("Closing application");
 
-                _navigationService.CloseApplication();
+                await _navigationService.CloseApplicationAsync();
             }
 
             return true;

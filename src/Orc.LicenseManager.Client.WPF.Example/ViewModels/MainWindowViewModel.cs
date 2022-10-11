@@ -6,7 +6,6 @@
     using Catel.MVVM;
     using Catel.Services;
     using LicenseManager.ViewModels;
-    using Services;
 
     /// <summary>
     /// MainWindow view model.
