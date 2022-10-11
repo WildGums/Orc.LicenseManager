@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using Catel;
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Services;
@@ -19,9 +18,9 @@
         public LicenseLocationService(IApplicationIdService applicationIdService, IFileService fileService,
             IAppDataService appDataService)
         {
-            Argument.IsNotNull(() => applicationIdService);
-            Argument.IsNotNull(() => fileService);
-            Argument.IsNotNull(() => appDataService);
+            ArgumentNullException.ThrowIfNull(applicationIdService);
+            ArgumentNullException.ThrowIfNull(fileService);
+            ArgumentNullException.ThrowIfNull(appDataService);
 
             _applicationIdService = applicationIdService;
             _fileService = fileService;

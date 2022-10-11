@@ -27,8 +27,8 @@
         /// <param name="fileService">The file service.</param>
         public LicenseService(ILicenseLocationService licenseLocationService, IFileService fileService)
         {
-            Argument.IsNotNull(() => licenseLocationService);
-            Argument.IsNotNull(() => fileService);
+            ArgumentNullException.ThrowIfNull(licenseLocationService);
+            ArgumentNullException.ThrowIfNull(fileService);
 
             _licenseLocationService = licenseLocationService;
             _fileService = fileService;

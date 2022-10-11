@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Logging;
 
     /// <summary>
@@ -26,9 +25,9 @@
         public SimpleLicenseService(ILicenseService licenseService, ILicenseValidationService licenseValidationService, 
             ILicenseVisualizerService licenseVisualizerService)
         {
-            Argument.IsNotNull(() => licenseService);
-            Argument.IsNotNull(() => licenseValidationService);
-            Argument.IsNotNull(() => licenseVisualizerService);
+            ArgumentNullException.ThrowIfNull(licenseService);
+            ArgumentNullException.ThrowIfNull(licenseValidationService);
+            ArgumentNullException.ThrowIfNull(licenseVisualizerService);
 
             _licenseService = licenseService;
             _licenseValidationService = licenseValidationService;

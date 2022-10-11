@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Catel;
     using Catel.Logging;
     using FileSystem;
 
@@ -15,8 +14,8 @@
 
         public LicenseModeService(IFileService fileService, ILicenseLocationService licenseLocationService)
         {
-            Argument.IsNotNull(() => fileService);
-            Argument.IsNotNull(() => licenseLocationService);
+            ArgumentNullException.ThrowIfNull(fileService);
+            ArgumentNullException.ThrowIfNull(licenseLocationService);
 
             _fileService = fileService;
             _licenseLocationService = licenseLocationService;

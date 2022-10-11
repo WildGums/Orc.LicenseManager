@@ -1,14 +1,14 @@
 ﻿namespace Orc.LicenseManager
 {
+    using System;
     using System.Linq;
-    using Catel;
     using Catel.IoC;
 
     public static class NetworkValidationResultExtensions
     {
         public static bool IsCurrentUserLatestUser(this NetworkValidationResult validationResult)
         {
-            Argument.IsNotNull(() => validationResult);
+            ArgumentNullException.ThrowIfNull(validationResult);
 
             var serviceLocator = ServiceLocator.Default;
             var networkLicenseService = serviceLocator.ResolveRequiredType<INetworkLicenseService>();
@@ -24,7 +24,7 @@
 
         public static NetworkLicenseUsage? GetLatestUser(this NetworkValidationResult validationResult)
         {
-            Argument.IsNotNull(() => validationResult);
+            ArgumentNullException.ThrowIfNull(validationResult);
 
             var latestUsage = (from usage in validationResult.CurrentUsers
                                orderby usage.StartDateTime descending

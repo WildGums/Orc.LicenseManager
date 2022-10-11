@@ -1,13 +1,13 @@
 ﻿namespace Orc.LicenseManager
 {
-    using Catel;
+    using System;
     using Portable.Licensing;
 
     public static class LicenseExtensions
     {
         public static int GetMaximumConcurrentLicenses(this License license)
         {
-            Argument.IsNotNull(() => license);
+            ArgumentNullException.ThrowIfNull(license);
 
             var maximumConcurrentNumbers = license.Quantity;
             if (maximumConcurrentNumbers <= 0)

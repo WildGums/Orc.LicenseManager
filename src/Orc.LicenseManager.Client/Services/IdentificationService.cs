@@ -1,7 +1,7 @@
 ﻿namespace Orc.LicenseManager
 {
     using SystemInfo;
-    using Catel;
+    using System;
 
     public class IdentificationService : IIdentificationService
     {
@@ -11,7 +11,7 @@
 
         public IdentificationService(ISystemIdentificationService systemIdentificationService)
         {
-            Argument.IsNotNull(() => systemIdentificationService);
+            ArgumentNullException.ThrowIfNull(systemIdentificationService);
 
             _systemIdentificationService = systemIdentificationService;
         }

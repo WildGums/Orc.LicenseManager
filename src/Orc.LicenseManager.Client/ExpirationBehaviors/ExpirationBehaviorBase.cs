@@ -1,7 +1,6 @@
 ﻿namespace Orc.LicenseManager
 {
     using System;
-    using Catel;
     using Catel.Logging;
     using Portable.Licensing;
 
@@ -11,7 +10,7 @@
 
         public virtual bool IsExpired(License license, DateTime expirationDateTime, DateTime validationDateTime)
         {
-            Argument.IsNotNull(() => license);
+            ArgumentNullException.ThrowIfNull(license);
 
             if (license.Type == LicenseType.Trial)
             {

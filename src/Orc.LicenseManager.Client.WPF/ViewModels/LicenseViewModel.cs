@@ -33,15 +33,15 @@
             ILicenseService licenseService, ILicenseValidationService licenseValidationService, IUIVisualizerService uiVisualizerService, 
             IMessageService messageService, ILanguageService languageService, ILicenseModeService licenseModeService)
         {
-            Argument.IsNotNull(() => licenseInfo);
-            Argument.IsNotNull(() => navigationService);
-            Argument.IsNotNull(() => processService);
-            Argument.IsNotNull(() => licenseService);
-            Argument.IsNotNull(() => licenseValidationService);
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => languageService);
-            Argument.IsNotNull(() => licenseModeService);
+            ArgumentNullException.ThrowIfNull(licenseInfo);
+            ArgumentNullException.ThrowIfNull(navigationService);
+            ArgumentNullException.ThrowIfNull(processService);
+            ArgumentNullException.ThrowIfNull(licenseService);
+            ArgumentNullException.ThrowIfNull(licenseValidationService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(messageService);
+            ArgumentNullException.ThrowIfNull(languageService);
+            ArgumentNullException.ThrowIfNull(licenseModeService);
 
             _navigationService = navigationService;
             _processService = processService;

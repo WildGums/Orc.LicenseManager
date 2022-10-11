@@ -35,10 +35,10 @@
         public LicenseValidationService(IApplicationIdService applicationIdService, IExpirationBehavior expirationBehavior,
             IIdentificationService identificationService, IMachineLicenseValidationService machineLicenseValidationService)
         {
-            Argument.IsNotNull(() => applicationIdService);
-            Argument.IsNotNull(() => expirationBehavior);
-            Argument.IsNotNull(() => identificationService);
-            Argument.IsNotNull(() => machineLicenseValidationService);
+            ArgumentNullException.ThrowIfNull(applicationIdService);
+            ArgumentNullException.ThrowIfNull(expirationBehavior);
+            ArgumentNullException.ThrowIfNull(identificationService);
+            ArgumentNullException.ThrowIfNull(machineLicenseValidationService);
 
             _applicationIdService = applicationIdService;
             _expirationBehavior = expirationBehavior;

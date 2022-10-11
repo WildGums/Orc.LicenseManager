@@ -10,7 +10,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
-    using Catel;
     using Catel.Logging;
     using Timer = System.Timers.Timer;
 
@@ -33,8 +32,8 @@
 
         public NetworkLicenseService(ILicenseService licenseService, IIdentificationService identificationService)
         {
-            Argument.IsNotNull(() => licenseService);
-            Argument.IsNotNull(() => identificationService);
+            ArgumentNullException.ThrowIfNull(licenseService);
+            ArgumentNullException.ThrowIfNull(identificationService);
 
             _licenseService = licenseService;
             _identificationService = identificationService;

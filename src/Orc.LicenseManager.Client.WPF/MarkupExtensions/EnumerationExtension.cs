@@ -4,7 +4,6 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Windows.Markup;
-    using Catel;
     using Catel.Logging;
 
     internal class EnumerationExtension : MarkupExtension
@@ -15,7 +14,7 @@
 
         public EnumerationExtension(Type enumType)
         {
-            Argument.IsNotNull(() => enumType);
+            ArgumentNullException.ThrowIfNull(enumType);
 
             var underlyingType = Nullable.GetUnderlyingType(enumType) ?? enumType;
 
@@ -29,7 +28,7 @@
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            Argument.IsNotNull(() => serviceProvider);
+            ArgumentNullException.ThrowIfNull(serviceProvider);
 
             var enumValues = Enum.GetValues(_enumType);
 

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.MVVM;
     using Catel.Services;
     using LicenseManager.ViewModels;
@@ -26,12 +25,12 @@
             IMessageService messageService, INetworkLicenseService networkLicenseService,
             ILicenseVisualizerService licenseVisualizerService, IUIVisualizerService uiVisualizerService)
         {
-            Argument.IsNotNull(() => licenseService);
-            Argument.IsNotNull(() => licenseValidationService);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => networkLicenseService);
-            Argument.IsNotNull(() => licenseVisualizerService);
-            Argument.IsNotNull(() => uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(licenseService);
+            ArgumentNullException.ThrowIfNull(licenseValidationService);
+            ArgumentNullException.ThrowIfNull(messageService);
+            ArgumentNullException.ThrowIfNull(networkLicenseService);
+            ArgumentNullException.ThrowIfNull(licenseVisualizerService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
 
             _licenseService = licenseService;
             _licenseValidationService = licenseValidationService;

@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Threading;
-    using Catel;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Reflection;
@@ -26,11 +25,11 @@
         public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService,
             IProcessService processService, INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => networkValidationResult);
-            Argument.IsNotNull(() => licenseInfoService);
-            Argument.IsNotNull(() => processService);
-            Argument.IsNotNull(() => networkLicenseService);
-            Argument.IsNotNull(() => dispatcherService);
+            ArgumentNullException.ThrowIfNull(networkValidationResult);
+            ArgumentNullException.ThrowIfNull(licenseInfoService);
+            ArgumentNullException.ThrowIfNull(processService);
+            ArgumentNullException.ThrowIfNull(networkLicenseService);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _licenseInfoService = licenseInfoService;
             _processService = processService;
@@ -111,7 +110,7 @@
 
         private void UpdateValidationResult(NetworkValidationResult networkValidationResult, bool allowToClose = true)
         {
-            Argument.IsNotNull(() => networkValidationResult);
+            ArgumentNullException.ThrowIfNull(networkValidationResult);
 
             var computerId = _networkLicenseService.ComputerId;
 

@@ -1,6 +1,6 @@
 ﻿namespace Orc.LicenseManager
 {
-    using Catel;
+    using System;
     using Catel.Logging;
     using Catel.Services;
     using ViewModels;
@@ -16,9 +16,9 @@
         public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService,
             IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => licenseInfoService);
-            Argument.IsNotNull(() => dispatcherService);
+            ArgumentNullException.ThrowIfNull(uiVisualizerService);
+            ArgumentNullException.ThrowIfNull(licenseInfoService);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _uiVisualizerService = uiVisualizerService;
             _licenseInfoService = licenseInfoService;

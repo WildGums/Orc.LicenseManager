@@ -13,7 +13,7 @@
 
         public MachineLicenseValidationService(IIdentificationService identificationService)
         {
-            Argument.IsNotNull(() => identificationService);
+            ArgumentNullException.ThrowIfNull(identificationService);
 
             _identificationService = identificationService;
 

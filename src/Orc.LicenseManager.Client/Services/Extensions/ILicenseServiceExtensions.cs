@@ -1,13 +1,12 @@
 ﻿namespace Orc.LicenseManager
 {
     using System;
-    using Catel;
 
     public static class ILicenseServiceExtensions
     {
         public static DateTime? GetCurrentLicenseExpirationDateTime(this ILicenseService licenseService)
         {
-            Argument.IsNotNull(() => licenseService);
+            ArgumentNullException.ThrowIfNull(licenseService);
 
             var license = licenseService.CurrentLicense;
             return (license is not null) ? license.Expiration : (DateTime?)null;

@@ -7,7 +7,6 @@
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
-    using Catel;
     using Catel.Logging;
 
     /// <summary>
@@ -23,7 +22,7 @@
         /// <param name="window">The window.</param>
         public static void ApplyIconFromApplication(this Window window)
         {
-            Argument.IsNotNull(() => window);
+            ArgumentNullException.ThrowIfNull(window);
 
             try
             {
