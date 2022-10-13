@@ -22,12 +22,9 @@
         {
 #if DEBUG
             LogManager.AddDebugListener(true);
-
-            var logPath = System.IO.Path.Combine(GetType().Assembly.GetDirectory(), "debug.log");
-            LogManager.AddListener(new FileLogListener(logPath, 25 * 1024));
 #endif
 
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
 
             // Note: it's best to use .CurrentUICulture in actual apps since it will use the preferred language
             // of the user. But in order to demo multilingual features for devs (who mostly have en-US as .CurrentUICulture),

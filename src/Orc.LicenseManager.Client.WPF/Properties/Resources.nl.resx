@@ -69,4 +69,7 @@
   <data name="LicenseManager_NetworkLicenseUsageWindow_TextBlock_ConverterParameter_YouAreEntitledToConcurrentUsagesOfTheLicenseButItLooksThisAmountIsAlreadyUsed" xml:space="preserve">
     <value>You are entitled to {0} concurrent usages of the license, but it looks this amount is already used.</value>
   </data>
+  <data name="NoTextWasPasted" xml:space="preserve">
+    <value>No text was pasted into the window</value>
+  </data>
 </root>

@@ -16,7 +16,7 @@ namespace Orc.LicenseManager.Converters
     {
         public FormattingConverter() { }
         protected FormattingConverter(string defaultFormatString) { }
-        protected override object Convert(object value, System.Type targetType, object parameter) { }
+        protected override object? Convert(object? value, System.Type targetType, object? parameter) { }
     }
 }
 namespace Orc.LicenseManager
@@ -40,31 +40,31 @@ namespace Orc.LicenseManager.ViewModels
 {
     public class ClipBoardViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.PropertyData ClipBoardTextProperty;
+        public static readonly Catel.Data.IPropertyData ClipBoardTextProperty;
         public ClipBoardViewModel() { }
         public string ClipBoardText { get; set; }
         public Catel.MVVM.TaskCommand Exit { get; }
     }
     public class LicenseViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.PropertyData AvailableLicenseModesProperty;
-        public static readonly Catel.Data.PropertyData FailureMessageProperty;
-        public static readonly Catel.Data.PropertyData FailureOccurredProperty;
-        public static readonly Catel.Data.PropertyData ImageUriProperty;
-        public static readonly Catel.Data.PropertyData InfoUrlProperty;
-        public static readonly Catel.Data.PropertyData KeyProperty;
-        public static readonly Catel.Data.PropertyData LicenseExistsProperty;
-        public static readonly Catel.Data.PropertyData LicenseInfoProperty;
-        public static readonly Catel.Data.PropertyData LicenseModeProperty;
-        public static readonly Catel.Data.PropertyData PurchaseUrlProperty;
-        public static readonly Catel.Data.PropertyData ShowFailureProperty;
-        public static readonly Catel.Data.PropertyData TextProperty;
-        public static readonly Catel.Data.PropertyData XmlDataProperty;
+        public static readonly Catel.Data.IPropertyData AvailableLicenseModesProperty;
+        public static readonly Catel.Data.IPropertyData FailureMessageProperty;
+        public static readonly Catel.Data.IPropertyData FailureOccurredProperty;
+        public static readonly Catel.Data.IPropertyData ImageUriProperty;
+        public static readonly Catel.Data.IPropertyData InfoUrlProperty;
+        public static readonly Catel.Data.IPropertyData KeyProperty;
+        public static readonly Catel.Data.IPropertyData LicenseExistsProperty;
+        public static readonly Catel.Data.IPropertyData LicenseInfoProperty;
+        public static readonly Catel.Data.IPropertyData LicenseModeProperty;
+        public static readonly Catel.Data.IPropertyData PurchaseUrlProperty;
+        public static readonly Catel.Data.IPropertyData ShowFailureProperty;
+        public static readonly Catel.Data.IPropertyData TextProperty;
+        public static readonly Catel.Data.IPropertyData XmlDataProperty;
         public LicenseViewModel(Orc.LicenseManager.LicenseInfo licenseInfo, Catel.Services.INavigationService navigationService, Catel.Services.IProcessService processService, Orc.LicenseManager.ILicenseService licenseService, Orc.LicenseManager.ILicenseValidationService licenseValidationService, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService, Orc.LicenseManager.ILicenseModeService licenseModeService) { }
         public System.Uri AboutImageUri { get; }
         public Catel.MVVM.Command AboutSiteClick { get; }
         public System.Collections.Generic.List<Orc.LicenseManager.LicenseMode> AvailableLicenseModes { get; }
-        public string FailureMessage { get; }
+        public string? FailureMessage { get; }
         public bool FailureOccurred { get; set; }
         [Catel.MVVM.ViewModelToModel("LicenseInfo", "ImageUri")]
         public string ImageUri { get; set; }
@@ -86,7 +86,7 @@ namespace Orc.LicenseManager.ViewModels
         public System.Collections.ObjectModel.ObservableCollection<Orc.LicenseManager.XmlDataModel> XmlData { get; set; }
         protected override System.Threading.Tasks.Task<bool> CancelAsync() { }
         protected override System.Threading.Tasks.Task InitializeAsync() { }
-        protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected override System.Threading.Tasks.Task<bool> SaveAsync() { }
         public string get_ImageUri() { }
         public string get_InfoUrl() { }
@@ -101,9 +101,9 @@ namespace Orc.LicenseManager.ViewModels
     }
     public class NetworkLicenseUsageViewModel : Catel.MVVM.ViewModelBase
     {
-        public static readonly Catel.Data.PropertyData CurrentUsersProperty;
-        public static readonly Catel.Data.PropertyData MaximumNumberOfConcurrentUsagesProperty;
-        public static readonly Catel.Data.PropertyData PurchaseUrlProperty;
+        public static readonly Catel.Data.IPropertyData CurrentUsersProperty;
+        public static readonly Catel.Data.IPropertyData MaximumNumberOfConcurrentUsagesProperty;
+        public static readonly Catel.Data.IPropertyData PurchaseUrlProperty;
         public NetworkLicenseUsageViewModel(Orc.LicenseManager.NetworkValidationResult networkValidationResult, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IProcessService processService, Orc.LicenseManager.INetworkLicenseService networkLicenseService, Catel.Services.IDispatcherService dispatcherService) { }
         public Catel.MVVM.Command BuyLicenses { get; }
         public Catel.MVVM.Command CloseApplication { get; }
@@ -132,13 +132,13 @@ namespace Orc.LicenseManager.Views
     public class LicenseWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public LicenseWindow() { }
-        public LicenseWindow(Orc.LicenseManager.ViewModels.LicenseViewModel viewModel) { }
+        public LicenseWindow(Orc.LicenseManager.ViewModels.LicenseViewModel? viewModel) { }
         public void InitializeComponent() { }
     }
     public class NetworkLicenseUsageWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public NetworkLicenseUsageWindow() { }
-        public NetworkLicenseUsageWindow(Orc.LicenseManager.ViewModels.NetworkLicenseUsageViewModel viewModel) { }
+        public NetworkLicenseUsageWindow(Orc.LicenseManager.ViewModels.NetworkLicenseUsageViewModel? viewModel) { }
         public void InitializeComponent() { }
     }
 }

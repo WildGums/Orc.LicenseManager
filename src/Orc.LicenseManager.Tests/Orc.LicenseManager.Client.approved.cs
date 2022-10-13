@@ -11,9 +11,9 @@ namespace Orc.LicenseManager
     public class ApplicationIdService : Orc.LicenseManager.IApplicationIdService
     {
         public ApplicationIdService() { }
-        public string ApplicationId { get; set; }
-        public string CompanyName { get; set; }
-        public string ProductName { get; set; }
+        public string? ApplicationId { get; set; }
+        public string? CompanyName { get; set; }
+        public string? ProductName { get; set; }
     }
     public class EmptyLicenseVisualizerService : Orc.LicenseManager.ILicenseVisualizerService
     {
@@ -28,9 +28,9 @@ namespace Orc.LicenseManager
     }
     public interface IApplicationIdService
     {
-        string ApplicationId { get; set; }
-        string CompanyName { get; set; }
-        string ProductName { get; set; }
+        string? ApplicationId { get; set; }
+        string? CompanyName { get; set; }
+        string? ProductName { get; set; }
     }
     public interface IExpirationBehavior
     {
@@ -46,8 +46,8 @@ namespace Orc.LicenseManager
     }
     public interface ILicenseLocationService
     {
-        string GetLicenseLocation(Orc.LicenseManager.LicenseMode licenseMode);
-        string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode);
+        string? GetLicenseLocation(Orc.LicenseManager.LicenseMode licenseMode);
+        string? LoadLicense(Orc.LicenseManager.LicenseMode licenseMode);
     }
     public interface ILicenseModeService
     {
@@ -56,8 +56,8 @@ namespace Orc.LicenseManager
     }
     public interface ILicenseService
     {
-        Portable.Licensing.License CurrentLicense { get; }
-        event System.EventHandler<System.EventArgs> CurrentLicenseChanged;
+        Portable.Licensing.License? CurrentLicense { get; }
+        event System.EventHandler<System.EventArgs>? CurrentLicenseChanged;
         bool LicenseExists(Orc.LicenseManager.LicenseMode licenseMode = 0);
         string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode = 0);
         System.Collections.Generic.List<Orc.LicenseManager.XmlDataModel> LoadXmlFromLicense(string license);
@@ -68,12 +68,12 @@ namespace Orc.LicenseManager
     {
         public static bool AnyExistingLicense(this Orc.LicenseManager.ILicenseService licenseService) { }
         public static System.DateTime? GetCurrentLicenseExpirationDateTime(this Orc.LicenseManager.ILicenseService licenseService) { }
-        public static string LoadExistingLicense(this Orc.LicenseManager.ILicenseService licenseService) { }
+        public static string? LoadExistingLicense(this Orc.LicenseManager.ILicenseService licenseService) { }
     }
     public interface ILicenseValidationService
     {
         System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateLicenseAsync(string license);
-        System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly assembly = null);
+        System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly? assembly = null);
         System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateXmlAsync(string license);
     }
     public static class ILicenseValidationServiceExtensions { }
@@ -88,7 +88,7 @@ namespace Orc.LicenseManager
     }
     public interface INetworkLicenseService
     {
-        string ComputerId { get; }
+        string? ComputerId { get; }
         System.TimeSpan PollingInterval { get; }
         System.TimeSpan SearchTimeout { get; set; }
         event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
@@ -119,16 +119,16 @@ namespace Orc.LicenseManager
     }
     public class LicenseInfo : Catel.Data.ModelBase
     {
-        public static readonly Catel.Data.PropertyData ImageUriProperty;
-        public static readonly Catel.Data.PropertyData InfoUrlProperty;
-        public static readonly Catel.Data.PropertyData KeyProperty;
-        public static readonly Catel.Data.PropertyData PurchaseUrlProperty;
-        public static readonly Catel.Data.PropertyData TextProperty;
-        public static readonly Catel.Data.PropertyData TitleProperty;
-        public LicenseInfo() { }
+        public static readonly Catel.Data.IPropertyData ImageUriProperty;
+        public static readonly Catel.Data.IPropertyData InfoUrlProperty;
+        public static readonly Catel.Data.IPropertyData KeyProperty;
+        public static readonly Catel.Data.IPropertyData PurchaseUrlProperty;
+        public static readonly Catel.Data.IPropertyData TextProperty;
+        public static readonly Catel.Data.IPropertyData TitleProperty;
+        public LicenseInfo(string title, string purchaseUrl, string infoUrl, string text, string imageUri, string? key = null) { }
         public string ImageUri { get; set; }
         public string InfoUrl { get; set; }
-        public string Key { get; set; }
+        public string? Key { get; set; }
         public string PurchaseUrl { get; set; }
         public string Text { get; set; }
         public string Title { get; set; }
@@ -136,8 +136,8 @@ namespace Orc.LicenseManager
     public class LicenseLocationService : Orc.LicenseManager.ILicenseLocationService
     {
         public LicenseLocationService(Orc.LicenseManager.IApplicationIdService applicationIdService, Orc.FileSystem.IFileService fileService, Catel.Services.IAppDataService appDataService) { }
-        public virtual string GetLicenseLocation(Orc.LicenseManager.LicenseMode licenseMode) { }
-        public string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode) { }
+        public virtual string? GetLicenseLocation(Orc.LicenseManager.LicenseMode licenseMode) { }
+        public string? LoadLicense(Orc.LicenseManager.LicenseMode licenseMode) { }
     }
     public enum LicenseMode
     {
@@ -160,8 +160,8 @@ namespace Orc.LicenseManager
     public class LicenseService : Orc.LicenseManager.ILicenseService
     {
         public LicenseService(Orc.LicenseManager.ILicenseLocationService licenseLocationService, Orc.FileSystem.IFileService fileService) { }
-        public Portable.Licensing.License CurrentLicense { get; }
-        public event System.EventHandler<System.EventArgs> CurrentLicenseChanged;
+        public Portable.Licensing.License? CurrentLicense { get; }
+        public event System.EventHandler<System.EventArgs>? CurrentLicenseChanged;
         public bool LicenseExists(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
         public string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
         public System.Collections.Generic.List<Orc.LicenseManager.XmlDataModel> LoadXmlFromLicense(string license) { }
@@ -171,14 +171,14 @@ namespace Orc.LicenseManager
     public class LicenseValidationResult
     {
         public LicenseValidationResult() { }
-        public string AdditionalInfo { get; set; }
+        public string? AdditionalInfo { get; set; }
         public bool IsValid { get; set; }
     }
     public class LicenseValidationService : Orc.LicenseManager.ILicenseValidationService
     {
         public LicenseValidationService(Orc.LicenseManager.IApplicationIdService applicationIdService, Orc.LicenseManager.IExpirationBehavior expirationBehavior, Orc.LicenseManager.IIdentificationService identificationService, Orc.LicenseManager.IMachineLicenseValidationService machineLicenseValidationService) { }
         public System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateLicenseAsync(string license) { }
-        public System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly assembly = null) { }
+        public System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly? assembly = null) { }
         public System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateXmlAsync(string license) { }
     }
     public class MachineLicenseValidationService : Orc.LicenseManager.IMachineLicenseValidationService
@@ -190,10 +190,10 @@ namespace Orc.LicenseManager
     public class NetworkLicenseService : Orc.LicenseManager.INetworkLicenseService
     {
         public NetworkLicenseService(Orc.LicenseManager.ILicenseService licenseService, Orc.LicenseManager.IIdentificationService identificationService) { }
-        public string ComputerId { get; }
+        public string? ComputerId { get; }
         public System.TimeSpan PollingInterval { get; }
         public System.TimeSpan SearchTimeout { get; set; }
-        public event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
+        public event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs>? Validated;
         public virtual void Initialize(System.TimeSpan pollingInterval = default) { }
         public virtual System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync() { }
     }
@@ -228,7 +228,7 @@ namespace Orc.LicenseManager
     }
     public static class NetworkValidationResultExtensions
     {
-        public static Orc.LicenseManager.NetworkLicenseUsage GetLatestUser(this Orc.LicenseManager.NetworkValidationResult validationResult) { }
+        public static Orc.LicenseManager.NetworkLicenseUsage? GetLatestUser(this Orc.LicenseManager.NetworkValidationResult validationResult) { }
         public static bool IsCurrentUserLatestUser(this Orc.LicenseManager.NetworkValidationResult validationResult) { }
     }
     public class PreventUsageOfAnyVersionExpirationBehavior : Orc.LicenseManager.ExpirationBehaviorBase
@@ -244,10 +244,10 @@ namespace Orc.LicenseManager
     public class ServerLicenseValidation
     {
         public ServerLicenseValidation() { }
-        public string License { get; set; }
-        public string MachineId { get; set; }
-        public string ProductName { get; set; }
-        public string ProductVersion { get; set; }
+        public string? License { get; set; }
+        public string? MachineId { get; set; }
+        public string? ProductName { get; set; }
+        public string? ProductVersion { get; set; }
     }
     public class SimpleLicenseService : Orc.LicenseManager.ISimpleLicenseService
     {
@@ -257,7 +257,6 @@ namespace Orc.LicenseManager
     }
     public class XmlDataModel
     {
-        public XmlDataModel() { }
         public XmlDataModel(string name, string value) { }
         public string Name { get; set; }
         public string Value { get; set; }
