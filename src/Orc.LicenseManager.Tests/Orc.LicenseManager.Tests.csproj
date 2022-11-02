@@ -14,7 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="5.7.3" />
     <PackageReference Include="Catel.Core" Version="6.0.0-alpha1019" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.6.4" PrivateAssets="all">
@@ -25,6 +24,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.0" PrivateAssets="all" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
     <PackageReference Include="PublicApiGenerator" Version="10.3.0" PrivateAssets="all" />
+    <PackageReference Include="Verify.NUnit" Version="18.1.1" />
   </ItemGroup>
 
   <ItemGroup>
