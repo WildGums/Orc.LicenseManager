@@ -5,7 +5,6 @@
     using System.Windows;
     using Catel.IoC;
     using Catel.Logging;
-    using Catel.Reflection;
     using Catel.Services;
     using Orchestra;
 
