@@ -12,7 +12,7 @@
 
         private static bool _isInErrorHandling;
 
-        public static async Task DefaultNetworkLicenseServiceValidationHandlerAsync(object sender, NetworkValidatedEventArgs e)
+        public static async Task DefaultNetworkLicenseServiceValidationHandlerAsync(object? sender, NetworkValidatedEventArgs e)
         {
             if (_isInErrorHandling)
             {
