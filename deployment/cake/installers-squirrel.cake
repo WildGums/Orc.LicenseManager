@@ -120,6 +120,7 @@ public class SquirrelInstaller : IInstaller
 
         if (!string.IsNullOrWhiteSpace(BuildContext.General.CodeSign.CertificateSubjectName))
         {
+            // Note: Squirrel uses it's own sign tool, so make sure to follow their specs
             signToolCommand = string.Format("/a /t {0} /n {1}", BuildContext.General.CodeSign.TimeStampUri, 
                 BuildContext.General.CodeSign.CertificateSubjectName);
         }

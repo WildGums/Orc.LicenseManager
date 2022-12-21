@@ -130,9 +130,7 @@ public class ComponentsProcessor : ProcessorBase
             // are properties passed in using the command line)
             var outputDirectory = GetProjectOutputDirectory(BuildContext, component);
             CakeContext.Information("Output directory: '{0}'", outputDirectory);
-            msBuildSettings.WithProperty("OverridableOutputRootPath", BuildContext.General.OutputRootDirectory);
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-            msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
 
             // SourceLink specific stuff
             if (IsSourceLinkSupported(BuildContext, component, projectFileName))
@@ -232,9 +230,7 @@ public class ComponentsProcessor : ProcessorBase
             // Note: we need to set OverridableOutputPath because we need to be able to respect
             // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
             // are properties passed in using the command line)
-            msBuildSettings.WithProperty("OverridableOutputRootPath", BuildContext.General.OutputRootDirectory);
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-            msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
             msBuildSettings.WithProperty("ConfigurationName", configurationName);
             msBuildSettings.WithProperty("PackageVersion", BuildContext.General.Version.NuGet);
 
@@ -268,7 +264,14 @@ public class ComponentsProcessor : ProcessorBase
             {
                 CakeContext.Information("Allowing build and package restore during package phase since this is a Blazor project which requires the 'obj' directory");
 
-                msBuildSettings.WithProperty("ResolveNuGetPackages", "true");
+                // Don't use WithProperty since that will concatenate, and we need to overwrite the
+                // value here
+                //msBuildSettings.WithProperty("ResolveNuGetPackages", "true");
+                msBuildSettings.Properties["ResolveNuGetPackages"] = new List<string>
+                { 
+                    "true"
+                };
+                
                 msBuildSettings.Restore = true;
                 noBuild = false;
             }

@@ -16,14 +16,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.MVVM" Version="6.0.0-alpha1014" />
+    <PackageReference Include="Catel.MVVM" Version="6.0.0-alpha1068" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.6.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.6.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="Orc.Controls" Version="5.0.0-alpha0053" />
+    <PackageReference Include="Orc.Controls" Version="5.0.0-alpha0118" />
     <PackageReference Include="Orchestra.Core" Version="7.0.0-alpha0051" />
   </ItemGroup>
 
