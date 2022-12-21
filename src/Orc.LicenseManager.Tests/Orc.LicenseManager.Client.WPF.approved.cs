@@ -33,7 +33,7 @@ namespace Orc.LicenseManager
     }
     public static class WpfNetworkValidationHelper
     {
-        public static System.Threading.Tasks.Task DefaultNetworkLicenseServiceValidationHandlerAsync(object sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
+        public static System.Threading.Tasks.Task DefaultNetworkLicenseServiceValidationHandlerAsync(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
     }
 }
 namespace Orc.LicenseManager.ViewModels
