@@ -10,7 +10,7 @@
 
         private static bool IsInErrorHandling;
 
-        public static void DefaultNetworkLicenseServiceValidationHandler(object sender, NetworkValidatedEventArgs e)
+        public static void DefaultNetworkLicenseServiceValidationHandler(object? sender, NetworkValidatedEventArgs e)
         {
             if (IsInErrorHandling)
             {

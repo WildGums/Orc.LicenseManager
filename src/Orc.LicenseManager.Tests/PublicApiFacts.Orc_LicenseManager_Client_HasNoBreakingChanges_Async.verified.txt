@@ -216,7 +216,7 @@ namespace Orc.LicenseManager
     }
     public static class NetworkValidationHelper
     {
-        public static void DefaultNetworkLicenseServiceValidationHandler(object sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
+        public static void DefaultNetworkLicenseServiceValidationHandler(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
     }
     public class NetworkValidationResult
     {
