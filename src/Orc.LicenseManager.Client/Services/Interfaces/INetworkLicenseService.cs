@@ -37,6 +37,6 @@
         /// <summary>
         /// Occurs every time when the network validation has finished.
         /// </summary>
-        event EventHandler<NetworkValidatedEventArgs> Validated;
+        event EventHandler<NetworkValidatedEventArgs>? Validated;
     }
 }
