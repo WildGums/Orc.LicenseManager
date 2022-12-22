@@ -91,7 +91,7 @@ namespace Orc.LicenseManager
         string? ComputerId { get; }
         System.TimeSpan PollingInterval { get; }
         System.TimeSpan SearchTimeout { get; set; }
-        event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs> Validated;
+        event System.EventHandler<Orc.LicenseManager.NetworkValidatedEventArgs>? Validated;
         void Initialize(System.TimeSpan pollingInterval = default);
         System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync();
     }
