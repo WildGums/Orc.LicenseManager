@@ -1,9 +1,8 @@
-﻿namespace Orc.LicenseManager.Server
-{
-    using System;
+﻿namespace Orc.LicenseManager.Server;
 
-    public interface IModifyDate
-    {
-        DateTime ModificationDate { get; set; }
-    }
+using System;
+
+public interface IModifyDate
+{
+    DateTime ModificationDate { get; set; }
 }

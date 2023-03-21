@@ -1,6 +1,5 @@
-﻿namespace Orc.LicenseManager.Server
+﻿namespace Orc.LicenseManager.Server;
+
+public interface IDates : IModifyDate, ICreateDate
 {
-    public interface IDates : IModifyDate, ICreateDate
-    {
-    }
 }

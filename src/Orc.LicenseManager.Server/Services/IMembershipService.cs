@@ -1,7 +1,6 @@
-﻿namespace Orc.LicenseManager.Server.Services
+﻿namespace Orc.LicenseManager.Server.Services;
+
+public interface IMembershipService
 {
-    public interface IMembershipService
-    {
-        string GetUserId();
-    }
+    string GetUserId();
 }

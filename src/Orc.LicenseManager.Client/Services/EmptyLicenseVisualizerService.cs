@@ -1,10 +1,9 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+public class EmptyLicenseVisualizerService : ILicenseVisualizerService
 {
-    public class EmptyLicenseVisualizerService : ILicenseVisualizerService
+    public void ShowLicense()
     {
-        public void ShowLicense()
-        {
-            // Empty for a reason
-        }
+        // Empty for a reason
     }
 }

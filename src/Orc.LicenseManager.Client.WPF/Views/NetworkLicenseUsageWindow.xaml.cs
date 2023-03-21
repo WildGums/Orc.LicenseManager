@@ -1,19 +1,18 @@
-﻿namespace Orc.LicenseManager.Views
+﻿namespace Orc.LicenseManager.Views;
+
+using Catel.Windows;
+using ViewModels;
+
+public partial class NetworkLicenseUsageWindow
 {
-    using Catel.Windows;
-    using ViewModels;
-
-    public partial class NetworkLicenseUsageWindow
+    public NetworkLicenseUsageWindow()
+        : this(null)
     {
-        public NetworkLicenseUsageWindow()
-            : this(null)
-        {
-        }
+    }
 
-        public NetworkLicenseUsageWindow(NetworkLicenseUsageViewModel? viewModel)
-            : base(viewModel, DataWindowMode.Custom)
-        {
-            InitializeComponent();
-        }
+    public NetworkLicenseUsageWindow(NetworkLicenseUsageViewModel? viewModel)
+        : base(viewModel, DataWindowMode.Custom)
+    {
+        InitializeComponent();
     }
 }

@@ -76,7 +76,6 @@ namespace Orc.LicenseManager
         System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly? assembly = null);
         System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateXmlAsync(string license);
     }
-    public static class ILicenseValidationServiceExtensions { }
     public interface ILicenseVisualizerService
     {
         void ShowLicense();

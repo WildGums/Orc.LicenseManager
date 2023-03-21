@@ -1,6 +1,5 @@
-﻿namespace Orc.LicenseManager.Server.Services
+﻿namespace Orc.LicenseManager.Server.Services;
+
+public interface IDbManagementService
 {
-    public interface IDbManagementService
-    {
-    }
 }

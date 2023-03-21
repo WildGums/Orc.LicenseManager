@@ -1,6 +1,5 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+public static class INetworkLicenseServiceExtensions
 {
-    public static class INetworkLicenseServiceExtensions
-    {
-    }
 }

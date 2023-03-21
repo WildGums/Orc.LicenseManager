@@ -1,8 +1,7 @@
-﻿namespace Orc.LicenseManager.Server
-{
-    using Microsoft.AspNet.Identity.EntityFramework;
+﻿namespace Orc.LicenseManager.Server;
 
-    public class User : IdentityUser
-    {
-    }
+using Microsoft.AspNet.Identity.EntityFramework;
+
+public class User : IdentityUser
+{
 }

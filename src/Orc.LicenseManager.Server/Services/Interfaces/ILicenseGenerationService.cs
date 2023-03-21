@@ -1,9 +1,8 @@
-﻿namespace Orc.LicenseManager.Server.Services
+﻿namespace Orc.LicenseManager.Server.Services;
+
+public interface ILicenseGenerationService
 {
-    public interface ILicenseGenerationService
-    {
-        void GenerateLicenseValue(LicensePoco license);
-        void GenerateKeysForProduct(Product product);
-        void GeneratePassPhraseForProduct(Product product);
-    }
+    void GenerateLicenseValue(LicensePoco license);
+    void GenerateKeysForProduct(Product product);
+    void GeneratePassPhraseForProduct(Product product);
 }

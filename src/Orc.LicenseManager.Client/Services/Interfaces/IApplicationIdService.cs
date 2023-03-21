@@ -1,11 +1,10 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+public interface IApplicationIdService
 {
-    public interface IApplicationIdService
-    {
-        string? ApplicationId { get; set; }
+    string? ApplicationId { get; set; }
 
-        string? CompanyName { get; set; }
+    string? CompanyName { get; set; }
 
-        string? ProductName { get; set; }
-    }
+    string? ProductName { get; set; }
 }
