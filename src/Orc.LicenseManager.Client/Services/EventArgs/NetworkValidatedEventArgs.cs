@@ -1,14 +1,13 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+using System;
+
+public class NetworkValidatedEventArgs : EventArgs
 {
-    using System;
-
-    public class NetworkValidatedEventArgs : EventArgs
+    public NetworkValidatedEventArgs(NetworkValidationResult validationResult)
     {
-        public NetworkValidatedEventArgs(NetworkValidationResult validationResult)
-        {
-            ValidationResult = validationResult;
-        }
-
-        public NetworkValidationResult ValidationResult { get; private set; }
+        ValidationResult = validationResult;
     }
+
+    public NetworkValidationResult ValidationResult { get; }
 }

@@ -1,10 +1,9 @@
-﻿namespace Orc.LicenseManager
-{
-    using Catel.Data;
+﻿namespace Orc.LicenseManager;
 
-    public interface IMachineLicenseValidationService
-    {
-        IValidationContext Validate(string machineIdToValidate);
-        int Threshold { get; set; }
-    }
+using Catel.Data;
+
+public interface IMachineLicenseValidationService
+{
+    IValidationContext Validate(string machineIdToValidate);
+    int Threshold { get; set; }
 }

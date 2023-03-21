@@ -1,9 +1,8 @@
-﻿namespace Orc.LicenseManager.Server.Services
+﻿namespace Orc.LicenseManager.Server.Services;
+
+public class DbManagementService : IDbManagementService
 {
-    public class DbManagementService : IDbManagementService
+    public void PerformanceMaintenanceIfRequired()
     {
-        public void PerformanceMaintenanceIfRequired()
-        {
-        }
     }
 }

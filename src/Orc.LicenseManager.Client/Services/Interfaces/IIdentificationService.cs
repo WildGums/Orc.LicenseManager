@@ -1,7 +1,6 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+public interface IIdentificationService
 {
-    public interface IIdentificationService
-    {
-        string GetMachineId();
-    }
+    string GetMachineId();
 }

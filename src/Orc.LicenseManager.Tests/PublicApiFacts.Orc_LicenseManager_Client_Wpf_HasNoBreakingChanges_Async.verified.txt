@@ -44,6 +44,7 @@ namespace Orc.LicenseManager.ViewModels
         public ClipBoardViewModel() { }
         public string ClipBoardText { get; set; }
         public Catel.MVVM.TaskCommand Exit { get; }
+        public override string Title { get; }
     }
     public class LicenseViewModel : Catel.MVVM.ViewModelBase
     {

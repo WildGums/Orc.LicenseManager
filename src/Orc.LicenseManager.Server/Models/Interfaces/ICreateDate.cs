@@ -1,9 +1,8 @@
-﻿namespace Orc.LicenseManager.Server
-{
-    using System;
+﻿namespace Orc.LicenseManager.Server;
 
-    public interface ICreateDate
-    {
-        DateTime CreationDate { get; set; }
-    }
+using System;
+
+public interface ICreateDate
+{
+    DateTime CreationDate { get; set; }
 }

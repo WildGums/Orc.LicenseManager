@@ -1,9 +1,8 @@
-﻿namespace Orc.LicenseManager
-{
-    public class LicenseValidationResult
-    {
-        public bool IsValid { get; set; }
+﻿namespace Orc.LicenseManager;
 
-        public string? AdditionalInfo { get; set; }
-    }
+public class LicenseValidationResult
+{
+    public bool IsValid { get; set; }
+
+    public string? AdditionalInfo { get; set; }
 }

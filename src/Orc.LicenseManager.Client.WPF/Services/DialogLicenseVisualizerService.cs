@@ -1,44 +1,43 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+using System;
+using Catel.Logging;
+using Catel.Services;
+using ViewModels;
+
+public class DialogLicenseVisualizerService : ILicenseVisualizerService
 {
-    using System;
-    using Catel.Logging;
-    using Catel.Services;
-    using ViewModels;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public class DialogLicenseVisualizerService : ILicenseVisualizerService
+    private readonly IUIVisualizerService _uiVisualizerService;
+    private readonly ILicenseInfoService _licenseInfoService;
+    private readonly IDispatcherService _dispatcherService;
+
+    public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService,
+        IDispatcherService dispatcherService)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(uiVisualizerService);
+        ArgumentNullException.ThrowIfNull(licenseInfoService);
+        ArgumentNullException.ThrowIfNull(dispatcherService);
 
-        private readonly IUIVisualizerService _uiVisualizerService;
-        private readonly ILicenseInfoService _licenseInfoService;
-        private readonly IDispatcherService _dispatcherService;
+        _uiVisualizerService = uiVisualizerService;
+        _licenseInfoService = licenseInfoService;
+        _dispatcherService = dispatcherService;
+    }
 
-        public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService,
-            IDispatcherService dispatcherService)
-        {
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-            ArgumentNullException.ThrowIfNull(licenseInfoService);
-            ArgumentNullException.ThrowIfNull(dispatcherService);
-
-            _uiVisualizerService = uiVisualizerService;
-            _licenseInfoService = licenseInfoService;
-            _dispatcherService = dispatcherService;
-        }
-
-        /// <summary>
-        /// Shows the single license dialog including all company info. You will see the about box.
-        /// </summary>
-        public void ShowLicense()
-        {
-            Log.Debug("Showing license dialog with company info");
+    /// <summary>
+    /// Shows the single license dialog including all company info. You will see the about box.
+    /// </summary>
+    public void ShowLicense()
+    {
+        Log.Debug("Showing license dialog with company info");
 
 #pragma warning disable AvoidAsyncVoid
-            _dispatcherService.Invoke(async () =>
-            {
-                var licenseInfo = _licenseInfoService.GetLicenseInfo();
-                await _uiVisualizerService.ShowDialogAsync<LicenseViewModel>(licenseInfo);
-            }, true);
+        _dispatcherService.Invoke(async () =>
+        {
+            var licenseInfo = _licenseInfoService.GetLicenseInfo();
+            await _uiVisualizerService.ShowDialogAsync<LicenseViewModel>(licenseInfo);
+        }, true);
 #pragma warning restore AvoidAsyncVoid
-        }
     }
 }

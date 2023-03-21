@@ -1,10 +1,9 @@
-﻿namespace Orc.LicenseManager.Server.Services
-{
-    using System.Threading.Tasks;
-    using Models;
+﻿namespace Orc.LicenseManager.Server.Services;
 
-    public interface ILicenseValidationService
-    {
-        Task<LicenseValidationResult> ValidateLicenseAsync(string license);
-    }
+using System.Threading.Tasks;
+using Models;
+
+public interface ILicenseValidationService
+{
+    Task<LicenseValidationResult> ValidateLicenseAsync(string license);
 }

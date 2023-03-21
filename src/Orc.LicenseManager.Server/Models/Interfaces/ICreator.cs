@@ -1,8 +1,7 @@
-﻿namespace Orc.LicenseManager.Server
+﻿namespace Orc.LicenseManager.Server;
+
+public interface ICreator   
 {
-    public interface ICreator   
-    {
-        string CreatorId { get; set; }
-        User Creator { get; set; }
-    }
+    string CreatorId { get; set; }
+    User Creator { get; set; }
 }

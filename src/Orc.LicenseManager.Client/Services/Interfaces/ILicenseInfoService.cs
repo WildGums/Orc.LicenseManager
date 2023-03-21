@@ -1,7 +1,6 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+public interface ILicenseInfoService
 {
-    public interface ILicenseInfoService
-    {
-        LicenseInfo GetLicenseInfo();
-    }
+    LicenseInfo GetLicenseInfo();
 }

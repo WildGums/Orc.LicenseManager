@@ -1,16 +1,15 @@
-﻿namespace Orc.LicenseManager.Server
+﻿namespace Orc.LicenseManager.Server;
+
+using Microsoft.AspNet.Identity.EntityFramework;
+
+public class Role : IdentityRole
 {
-    using Microsoft.AspNet.Identity.EntityFramework;
-
-    public class Role : IdentityRole
+    public Role()
     {
-        public Role()
-        {
-        }
+    }
 
-        public Role(string rolename)
-        {
-            Name = rolename;
-        }
+    public Role(string rolename)
+    {
+        Name = rolename;
     }
 }

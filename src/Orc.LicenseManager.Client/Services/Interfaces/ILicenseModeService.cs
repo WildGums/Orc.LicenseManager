@@ -1,10 +1,9 @@
-﻿namespace Orc.LicenseManager
-{
-    using System.Collections.Generic;
+﻿namespace Orc.LicenseManager;
 
-    public interface ILicenseModeService
-    {
-        List<LicenseMode> GetAvailableLicenseModes();
-        bool IsLicenseModeAvailable(LicenseMode licenseMode);
-    }
+using System.Collections.Generic;
+
+public interface ILicenseModeService
+{
+    List<LicenseMode> GetAvailableLicenseModes();
+    bool IsLicenseModeAvailable(LicenseMode licenseMode);
 }
