@@ -24,7 +24,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" PrivateAssets="all" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
     <PackageReference Include="PublicApiGenerator" Version="11.0.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="20.8.2" />
+    <PackageReference Include="Verify.NUnit" Version="21.0.0" />
   </ItemGroup>
 
   <ItemGroup>
