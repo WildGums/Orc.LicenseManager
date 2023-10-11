@@ -27,7 +27,7 @@
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
-    <PackageReference Include="Orc.FileSystem" Version="5.0.0-alpha0226" />
+    <PackageReference Include="Orc.FileSystem" Version="5.0.0-alpha0322" />
     <PackageReference Include="Orc.SystemInfo" Version="5.0.0-alpha0233" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
   </ItemGroup>
