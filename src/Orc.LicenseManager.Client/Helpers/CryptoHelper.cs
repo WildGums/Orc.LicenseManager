@@ -25,7 +25,7 @@ internal static class CryptoHelper
         var ivStringBytes = GenerateRandomBytes(Keysize);
         var plainTextBytes = Encoding.GetBytes(plainText);
 
-        using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations);
+        using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations, HashAlgorithmName.SHA256);
         var keyBytes = password.GetBytes(Keysize / 8);
 
         using var symmetricKey = Aes.Create();
@@ -68,7 +68,7 @@ internal static class CryptoHelper
         // Get the actual cipher text bytes by removing the first 32 bytes from the cipherText string.
         var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip(fixedDataLength * 2).ToArray();
 
-        using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations);
+        using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations, HashAlgorithmName.SHA256);
         var keyBytes = password.GetBytes(fixedDataLength);
 
         using var symmetricKey = Aes.Create();
