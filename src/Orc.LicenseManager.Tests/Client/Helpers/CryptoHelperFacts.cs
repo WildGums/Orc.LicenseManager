@@ -11,8 +11,8 @@ internal class CryptoHelperFacts
     public async Task EncryptTestAsync(string inputText, string inputPassword)
     {
         var text = await CryptoHelper.EncryptAsync(inputText, inputPassword);
-        var actualDecryptedText = await CryptoHelper.DecryptAsync(text, inputPassword); 
+        var actualDecryptedText = await CryptoHelper.DecryptAsync(text, inputPassword);
 
-        Assert.AreEqual(inputText, actualDecryptedText);
+        Assert.That(actualDecryptedText, Is.EqualTo(inputText));
     }
 }

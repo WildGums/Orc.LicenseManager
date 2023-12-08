@@ -16,18 +16,18 @@ public class NetworkLicenseUsageTests
 
             var usage = new NetworkLicenseUsage("computerId", "ip", "userName", "licenseSignature", dateTime);
 
-            Assert.AreEqual("computerId", usage.ComputerId);
-            Assert.AreEqual("ip", usage.Ip);
-            Assert.AreEqual("licenseSignature", usage.LicenseSignature);
-            Assert.AreEqual("userName", usage.UserName);
+            Assert.That(usage.ComputerId, Is.EqualTo("computerId"));
+            Assert.That(usage.Ip, Is.EqualTo("ip"));
+            Assert.That(usage.LicenseSignature, Is.EqualTo("licenseSignature"));
+            Assert.That(usage.UserName, Is.EqualTo("userName"));
 
             var networkString = await usage.ToNetworkMessageAsync();
             var usage2 = await NetworkLicenseUsage.ParseAsync(networkString);
 
-            Assert.AreEqual(usage.ComputerId, usage2.ComputerId);
-            Assert.AreEqual(usage.Ip, usage2.Ip);
-            Assert.AreEqual(usage.LicenseSignature, usage2.LicenseSignature);
-            Assert.AreEqual(usage.UserName, usage2.UserName);
+            Assert.That(usage2.ComputerId, Is.EqualTo(usage.ComputerId));
+            Assert.That(usage2.Ip, Is.EqualTo(usage.Ip));
+            Assert.That(usage2.LicenseSignature, Is.EqualTo(usage.LicenseSignature));
+            Assert.That(usage2.UserName, Is.EqualTo(usage.UserName));
         }
     }
 }

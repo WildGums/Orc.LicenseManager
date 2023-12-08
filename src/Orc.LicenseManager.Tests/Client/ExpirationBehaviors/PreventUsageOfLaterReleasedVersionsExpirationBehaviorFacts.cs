@@ -24,7 +24,7 @@ public class PreventUsageOfLaterReleasedVersionsExpirationBehaviorFacts
         var license = licenseBuilder.CreateAndSignWithPrivateKey(TestEnvironment.LicenseKeys.Private, TestEnvironment.LicenseKeys.PassPhrase);
 
         var expirationBehavior = new PreventUsageOfAnyVersionExpirationBehavior();
-            
-        Assert.AreEqual(expectedValue, expirationBehavior.IsExpired(license, expirationDate, currentDate));
+
+        Assert.That(expirationBehavior.IsExpired(license, expirationDate, currentDate), Is.EqualTo(expectedValue));
     }
 }
