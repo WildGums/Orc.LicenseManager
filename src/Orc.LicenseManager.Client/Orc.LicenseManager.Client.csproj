@@ -16,7 +16,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Catel.Core" Version="6.0.0-alpha1311" />
+    <PackageReference Include="Catel.Core" Version="6.0.0" />
     <PackageReference Include="Catel.Fody" Version="4.9.0" PrivateAssets="all" />
     <PackageReference Include="Costura.Fody" Version="5.7.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all">
@@ -27,8 +27,8 @@
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="all" />
-    <PackageReference Include="Orc.FileSystem" Version="5.0.0-alpha0356" />
-    <PackageReference Include="Orc.SystemInfo" Version="5.0.0-alpha0381" />
+    <PackageReference Include="Orc.FileSystem" Version="5.0.0" />
+    <PackageReference Include="Orc.SystemInfo" Version="5.0.0" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
   </ItemGroup>
 
