@@ -1,20 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseType.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using Catel.ComponentModel;
 
-namespace Orc.LicenseManager
+public enum LicenseMode
 {
-    using Catel.ComponentModel;
+    [DisplayName("CurrentUser")]
+    CurrentUser,
 
-    public enum LicenseMode
-    {
-        [DisplayName("CurrentUser")]
-        CurrentUser,
-
-        [DisplayName("AllUsers")]
-        MachineWide
-    }
+    [DisplayName("AllUsers")]
+    MachineWide
 }

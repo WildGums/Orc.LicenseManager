@@ -1,50 +1,37 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleLicenseWindow.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager.Views;
 
+using Catel;
+using Catel.Windows;
+using ViewModels;
 
-namespace Orc.LicenseManager.Views
+public partial class LicenseWindow : DataWindow
 {
-    using Catel;
-    using Catel.Windows;
-    using ViewModels;
-
     /// <summary>
-    /// Interaction logic for SingleLicenseWindow.xaml.
+    /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
     /// </summary>
-    public partial class LicenseWindow : DataWindow
+    public LicenseWindow()
+        : this(null)
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
-        /// </summary>
-        public LicenseWindow()
-            : this(null)
+    }
+
+    /// <summary>5
+    /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
+    /// </summary>
+    /// <param name="viewModel">The view model.</param>
+    public LicenseWindow(LicenseViewModel? viewModel)
+        : base(viewModel, DataWindowMode.OkCancel)
+    {
+        InitializeComponent();
+
+        if (CatelEnvironment.IsInDesignMode)
         {
+            return;
         }
 
-        /// <summary>5
-        /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        public LicenseWindow(LicenseViewModel viewModel)
-            : base(viewModel, DataWindowMode.OkCancel)
-        {
-            InitializeComponent();
+        LicenseManager.ResourceHelper.EnsureStyles();
 
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                return;
-            }
+        this.ApplyIconFromApplication();
 
-            LicenseManager.ResourceHelper.EnsureStyles();
-
-            this.ApplyIconFromApplication();
-
-            this.RemoveCloseButton();
-        }
-        #endregion
+        this.RemoveCloseButton();
     }
 }

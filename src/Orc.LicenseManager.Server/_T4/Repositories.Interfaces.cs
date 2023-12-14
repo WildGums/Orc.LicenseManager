@@ -1,31 +1,24 @@
-using System.Data.Entity;
 using Orc.EntityFramework.Repositories;
-using Orc.EntityFramework;
-using Catel.IoC;
-using Orc.LicenseManager.Server.Repositories;
-using Orc.LicenseManager.Server;
 
-namespace Orc.LicenseManager.Server.Repositories
+namespace Orc.LicenseManager.Server.Repositories;
+
+public partial interface ILicensePocoRepository : IEntityRepository<LicensePoco, int>
 {
-	public partial interface ILicensePocoRepository : IEntityRepository<LicensePoco, int>
-	{
 		
-	} 
-	public partial interface IProductRepository : IEntityRepository<Product, int>
-	{
+} 
+public partial interface IProductRepository : IEntityRepository<Product, int>
+{
 		
-	} 
-	public partial interface ICustomerRepository : IEntityRepository<Customer, int>
-	{
+} 
+public partial interface ICustomerRepository : IEntityRepository<Customer, int>
+{
 		
-	} 
-	public partial interface IRoleRepository : IEntityRepository<Role, string>
-	{
+} 
+public partial interface IRoleRepository : IEntityRepository<Role, string>
+{
 		
-	} 
-	public partial interface IUserRepository : IEntityRepository<User, string>
-	{
+} 
+public partial interface IUserRepository : IEntityRepository<User, string>
+{
 		
-	} 
 }
-

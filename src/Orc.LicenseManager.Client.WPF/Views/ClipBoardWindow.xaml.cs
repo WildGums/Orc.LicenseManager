@@ -1,38 +1,30 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClipBoardWindow.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager.Views;
 
+using Catel.Windows;
+using ViewModels;
 
-namespace Orc.LicenseManager.Views
+/// <summary>
+/// Interaction logic for ClipBoardWindow.xaml.
+/// </summary>
+public partial class ClipBoardWindow : DataWindow
 {
-    using Catel.Windows;
-    using ViewModels;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ClipBoardWindow"/> class.
+    /// </summary>
+    public ClipBoardWindow()
+    {
+        InitializeComponent();
+    }
 
     /// <summary>
-    /// Interaction logic for ClipBoardWindow.xaml.
+    /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
     /// </summary>
-    public partial class ClipBoardWindow : DataWindow
+    /// <param name="viewModel">The view model.</param>
+    public ClipBoardWindow(ClipBoardViewModel viewModel)
+        : base(viewModel, DataWindowMode.Custom)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClipBoardWindow"/> class.
-        /// </summary>
-        public ClipBoardWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        public ClipBoardWindow(ClipBoardViewModel viewModel)
-            : base(viewModel, DataWindowMode.Custom)
-        {
-            InitializeComponent();
-
-            this.ApplyIconFromApplication();
-        }
+        this.ApplyIconFromApplication();
     }
 }

@@ -1,12 +1,7 @@
-namespace Orc.LicenseManager.Server
-{
-    using System;
+﻿namespace Orc.LicenseManager.Server;
 
-    public interface ICreator   
-    {
-        #region Properties
-        string CreatorId { get; set; }
-        User Creator { get; set; }
-        #endregion
-    }
+public interface ICreator   
+{
+    string CreatorId { get; set; }
+    User Creator { get; set; }
 }

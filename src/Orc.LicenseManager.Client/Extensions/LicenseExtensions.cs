@@ -1,29 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using System;
+using Portable.Licensing;
 
-namespace Orc.LicenseManager
+public static class LicenseExtensions
 {
-    using Catel;
-    using Catel.Logging;
-    using Portable.Licensing;
-
-    public static class LicenseExtensions
+    public static int GetMaximumConcurrentLicenses(this License license)
     {
-        public static int GetMaximumConcurrentLicenses(this License license)
+        ArgumentNullException.ThrowIfNull(license);
+
+        var maximumConcurrentNumbers = license.Quantity;
+        if (maximumConcurrentNumbers <= 0)
         {
-            Argument.IsNotNull(() => license);
-
-            var maximumConcurrentNumbers = license.Quantity;
-            if (maximumConcurrentNumbers <= 0)
-            {
-                maximumConcurrentNumbers = 1;
-            }
-
-            return maximumConcurrentNumbers;
+            maximumConcurrentNumbers = 1;
         }
+
+        return maximumConcurrentNumbers;
     }
 }

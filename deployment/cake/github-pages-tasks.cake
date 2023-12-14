@@ -1,6 +1,6 @@
 #l "github-pages-variables.cake"
 
-#addin "nuget:?package=Cake.Git&version=2.0.0"
+#addin "nuget:?package=Cake.Git&version=3.0.0"
 
 //-------------------------------------------------------------
 
@@ -111,15 +111,6 @@ public class GitHubPagesProcessor : ProcessorBase
             // Always disable SourceLink
             msBuildSettings.WithProperty("EnableSourceLink", "false");
 
-            // Note: we need to set OverridableOutputPath because we need to be able to respect
-            // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
-            // are properties passed in using the command line)
-            var outputDirectory = GetProjectOutputDirectory(BuildContext, gitHubPage);
-            CakeContext.Information("Output directory: '{0}'", outputDirectory);
-            msBuildSettings.WithProperty("OverridableOutputRootPath", BuildContext.General.OutputRootDirectory);
-            msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-            msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
-
             RunMsBuild(BuildContext, gitHubPage, projectFileName, msBuildSettings, "build");
         }        
     }
@@ -133,9 +124,9 @@ public class GitHubPagesProcessor : ProcessorBase
 
         foreach (var gitHubPage in BuildContext.GitHubPages.Items)
         {
-            if (!ShouldDeployProject(BuildContext, gitHubPage))
+            if (!ShouldPackageProject(BuildContext, gitHubPage))
             {
-                CakeContext.Information("GitHub page '{0}' should not be deployed", gitHubPage);
+                CakeContext.Information("GitHub page '{0}' should not be packaged", gitHubPage);
                 continue;
             }
 
@@ -150,12 +141,8 @@ public class GitHubPagesProcessor : ProcessorBase
 
             var msBuildSettings = new DotNetMSBuildSettings();
 
-            // Note: we need to set OverridableOutputPath because we need to be able to respect
-            // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
-            // are properties passed in using the command line)
-            msBuildSettings.WithProperty("OverridableOutputRootPath", BuildContext.General.OutputRootDirectory);
-            msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-            msBuildSettings.WithProperty("PackageOutputPath", outputDirectory);
+            ConfigureMsBuildForDotNet(BuildContext, msBuildSettings, gitHubPage, "pack");
+
             msBuildSettings.WithProperty("ConfigurationName", BuildContext.General.Solution.ConfigurationName);
             msBuildSettings.WithProperty("PackageVersion", BuildContext.General.Version.NuGet);
 

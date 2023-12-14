@@ -27,7 +27,7 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterTypeIfNotYetRegistered<ILicenseVisualizerService, EmptyLicenseVisualizerService>();
 
-        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        var languageService = serviceLocator.ResolveRequiredType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.LicenseManager.Client", "Orc.LicenseManager.Properties", "Resources"));
     }
 }

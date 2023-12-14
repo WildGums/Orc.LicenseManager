@@ -1,76 +1,67 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseModeService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using System;
+using System.Collections.Generic;
+using Catel.Logging;
+using FileSystem;
 
-namespace Orc.LicenseManager
+public class LicenseModeService : ILicenseModeService
 {
-    using System;
-    using System.Collections.Generic;
-    using Catel;
-    using Catel.Logging;
-    using FileSystem;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public class LicenseModeService : ILicenseModeService
+    private readonly IFileService _fileService;
+    private readonly ILicenseLocationService _licenseLocationService;
+
+    public LicenseModeService(IFileService fileService, ILicenseLocationService licenseLocationService)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(fileService);
+        ArgumentNullException.ThrowIfNull(licenseLocationService);
 
-        private readonly IFileService _fileService;
-        private readonly ILicenseLocationService _licenseLocationService;
+        _fileService = fileService;
+        _licenseLocationService = licenseLocationService;
+    }
 
-        public LicenseModeService(IFileService fileService, ILicenseLocationService licenseLocationService)
+    public List<LicenseMode> GetAvailableLicenseModes()
+    {
+        var licenseModes = new List<LicenseMode>();
+
+        if (IsLicenseModeAvailable(LicenseMode.CurrentUser))
         {
-            Argument.IsNotNull(() => fileService);
-            Argument.IsNotNull(() => licenseLocationService);
-
-            _fileService = fileService;
-            _licenseLocationService = licenseLocationService;
+            licenseModes.Add(LicenseMode.CurrentUser);
         }
 
-        public List<LicenseMode> GetAvailableLicenseModes()
+        if (IsLicenseModeAvailable(LicenseMode.MachineWide))
         {
-            var licenseModes = new List<LicenseMode>();
-
-            if (IsLicenseModeAvailable(LicenseMode.CurrentUser))
-            {
-                licenseModes.Add(LicenseMode.CurrentUser);
-            }
-
-            if (IsLicenseModeAvailable(LicenseMode.MachineWide))
-            {
-                licenseModes.Add(LicenseMode.MachineWide);
-            }
-
-            return licenseModes;
+            licenseModes.Add(LicenseMode.MachineWide);
         }
 
-        public bool IsLicenseModeAvailable(LicenseMode licenseMode)
+        return licenseModes;
+    }
+
+    public bool IsLicenseModeAvailable(LicenseMode licenseMode)
+    {
+        var licenseLocation = _licenseLocationService.GetLicenseLocation(licenseMode);
+        if (string.IsNullOrWhiteSpace(licenseLocation))
         {
-            var licenseLocation = _licenseLocationService.GetLicenseLocation(licenseMode);
-            if (string.IsNullOrWhiteSpace(licenseLocation))
+            return false;
+        }
+
+        try
+        {
+            var checkLocation = $"{licenseLocation}.tmp";
+            if (!_fileService.CanOpenWrite(checkLocation))
             {
                 return false;
             }
 
-            try
-            {
-                var checkLocation = $"{licenseLocation}.tmp";
-                if (!_fileService.CanOpenWrite(checkLocation))
-                {
-                    return false;
-                }
+            _fileService.Delete(checkLocation);
 
-                _fileService.Delete(checkLocation);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.Debug(ex, $"Failed to access location @ '{licenseLocation}', assuming license mode '{licenseMode}' is not available");
-                return false;
-            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Log.Debug(ex, $"Failed to access location @ '{licenseLocation}', assuming license mode '{licenseMode}' is not available");
+            return false;
         }
     }
 }

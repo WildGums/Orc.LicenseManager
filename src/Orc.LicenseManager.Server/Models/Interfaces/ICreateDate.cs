@@ -1,11 +1,8 @@
-namespace Orc.LicenseManager.Server
-{
-    using System;
+﻿namespace Orc.LicenseManager.Server;
 
-    public interface ICreateDate
-    {
-        #region Properties
-        DateTime CreationDate { get; set; }
-        #endregion
-    }
+using System;
+
+public interface ICreateDate
+{
+    DateTime CreationDate { get; set; }
 }

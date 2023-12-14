@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseValidationResult.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
-
-namespace Orc.LicenseManager
+public class LicenseValidationResult
 {
-    public class LicenseValidationResult
-    {
-        public bool IsValid { get; set; }
+    public bool IsValid { get; set; }
 
-        public string AdditionalInfo { get; set; }
-    }
+    public string? AdditionalInfo { get; set; }
 }

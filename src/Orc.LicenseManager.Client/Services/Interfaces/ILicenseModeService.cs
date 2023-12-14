@@ -1,17 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ILicenseModeService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2017 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using System.Collections.Generic;
 
-namespace Orc.LicenseManager
+public interface ILicenseModeService
 {
-    using System.Collections.Generic;
-
-    public interface ILicenseModeService
-    {
-        List<LicenseMode> GetAvailableLicenseModes();
-        bool IsLicenseModeAvailable(LicenseMode licenseMode);
-    }
+    List<LicenseMode> GetAvailableLicenseModes();
+    bool IsLicenseModeAvailable(LicenseMode licenseMode);
 }

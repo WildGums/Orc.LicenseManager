@@ -1,254 +1,255 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LicenseService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using System;
+using System.Collections.Generic;
+using System.Xml;
+using Catel;
+using Catel.Logging;
+using FileSystem;
+using Portable.Licensing;
 
-namespace Orc.LicenseManager
+/// <summary>
+/// Service to validate, store and remove licenses for software products.
+/// </summary>
+public class LicenseService : ILicenseService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Xml;
-    using Catel;
-    using Catel.Logging;
-    using FileSystem;
-    using Portable.Licensing;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+    private readonly ILicenseLocationService _licenseLocationService;
+    private readonly IFileService _fileService;
+
+    private Tuple<License, LicenseMode>? _currentLicense;
 
     /// <summary>
-    /// Service to validate, store and remove licenses for software products.
+    /// Initializes a new instance of the <see cref="LicenseService" /> class.
     /// </summary>
-    public class LicenseService : ILicenseService
+    /// <param name="licenseLocationService">The application identifier service.</param>
+    /// <param name="fileService">The file service.</param>
+    public LicenseService(ILicenseLocationService licenseLocationService, IFileService fileService)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(licenseLocationService);
+        ArgumentNullException.ThrowIfNull(fileService);
 
-        private readonly ILicenseLocationService _licenseLocationService;
-        private readonly IFileService _fileService;
+        _licenseLocationService = licenseLocationService;
+        _fileService = fileService;
+    }
 
-        private Tuple<License, LicenseMode> _currentLicense;
+    public License? CurrentLicense
+    {
+        get => _currentLicense?.Item1;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LicenseService" /> class.
-        /// </summary>
-        /// <param name="licenseLocationService">The application identifier service.</param>
-        /// <param name="fileService">The file service.</param>
-        public LicenseService(ILicenseLocationService licenseLocationService, IFileService fileService)
+    /// <summary>
+    /// Raised when the current license changes.
+    /// </summary>
+    public event EventHandler<EventArgs>? CurrentLicenseChanged;
+
+    /// <summary>
+    /// Saves the license.
+    /// </summary>
+    /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
+    /// <param name="licenseMode"></param>
+    /// <returns>Returns only true if the license is valid.</returns>
+    /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
+    public void SaveLicense(string license, LicenseMode licenseMode = LicenseMode.CurrentUser)
+    {
+        Argument.IsNotNullOrWhitespace("license", license);
+
+        try
         {
-            Argument.IsNotNull(() => licenseLocationService);
-            Argument.IsNotNull(() => fileService);
+            var licenseObject = License.Load(license);
 
-            _licenseLocationService = licenseLocationService;
-            _fileService = fileService;
-        }
-
-        public License CurrentLicense
-        {
-            get => _currentLicense?.Item1;
-        }
-
-        /// <summary>
-        /// Raised when the current license changes.
-        /// </summary>
-        public event EventHandler<EventArgs> CurrentLicenseChanged;
-
-        /// <summary>
-        /// Saves the license.
-        /// </summary>
-        /// <param name="license">The license key that will be saved to <c>Catel.IO.Path.GetApplicationDataDirectory</c> .</param>
-        /// <param name="licenseMode"></param>
-        /// <returns>Returns only true if the license is valid.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="license" /> is <c>null</c> or whitespace.</exception>
-        public void SaveLicense(string license, LicenseMode licenseMode = LicenseMode.CurrentUser)
-        {
-            Argument.IsNotNullOrWhitespace("license", license);
-
-            try
-            {
-                var licenseObject = License.Load(license);
-
-                var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
-
-                using (var xmlWriter = XmlWriter.Create(xmlFilePath))
-                {
-                    licenseObject.Save(xmlWriter);
-
-                    xmlWriter.Flush();
-                    xmlWriter.Close();
-                }
-
-                Log.Info("License saved");
-
-                if (_currentLicense is null || _currentLicense.Item2 == licenseMode)
-                {
-                    LoadLicense(licenseMode);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to save license");
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Removes the license if exists.
-        /// </summary>
-        /// <param name="licenseMode"></param>
-        public void RemoveLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
-        {
             var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
+            if (string.IsNullOrEmpty(xmlFilePath))
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("License path not found");
+            }
 
-            try
+            using (var xmlWriter = XmlWriter.Create(xmlFilePath))
+            {
+                licenseObject.Save(xmlWriter);
+
+                xmlWriter.Flush();
+                xmlWriter.Close();
+            }
+
+            Log.Info("License saved");
+
+            if (_currentLicense is null || _currentLicense.Item2 == licenseMode)
+            {
+                LoadLicense(licenseMode);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to save license");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Removes the license if exists.
+    /// </summary>
+    /// <param name="licenseMode"></param>
+    public void RemoveLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
+    {
+        var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
+
+        try
+        {
+            if (string.IsNullOrEmpty(xmlFilePath))
+            {
+                Log.Warning($"Failed to find '{licenseMode}' license file");
+            }
+            else
             {
                 _fileService.Delete(xmlFilePath);
 
                 Log.Info($"The '{licenseMode}' license has been removed");
-
-                if (_currentLicense?.Item2 == licenseMode)
-                {
-                    SetCurrentLicense(null, licenseMode);
-                }
             }
-            catch (Exception ex)
+
+            if (_currentLicense?.Item2 == licenseMode)
             {
-                Log.Error(ex, $"Failed to delete the license @ '{xmlFilePath}'");
+                SetCurrentLicense(null, licenseMode);
             }
         }
-
-        /// <summary>
-        /// Check if the license exists.
-        /// </summary>
-        /// <returns>returns <c>true</c> if exists else <c>false</c></returns>
-        public bool LicenseExists(LicenseMode licenseMode = LicenseMode.CurrentUser)
+        catch (Exception ex)
         {
-            var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
+            Log.Error(ex, $"Failed to delete the license @ '{xmlFilePath}'");
+        }
+    }
 
-            try
+    /// <summary>
+    /// Check if the license exists.
+    /// </summary>
+    /// <returns>returns <c>true</c> if exists else <c>false</c></returns>
+    public bool LicenseExists(LicenseMode licenseMode = LicenseMode.CurrentUser)
+    {
+        var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
+
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(xmlFilePath) && _fileService.Exists(xmlFilePath))
             {
-                if (!string.IsNullOrWhiteSpace(xmlFilePath) && _fileService.Exists(xmlFilePath))
-                {
-                    Log.Debug("License exists");
-                    return true;
-                }
+                Log.Debug("License exists");
+                return true;
             }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, $"Failed to check whether the license exists @ '{xmlFilePath}'");
-            }
-
-            Log.Debug("License does not exist");
-
-            return false;
+        }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, $"Failed to check whether the license exists @ '{xmlFilePath}'");
         }
 
-        /// <summary>
-        /// Loads the license.
-        /// </summary>
-        /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
-        public string LoadLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
+        Log.Debug("License does not exist");
+
+        return false;
+    }
+
+    /// <summary>
+    /// Loads the license.
+    /// </summary>
+    /// <returns>The license from <c>Catel.IO.Path.GetApplicationDataDirectory</c> unless it failed to load then it returns an empty string</returns>
+    public string LoadLicense(LicenseMode licenseMode = LicenseMode.CurrentUser)
+    {
+        try
         {
-            try
+            var licenseString = _licenseLocationService.LoadLicense(licenseMode);
+            if (!string.IsNullOrWhiteSpace(licenseString))
             {
-                var licenseString = _licenseLocationService.LoadLicense(licenseMode);
-                if (!string.IsNullOrWhiteSpace(licenseString))
-                {
-                    var licenseObject = License.Load(licenseString);
+                var licenseObject = License.Load(licenseString);
 
-                    SetCurrentLicense(licenseObject, licenseMode);
+                SetCurrentLicense(licenseObject, licenseMode);
 
-                    //Log.Debug("License loaded: {0}", licenseObject.ToString());
+                //Log.Debug("License loaded: {0}", licenseObject.ToString());
 
-                    return licenseObject.ToString();
-                }
+                return licenseObject.ToString();
             }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load the license");
-            }
-
-            Log.Debug("Failed to load the license, returning empty string");
-
-            SetCurrentLicense(null, licenseMode);
-
-            return string.Empty;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to load the license");
         }
 
-        /// <summary>
-        /// Loads the XML out of license.
-        /// </summary>
-        /// <param name="license">The license.</param>
-        /// <returns>A List of with the xml names and values</returns>
-        public List<XmlDataModel> LoadXmlFromLicense(string license)
-        {
-            var xmlDataList = new List<XmlDataModel>();
+        Log.Debug("Failed to load the license, returning empty string");
 
-            if (string.IsNullOrWhiteSpace(license))
+        SetCurrentLicense(null, licenseMode);
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// Loads the XML out of license.
+    /// </summary>
+    /// <param name="license">The license.</param>
+    /// <returns>A List of with the xml names and values</returns>
+    public List<XmlDataModel> LoadXmlFromLicense(string license)
+    {
+        var xmlDataList = new List<XmlDataModel>();
+
+        if (string.IsNullOrWhiteSpace(license))
+        {
+            return xmlDataList;
+        }
+
+        try
+        {
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(license);
+            var xmlRoot = xmlDoc.DocumentElement;
+            if (xmlRoot is null)
             {
                 return xmlDataList;
             }
 
-            try
-            {
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(license);
-                var xmlRoot = xmlDoc.DocumentElement;
-                var xmlNodes = xmlRoot.ChildNodes;
+            var xmlNodes = xmlRoot.ChildNodes;
 
-                foreach (XmlNode node in xmlNodes)
+            foreach (XmlNode node in xmlNodes)
+            {
+                if (string.Equals(node.Name, "Customer"))
                 {
-                    if (string.Equals(node.Name, "Customer"))
+                    var customerInfo = $"{node.ChildNodes[0]?.InnerText} ({node.ChildNodes[1]?.InnerText})";
+                    xmlDataList.Add(new XmlDataModel("Licensed to", customerInfo));
+                }
+                else if (string.Equals(node.Name, "ProductFeatures"))
+                {
+                    foreach (XmlNode featureNode in node.ChildNodes)
                     {
-                        var customerInfo = $"{node.ChildNodes[0].InnerText} ({node.ChildNodes[1].InnerText})";
-                        xmlDataList.Add(new XmlDataModel("Licensed to", customerInfo));
-                    }
-                    else if (string.Equals(node.Name, "ProductFeatures"))
-                    {
-                        foreach (XmlNode featureNode in node.ChildNodes)
-                        {
-                            xmlDataList.Add(new XmlDataModel
-                            {
-                                Name = featureNode.Attributes[0].Value,
-                                Value = featureNode.InnerText
-                            });
-                        }
-                    }
-                    else
-                    {
-                        xmlDataList.Add(new XmlDataModel
-                        {
-                            Name = node.Name,
-                            Value = node.InnerText
-                        });
+                        var name = featureNode.Attributes?[0]?.Value ?? string.Empty;
+                        xmlDataList.Add(new XmlDataModel(name, featureNode.InnerText));
                     }
                 }
-
-                Log.Debug("Returning xml successful");
-            }
-            catch (Exception ex)
-            {
-                Log.Debug(ex);
-                return new List<XmlDataModel>();
+                else
+                {
+                    xmlDataList.Add(new XmlDataModel(node.Name, node.InnerText));
+                }
             }
 
-            return xmlDataList;
+            Log.Debug("Returning xml successful");
         }
-
-        private void SetCurrentLicense(License license, LicenseMode licenseMode)
+        catch (Exception ex)
         {
-            var currentLicense = _currentLicense?.Item1;
-            if (ReferenceEquals(currentLicense, license))
-            {
-                return;
-            }
-
-            if (currentLicense?.Id == license?.Id)
-            {
-                return;
-            }
-
-            _currentLicense = license is not null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
-
-            CurrentLicenseChanged?.Invoke(this, EventArgs.Empty);
+            Log.Debug(ex);
+            return new List<XmlDataModel>();
         }
+
+        return xmlDataList;
+    }
+
+    private void SetCurrentLicense(License? license, LicenseMode licenseMode)
+    {
+        var currentLicense = _currentLicense?.Item1;
+        if (ReferenceEquals(currentLicense, license))
+        {
+            return;
+        }
+
+        if (currentLicense?.Id == license?.Id)
+        {
+            return;
+        }
+
+        _currentLicense = license is not null ? new Tuple<License, LicenseMode>(license, licenseMode) : null;
+
+        CurrentLicenseChanged?.Invoke(this, EventArgs.Empty);
     }
 }

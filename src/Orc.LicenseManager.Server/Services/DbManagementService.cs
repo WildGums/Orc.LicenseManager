@@ -1,18 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DbManagementService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager.Server.Services;
 
-
-namespace Orc.LicenseManager.Server.Services
+public class DbManagementService : IDbManagementService
 {
-    public class DbManagementService : IDbManagementService
+    public void PerformanceMaintenanceIfRequired()
     {
-        #region Methods
-        public void PerformanceMaintenanceIfRequired()
-        {
-        }
-        #endregion
     }
 }

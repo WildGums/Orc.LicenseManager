@@ -1,52 +1,44 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WpfNetworkValidationHelper.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using System.Threading.Tasks;
+using Catel.IoC;
+using Catel.Logging;
+using Catel.Services;
+using ViewModels;
 
-namespace Orc.LicenseManager
+public static class WpfNetworkValidationHelper
 {
-    using System.Threading.Tasks;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.Services;
-    using ViewModels;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public static class WpfNetworkValidationHelper
+    private static bool _isInErrorHandling;
+
+    public static async Task DefaultNetworkLicenseServiceValidationHandlerAsync(object? sender, NetworkValidatedEventArgs e)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static bool _isInErrorHandling;
-
-        public static async Task DefaultNetworkLicenseServiceValidationHandlerAsync(object sender, NetworkValidatedEventArgs e)
+        if (_isInErrorHandling)
         {
-            if (_isInErrorHandling)
+            Log.Warning("Already handling the invalid license usage");
+            return;
+        }
+
+        var validationResult = e.ValidationResult;
+        if (!validationResult.IsValid && validationResult.IsCurrentUserLatestUser())
+        {
+            _isInErrorHandling = true;
+
+            var serviceLocator = ServiceLocator.Default;
+
+            var dispatcherService = serviceLocator.ResolveRequiredType<IDispatcherService>();
+            await dispatcherService.InvokeTaskAsync(async () =>
             {
-                Log.Warning("Already handling the invalid license usage");
-                return;
-            }
+                var uiVisualizerService = serviceLocator.ResolveRequiredType<IUIVisualizerService>();
+                await uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(validationResult);
+            });
 
-            var validationResult = e.ValidationResult;
-            if (!validationResult.IsValid && validationResult.IsCurrentUserLatestUser())
-            {
-                _isInErrorHandling = true;
+            _isInErrorHandling = false;
 
-                var serviceLocator = ServiceLocator.Default;
-
-                var dispatcherService = serviceLocator.ResolveType<IDispatcherService>();
-                await dispatcherService.InvokeTaskAsync(async () =>
-                {
-                    var uiVisualizerService = serviceLocator.ResolveType<IUIVisualizerService>();
-                    await uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(validationResult);
-                });
-
-                _isInErrorHandling = false;
-
-                // Force check
-                var networkLicenseService = serviceLocator.ResolveType<INetworkLicenseService>();
-                await networkLicenseService.ValidateLicenseAsync();
-            }
+            // Force check
+            var networkLicenseService = serviceLocator.ResolveRequiredType<INetworkLicenseService>();
+            await networkLicenseService.ValidateLicenseAsync();
         }
     }
 }

@@ -1,44 +1,33 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkLicenseUsageTests.cs" company="WildGums">
-//   Copyright (c) 2008 - 2014 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager.Tests.Client.Models;
 
+using System;
+using System.Threading.Tasks;
+using NUnit.Framework;
 
-namespace Orc.LicenseManager.Tests.Client.Models
+public class NetworkLicenseUsageTests
 {
-    using System;
-    using System.Threading.Tasks;
-    using Catel;
-    using NUnit.Framework;
-
-    public class NetworkLicenseUsageTests
+    [TestFixture]
+    public class TheParsing
     {
-        [TestFixture]
-        public class TheParsing
+        [Test]
+        public async Task TestParsingAsync()
         {
-            [Test]
-            public async Task TestParsingAsync()
-            {
-                var dateTime = DateTime.Now;
+            var dateTime = DateTime.Now;
 
-                var usage = new NetworkLicenseUsage("computerId", "ip", "userName", "licenseSignature", dateTime);
+            var usage = new NetworkLicenseUsage("computerId", "ip", "userName", "licenseSignature", dateTime);
 
-                Assert.AreEqual("computerId", usage.ComputerId);
-                Assert.AreEqual("ip", usage.Ip);
-                Assert.AreEqual("licenseSignature", usage.LicenseSignature);
-                Assert.AreEqual("userName", usage.UserName);
-                //Assert.IsTrue(ObjectHelper.AreEqual(dateTime, usage.StartDateTime));
+            Assert.That(usage.ComputerId, Is.EqualTo("computerId"));
+            Assert.That(usage.Ip, Is.EqualTo("ip"));
+            Assert.That(usage.LicenseSignature, Is.EqualTo("licenseSignature"));
+            Assert.That(usage.UserName, Is.EqualTo("userName"));
 
-                var networkString = await usage.ToNetworkMessageAsync();
-                var usage2 = await NetworkLicenseUsage.ParseAsync(networkString);
+            var networkString = await usage.ToNetworkMessageAsync();
+            var usage2 = await NetworkLicenseUsage.ParseAsync(networkString);
 
-                Assert.AreEqual(usage.ComputerId, usage2.ComputerId);
-                Assert.AreEqual(usage.Ip, usage2.Ip);
-                Assert.AreEqual(usage.LicenseSignature, usage2.LicenseSignature);
-                Assert.AreEqual(usage.UserName, usage2.UserName);
-                //Assert.IsTrue(ObjectHelper.AreEqual(usage.StartDateTime, usage2.StartDateTime));
-            }
+            Assert.That(usage2.ComputerId, Is.EqualTo(usage.ComputerId));
+            Assert.That(usage2.Ip, Is.EqualTo(usage.Ip));
+            Assert.That(usage2.LicenseSignature, Is.EqualTo(usage.LicenseSignature));
+            Assert.That(usage2.UserName, Is.EqualTo(usage.UserName));
         }
     }
 }

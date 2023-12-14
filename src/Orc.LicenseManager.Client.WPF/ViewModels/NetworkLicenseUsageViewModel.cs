@@ -1,151 +1,131 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NetworkLicenseUsageViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager.ViewModels;
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using Catel.Logging;
+using Catel.MVVM;
+using Catel.Reflection;
+using Catel.Services;
 
-namespace Orc.LicenseManager.ViewModels
+public class NetworkLicenseUsageViewModel : ViewModelBase
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows.Threading;
-    using Catel;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.Reflection;
-    using Catel.Services;
-    using Catel.Threading;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public class NetworkLicenseUsageViewModel : ViewModelBase
+    private readonly ILicenseInfoService _licenseInfoService;
+    private readonly IProcessService _processService;
+    private readonly INetworkLicenseService _networkLicenseService;
+    private readonly IDispatcherService _dispatcherService;
+
+    private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+
+    public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService,
+        IProcessService processService, INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
     {
-        #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(networkValidationResult);
+        ArgumentNullException.ThrowIfNull(licenseInfoService);
+        ArgumentNullException.ThrowIfNull(processService);
+        ArgumentNullException.ThrowIfNull(networkLicenseService);
+        ArgumentNullException.ThrowIfNull(dispatcherService);
 
-        private readonly ILicenseInfoService _licenseInfoService;
-        private readonly IProcessService _processService;
-        private readonly INetworkLicenseService _networkLicenseService;
-        private readonly IDispatcherService _dispatcherService;
+        _licenseInfoService = licenseInfoService;
+        _processService = processService;
+        _networkLicenseService = networkLicenseService;
+        _dispatcherService = dispatcherService;
 
-        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
-        #endregion
+        var assembly = AssemblyHelper.GetRequiredEntryAssembly();
+        Title = assembly.Title() + " licence usage";
+        PurchaseUrl = _licenseInfoService.GetLicenseInfo().PurchaseUrl;
+        UpdateValidationResult(networkValidationResult, false);
 
-        #region Constructors
-        public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService,
-            IProcessService processService, INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
-        {
-            Argument.IsNotNull(() => networkValidationResult);
-            Argument.IsNotNull(() => licenseInfoService);
-            Argument.IsNotNull(() => processService);
-            Argument.IsNotNull(() => networkLicenseService);
-            Argument.IsNotNull(() => dispatcherService);
+        _dispatcherTimer.Interval = TimeSpan.FromSeconds(15);
 
-            _licenseInfoService = licenseInfoService;
-            _processService = processService;
-            _networkLicenseService = networkLicenseService;
-            _dispatcherService = dispatcherService;
+        CloseApplication = new Command(OnCloseApplicationExecute);
+        BuyLicenses = new Command(OnBuyLicensesExecute);
+    }
 
-            var assembly = AssemblyHelper.GetEntryAssembly();
-            Title = assembly.Title() + " licence usage";
-            PurchaseUrl = _licenseInfoService.GetLicenseInfo().PurchaseUrl;
-            UpdateValidationResult(networkValidationResult, false);
+    public string PurchaseUrl { get; set; }
 
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(15);
+    public List<NetworkLicenseUsage> CurrentUsers { get; set; } = new List<NetworkLicenseUsage>();
 
-            CloseApplication = new Command(OnCloseApplicationExecute);
-            BuyLicenses = new Command(OnBuyLicensesExecute);
-        }
-        #endregion
+    public int MaximumNumberOfConcurrentUsages { get; set; }
 
-        #region Properties
-        public string PurchaseUrl { get; set; }
+    public Command CloseApplication { get; private set; }
 
-        public List<NetworkLicenseUsage> CurrentUsers { get; set; }
+    private void OnCloseApplicationExecute()
+    {
+        Log.Info("Closing application");
 
-        public int MaximumNumberOfConcurrentUsages { get; set; }
-        #endregion
+        var process = Process.GetCurrentProcess();
+        process.Kill();
+    }
 
-        #region Commands
-        public Command CloseApplication { get; private set; }
+    public Command BuyLicenses { get; private set; }
 
-        private void OnCloseApplicationExecute()
-        {
-            Log.Info("Closing application");
+    private void OnBuyLicensesExecute()
+    {
+        var purchaseUrl = PurchaseUrl;
 
-            var process = Process.GetCurrentProcess();
-            process.Kill();
-        }
+        Log.Info("Buying licenses using url '{0}'", purchaseUrl);
 
-        public Command BuyLicenses { get; private set; }
+        _processService.StartProcess(purchaseUrl);
+    }
 
-        private void OnBuyLicensesExecute()
-        {
-            var purchaseUrl = PurchaseUrl;
+    protected override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
 
-            Log.Info("Buying licenses using url '{0}'", purchaseUrl);
+        _dispatcherTimer.Tick += OnDispatcherTimerTick;
+        _networkLicenseService.Validated += OnNetworkLicenseValidated;
 
-            _processService.StartProcess(purchaseUrl);
-        }
-        #endregion
+        _dispatcherTimer.Start();
+    }
 
-        #region Methods
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
+    protected override async Task CloseAsync()
+    {
+        _dispatcherTimer.Stop();
 
-            _dispatcherTimer.Tick += OnDispatcherTimerTick;
-            _networkLicenseService.Validated += OnNetworkLicenseValidated;
+        _dispatcherTimer.Tick -= OnDispatcherTimerTick;
+        _networkLicenseService.Validated -= OnNetworkLicenseValidated;
 
-            _dispatcherTimer.Start();
-        }
-
-        protected override async Task CloseAsync()
-        {
-            _dispatcherTimer.Stop();
-
-            _dispatcherTimer.Tick -= OnDispatcherTimerTick;
-            _networkLicenseService.Validated -= OnNetworkLicenseValidated;
-
-            await base.CloseAsync();
-        }
+        await base.CloseAsync();
+    }
 
 #pragma warning disable AvoidAsyncVoid
-        private async void OnDispatcherTimerTick(object sender, EventArgs e)
+    private async void OnDispatcherTimerTick(object? sender, EventArgs e)
 #pragma warning restore AvoidAsyncVoid
+    {
+        var validationResult = await Task.Run(async () => await _networkLicenseService.ValidateLicenseAsync());
+
+        UpdateValidationResult(validationResult);
+    }
+
+    private void OnNetworkLicenseValidated(object? sender, NetworkValidatedEventArgs e)
+    {
+        UpdateValidationResult(e.ValidationResult);
+    }
+
+    private void UpdateValidationResult(NetworkValidationResult networkValidationResult, bool allowToClose = true)
+    {
+        ArgumentNullException.ThrowIfNull(networkValidationResult);
+
+        var computerId = _networkLicenseService.ComputerId;
+
+        MaximumNumberOfConcurrentUsages = networkValidationResult.MaximumConcurrentUsers;
+        CurrentUsers = (from user in networkValidationResult.CurrentUsers
+            where !string.Equals(user.ComputerId, computerId)
+            select user).ToList();
+
+        if (allowToClose && networkValidationResult.IsValid)
         {
-            var validationResult = await TaskHelper.Run(async () => await _networkLicenseService.ValidateLicenseAsync(), true);
-
-            UpdateValidationResult(validationResult);
-        }
-
-        private void OnNetworkLicenseValidated(object sender, NetworkValidatedEventArgs e)
-        {
-            UpdateValidationResult(e.ValidationResult);
-        }
-
-        private void UpdateValidationResult(NetworkValidationResult networkValidationResult, bool allowToClose = true)
-        {
-            Argument.IsNotNull(() => networkValidationResult);
-
-            var computerId = _networkLicenseService.ComputerId;
-
-            MaximumNumberOfConcurrentUsages = networkValidationResult.MaximumConcurrentUsers;
-            CurrentUsers = (from user in networkValidationResult.CurrentUsers
-                            where !string.Equals(user.ComputerId, computerId)
-                            select user).ToList();
-
-            if (allowToClose && networkValidationResult.IsValid)
-            {
-                Log.Info("No longer exceeding maximum concurrent users, closing network license validation");
+            Log.Info("No longer exceeding maximum concurrent users, closing network license validation");
 
 #pragma warning disable 4014
-                _dispatcherService.BeginInvoke(() => this.SaveAndCloseViewModelAsync());
+            _dispatcherService.BeginInvoke(() => this.SaveAndCloseViewModelAsync());
 #pragma warning restore 4014
-            }
         }
-        #endregion
     }
 }

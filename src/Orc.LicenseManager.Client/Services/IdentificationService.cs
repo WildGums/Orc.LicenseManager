@@ -1,40 +1,31 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IdentificationService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.LicenseManager;
 
+using SystemInfo;
+using System;
 
-namespace Orc.LicenseManager
+public class IdentificationService : IIdentificationService
 {
-    using SystemInfo;
-    using Catel;
-    using Catel.Logging;
+    private readonly ISystemIdentificationService _systemIdentificationService;
+    private readonly object _lock = new object();
+    private string _machineId = string.Empty;
 
-    public class IdentificationService : IIdentificationService
+    public IdentificationService(ISystemIdentificationService systemIdentificationService)
     {
-        private readonly ISystemIdentificationService _systemIdentificationService;
-        private readonly object _lock = new object();
-        private string _machineId = string.Empty;
+        ArgumentNullException.ThrowIfNull(systemIdentificationService);
 
-        public IdentificationService(ISystemIdentificationService systemIdentificationService)
+        _systemIdentificationService = systemIdentificationService;
+    }
+
+    public virtual string GetMachineId()
+    {
+        lock (_lock)
         {
-            Argument.IsNotNull(() => systemIdentificationService);
-
-            _systemIdentificationService = systemIdentificationService;
-        }
-
-        public virtual string GetMachineId()
-        {
-            lock (_lock)
+            if (string.IsNullOrWhiteSpace(_machineId))
             {
-                if (string.IsNullOrWhiteSpace(_machineId))
-                {
-                    _machineId = _systemIdentificationService.GetMachineId(LicenseElements.IdentificationSeparator, false);
-                }
-
-                return _machineId;
+                _machineId = _systemIdentificationService.GetMachineId(LicenseElements.IdentificationSeparator, false);
             }
+
+            return _machineId;
         }
     }
 }
