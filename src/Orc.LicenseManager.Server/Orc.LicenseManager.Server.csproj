@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageReference Include="Catel.Core" Version="6.0.0" />
     <PackageReference Include="Catel.Fody" Version="4.9.0" PrivateAssets="all" />
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Fody" Version="6.8.1" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
