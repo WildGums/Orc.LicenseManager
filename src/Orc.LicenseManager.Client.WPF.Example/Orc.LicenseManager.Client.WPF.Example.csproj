@@ -32,5 +32,5 @@
     <ProjectReference Include="..\Orc.LicenseManager.Client.WPF\Orc.LicenseManager.Client.WPF.csproj" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.explicit.props')" />
 </Project>
