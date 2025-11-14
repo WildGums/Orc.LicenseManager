@@ -1,0 +1,31 @@
+<Solution>
+  <Folder Name="/data/">
+    <File Path="../data/FakeLicenseInfo.txt" />
+  </Folder>
+  <Folder Name="/misc/">
+    <File Path="Directory.build.project.props" />
+    <File Path="Directory.build.props" />
+    <File Path="Directory.build.shared.explicit.props" />
+    <File Path="Directory.build.shared.implicit.props" />
+    <File Path="Directory.build.shared.mat.props" />
+    <File Path="Directory.build.targets" />
+    <File Path="GlobalSuppressions.cs" />
+    <File Path="NuGet.config" />
+    <File Path="Orc.LicenseManager.sln.DotSettings" />
+    <File Path="SolutionAssemblyInfo.cs" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Client/">
+    <Project Path="Orc.LicenseManager.Client.WPF/Orc.LicenseManager.Client.WPF.csproj" />
+    <Project Path="Orc.LicenseManager.Client/Orc.LicenseManager.Client.csproj" />
+  </Folder>
+  <Folder Name="/src/Examples/">
+    <Project Path="Orc.LicenseManager.Client.WPF.Example/Orc.LicenseManager.Client.WPF.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Server/">
+    <Project Path="Orc.LicenseManager.Server/Orc.LicenseManager.Server.csproj" />
+  </Folder>
+  <Folder Name="/src/Tests/">
+    <Project Path="Orc.LicenseManager.Tests/Orc.LicenseManager.Tests.csproj" />
+  </Folder>
+</Solution>
