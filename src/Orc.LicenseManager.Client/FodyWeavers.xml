@@ -5,7 +5,6 @@
       Portable.Licensing
     </IncludeAssemblies>
   </Costura>
-  <ModuleInit />
   <Catel />
   <MethodTimer />
   <LoadAssembliesOnStartup />
