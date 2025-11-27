@@ -7,6 +7,7 @@
 public static class LoadAssembliesOnStartup { }
 public static class ModuleInitializer
 {
+    [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
 namespace Orc.LicenseManager.Converters
