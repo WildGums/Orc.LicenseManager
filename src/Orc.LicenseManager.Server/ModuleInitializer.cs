@@ -1,4 +1,5 @@
-﻿using Catel.IoC;
+using System.Runtime.CompilerServices;
+using Catel.IoC;
 using Orc.LicenseManager.Server;
 using Orc.LicenseManager.Server.Services;
 
@@ -10,6 +11,7 @@ public static class ModuleInitializer
     /// <summary>
     /// Initializes the module.
     /// </summary>
+    [ModuleInitializer]
     public static void Initialize()
     {
         var serviceLocator = ServiceLocator.Default;
