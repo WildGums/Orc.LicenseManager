@@ -6,22 +6,19 @@ using Catel.Logging;
 using Catel.Reflection;
 using Catel.Services;
 using FileSystem;
+using Microsoft.Extensions.Logging;
 
 public class LicenseLocationService : ILicenseLocationService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(LicenseLocationService));
 
     private readonly IApplicationIdService _applicationIdService;
     private readonly IFileService _fileService;
     private readonly IAppDataService _appDataService;
 
-    public LicenseLocationService(IApplicationIdService applicationIdService, IFileService fileService,
-        IAppDataService appDataService)
+    public LicenseLocationService(IApplicationIdService applicationIdService, 
+        IFileService fileService, IAppDataService appDataService)
     {
-        ArgumentNullException.ThrowIfNull(applicationIdService);
-        ArgumentNullException.ThrowIfNull(fileService);
-        ArgumentNullException.ThrowIfNull(appDataService);
-
         _applicationIdService = applicationIdService;
         _fileService = fileService;
         _appDataService = appDataService;
@@ -34,14 +31,14 @@ public class LicenseLocationService : ILicenseLocationService
             var fileName = GetLicenseLocation(licenseMode);
             if (!string.IsNullOrWhiteSpace(fileName) && _fileService.Exists(fileName))
             {
-                Log.Debug($"Loading license from '{fileName}'");
+                Logger.LogDebug($"Loading license from '{fileName}'");
 
                 return _fileService.ReadAllText(fileName);
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Failed to load license for license mode '{licenseMode}'");
+            Logger.LogError(ex, $"Failed to load license for license mode '{licenseMode}'");
         }
 
         return null;
@@ -75,7 +72,7 @@ public class LicenseLocationService : ILicenseLocationService
         }
         catch (Exception ex)
         {
-            Log.Warning(ex, $"Failed to get license location for license mode '{licenseMode}', probably access is denied");
+            Logger.LogWarning(ex, $"Failed to get license location for license mode '{licenseMode}', probably access is denied");
             return null;
         }
     }

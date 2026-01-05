@@ -3,11 +3,12 @@
 using System;
 using Catel.Logging;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 using ViewModels;
 
 public class DialogLicenseVisualizerService : ILicenseVisualizerService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(DialogLicenseVisualizerService));
 
     private readonly IUIVisualizerService _uiVisualizerService;
     private readonly ILicenseInfoService _licenseInfoService;
@@ -16,10 +17,6 @@ public class DialogLicenseVisualizerService : ILicenseVisualizerService
     public DialogLicenseVisualizerService(IUIVisualizerService uiVisualizerService, ILicenseInfoService licenseInfoService,
         IDispatcherService dispatcherService)
     {
-        ArgumentNullException.ThrowIfNull(uiVisualizerService);
-        ArgumentNullException.ThrowIfNull(licenseInfoService);
-        ArgumentNullException.ThrowIfNull(dispatcherService);
-
         _uiVisualizerService = uiVisualizerService;
         _licenseInfoService = licenseInfoService;
         _dispatcherService = dispatcherService;
@@ -30,7 +27,7 @@ public class DialogLicenseVisualizerService : ILicenseVisualizerService
     /// </summary>
     public void ShowLicense()
     {
-        Log.Debug("Showing license dialog with company info");
+        Logger.LogDebug("Showing license dialog with company info");
 
 #pragma warning disable AvoidAsyncVoid
         _dispatcherService.Invoke(async () =>

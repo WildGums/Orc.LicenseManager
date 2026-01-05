@@ -10,10 +10,11 @@ using Catel.Logging;
 using Catel.MVVM;
 using Catel.Reflection;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 
 public class NetworkLicenseUsageViewModel : ViewModelBase
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(NetworkLicenseUsageViewModel));
 
     private readonly ILicenseInfoService _licenseInfoService;
     private readonly IProcessService _processService;
@@ -22,29 +23,25 @@ public class NetworkLicenseUsageViewModel : ViewModelBase
 
     private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
 
-    public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, ILicenseInfoService licenseInfoService,
-        IProcessService processService, INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
+    public NetworkLicenseUsageViewModel(NetworkValidationResult networkValidationResult, IServiceProvider serviceProvider,
+        ILicenseInfoService licenseInfoService, IProcessService processService, 
+        INetworkLicenseService networkLicenseService, IDispatcherService dispatcherService)
+        : base(serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(networkValidationResult);
-        ArgumentNullException.ThrowIfNull(licenseInfoService);
-        ArgumentNullException.ThrowIfNull(processService);
-        ArgumentNullException.ThrowIfNull(networkLicenseService);
-        ArgumentNullException.ThrowIfNull(dispatcherService);
-
         _licenseInfoService = licenseInfoService;
         _processService = processService;
         _networkLicenseService = networkLicenseService;
         _dispatcherService = dispatcherService;
 
         var assembly = AssemblyHelper.GetRequiredEntryAssembly();
-        Title = assembly.Title() + " licence usage";
+        Title = assembly.Title() + " license usage";
         PurchaseUrl = _licenseInfoService.GetLicenseInfo().PurchaseUrl;
         UpdateValidationResult(networkValidationResult, false);
 
         _dispatcherTimer.Interval = TimeSpan.FromSeconds(15);
 
-        CloseApplication = new Command(OnCloseApplicationExecute);
-        BuyLicenses = new Command(OnBuyLicensesExecute);
+        CloseApplication = new Command(serviceProvider, OnCloseApplicationExecute);
+        BuyLicenses = new Command(serviceProvider, OnBuyLicensesExecute);
     }
 
     public string PurchaseUrl { get; set; }
@@ -57,7 +54,7 @@ public class NetworkLicenseUsageViewModel : ViewModelBase
 
     private void OnCloseApplicationExecute()
     {
-        Log.Info("Closing application");
+        Logger.LogInformation("Closing application");
 
         var process = Process.GetCurrentProcess();
         process.Kill();
@@ -69,7 +66,7 @@ public class NetworkLicenseUsageViewModel : ViewModelBase
     {
         var purchaseUrl = PurchaseUrl;
 
-        Log.Info("Buying licenses using url '{0}'", purchaseUrl);
+        Logger.LogInformation("Buying licenses using url '{0}'", purchaseUrl);
 
         _processService.StartProcess(purchaseUrl);
     }
@@ -121,7 +118,7 @@ public class NetworkLicenseUsageViewModel : ViewModelBase
 
         if (allowToClose && networkValidationResult.IsValid)
         {
-            Log.Info("No longer exceeding maximum concurrent users, closing network license validation");
+            Logger.LogInformation("No longer exceeding maximum concurrent users, closing network license validation");
 
 #pragma warning disable 4014
             _dispatcherService.BeginInvoke(() => this.SaveAndCloseViewModelAsync());

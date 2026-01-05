@@ -27,14 +27,19 @@ namespace Orc.LicenseManager
         public DialogLicenseVisualizerService(Catel.Services.IUIVisualizerService uiVisualizerService, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IDispatcherService dispatcherService) { }
         public void ShowLicense() { }
     }
+    public static class OrcLicenseManagerXamlModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcLicenseManagerXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+    }
     public static class WindowExtensions
     {
         public static void ApplyIconFromApplication(this System.Windows.Window window) { }
         public static void RemoveCloseButton(this System.Windows.Window window) { }
     }
-    public static class WpfNetworkValidationHelper
+    public class WpfNetworkValidationHandler : Orc.LicenseManager.INetworkValidationHandler
     {
-        public static System.Threading.Tasks.Task DefaultNetworkLicenseServiceValidationHandlerAsync(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
+        public WpfNetworkValidationHandler(Orc.LicenseManager.INetworkLicenseService networkLicenseService, Catel.Services.IUIVisualizerService uiVisualizerService) { }
+        public void HandleNetworkValidation(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
     }
 }
 namespace Orc.LicenseManager.ViewModels
@@ -42,7 +47,7 @@ namespace Orc.LicenseManager.ViewModels
     public class ClipBoardViewModel : Catel.MVVM.ViewModelBase
     {
         public static readonly Catel.Data.IPropertyData ClipBoardTextProperty;
-        public ClipBoardViewModel() { }
+        public ClipBoardViewModel(System.IServiceProvider serviceProvider) { }
         public string ClipBoardText { get; set; }
         public Catel.MVVM.TaskCommand Exit { get; }
         public override string Title { get; }
@@ -62,10 +67,10 @@ namespace Orc.LicenseManager.ViewModels
         public static readonly Catel.Data.IPropertyData ShowFailureProperty;
         public static readonly Catel.Data.IPropertyData TextProperty;
         public static readonly Catel.Data.IPropertyData XmlDataProperty;
-        public LicenseViewModel(Orc.LicenseManager.LicenseInfo licenseInfo, Catel.Services.INavigationService navigationService, Catel.Services.IProcessService processService, Orc.LicenseManager.ILicenseService licenseService, Orc.LicenseManager.ILicenseValidationService licenseValidationService, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService, Orc.LicenseManager.ILicenseModeService licenseModeService) { }
+        public LicenseViewModel(Orc.LicenseManager.LicenseInfo licenseInfo, System.IServiceProvider serviceProvider, Catel.Services.INavigationService navigationService, Catel.Services.IProcessService processService, Orc.LicenseManager.ILicenseService licenseService, Orc.LicenseManager.ILicenseValidationService licenseValidationService, Catel.Services.IUIVisualizerService uiVisualizerService, Catel.Services.IMessageService messageService, Catel.Services.ILanguageService languageService, Orc.LicenseManager.ILicenseModeService licenseModeService) { }
         public System.Uri AboutImageUri { get; }
         public Catel.MVVM.Command AboutSiteClick { get; }
-        public System.Collections.Generic.List<Orc.LicenseManager.LicenseMode> AvailableLicenseModes { get; }
+        public System.Collections.Generic.IReadOnlyList<Orc.LicenseManager.LicenseMode> AvailableLicenseModes { get; }
         public string? FailureMessage { get; }
         public bool FailureOccurred { get; set; }
         [Catel.MVVM.ViewModelToModel("LicenseInfo", "ImageUri")]
@@ -106,7 +111,7 @@ namespace Orc.LicenseManager.ViewModels
         public static readonly Catel.Data.IPropertyData CurrentUsersProperty;
         public static readonly Catel.Data.IPropertyData MaximumNumberOfConcurrentUsagesProperty;
         public static readonly Catel.Data.IPropertyData PurchaseUrlProperty;
-        public NetworkLicenseUsageViewModel(Orc.LicenseManager.NetworkValidationResult networkValidationResult, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IProcessService processService, Orc.LicenseManager.INetworkLicenseService networkLicenseService, Catel.Services.IDispatcherService dispatcherService) { }
+        public NetworkLicenseUsageViewModel(Orc.LicenseManager.NetworkValidationResult networkValidationResult, System.IServiceProvider serviceProvider, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IProcessService processService, Orc.LicenseManager.INetworkLicenseService networkLicenseService, Catel.Services.IDispatcherService dispatcherService) { }
         public Catel.MVVM.Command BuyLicenses { get; }
         public Catel.MVVM.Command CloseApplication { get; }
         public System.Collections.Generic.List<Orc.LicenseManager.NetworkLicenseUsage> CurrentUsers { get; set; }
@@ -121,26 +126,35 @@ namespace Orc.LicenseManager.Views
     public class ClipBoardWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public ClipBoardWindow() { }
-        public ClipBoardWindow(Orc.LicenseManager.ViewModels.ClipBoardViewModel viewModel) { }
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ClipBoardWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
+        public ClipBoardWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
     }
     public sealed class LicenseView : Catel.Windows.Controls.UserControl, System.Windows.Markup.IComponentConnector
     {
         public static readonly System.Windows.DependencyProperty ShowAboutProperty;
         public LicenseView() { }
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public LicenseView(System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
+        public LicenseView(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public bool ShowAbout { get; set; }
         public void InitializeComponent() { }
     }
     public class LicenseWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public LicenseWindow() { }
-        public LicenseWindow(Orc.LicenseManager.ViewModels.LicenseViewModel? viewModel) { }
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public LicenseWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
+        public LicenseWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
     }
     public class NetworkLicenseUsageWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public NetworkLicenseUsageWindow() { }
-        public NetworkLicenseUsageWindow(Orc.LicenseManager.ViewModels.NetworkLicenseUsageViewModel? viewModel) { }
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public NetworkLicenseUsageWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
+        public NetworkLicenseUsageWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
     }
 }

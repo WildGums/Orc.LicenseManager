@@ -4,25 +4,10 @@ using Catel;
 using Catel.Windows;
 using ViewModels;
 
-public partial class LicenseWindow : DataWindow
+public partial class LicenseWindow
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
-    /// </summary>
-    public LicenseWindow()
-        : this(null)
+    partial void OnInitializedComponent()
     {
-    }
-
-    /// <summary>5
-    /// Initializes a new instance of the <see cref="LicenseWindow"/> class.
-    /// </summary>
-    /// <param name="viewModel">The view model.</param>
-    public LicenseWindow(LicenseViewModel? viewModel)
-        : base(viewModel, DataWindowMode.OkCancel)
-    {
-        InitializeComponent();
-
         if (CatelEnvironment.IsInDesignMode)
         {
             return;

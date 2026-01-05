@@ -5,6 +5,7 @@ using System.Globalization;
 using Portable.Licensing;
 using Tests;
 using NUnit.Framework;
+using Microsoft.Extensions.Logging.Abstractions;
 
 [TestFixture]
 public class PreventUsageOfAnyVersionExpirationBehaviorFacts
@@ -23,7 +24,7 @@ public class PreventUsageOfAnyVersionExpirationBehaviorFacts
         var licenseBuilder = License.New().As(licenseType).ExpiresAt(expirationDate);
         var license = licenseBuilder.CreateAndSignWithPrivateKey(TestEnvironment.LicenseKeys.Private, TestEnvironment.LicenseKeys.PassPhrase);
 
-        var expirationBehavior = new PreventUsageOfAnyVersionExpirationBehavior();
+        var expirationBehavior = new PreventUsageOfAnyVersionExpirationBehavior(NullLogger<PreventUsageOfAnyVersionExpirationBehavior>.Instance);
 
         Assert.That(expirationBehavior.IsExpired(license, expirationDate, currentDate), Is.EqualTo(expectedValue));
     }

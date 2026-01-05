@@ -23,7 +23,7 @@ namespace Orc.LicenseManager
     }
     public abstract class ExpirationBehaviorBase : Orc.LicenseManager.IExpirationBehavior
     {
-        protected ExpirationBehaviorBase() { }
+        protected ExpirationBehaviorBase(Microsoft.Extensions.Logging.ILogger logger) { }
         public virtual bool IsExpired(Portable.Licensing.License license, System.DateTime expirationDateTime, System.DateTime validationDateTime) { }
         protected abstract bool IsNormalLicenseExpired(Portable.Licensing.License license, System.DateTime expirationDateTime, System.DateTime validationDateTime);
     }
@@ -52,7 +52,7 @@ namespace Orc.LicenseManager
     }
     public interface ILicenseModeService
     {
-        System.Collections.Generic.List<Orc.LicenseManager.LicenseMode> GetAvailableLicenseModes();
+        System.Collections.Generic.IReadOnlyList<Orc.LicenseManager.LicenseMode> GetAvailableLicenseModes();
         bool IsLicenseModeAvailable(Orc.LicenseManager.LicenseMode licenseMode);
     }
     public interface ILicenseService
@@ -61,7 +61,7 @@ namespace Orc.LicenseManager
         event System.EventHandler<System.EventArgs>? CurrentLicenseChanged;
         bool LicenseExists(Orc.LicenseManager.LicenseMode licenseMode = 0);
         string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode = 0);
-        System.Collections.Generic.List<Orc.LicenseManager.XmlDataModel> LoadXmlFromLicense(string license);
+        System.Collections.Generic.IReadOnlyList<Orc.LicenseManager.XmlDataModel> LoadXmlFromLicense(string license);
         void RemoveLicense(Orc.LicenseManager.LicenseMode licenseMode = 0);
         void SaveLicense(string license, Orc.LicenseManager.LicenseMode licenseMode = 0);
     }
@@ -96,6 +96,10 @@ namespace Orc.LicenseManager
         System.Threading.Tasks.Task<Orc.LicenseManager.NetworkValidationResult> ValidateLicenseAsync();
     }
     public static class INetworkLicenseServiceExtensions { }
+    public interface INetworkValidationHandler
+    {
+        void HandleNetworkValidation(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e);
+    }
     public interface ISimpleLicenseService
     {
         System.Threading.Tasks.Task<bool> ValidateAsync();
@@ -154,7 +158,7 @@ namespace Orc.LicenseManager
     public class LicenseModeService : Orc.LicenseManager.ILicenseModeService
     {
         public LicenseModeService(Orc.FileSystem.IFileService fileService, Orc.LicenseManager.ILicenseLocationService licenseLocationService) { }
-        public System.Collections.Generic.List<Orc.LicenseManager.LicenseMode> GetAvailableLicenseModes() { }
+        public System.Collections.Generic.IReadOnlyList<Orc.LicenseManager.LicenseMode> GetAvailableLicenseModes() { }
         public bool IsLicenseModeAvailable(Orc.LicenseManager.LicenseMode licenseMode) { }
     }
     public class LicenseService : Orc.LicenseManager.ILicenseService
@@ -164,7 +168,7 @@ namespace Orc.LicenseManager
         public event System.EventHandler<System.EventArgs>? CurrentLicenseChanged;
         public bool LicenseExists(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
         public string LoadLicense(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
-        public System.Collections.Generic.List<Orc.LicenseManager.XmlDataModel> LoadXmlFromLicense(string license) { }
+        public System.Collections.Generic.IReadOnlyList<Orc.LicenseManager.XmlDataModel> LoadXmlFromLicense(string license) { }
         public void RemoveLicense(Orc.LicenseManager.LicenseMode licenseMode = 0) { }
         public void SaveLicense(string license, Orc.LicenseManager.LicenseMode licenseMode = 0) { }
     }
@@ -214,9 +218,10 @@ namespace Orc.LicenseManager
         public NetworkValidatedEventArgs(Orc.LicenseManager.NetworkValidationResult validationResult) { }
         public Orc.LicenseManager.NetworkValidationResult ValidationResult { get; }
     }
-    public static class NetworkValidationHelper
+    public class NetworkValidationHandler : Orc.LicenseManager.INetworkValidationHandler
     {
-        public static void DefaultNetworkLicenseServiceValidationHandler(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
+        public NetworkValidationHandler(Orc.LicenseManager.INetworkLicenseService networkLicenseService) { }
+        public void HandleNetworkValidation(object? sender, Orc.LicenseManager.NetworkValidatedEventArgs e) { }
     }
     public class NetworkValidationResult
     {
@@ -229,16 +234,20 @@ namespace Orc.LicenseManager
     public static class NetworkValidationResultExtensions
     {
         public static Orc.LicenseManager.NetworkLicenseUsage? GetLatestUser(this Orc.LicenseManager.NetworkValidationResult validationResult) { }
-        public static bool IsCurrentUserLatestUser(this Orc.LicenseManager.NetworkValidationResult validationResult) { }
+        public static bool IsCurrentUserLatestUser(this Orc.LicenseManager.INetworkLicenseService networkLicenseService, Orc.LicenseManager.NetworkValidationResult validationResult) { }
+    }
+    public static class OrcLicenseManagerModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcLicenseManager(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public class PreventUsageOfAnyVersionExpirationBehavior : Orc.LicenseManager.ExpirationBehaviorBase
     {
-        public PreventUsageOfAnyVersionExpirationBehavior() { }
+        public PreventUsageOfAnyVersionExpirationBehavior(Microsoft.Extensions.Logging.ILogger<Orc.LicenseManager.PreventUsageOfAnyVersionExpirationBehavior> logger) { }
         protected override bool IsNormalLicenseExpired(Portable.Licensing.License license, System.DateTime expirationDateTime, System.DateTime validationDateTime) { }
     }
     public class PreventUsageOfLaterReleasedVersionsExpirationBehavior : Orc.LicenseManager.ExpirationBehaviorBase
     {
-        public PreventUsageOfLaterReleasedVersionsExpirationBehavior() { }
+        public PreventUsageOfLaterReleasedVersionsExpirationBehavior(Microsoft.Extensions.Logging.ILogger<Orc.LicenseManager.PreventUsageOfLaterReleasedVersionsExpirationBehavior> logger) { }
         protected override bool IsNormalLicenseExpired(Portable.Licensing.License license, System.DateTime expirationDateTime, System.DateTime validationDateTime) { }
     }
     public class ServerLicenseValidation

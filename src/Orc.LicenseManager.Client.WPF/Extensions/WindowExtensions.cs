@@ -8,13 +8,14 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Extensions for the window class.
 /// </summary>
 public static class WindowExtensions
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(WindowExtensions));
 
     /// <summary>
     /// Applies the icon from the entry assembly (the application) to the window.
@@ -48,7 +49,7 @@ public static class WindowExtensions
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to set the application icon to the window");
+            Logger.LogError(ex, "Failed to set the application icon to the window");
         }
     }
 

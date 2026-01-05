@@ -7,16 +7,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Catel;
+using Catel.Collections;
 using Catel.Logging;
 using Catel.MVVM;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// View model for a single License.
 /// </summary>
 public class LicenseViewModel : ViewModelBase
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(LicenseViewModel));
 
     private readonly INavigationService _navigationService;
     private readonly IProcessService _processService;
@@ -29,20 +31,13 @@ public class LicenseViewModel : ViewModelBase
     private readonly ILanguageService _languageService;
     private readonly ILicenseModeService _licenseModeService;
 
-    public LicenseViewModel(LicenseInfo licenseInfo, INavigationService navigationService, IProcessService processService,
-        ILicenseService licenseService, ILicenseValidationService licenseValidationService, IUIVisualizerService uiVisualizerService, 
-        IMessageService messageService, ILanguageService languageService, ILicenseModeService licenseModeService)
+    public LicenseViewModel(LicenseInfo licenseInfo, IServiceProvider serviceProvider, 
+        INavigationService navigationService, IProcessService processService,
+        ILicenseService licenseService, ILicenseValidationService licenseValidationService, 
+        IUIVisualizerService uiVisualizerService, IMessageService messageService, 
+        ILanguageService languageService, ILicenseModeService licenseModeService)
+        : base(serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(licenseInfo);
-        ArgumentNullException.ThrowIfNull(navigationService);
-        ArgumentNullException.ThrowIfNull(processService);
-        ArgumentNullException.ThrowIfNull(licenseService);
-        ArgumentNullException.ThrowIfNull(licenseValidationService);
-        ArgumentNullException.ThrowIfNull(uiVisualizerService);
-        ArgumentNullException.ThrowIfNull(messageService);
-        ArgumentNullException.ThrowIfNull(languageService);
-        ArgumentNullException.ThrowIfNull(licenseModeService);
-
         _navigationService = navigationService;
         _processService = processService;
         _licenseService = licenseService;
@@ -54,17 +49,18 @@ public class LicenseViewModel : ViewModelBase
 
         LicenseInfo = licenseInfo;
         Title = licenseInfo.Title;
+        AvailableLicenseModes = Array.Empty<LicenseMode>();
 
         XmlData = new ObservableCollection<XmlDataModel>();
 
-        Paste = new TaskCommand(OnPasteExecuteAsync);
-        ShowClipboard = new TaskCommand(OnShowClipboardExecuteAsync);
-        PurchaseLinkClick = new Command(OnPurchaseLinkClickExecute);
-        AboutSiteClick = new Command(OnAboutSiteClickExecute);
-        RemoveLicense = new TaskCommand(OnRemoveLicenseExecuteAsync, OnRemoveLicenseCanExecute);
+        Paste = new TaskCommand(serviceProvider, OnPasteExecuteAsync);
+        ShowClipboard = new TaskCommand(serviceProvider, OnShowClipboardExecuteAsync);
+        PurchaseLinkClick = new Command(serviceProvider, OnPurchaseLinkClickExecute);
+        AboutSiteClick = new Command(serviceProvider, OnAboutSiteClickExecute);
+        RemoveLicense = new TaskCommand(serviceProvider, OnRemoveLicenseExecuteAsync, OnRemoveLicenseCanExecute);
     }
 
-    public List<LicenseMode> AvailableLicenseModes { get; private set; } = new();
+    public IReadOnlyList<LicenseMode> AvailableLicenseModes { get; private set; }
 
     public LicenseMode LicenseMode { get; set; }
 
@@ -227,7 +223,7 @@ public class LicenseViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Failed to save license using '{LicenseMode}'");
+            Logger.LogError(ex, $"Failed to save license using '{LicenseMode}'");
 
             await _messageService.ShowErrorAsync(_languageService.GetRequiredString("FailedToSaveLicense"));
             return false;
@@ -255,7 +251,7 @@ public class LicenseViewModel : ViewModelBase
             return true;
         }
 
-        Log.Debug("Closing application");
+        Logger.LogDebug("Closing application");
 
         await _navigationService.CloseApplicationAsync();
 

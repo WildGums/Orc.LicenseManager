@@ -1,5 +1,6 @@
 ﻿namespace Orc.LicenseManager.ViewModels;
 
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using Catel.MVVM;
@@ -9,9 +10,10 @@ public class ClipBoardViewModel : ViewModelBase
     /// <summary>
     /// Initializes a new instance of the <see cref="ClipBoardViewModel"/> class.
     /// </summary>
-    public ClipBoardViewModel()
+    public ClipBoardViewModel(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        Exit = new TaskCommand(OnExitExecuteAsync);
+        Exit = new TaskCommand(serviceProvider, OnExitExecuteAsync);
 
         var clipBoardData = Clipboard.GetText();
         ClipBoardText = string.IsNullOrWhiteSpace(clipBoardData) 

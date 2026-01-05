@@ -3,13 +3,14 @@
 using System;
 using System.Threading.Tasks;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Simple license service.
 /// </summary>
 public class SimpleLicenseService : ISimpleLicenseService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(SimpleLicenseService));
 
     private readonly ILicenseService _licenseService;
     private readonly ILicenseValidationService _licenseValidationService;
@@ -25,10 +26,6 @@ public class SimpleLicenseService : ISimpleLicenseService
     public SimpleLicenseService(ILicenseService licenseService, ILicenseValidationService licenseValidationService, 
         ILicenseVisualizerService licenseVisualizerService)
     {
-        ArgumentNullException.ThrowIfNull(licenseService);
-        ArgumentNullException.ThrowIfNull(licenseValidationService);
-        ArgumentNullException.ThrowIfNull(licenseVisualizerService);
-
         _licenseService = licenseService;
         _licenseValidationService = licenseValidationService;
         _licenseVisualizerService = licenseVisualizerService;
@@ -57,21 +54,21 @@ public class SimpleLicenseService : ISimpleLicenseService
         var licenseValidationResult = await _licenseValidationService.ValidateLicenseOnServerAsync(licenseString, serverUrl);
         if (!licenseValidationResult.IsValid)
         {
-            Log.Error("The server returned that the license is invalid and contains the following errors:");
-            Log.Error("  * {0}", licenseValidationResult.AdditionalInfo);
+            Logger.LogError("The server returned that the license is invalid and contains the following errors:");
+            Logger.LogError("  * {0}", licenseValidationResult.AdditionalInfo);
 
             return false;
         }
 
-        Log.Debug("Server returned valid license, doing a local check to be sure that the server wasn't forged");
+        Logger.LogDebug("Server returned valid license, doing a local check to be sure that the server wasn't forged");
 
         var validationContext = await _licenseValidationService.ValidateLicenseAsync(licenseString);
         if (validationContext.HasErrors)
         {
-            Log.Error("The license is invalid and contains the following errors:");
+            Logger.LogError("The license is invalid and contains the following errors:");
             foreach (var error in validationContext.GetErrors())
             {
-                Log.Error("  * {0}", error.Message);
+                Logger.LogError("  * {0}", error.Message);
             }
 
             return false;

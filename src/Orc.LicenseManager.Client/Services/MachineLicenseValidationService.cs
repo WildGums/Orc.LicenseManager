@@ -4,10 +4,11 @@ using System;
 using Catel;
 using Catel.Data;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 public class MachineLicenseValidationService : IMachineLicenseValidationService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(MachineLicenseValidationService));
 
     private readonly IIdentificationService _identificationService;
 
@@ -28,11 +29,11 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
 
         var validationContext = new ValidationContext();
 
-        Log.Debug("Retrieving machine id");
+        Logger.LogDebug("Retrieving machine id");
 
         var machineId = _identificationService.GetMachineId();
 
-        Log.Debug("Validating machine id '{0}' against expected machine id '{1}'", machineId, machineIdToValidate);
+        Logger.LogDebug("Validating machine id '{0}' against expected machine id '{1}'", machineId, machineIdToValidate);
 
         var machineSplitted = machineId.Split(new[] { LicenseElements.IdentificationSeparator }, StringSplitOptions.None);
         var expectedSplitter = machineIdToValidate.Split(new[] { LicenseElements.IdentificationSeparator }, StringSplitOptions.None);
@@ -40,7 +41,7 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
         if (machineSplitted.Length != expectedSplitter.Length)
         {
             var error = "The number of items inside the license differ too much, assuming machine ids do not match";
-            Log.Error(error);
+            Logger.LogError(error);
             validationContext.Add(BusinessRuleValidationResult.CreateError(error));
 
             return validationContext;
@@ -59,7 +60,7 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
         if (invalidEntries > Threshold)
         {
             var error = string.Format("{0} values are not equal, not accepting the machine id, maximum threshold is '{1}'", invalidEntries, Threshold);
-            Log.Error(error);
+            Logger.LogError(error);
             validationContext.Add(BusinessRuleValidationResult.CreateError(error));
 
             return validationContext;
@@ -68,7 +69,7 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
         if (invalidEntries > 0)
         {
             var warning = string.Format("One of the values is not equal, but we have a threshold of {0} so accepting machine id", Threshold);
-            Log.Warning(warning);
+            Logger.LogWarning(warning);
 
             validationContext.Add(BusinessRuleValidationResult.CreateWarning(warning));
         }
