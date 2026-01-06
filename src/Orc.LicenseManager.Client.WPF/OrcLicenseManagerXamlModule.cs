@@ -1,9 +1,10 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc
 {
     using Catel.IoC;
     using Catel.Services;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Orc.LicenseManager;
     using Orc.LicenseManager.ViewModels;
     using Orc.LicenseManager.Views;
 
