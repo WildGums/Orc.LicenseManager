@@ -236,10 +236,6 @@ namespace Orc.LicenseManager
         public static Orc.LicenseManager.NetworkLicenseUsage? GetLatestUser(this Orc.LicenseManager.NetworkValidationResult validationResult) { }
         public static bool IsCurrentUserLatestUser(this Orc.LicenseManager.INetworkLicenseService networkLicenseService, Orc.LicenseManager.NetworkValidationResult validationResult) { }
     }
-    public static class OrcLicenseManagerModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcLicenseManager(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
-    }
     public class PreventUsageOfAnyVersionExpirationBehavior : Orc.LicenseManager.ExpirationBehaviorBase
     {
         public PreventUsageOfAnyVersionExpirationBehavior(Microsoft.Extensions.Logging.ILogger<Orc.LicenseManager.PreventUsageOfAnyVersionExpirationBehavior> logger) { }
@@ -269,5 +265,12 @@ namespace Orc.LicenseManager
         public XmlDataModel(string name, string value) { }
         public string Name { get; set; }
         public string Value { get; set; }
+    }
+}
+namespace Orc
+{
+    public static class OrcLicenseManagerModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcLicenseManager(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
 }

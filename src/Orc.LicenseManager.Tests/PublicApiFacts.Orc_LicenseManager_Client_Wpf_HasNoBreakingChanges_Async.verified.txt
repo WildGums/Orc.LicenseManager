@@ -27,10 +27,6 @@ namespace Orc.LicenseManager
         public DialogLicenseVisualizerService(Catel.Services.IUIVisualizerService uiVisualizerService, Orc.LicenseManager.ILicenseInfoService licenseInfoService, Catel.Services.IDispatcherService dispatcherService) { }
         public void ShowLicense() { }
     }
-    public static class OrcLicenseManagerXamlModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcLicenseManagerXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
-    }
     public static class WindowExtensions
     {
         public static void ApplyIconFromApplication(this System.Windows.Window window) { }
@@ -156,5 +152,12 @@ namespace Orc.LicenseManager.Views
         public NetworkLicenseUsageWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public NetworkLicenseUsageWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
+    }
+}
+namespace Orc
+{
+    public static class OrcLicenseManagerXamlModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcLicenseManagerXaml(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
 }
