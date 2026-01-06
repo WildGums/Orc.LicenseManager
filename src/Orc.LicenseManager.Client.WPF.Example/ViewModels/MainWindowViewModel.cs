@@ -6,9 +6,6 @@
     using Catel.Services;
     using LicenseManager.ViewModels;
 
-    /// <summary>
-    /// MainWindow view model.
-    /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ILicenseService _licenseService;
@@ -18,20 +15,12 @@
         private readonly ILicenseVisualizerService _licenseVisualizerService;
         private readonly IUIVisualizerService _uiVisualizerService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
-        /// </summary>
-        public MainWindowViewModel(ILicenseService licenseService, ILicenseValidationService licenseValidationService,
-            IMessageService messageService, INetworkLicenseService networkLicenseService,
-            ILicenseVisualizerService licenseVisualizerService, IUIVisualizerService uiVisualizerService)
+        public MainWindowViewModel(IServiceProvider serviceProvider, ILicenseService licenseService, 
+            ILicenseValidationService licenseValidationService, IMessageService messageService, 
+            INetworkLicenseService networkLicenseService, ILicenseVisualizerService licenseVisualizerService, 
+            IUIVisualizerService uiVisualizerService)
+            : base(serviceProvider)
         {
-            ArgumentNullException.ThrowIfNull(licenseService);
-            ArgumentNullException.ThrowIfNull(licenseValidationService);
-            ArgumentNullException.ThrowIfNull(messageService);
-            ArgumentNullException.ThrowIfNull(networkLicenseService);
-            ArgumentNullException.ThrowIfNull(licenseVisualizerService);
-            ArgumentNullException.ThrowIfNull(uiVisualizerService);
-
             _licenseService = licenseService;
             _licenseValidationService = licenseValidationService;
             _messageService = messageService;
@@ -39,11 +28,11 @@
             _licenseVisualizerService = licenseVisualizerService;
             _uiVisualizerService = uiVisualizerService;
 
-            RemoveLicense = new Command(OnRemoveLicenseExecute);
-            ValidateLicenseOnServer = new TaskCommand(OnValidateLicenseOnServerExecuteAsync, OnValidateLicenseOnServerCanExecute);
-            ValidateLicenseOnLocalNetwork = new TaskCommand(OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
-            ShowLicense = new Command(OnShowLicenseExecute);
-            ShowLicenseUsage = new TaskCommand(OnShowLicenseUsageExecuteAsync);
+            RemoveLicense = new Command(serviceProvider, OnRemoveLicenseExecute);
+            ValidateLicenseOnServer = new TaskCommand(serviceProvider, OnValidateLicenseOnServerExecuteAsync, OnValidateLicenseOnServerCanExecute);
+            ValidateLicenseOnLocalNetwork = new TaskCommand(serviceProvider, OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
+            ShowLicense = new Command(serviceProvider, OnShowLicenseExecute);
+            ShowLicenseUsage = new TaskCommand(serviceProvider, OnShowLicenseUsageExecuteAsync);
 
             ServerUri = string.Format("http://localhost:1815/api/license/validate");
         }
@@ -178,7 +167,7 @@
             {
                 var latestUsage = validationResult.GetLatestUser();
 
-                if (validationResult.IsCurrentUserLatestUser())
+                if (_networkLicenseService.IsCurrentUserLatestUser(validationResult))
                 {
                     await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
                 }

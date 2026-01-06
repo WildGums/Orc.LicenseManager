@@ -51,7 +51,7 @@ public class LicenseViewModel : ViewModelBase
         Title = licenseInfo.Title;
         AvailableLicenseModes = Array.Empty<LicenseMode>();
 
-        XmlData = new ObservableCollection<XmlDataModel>();
+        XmlData = new System.Collections.ObjectModel.ObservableCollection<XmlDataModel>();
 
         Paste = new TaskCommand(serviceProvider, OnPasteExecuteAsync);
         ShowClipboard = new TaskCommand(serviceProvider, OnShowClipboardExecuteAsync);
@@ -111,7 +111,7 @@ public class LicenseViewModel : ViewModelBase
     /// <summary>
     /// List of xml Data, only populated when license was valid.
     /// </summary>
-    public ObservableCollection<XmlDataModel> XmlData { get; set; }
+    public System.Collections.ObjectModel.ObservableCollection<XmlDataModel> XmlData { get; set; }
 
     /// <summary>
     /// Gets the ShowClipboard command.
