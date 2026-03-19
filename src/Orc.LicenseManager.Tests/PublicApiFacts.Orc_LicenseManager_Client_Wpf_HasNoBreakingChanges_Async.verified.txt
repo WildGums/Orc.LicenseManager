@@ -122,7 +122,6 @@ namespace Orc.LicenseManager.Views
     public class ClipBoardWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public ClipBoardWindow() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public ClipBoardWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public ClipBoardWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
@@ -131,7 +130,6 @@ namespace Orc.LicenseManager.Views
     {
         public static readonly System.Windows.DependencyProperty ShowAboutProperty;
         public LicenseView() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public LicenseView(System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public LicenseView(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IViewModelWrapperService viewModelWrapperService, Catel.MVVM.IDataContextSubscriptionService dataContextSubscriptionService) { }
         public bool ShowAbout { get; set; }
@@ -140,7 +138,6 @@ namespace Orc.LicenseManager.Views
     public class LicenseWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public LicenseWindow() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public LicenseWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public LicenseWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
@@ -148,7 +145,6 @@ namespace Orc.LicenseManager.Views
     public class NetworkLicenseUsageWindow : Catel.Windows.DataWindow, System.Windows.Markup.IComponentConnector
     {
         public NetworkLicenseUsageWindow() { }
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public NetworkLicenseUsageWindow(System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public NetworkLicenseUsageWindow(Catel.MVVM.IViewModel? viewModel, System.IServiceProvider serviceProvider, Catel.Services.IWrapControlService wrapControlService, Catel.Services.ILanguageService languageService) { }
         public void InitializeComponent() { }
