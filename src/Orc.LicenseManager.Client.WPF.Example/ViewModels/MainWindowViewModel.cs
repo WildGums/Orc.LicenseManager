@@ -1,186 +1,185 @@
-﻿namespace Orc.LicenseManager.Client.Example.ViewModels
+﻿namespace Orc.LicenseManager.Client.Example.ViewModels;
+
+using System;
+using System.Threading.Tasks;
+using Catel.MVVM;
+using Catel.Services;
+using LicenseManager.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase
 {
-    using System;
-    using System.Threading.Tasks;
-    using Catel.MVVM;
-    using Catel.Services;
-    using LicenseManager.ViewModels;
+    private readonly ILicenseService _licenseService;
+    private readonly ILicenseValidationService _licenseValidationService;
+    private readonly IMessageService _messageService;
+    private readonly INetworkLicenseService _networkLicenseService;
+    private readonly ILicenseVisualizerService _licenseVisualizerService;
+    private readonly IUIVisualizerService _uiVisualizerService;
 
-    public class MainWindowViewModel : ViewModelBase
+    public MainWindowViewModel(IServiceProvider serviceProvider, ILicenseService licenseService, 
+        ILicenseValidationService licenseValidationService, IMessageService messageService, 
+        INetworkLicenseService networkLicenseService, ILicenseVisualizerService licenseVisualizerService, 
+        IUIVisualizerService uiVisualizerService)
+        : base(serviceProvider)
     {
-        private readonly ILicenseService _licenseService;
-        private readonly ILicenseValidationService _licenseValidationService;
-        private readonly IMessageService _messageService;
-        private readonly INetworkLicenseService _networkLicenseService;
-        private readonly ILicenseVisualizerService _licenseVisualizerService;
-        private readonly IUIVisualizerService _uiVisualizerService;
+        _licenseService = licenseService;
+        _licenseValidationService = licenseValidationService;
+        _messageService = messageService;
+        _networkLicenseService = networkLicenseService;
+        _licenseVisualizerService = licenseVisualizerService;
+        _uiVisualizerService = uiVisualizerService;
 
-        public MainWindowViewModel(IServiceProvider serviceProvider, ILicenseService licenseService, 
-            ILicenseValidationService licenseValidationService, IMessageService messageService, 
-            INetworkLicenseService networkLicenseService, ILicenseVisualizerService licenseVisualizerService, 
-            IUIVisualizerService uiVisualizerService)
-            : base(serviceProvider)
+        RemoveLicense = new Command(serviceProvider, OnRemoveLicenseExecute);
+        ValidateLicenseOnServer = new TaskCommand(serviceProvider, OnValidateLicenseOnServerExecuteAsync, OnValidateLicenseOnServerCanExecute);
+        ValidateLicenseOnLocalNetwork = new TaskCommand(serviceProvider, OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
+        ShowLicense = new Command(serviceProvider, OnShowLicenseExecute);
+        ShowLicenseUsage = new TaskCommand(serviceProvider, OnShowLicenseUsageExecuteAsync);
+
+        ServerUri = string.Format("http://localhost:1815/api/license/validate");
+    }
+
+    /// <summary>
+    /// Gets the title of the view model.
+    /// </summary>
+    /// <value>The title.</value>
+    public override string Title
+    {
+        get { return "Orc.LicenseManager example"; }
+    }
+
+    public string ServerUri { get; set; }
+
+    public Command RemoveLicense { get; private set; }
+
+    private void OnRemoveLicenseExecute()
+    {
+        _licenseService.RemoveLicense(LicenseMode.CurrentUser);
+        _licenseService.RemoveLicense(LicenseMode.MachineWide);
+
+        ShowLicenseDialog();
+    }
+
+    public TaskCommand ValidateLicenseOnServer { get; private set; }
+
+    private bool OnValidateLicenseOnServerCanExecute()
+    {
+        if (string.IsNullOrWhiteSpace(ServerUri))
         {
-            _licenseService = licenseService;
-            _licenseValidationService = licenseValidationService;
-            _messageService = messageService;
-            _networkLicenseService = networkLicenseService;
-            _licenseVisualizerService = licenseVisualizerService;
-            _uiVisualizerService = uiVisualizerService;
-
-            RemoveLicense = new Command(serviceProvider, OnRemoveLicenseExecute);
-            ValidateLicenseOnServer = new TaskCommand(serviceProvider, OnValidateLicenseOnServerExecuteAsync, OnValidateLicenseOnServerCanExecute);
-            ValidateLicenseOnLocalNetwork = new TaskCommand(serviceProvider, OnValidateLicenseOnLocalNetworkExecuteAsync, OnValidateLicenseOnLocalNetworkCanExecute);
-            ShowLicense = new Command(serviceProvider, OnShowLicenseExecute);
-            ShowLicenseUsage = new TaskCommand(serviceProvider, OnShowLicenseUsageExecuteAsync);
-
-            ServerUri = string.Format("http://localhost:1815/api/license/validate");
+            return false;
         }
 
-        /// <summary>
-        /// Gets the title of the view model.
-        /// </summary>
-        /// <value>The title.</value>
-        public override string Title
+        if (!_licenseService.AnyExistingLicense())
         {
-            get { return "Orc.LicenseManager example"; }
+            return false;
         }
 
-        public string ServerUri { get; set; }
+        return true;
+    }
 
-        public Command RemoveLicense { get; private set; }
+    private async Task OnValidateLicenseOnServerExecuteAsync()
+    {
+        var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
 
-        private void OnRemoveLicenseExecute()
+        if (string.IsNullOrWhiteSpace(licenseString))
         {
-            _licenseService.RemoveLicense(LicenseMode.CurrentUser);
-            _licenseService.RemoveLicense(LicenseMode.MachineWide);
-
-            ShowLicenseDialog();
+            licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
         }
 
-        public TaskCommand ValidateLicenseOnServer { get; private set; }
+        var result = await _licenseValidationService.ValidateLicenseOnServerAsync(licenseString, ServerUri);
 
-        private bool OnValidateLicenseOnServerCanExecute()
+        await _messageService.ShowAsync(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
+    }
+
+    public TaskCommand ValidateLicenseOnLocalNetwork { get; private set; }
+
+    private bool OnValidateLicenseOnLocalNetworkCanExecute()
+    {
+        if (!_licenseService.AnyExistingLicense())
         {
-            if (string.IsNullOrWhiteSpace(ServerUri))
-            {
-                return false;
-            }
-
-            if (!_licenseService.AnyExistingLicense())
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
-        private async Task OnValidateLicenseOnServerExecuteAsync()
+        return true;
+    }
+
+    private async Task OnValidateLicenseOnLocalNetworkExecuteAsync()
+    {
+        NetworkValidationResult validationResult = null;
+
+        validationResult = await _networkLicenseService.ValidateLicenseAsync();
+
+        await _messageService.ShowAsync(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
+    }
+
+    public Command ShowLicense { get; private set; }
+
+    private void OnShowLicenseExecute()
+    {
+        _licenseVisualizerService.ShowLicense();
+    }
+
+    public TaskCommand ShowLicenseUsage { get; set; }
+
+    private async Task OnShowLicenseUsageExecuteAsync()
+    {
+        var networkValidationResult = new NetworkValidationResult();
+
+        networkValidationResult.MaximumConcurrentUsers = 2;
+        networkValidationResult.CurrentUsers.AddRange(new[]
         {
-            var licenseString = _licenseService.LoadLicense(LicenseMode.CurrentUser);
+            new NetworkLicenseUsage("12", "192.168.1.100", "Jon", "Licence signature", DateTime.Now),
+            new NetworkLicenseUsage("13", "192.168.1.101", "Jane", "Licence signature", DateTime.Now),
+            new NetworkLicenseUsage("14", "192.168.1.102", "Samuel", "Licence signature", DateTime.Now),
+            new NetworkLicenseUsage("15", "192.168.1.103", "Paula", "Licence signature", DateTime.Now)
+        });
 
-            if (string.IsNullOrWhiteSpace(licenseString))
-            {
-                licenseString = _licenseService.LoadLicense(LicenseMode.MachineWide);
-            }
+        await _uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(networkValidationResult);
+    }
 
-            var result = await _licenseValidationService.ValidateLicenseOnServerAsync(licenseString, ServerUri);
+    protected override async Task InitializeAsync()
+    {
+        _networkLicenseService.Validated += OnNetworkLicenseValidated;
 
-            await _messageService.ShowAsync(string.Format("License is {0}valid", result.IsValid ? string.Empty : "NOT "));
-        }
+        // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
+        await Task.Factory.StartNew(() => _networkLicenseService.Initialize(TimeSpan.FromSeconds(10)));
 
-        public TaskCommand ValidateLicenseOnLocalNetwork { get; private set; }
-
-        private bool OnValidateLicenseOnLocalNetworkCanExecute()
+        if (_licenseService.AnyExistingLicense())
         {
-            if (!_licenseService.AnyExistingLicense())
-            {
-                return false;
-            }
+            var licenseString = _licenseService.LoadExistingLicense();
+            var licenseValidation = await _licenseValidationService.ValidateLicenseAsync(licenseString);
 
-            return true;
-        }
-
-        private async Task OnValidateLicenseOnLocalNetworkExecuteAsync()
-        {
-            NetworkValidationResult validationResult = null;
-
-            validationResult = await _networkLicenseService.ValidateLicenseAsync();
-
-            await _messageService.ShowAsync(string.Format("License is {0}valid, using '{1}' of '{2}' licenses", validationResult.IsValid ? string.Empty : "NOT ", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
-        }
-
-        public Command ShowLicense { get; private set; }
-
-        private void OnShowLicenseExecute()
-        {
-            _licenseVisualizerService.ShowLicense();
-        }
-
-        public TaskCommand ShowLicenseUsage { get; set; }
-
-        private async Task OnShowLicenseUsageExecuteAsync()
-        {
-            var networkValidationResult = new NetworkValidationResult();
-
-            networkValidationResult.MaximumConcurrentUsers = 2;
-            networkValidationResult.CurrentUsers.AddRange(new[]
-            {
-                new NetworkLicenseUsage("12", "192.168.1.100", "Jon", "Licence signature", DateTime.Now),
-                new NetworkLicenseUsage("13", "192.168.1.101", "Jane", "Licence signature", DateTime.Now),
-                new NetworkLicenseUsage("14", "192.168.1.102", "Samuel", "Licence signature", DateTime.Now),
-                new NetworkLicenseUsage("15", "192.168.1.103", "Paula", "Licence signature", DateTime.Now)
-            });
-
-            await _uiVisualizerService.ShowDialogAsync<NetworkLicenseUsageViewModel>(networkValidationResult);
-        }
-
-        protected override async Task InitializeAsync()
-        {
-            _networkLicenseService.Validated += OnNetworkLicenseValidated;
-
-            // For debug / demo / test purposes, check every 10 seconds, recommended in production is 30 seconds or higher
-            await Task.Factory.StartNew(() => _networkLicenseService.Initialize(TimeSpan.FromSeconds(10)));
-
-            if (_licenseService.AnyExistingLicense())
-            {
-                var licenseString = _licenseService.LoadExistingLicense();
-                var licenseValidation = await _licenseValidationService.ValidateLicenseAsync(licenseString);
-
-                if (licenseValidation.HasErrors)
-                {
-                    ShowLicenseDialog();
-                }
-            }
-            else
+            if (licenseValidation.HasErrors)
             {
                 ShowLicenseDialog();
             }
         }
+        else
+        {
+            ShowLicenseDialog();
+        }
+    }
 
 #pragma warning disable AvoidAsyncVoid
-        private async void OnNetworkLicenseValidated(object sender, NetworkValidatedEventArgs e)
+    private async void OnNetworkLicenseValidated(object sender, NetworkValidatedEventArgs e)
 #pragma warning restore AvoidAsyncVoid
+    {
+        var validationResult = e.ValidationResult;
+        if (!validationResult.IsValid)
         {
-            var validationResult = e.ValidationResult;
-            if (!validationResult.IsValid)
-            {
-                var latestUsage = validationResult.GetLatestUser();
+            var latestUsage = validationResult.GetLatestUser();
 
-                if (_networkLicenseService.IsCurrentUserLatestUser(validationResult))
-                {
-                    await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
-                }
-                else
-                {
-                    await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. The latest user is '{2}' with ip '{3}', you can continue working", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers, latestUsage.UserName, latestUsage.Ip));
-                }
+            if (_networkLicenseService.IsCurrentUserLatestUser(validationResult))
+            {
+                await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. You are the latest user, your software will be shut down", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers));
+            }
+            else
+            {
+                await _messageService.ShowAsync(string.Format("License is invalid, using '{0}' of '{1}' licenses. The latest user is '{2}' with ip '{3}', you can continue working", validationResult.CurrentUsers.Count, validationResult.MaximumConcurrentUsers, latestUsage.UserName, latestUsage.Ip));
             }
         }
+    }
 
-        private void ShowLicenseDialog()
-        {
-            _licenseVisualizerService.ShowLicense();
-        }
+    private void ShowLicenseDialog()
+    {
+        _licenseVisualizerService.ShowLicense();
     }
 }

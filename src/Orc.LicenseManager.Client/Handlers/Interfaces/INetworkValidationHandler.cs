@@ -1,7 +1,6 @@
-﻿namespace Orc.LicenseManager
+﻿namespace Orc.LicenseManager;
+
+public interface INetworkValidationHandler
 {
-    public interface INetworkValidationHandler
-    {
-        void HandleNetworkValidation(object? sender, NetworkValidatedEventArgs e);
-    }
+    void HandleNetworkValidation(object? sender, NetworkValidatedEventArgs e);
 }
