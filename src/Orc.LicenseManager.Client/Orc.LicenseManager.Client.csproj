@@ -16,8 +16,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="4.12.0-alpha0121" PrivateAssets="all" />
-    <PackageReference Include="Catel.SourceGenerators" Version="1.0.0-alpha0052" PrivateAssets="all" />
+    <PackageReference Include="Catel.Fody" Version="7.0.0" PrivateAssets="all" />
+    <PackageReference Include="Catel.SourceGenerators" Version="7.0.1" PrivateAssets="all" />
     <PackageReference Include="Costura.Fody" Version="6.1.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -26,14 +26,9 @@
     <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.1" PrivateAssets="all" />
-    <!--<PackageReference Include="Orc.FileSystem" Version="5.1.0" />
-    <PackageReference Include="Orc.SystemInfo" Version="5.1.0" />-->
+    <PackageReference Include="Orc.FileSystem" Version="6.0.0-alpha0099" />
+    <PackageReference Include="Orc.SystemInfo" Version="6.0.0-alpha0092" />
     <PackageReference Include="Portable.Licensing" Version="1.1.0" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Orc.FileSystem\src\Orc.FileSystem\Orc.FileSystem.csproj" />
-    <ProjectReference Include="..\..\..\Orc.SystemInfo\src\Orc.SystemInfo\Orc.SystemInfo.csproj" />
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props')" />
