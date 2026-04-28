@@ -5,14 +5,8 @@ using ViewModels;
 
 public partial class NetworkLicenseUsageWindow
 {
-    public NetworkLicenseUsageWindow()
-        : this(null)
+    partial void OnInitializedComponent()
     {
-    }
-
-    public NetworkLicenseUsageWindow(NetworkLicenseUsageViewModel? viewModel)
-        : base(viewModel, DataWindowMode.Custom)
-    {
-        InitializeComponent();
+        Mode = DataWindowMode.Custom;
     }
 }

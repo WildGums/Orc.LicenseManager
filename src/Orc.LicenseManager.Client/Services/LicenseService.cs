@@ -6,6 +6,7 @@ using System.Xml;
 using Catel;
 using Catel.Logging;
 using FileSystem;
+using Microsoft.Extensions.Logging;
 using Portable.Licensing;
 
 /// <summary>
@@ -13,7 +14,7 @@ using Portable.Licensing;
 /// </summary>
 public class LicenseService : ILicenseService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(LicenseService));
 
     private readonly ILicenseLocationService _licenseLocationService;
     private readonly IFileService _fileService;
@@ -62,7 +63,7 @@ public class LicenseService : ILicenseService
             var xmlFilePath = _licenseLocationService.GetLicenseLocation(licenseMode);
             if (string.IsNullOrEmpty(xmlFilePath))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("License path not found");
+                throw Logger.LogErrorAndCreateException<InvalidOperationException>("License path not found");
             }
 
             using (var xmlWriter = XmlWriter.Create(xmlFilePath))
@@ -73,7 +74,7 @@ public class LicenseService : ILicenseService
                 xmlWriter.Close();
             }
 
-            Log.Info("License saved");
+            Logger.LogInformation("License saved");
 
             if (_currentLicense is null || _currentLicense.Item2 == licenseMode)
             {
@@ -82,7 +83,7 @@ public class LicenseService : ILicenseService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to save license");
+            Logger.LogError(ex, "Failed to save license");
             throw;
         }
     }
@@ -99,13 +100,13 @@ public class LicenseService : ILicenseService
         {
             if (string.IsNullOrEmpty(xmlFilePath))
             {
-                Log.Warning($"Failed to find '{licenseMode}' license file");
+                Logger.LogWarning($"Failed to find '{licenseMode}' license file");
             }
             else
             {
                 _fileService.Delete(xmlFilePath);
 
-                Log.Info($"The '{licenseMode}' license has been removed");
+                Logger.LogInformation($"The '{licenseMode}' license has been removed");
             }
 
             if (_currentLicense?.Item2 == licenseMode)
@@ -115,7 +116,7 @@ public class LicenseService : ILicenseService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Failed to delete the license @ '{xmlFilePath}'");
+            Logger.LogError(ex, $"Failed to delete the license @ '{xmlFilePath}'");
         }
     }
 
@@ -131,16 +132,16 @@ public class LicenseService : ILicenseService
         {
             if (!string.IsNullOrWhiteSpace(xmlFilePath) && _fileService.Exists(xmlFilePath))
             {
-                Log.Debug("License exists");
+                Logger.LogDebug("License exists");
                 return true;
             }
         }
         catch (Exception ex)
         {
-            Log.Warning(ex, $"Failed to check whether the license exists @ '{xmlFilePath}'");
+            Logger.LogWarning(ex, $"Failed to check whether the license exists @ '{xmlFilePath}'");
         }
 
-        Log.Debug("License does not exist");
+        Logger.LogDebug("License does not exist");
 
         return false;
     }
@@ -160,17 +161,17 @@ public class LicenseService : ILicenseService
 
                 SetCurrentLicense(licenseObject, licenseMode);
 
-                //Log.Debug("License loaded: {0}", licenseObject.ToString());
+                //Logger.LogDebug("License loaded: {0}", licenseObject.ToString());
 
                 return licenseObject.ToString();
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to load the license");
+            Logger.LogError(ex, "Failed to load the license");
         }
 
-        Log.Debug("Failed to load the license, returning empty string");
+        Logger.LogDebug("Failed to load the license, returning empty string");
 
         SetCurrentLicense(null, licenseMode);
 
@@ -182,7 +183,7 @@ public class LicenseService : ILicenseService
     /// </summary>
     /// <param name="license">The license.</param>
     /// <returns>A List of with the xml names and values</returns>
-    public List<XmlDataModel> LoadXmlFromLicense(string license)
+    public IReadOnlyList<XmlDataModel> LoadXmlFromLicense(string license)
     {
         var xmlDataList = new List<XmlDataModel>();
 
@@ -224,12 +225,12 @@ public class LicenseService : ILicenseService
                 }
             }
 
-            Log.Debug("Returning xml successful");
+            Logger.LogDebug("Returning xml successful");
         }
         catch (Exception ex)
         {
-            Log.Debug(ex);
-            return new List<XmlDataModel>();
+            Logger.LogDebug(ex, null);
+            return Array.Empty<XmlDataModel>();
         }
 
         return xmlDataList;

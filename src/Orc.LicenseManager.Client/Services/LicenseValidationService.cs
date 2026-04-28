@@ -12,13 +12,14 @@ using Catel;
 using Catel.Data;
 using Catel.Logging;
 using Catel.Reflection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Portable.Licensing;
 using Portable.Licensing.Validation;
 
 public class LicenseValidationService : ILicenseValidationService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(LicenseValidationService));
 
     private readonly IApplicationIdService _applicationIdService;
     private readonly IExpirationBehavior _expirationBehavior;
@@ -57,7 +58,7 @@ public class LicenseValidationService : ILicenseValidationService
 
         var validationContext = new ValidationContext();
 
-        Log.Info("Validating license");
+        Logger.LogInformation("Validating license");
 
         try
         {
@@ -82,14 +83,14 @@ public class LicenseValidationService : ILicenseValidationService
                 {
                     if (string.Equals(licenseAttribute.Key, LicenseElements.MachineId))
                     {
-                        Log.Debug("Validating license using machine ID");
+                        Logger.LogDebug("Validating license using machine ID");
 
                         var machineLicenseValidationContext = _machineLicenseValidationService.Validate(licenseAttribute.Value);
                         validationContext.SynchronizeWithContext(machineLicenseValidationContext, true);
 
                         if (machineLicenseValidationContext.HasErrors)
                         {
-                            Log.Error("The license can only run on machine with ID '{0}'", licenseAttribute.Value);
+                            Logger.LogError("The license can only run on machine with ID '{0}'", licenseAttribute.Value);
                         }
                     }
                 }
@@ -101,7 +102,7 @@ public class LicenseValidationService : ILicenseValidationService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "An error occurred while loading the license");
+            Logger.LogError(ex, "An error occurred while loading the license");
 
             validationContext.Add(BusinessRuleValidationResult.CreateError("An unknown error occurred while loading the license, please contact support"));
         }
@@ -146,7 +147,7 @@ public class LicenseValidationService : ILicenseValidationService
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to retrieve the product version");
+                        Logger.LogError(ex, "Failed to retrieve the product version");
                     }
                 }
 
@@ -171,7 +172,7 @@ public class LicenseValidationService : ILicenseValidationService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to validate the license on the server");
+            Logger.LogError(ex, "Failed to validate the license on the server");
         }
 
         validationResult ??= new LicenseValidationResult()
@@ -244,7 +245,7 @@ public class LicenseValidationService : ILicenseValidationService
             {
                 if (DateTime.TryParse(expData.Value, out var expirationDateTime))
                 {
-                    Log.Debug("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
+                    Logger.LogDebug("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
 
                     var portableLicense = License.Load(license);
 
@@ -278,20 +279,20 @@ public class LicenseValidationService : ILicenseValidationService
         }
         catch (XmlException xmlex)
         {
-            Log.Debug(xmlex);
+            Logger.LogDebug(xmlex, null);
 
             validationContext.Add(BusinessRuleValidationResult.CreateError("The license data is not a license"));
         }
         catch (Exception ex)
         {
-            Log.Debug(ex);
+            Logger.LogDebug(ex, null);
 
             validationContext.Add(BusinessRuleValidationResult.CreateError(ex.Message));
         }
 
         if (validationContext.HasErrors || validationContext.HasWarnings)
         {
-            Log.Warning("The XML is invalid");
+            Logger.LogWarning("The XML is invalid");
         }
 
         return validationContext;
@@ -301,19 +302,16 @@ public class LicenseValidationService : ILicenseValidationService
     {
         if (validationContext.GetErrors().Count > 0)
         {
-            Log.Warning("License is not valid:");
-            Log.Indent();
+            Logger.LogWarning("License is not valid:");
 
             foreach (var error in validationContext.GetErrors())
             {
-                Log.Warning("- {0}\n{1}", error.Message, error.Tag as string);
+                Logger.LogWarning("  - {0}\n{1}", error.Message, error.Tag as string);
             }
-
-            Log.Unindent();
         }
         else
         {
-            Log.Info("License is valid");
+            Logger.LogInformation("License is valid");
         }
     }
 }

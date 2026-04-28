@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using Portable.Licensing;
 
@@ -23,7 +24,7 @@ public class PreventUsageOfLaterReleasedVersionsExpirationBehaviorFacts
         var licenseBuilder = License.New().As(licenseType).ExpiresAt(expirationDate);
         var license = licenseBuilder.CreateAndSignWithPrivateKey(TestEnvironment.LicenseKeys.Private, TestEnvironment.LicenseKeys.PassPhrase);
 
-        var expirationBehavior = new PreventUsageOfAnyVersionExpirationBehavior();
+        var expirationBehavior = new PreventUsageOfAnyVersionExpirationBehavior(NullLogger<PreventUsageOfAnyVersionExpirationBehavior>.Instance);
 
         Assert.That(expirationBehavior.IsExpired(license, expirationDate, currentDate), Is.EqualTo(expectedValue));
     }

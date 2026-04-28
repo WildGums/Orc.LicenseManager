@@ -1,13 +1,6 @@
-﻿namespace Orc.LicenseManager.Client.Example.Views
-{
-    using Catel.Windows;
+﻿namespace Orc.LicenseManager.Client.Example.Views;
 
-    public partial class MainWindow : DataWindow
-    {
-        public MainWindow()
-            : base(DataWindowMode.Custom)
-        {
-            InitializeComponent();
-        }
-    }
+public partial class MainWindow
+{
+
 }

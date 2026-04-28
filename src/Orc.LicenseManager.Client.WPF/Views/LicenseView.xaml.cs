@@ -4,11 +4,6 @@ using System.Windows;
 
 public sealed partial class LicenseView
 {
-    public LicenseView()
-    {
-        InitializeComponent();
-    }
-
     public bool ShowAbout
     {
         get { return (bool)GetValue(ShowAboutProperty); }

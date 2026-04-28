@@ -4,6 +4,6 @@ using System.Collections.Generic;
 
 public interface ILicenseModeService
 {
-    List<LicenseMode> GetAvailableLicenseModes();
+    IReadOnlyList<LicenseMode> GetAvailableLicenseModes();
     bool IsLicenseModeAvailable(LicenseMode licenseMode);
 }

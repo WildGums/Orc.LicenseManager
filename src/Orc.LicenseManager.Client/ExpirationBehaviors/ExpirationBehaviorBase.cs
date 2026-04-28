@@ -2,11 +2,17 @@
 
 using System;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 using Portable.Licensing;
 
 public abstract class ExpirationBehaviorBase : IExpirationBehavior
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private readonly ILogger _logger;
+
+    protected ExpirationBehaviorBase(ILogger logger)
+    {
+        _logger = logger;
+    }
 
     public virtual bool IsExpired(License license, DateTime expirationDateTime, DateTime validationDateTime)
     {
@@ -17,7 +23,7 @@ public abstract class ExpirationBehaviorBase : IExpirationBehavior
             return IsNormalLicenseExpired(license, expirationDateTime, validationDateTime);
         }
 
-        Log.Debug("License is trial, checking for absolute expiration date time (trials always prevent usage after expiration date)");
+        _logger.LogDebug("License is trial, checking for absolute expiration date time (trials always prevent usage after expiration date)");
 
         return validationDateTime > expirationDateTime;
 

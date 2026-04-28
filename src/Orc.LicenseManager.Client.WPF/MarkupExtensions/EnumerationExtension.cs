@@ -5,10 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Markup;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 internal class EnumerationExtension : MarkupExtension
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(EnumerationExtension));
 
     private readonly Type _enumType;
 
@@ -20,7 +21,7 @@ internal class EnumerationExtension : MarkupExtension
 
         if (!underlyingType.IsEnum)
         {
-            throw Log.ErrorAndCreateException<ArgumentException>("Type must be an Enum.");
+            throw Logger.LogErrorAndCreateException<ArgumentException>("Type must be an Enum.");
         }
 
         _enumType = enumType;
@@ -46,7 +47,7 @@ internal class EnumerationExtension : MarkupExtension
         var fieldName = enumValue.ToString();
         if (string.IsNullOrEmpty(fieldName))
         {
-            throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot get field with null or empty name");
+            throw Logger.LogErrorAndCreateException<InvalidOperationException>("Cannot get field with null or empty name");
         }
 
         return _enumType

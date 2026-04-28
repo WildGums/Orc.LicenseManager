@@ -54,5 +54,5 @@ public interface ILicenseService
     /// <returns>
     /// A List of with the xml names and values
     /// </returns>
-    List<XmlDataModel> LoadXmlFromLicense(string license);
+    IReadOnlyList<XmlDataModel> LoadXmlFromLicense(string license);
 }

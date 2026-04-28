@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using Catel.Logging;
 using FileSystem;
+using Microsoft.Extensions.Logging;
 
 public class LicenseModeService : ILicenseModeService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(LicenseModeService));
 
     private readonly IFileService _fileService;
     private readonly ILicenseLocationService _licenseLocationService;
@@ -21,7 +22,7 @@ public class LicenseModeService : ILicenseModeService
         _licenseLocationService = licenseLocationService;
     }
 
-    public List<LicenseMode> GetAvailableLicenseModes()
+    public IReadOnlyList<LicenseMode> GetAvailableLicenseModes()
     {
         var licenseModes = new List<LicenseMode>();
 
@@ -60,7 +61,7 @@ public class LicenseModeService : ILicenseModeService
         }
         catch (Exception ex)
         {
-            Log.Debug(ex, $"Failed to access location @ '{licenseLocation}', assuming license mode '{licenseMode}' is not available");
+            Logger.LogDebug(ex, $"Failed to access location @ '{licenseLocation}', assuming license mode '{licenseMode}' is not available");
             return false;
         }
     }
