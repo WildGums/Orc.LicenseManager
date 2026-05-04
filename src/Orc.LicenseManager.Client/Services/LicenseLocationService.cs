@@ -31,14 +31,14 @@ public class LicenseLocationService : ILicenseLocationService
             var fileName = GetLicenseLocation(licenseMode);
             if (!string.IsNullOrWhiteSpace(fileName) && _fileService.Exists(fileName))
             {
-                Logger.LogDebug($"Loading license from '{fileName}'");
+                Logger.LogDebug("Loading license from '{FileName}'", fileName);
 
                 return _fileService.ReadAllText(fileName);
             }
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, $"Failed to load license for license mode '{licenseMode}'");
+            Logger.LogError(ex, "Failed to load license for license mode '{LicenseMode}'", licenseMode);
         }
 
         return null;
@@ -72,7 +72,7 @@ public class LicenseLocationService : ILicenseLocationService
         }
         catch (Exception ex)
         {
-            Logger.LogWarning(ex, $"Failed to get license location for license mode '{licenseMode}', probably access is denied");
+            Logger.LogWarning(ex, "Failed to get license location for license mode '{LicenseMode}', probably access is denied", licenseMode);
             return null;
         }
     }

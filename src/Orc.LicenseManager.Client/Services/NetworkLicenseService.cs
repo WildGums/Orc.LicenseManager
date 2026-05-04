@@ -90,7 +90,7 @@ public class NetworkLicenseService : INetworkLicenseService
                 pollingInterval = SearchTimeout.Add(TimeSpan.FromSeconds(5));
             }
 
-            Logger.LogDebug("Starting network polling with an interval of '{0}'", pollingInterval);
+            Logger.LogDebug("Starting network polling with an interval of '{PollingInterval}'", pollingInterval);
 
             _pollingTimer.Interval = pollingInterval.TotalMilliseconds;
             _pollingTimer.Elapsed += OnPollingTimerElapsed;
@@ -110,7 +110,7 @@ public class NetworkLicenseService : INetworkLicenseService
 
         networkValidationResult.MaximumConcurrentUsers = license.GetMaximumConcurrentLicenses();
 
-        Logger.LogInformation("Checking for other licenses, maximum number of concurrent users allowed is '{0}'", networkValidationResult.MaximumConcurrentUsers);
+        Logger.LogInformation("Checking for other licenses, maximum number of concurrent users allowed is '{MaximumConcurrentUsers}'", networkValidationResult.MaximumConcurrentUsers);
 
         try
         {
@@ -128,7 +128,7 @@ public class NetworkLicenseService : INetworkLicenseService
 
             networkValidationResult.CurrentUsers.AddRange(licenseUsages.GroupBy(x => x.ComputerId).Select(group => group.First()));
 
-            Logger.LogDebug("Found {0}", networkValidationResult);
+            Logger.LogDebug("Found {NetworkValidationResult}", networkValidationResult);
 
             Validated?.Invoke(this, new NetworkValidatedEventArgs(networkValidationResult));
         }
@@ -182,7 +182,7 @@ public class NetworkLicenseService : INetworkLicenseService
     {
         var licenseUsages = new Dictionary<string, NetworkLicenseUsage>();
 
-        Logger.LogDebug("Broadcasting via ip '{0}' to see how much users are currently using the license", ipAddress);
+        Logger.LogDebug("Broadcasting via ip '{IpAddress}' to see how much users are currently using the license", ipAddress);
 
         try
         {
@@ -211,7 +211,7 @@ public class NetworkLicenseService : INetworkLicenseService
                         {
                             var receivedMessage = Encoding.ASCII.GetString(receiveBuffer);
 
-                            Logger.LogDebug("Received message '{0}' from '{1}'", receivedMessage, ipEndPoint.Address);
+                            Logger.LogDebug("Received message '{ReceivedMessage}' from '{IpAddress}'", receivedMessage, ipEndPoint.Address);
 
                             var licenseUsage = await NetworkLicenseUsage.ParseAsync(receivedMessage);
                             if (licenseUsage is null)
@@ -261,7 +261,7 @@ public class NetworkLicenseService : INetworkLicenseService
         {
             var ipAddress = (ipAddressAsObject is not null) ? IPAddress.Parse((string)ipAddressAsObject) : IPAddress.Any;
 
-            Logger.LogDebug("Creating listener for ip '{0}'", ipAddress);
+            Logger.LogDebug("Creating listener for ip '{IpAddress}'", ipAddress);
 
             using (var udpClient = new UdpClient())
             {
@@ -299,7 +299,7 @@ public class NetworkLicenseService : INetworkLicenseService
                         var message = Encoding.ASCII.GetString(data);
                         if (string.Equals(message, licenseSignature))
                         {
-                            Logger.LogDebug("Received request from '{0}' on '{1}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
+                            Logger.LogDebug("Received request from '{IpAddress}' on '{LocalEndPoint}' to get currently used license", ipEndPoint.Address, udpClient.Client.LocalEndPoint);
 
                             if (string.IsNullOrEmpty(_machineId) || string.IsNullOrEmpty(_userName))
                             {

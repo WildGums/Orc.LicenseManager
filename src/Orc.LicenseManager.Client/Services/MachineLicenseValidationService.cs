@@ -33,7 +33,7 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
 
         var machineId = _identificationService.GetMachineId();
 
-        Logger.LogDebug("Validating machine id '{0}' against expected machine id '{1}'", machineId, machineIdToValidate);
+        Logger.LogDebug("Validating machine id '{MachineId}' against expected machine id '{ExpectedMachineId}'", machineId, machineIdToValidate);
 
         var machineSplitted = machineId.Split(new[] { LicenseElements.IdentificationSeparator }, StringSplitOptions.None);
         var expectedSplitter = machineIdToValidate.Split(new[] { LicenseElements.IdentificationSeparator }, StringSplitOptions.None);
@@ -59,8 +59,8 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
 
         if (invalidEntries > Threshold)
         {
-            var error = string.Format("{0} values are not equal, not accepting the machine id, maximum threshold is '{1}'", invalidEntries, Threshold);
-            Logger.LogError(error);
+            var error = $"{invalidEntries} values are not equal, not accepting the machine id, maximum threshold is '{Threshold}'";
+            Logger.LogError("{InvalidEntries} values are not equal, not accepting the machine id, maximum threshold is '{Threshold}'", invalidEntries, Threshold);
             validationContext.Add(BusinessRuleValidationResult.CreateError(error));
 
             return validationContext;
@@ -68,8 +68,8 @@ public class MachineLicenseValidationService : IMachineLicenseValidationService
 
         if (invalidEntries > 0)
         {
-            var warning = string.Format("One of the values is not equal, but we have a threshold of {0} so accepting machine id", Threshold);
-            Logger.LogWarning(warning);
+            var warning = $"One of the values is not equal, but we have a threshold of {Threshold} so accepting machine id";
+            Logger.LogWarning("One of the values is not equal, but we have a threshold of {Threshold} so accepting machine id", Threshold);
 
             validationContext.Add(BusinessRuleValidationResult.CreateWarning(warning));
         }
