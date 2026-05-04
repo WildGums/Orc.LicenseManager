@@ -100,13 +100,13 @@ public class LicenseService : ILicenseService
         {
             if (string.IsNullOrEmpty(xmlFilePath))
             {
-                Logger.LogWarning($"Failed to find '{licenseMode}' license file");
+                Logger.LogWarning("Failed to find '{LicenseMode}' license file", licenseMode);
             }
             else
             {
                 _fileService.Delete(xmlFilePath);
 
-                Logger.LogInformation($"The '{licenseMode}' license has been removed");
+                Logger.LogInformation("The '{LicenseMode}' license has been removed", licenseMode);
             }
 
             if (_currentLicense?.Item2 == licenseMode)
@@ -116,7 +116,7 @@ public class LicenseService : ILicenseService
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, $"Failed to delete the license @ '{xmlFilePath}'");
+            Logger.LogError(ex, "Failed to delete the license @ '{XmlFilePath}'", xmlFilePath);
         }
     }
 
@@ -138,7 +138,7 @@ public class LicenseService : ILicenseService
         }
         catch (Exception ex)
         {
-            Logger.LogWarning(ex, $"Failed to check whether the license exists @ '{xmlFilePath}'");
+            Logger.LogWarning(ex, "Failed to check whether the license exists @ '{XmlFilePath}'", xmlFilePath);
         }
 
         Logger.LogDebug("License does not exist");

@@ -61,7 +61,7 @@ public class LicenseModeService : ILicenseModeService
         }
         catch (Exception ex)
         {
-            Logger.LogDebug(ex, $"Failed to access location @ '{licenseLocation}', assuming license mode '{licenseMode}' is not available");
+            Logger.LogDebug(ex, "Failed to access location @ '{LicenseLocation}', assuming license mode '{LicenseMode}' is not available", licenseLocation, licenseMode);
             return false;
         }
     }

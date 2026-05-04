@@ -223,7 +223,7 @@ public class LicenseViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, $"Failed to save license using '{LicenseMode}'");
+            Logger.LogError(ex, "Failed to save license using '{LicenseMode}'", LicenseMode);
 
             await _messageService.ShowErrorAsync(_languageService.GetRequiredString("FailedToSaveLicense"));
             return false;

@@ -39,7 +39,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         // GET: /Customer/Details/5
         public ActionResult Details(int? id)
         {
-			Log.Debug("GET/Details id: {0}", id.ToString());
+			Log.Debug("GET/Details id: {Id}", id);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -93,7 +93,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         // GET: /Customer/Edit/5
         public ActionResult Edit(int? id)
         {
-			Log.Debug("GET/Edit id:{0}", id.ToString());
+			Log.Debug("GET/Edit id:{Id}", id);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -148,7 +148,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         // GET: /Customer/Delete/5
         public ActionResult Delete(int? id)
         {
-		Log.Debug("GET/Delete Id:{0}, id.ToString()");
+		Log.Debug("GET/Delete Id:{Id}", id);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -170,7 +170,7 @@ namespace Orc.LicenseManager.Server.Website.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-			Log.Debug("POST/DeleteConfirmed Id:{0}", id.ToString());
+			Log.Debug("POST/DeleteConfirmed Id:{Id}", id);
 			using(var uow = new UoW()){
 				var customersRepo = uow.GetRepository<ICustomerRepository>();
 				var customer = customersRepo.GetByKey((System.Int32)id);

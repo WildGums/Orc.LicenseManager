@@ -90,7 +90,7 @@ public class LicenseValidationService : ILicenseValidationService
 
                         if (machineLicenseValidationContext.HasErrors)
                         {
-                            Logger.LogError("The license can only run on machine with ID '{0}'", licenseAttribute.Value);
+                            Logger.LogError("The license can only run on machine with ID '{MachineId}'", licenseAttribute.Value);
                         }
                     }
                 }
@@ -245,7 +245,7 @@ public class LicenseValidationService : ILicenseValidationService
             {
                 if (DateTime.TryParse(expData.Value, out var expirationDateTime))
                 {
-                    Logger.LogDebug("Using expiration behavior '{0}'", _expirationBehavior.GetType().Name);
+                    Logger.LogDebug("Using expiration behavior '{ExpirationBehavior}'", _expirationBehavior.GetType().Name);
 
                     var portableLicense = License.Load(license);
 
@@ -306,7 +306,7 @@ public class LicenseValidationService : ILicenseValidationService
 
             foreach (var error in validationContext.GetErrors())
             {
-                Logger.LogWarning("  - {0}\n{1}", error.Message, error.Tag as string);
+                Logger.LogWarning("  - {ErrorMessage}\n{ErrorTag}", error.Message, error.Tag as string);
             }
         }
         else
