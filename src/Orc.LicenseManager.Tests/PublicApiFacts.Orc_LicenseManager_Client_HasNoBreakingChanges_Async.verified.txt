@@ -180,7 +180,7 @@ namespace Orc.LicenseManager
     }
     public class LicenseValidationService : Orc.LicenseManager.ILicenseValidationService
     {
-        public LicenseValidationService(Orc.LicenseManager.IApplicationIdService applicationIdService, Orc.LicenseManager.IExpirationBehavior expirationBehavior, Orc.LicenseManager.IIdentificationService identificationService, Orc.LicenseManager.IMachineLicenseValidationService machineLicenseValidationService) { }
+        public LicenseValidationService(Orc.LicenseManager.IApplicationIdService applicationIdService, Orc.LicenseManager.IExpirationBehavior expirationBehavior, Orc.LicenseManager.IIdentificationService identificationService, Orc.LicenseManager.IMachineLicenseValidationService machineLicenseValidationService, Orc.Serialization.Json.IJsonSerializerFactory jsonSerializerFactory) { }
         public System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateLicenseAsync(string license) { }
         public System.Threading.Tasks.Task<Orc.LicenseManager.LicenseValidationResult> ValidateLicenseOnServerAsync(string license, string serverUrl, System.Reflection.Assembly? assembly = null) { }
         public System.Threading.Tasks.Task<Catel.Data.IValidationContext> ValidateXmlAsync(string license) { }

@@ -13,7 +13,7 @@ using Catel.Data;
 using Catel.Logging;
 using Catel.Reflection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Orc.Serialization.Json;
 using Portable.Licensing;
 using Portable.Licensing.Validation;
 
@@ -25,6 +25,7 @@ public class LicenseValidationService : ILicenseValidationService
     private readonly IExpirationBehavior _expirationBehavior;
     private readonly IIdentificationService _identificationService;
     private readonly IMachineLicenseValidationService _machineLicenseValidationService;
+    private readonly IJsonSerializerFactory _jsonSerializerFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LicenseValidationService" /> class.
@@ -33,8 +34,10 @@ public class LicenseValidationService : ILicenseValidationService
     /// <param name="expirationBehavior">The expiration behavior.</param>
     /// <param name="identificationService">The identification service.</param>
     /// <param name="machineLicenseValidationService">The machine license validation service.</param>
+    /// <param name="jsonSerializerFactory">The json serializer factory.</param>
     public LicenseValidationService(IApplicationIdService applicationIdService, IExpirationBehavior expirationBehavior,
-        IIdentificationService identificationService, IMachineLicenseValidationService machineLicenseValidationService)
+        IIdentificationService identificationService, IMachineLicenseValidationService machineLicenseValidationService,
+        IJsonSerializerFactory jsonSerializerFactory)
     {
         ArgumentNullException.ThrowIfNull(applicationIdService);
         ArgumentNullException.ThrowIfNull(expirationBehavior);
@@ -45,6 +48,7 @@ public class LicenseValidationService : ILicenseValidationService
         _expirationBehavior = expirationBehavior;
         _identificationService = identificationService;
         _machineLicenseValidationService = machineLicenseValidationService;
+        _jsonSerializerFactory = jsonSerializerFactory;
     }
 
     /// <summary>
@@ -159,13 +163,16 @@ public class LicenseValidationService : ILicenseValidationService
                     License = license
                 };
 
-                var json = JsonConvert.SerializeObject(serverLicenseValidation);
+                var serializer = _jsonSerializerFactory.CreateSerializer();
+
+                var json = serializer.SerializeToString(serverLicenseValidation);
+
                 using (var httpContent = JsonContent.Create(json))
                 {
                     using (var response = await httpClient.PostAsync(serverUrl, httpContent))
                     {
                         var responseJson = await response.Content.ReadAsStringAsync();
-                        validationResult = JsonConvert.DeserializeObject<LicenseValidationResult>(responseJson);
+                        validationResult = serializer.DeserializeFromString<LicenseValidationResult>(responseJson);
                     }
                 }
             }

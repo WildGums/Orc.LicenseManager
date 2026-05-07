@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 /// <summary>
 /// View model for a single License.
 /// </summary>
-public class LicenseViewModel : ViewModelBase
+public class LicenseViewModel : FeaturedViewModelBase
 {
     private static readonly ILogger Logger = LogManager.GetLogger(typeof(LicenseViewModel));
 

@@ -48,7 +48,7 @@ namespace Orc.LicenseManager.ViewModels
         public Catel.MVVM.TaskCommand Exit { get; }
         public override string Title { get; }
     }
-    public class LicenseViewModel : Catel.MVVM.ViewModelBase
+    public class LicenseViewModel : Catel.MVVM.FeaturedViewModelBase
     {
         public static readonly Catel.Data.IPropertyData AvailableLicenseModesProperty;
         public static readonly Catel.Data.IPropertyData FailureMessageProperty;
