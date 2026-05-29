@@ -19,4 +19,9 @@ public partial class LicenseWindow
 
         this.RemoveCloseButton();
     }
+
+    partial void OnInitializingComponent()
+    {
+        Mode = DataWindowMode.OkCancel;
+    }
 }
