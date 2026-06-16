@@ -31,7 +31,7 @@ public static class OrcLicenseManagerModule
 
         serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Orc.LicenseManager.Client", "Orc.LicenseManager.Properties", "Resources"));
 
-        serviceCollection.AddSingleton<IThirdPartyNotice>((x) => new LibraryThirdPartyNotice("Orc.LicenseManager", "https://github.com/wildgums/orc.licensemanager"));
+        serviceCollection.AddSingleton<IThirdPartyNotice>((x) => new LibraryThirdPartyNotice("Orc.LicenseManager", "https://github.com/wildgums/orc.licensemanager", "Orc.LicenseManager.Client"));
         serviceCollection.AddSingleton<IThirdPartyNotice>((x) => new ResourceBasedThirdPartyNotice("Portable.Licensing", "https://github.com/dnauck/Portable.Licensing", "Orc.LicenseManager.Client", "Orchestra", "Resources.ThirdPartyNotices.portable.licensing.txt"));
 
         return serviceCollection;
