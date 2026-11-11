@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net10.0-windows</TargetFrameworks>
+    <TargetFrameworks>net11.0-windows</TargetFrameworks>
     <AssemblyName>Orc.LicenseManager.Client.WPF.Example</AssemblyName>
     <RootNamespace>Orc.LicenseManager.Client.WPF.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
