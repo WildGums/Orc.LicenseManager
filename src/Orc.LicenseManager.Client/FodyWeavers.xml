@@ -7,6 +7,5 @@
   </Costura>
   <Catel />
   <MethodTimer />
-  <LoadAssembliesOnStartup />
   <Obsolete />
 </Weavers>
