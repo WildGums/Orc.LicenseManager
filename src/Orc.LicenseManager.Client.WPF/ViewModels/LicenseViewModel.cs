@@ -50,6 +50,7 @@ public class LicenseViewModel : FeaturedViewModelBase
         LicenseInfo = licenseInfo;
         Title = licenseInfo.Title;
         AvailableLicenseModes = Array.Empty<LicenseMode>();
+        AboutImageUri = new Uri(LicenseInfo.ImageUri, UriKind.RelativeOrAbsolute);
 
         XmlData = new System.Collections.ObjectModel.ObservableCollection<XmlDataModel>();
 
@@ -101,7 +102,7 @@ public class LicenseViewModel : FeaturedViewModelBase
     /// <value>
     /// The about image URI.
     /// </value>
-    public Uri AboutImageUri { get { return new Uri(LicenseInfo.ImageUri, UriKind.RelativeOrAbsolute); } }
+    public Uri AboutImageUri { get; set; }
 
     /// <summary>
     /// Gets the Paste command.
